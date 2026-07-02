@@ -1,0 +1,228 @@
+Please determine whether the analysis should continue to the callers of function `<{target_func_name}>`.
+
+Function code:
+{target_func_code}
+
+Wrapper judgment:
+{wrapper_judgment}
+
+Validated ResultList:
+{validated_result_list}
+
+---
+## Few-Shot Examples
+
+### Example 1 (Positive): should_continue=true — get-wrapper exposes critical variable to callers
+
+Function: mlx5dr_definer_get
+Code:
+```c
+int mlx5dr_definer_get(struct mlx5dr_domain *dmn, u16 format_id,
+		       u8 *dw_selectors, u8 *byte_selectors,
+		       u8 *match_mask, u32 *definer_id)
+{{
+	struct dr_definer_object *definer_obj;
+	int ret = 0;
+
+	definer_obj = dr_definer_find_obj(dmn, format_id, dw_selectors,
+					  byte_selectors, match_mask);
+	if (!definer_obj) {{
+		definer_obj = dr_definer_create_obj(dmn, format_id,
+						    dw_selectors, byte_selectors,
+						    match_mask);
+		if (!definer_obj)
+			return -ENOMEM;
+	}} else {{
+		refcount_inc(&definer_obj->refcount);
+	}}
+
+	*definer_id = definer_obj->id;
+
+	return ret;
+}}
+```
+Wrapper judgment:
+```json
+{{"is_wrapper": true, "passes_critical_variable": true, "purity": "high"}}
+```
+Validated ResultList:
+```json
+[["get", "return", "0", "definer_obj.refcount.refcnt", "dr_definer_object--refcount_struct--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "should_continue": true,
+  "reason": "This is a high-purity get wrapper that acquires a reference on definer_obj and passes it to the caller via *definer_id. Callers that receive definer_obj are responsible for releasing the reference. The get semantics propagate to callers — continue expansion."
+}}
+```
+
+### Example 2 (Positive): should_continue=true — get-wrapper returns referenced object
+
+Function: sk_dst_get
+Code:
+```c
+static inline struct dst_entry *
+sk_dst_get(const struct sock *sk)
+{{
+	struct dst_entry *dst;
+
+	rcu_read_lock();
+	dst = rcu_dereference(sk->sk_dst_cache);
+	if (dst && !rcuref_get(&dst->__rcuref))
+		dst = NULL;
+	rcu_read_unlock();
+	return dst;
+}}
+```
+Wrapper judgment:
+```json
+{{"is_wrapper": true, "passes_critical_variable": true, "purity": "high"}}
+```
+Validated ResultList:
+```json
+[["get", "return", "0", "dst.__rcuref.refcnt", "dst_entry--rcuref_t--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "should_continue": true,
+  "reason": "This is a high-purity get wrapper that acquires an rcuref on dst_entry and returns it. Callers receive a referenced dst_entry and must call dst_release (put) when done. The get semantics propagate to callers — continue expansion."
+}}
+```
+
+### Example 3 (Positive): should_continue=true — base put function, expands to find put-wrappers
+
+Function: rcuref_put
+Code:
+```c
+static inline __must_check bool rcuref_put(rcuref_t *ref)
+{{
+	bool released;
+
+	preempt_disable();
+	released = __rcuref_put(ref);
+	preempt_enable();
+	return released;
+}}
+```
+Wrapper judgment:
+```json
+{{"is_wrapper": true, "passes_critical_variable": true, "purity": "high"}}
+```
+Validated ResultList:
+```json
+[["put", "parameter", "1", "ref.refcnt", "rcuref_t--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "should_continue": true,
+  "reason": "rcuref_put only decrements the refcount — it does NOT free or destroy the object. After the call, the object may still exist if other references remain. The callers of rcuref_put (like dst_release, posixtimer_putref) are the put-wrapper candidates we need to find for get/put pairing. Continue expansion."
+}}
+```
+
+### Example 4 (Negative): should_continue=false — put that UNCONDITIONALLY calls a release callback
+
+Function: kref_put
+Code:
+```c
+static inline int kref_put(struct kref *kref, void (*release)(struct kref *))
+{{
+	if (refcount_dec_and_test(&kref->refcount)) {{
+		release(kref);
+		return 1;
+	}}
+	return 0;
+}}
+```
+Wrapper judgment:
+```json
+{{"is_wrapper": true, "passes_critical_variable": true, "purity": "high"}}
+```
+Validated ResultList:
+```json
+[["put", "parameter", "1", "kref.refcount.refcnt", "kref--refcount_struct--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "should_continue": false,
+  "reason": "kref_put accepts an arbitrary release callback that the caller provides. When the refcount reaches zero, release(kref) is called synchronously, which typically frees the containing object. Because the release behavior is caller-defined and usually destroys the object immediately, callers of kref_put are the final consumers — not wrapper candidates. Expanding further would not find meaningful refcount wrappers. Stop expansion."
+}}
+```
+
+### Example 5 (Positive): should_continue=true — put-wrapper with conditional/deferred cleanup on last ref
+
+Function: dst_release
+Code:
+```c
+void dst_release(struct dst_entry *dst)
+{{
+	if (dst) {{
+		int was_last = rcuref_put(&dst->__rcuref);
+		if (was_last) {{
+			dst->pending_confirm = 0;
+			call_rcu(&dst->rcu_head, dst_destroy);
+		}}
+	}}
+}}
+```
+Wrapper judgment:
+```json
+{{"is_wrapper": true, "passes_critical_variable": true, "purity": "high"}}
+```
+Validated ResultList:
+```json
+[["put", "parameter", "1", "dst.__rcuref.refcnt", "dst_entry--rcuref_t--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "should_continue": true,
+  "reason": "dst_release wraps rcuref_put (which only decrements the refcount). The RCU cleanup (dst_destroy) is CONDITIONAL — it only triggers when the refcount reaches zero, and even then it is deferred via call_rcu (not executed synchronously). After dst_release returns, the dst_entry may still exist if other references remain. Callers of dst_release (e.g. dst_release_immediate, __sk_dst_reset) are valid wrapper candidates that participate in dst_entry get/put balancing. Continue expansion."
+}}
+```
+
+---
+## Task — continue to callers ONLY if ALL of the following hold:
+
+1. This function is primarily a reference-count wrapper/helper (is_wrapper = true).
+
+2. The validated ResultList is non-empty (we successfully extracted critical variables).
+
+3. The function passes critical reference-counted objects outward through return values
+   or parameters (passes_critical_variable = true). If the critical variable is consumed
+   internally and not exposed to callers, expansion stops.
+
+4. The function has high or medium purity — if it contains substantial non-refcount
+   business logic, further expansion would dilute precision.
+
+5. Lifecycle semantics check:
+   - For a suspected GET function: after calling it, does the caller need to perform a
+     release (put) operation? If YES → the get semantics propagate to callers → continue.
+     If NO (e.g. the reference is managed entirely internally) → stop.
+   - For a suspected PUT function: does it UNCONDITIONALLY destroy or free the object?
+     * If it only decrements the refcount (even with conditional/deferred cleanup on the
+       last reference), the object may still exist after the call → CONTINUE.
+     * Conditional cleanup (call_rcu, schedule_work, etc. triggered only when refcount
+       reaches zero) is NOT terminal — the object can outlive the call.
+     * Only UNCONDITIONAL destruction (e.g. always calling kfree regardless of refcount,
+       or an arbitrary caller-provided release callback that typically frees the object
+       synchronously) should STOP expansion, because the object lifecycle reliably ends
+       inside this function.
+
+Output only JSON behind <OUTPUT JSON>:
+<OUTPUT JSON>
+```json
+{{
+  "should_continue": true,
+  "reason": "short reason"
+}}
+```
+</OUTPUT JSON>

@@ -1,0 +1,459 @@
+/*
+ * Copyright (C) 2010 Dan Carpenter.
+ * Copyright (C) 2020 Oracle.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see http://www.gnu.org/copyleft/gpl.txt
+ */
+
+/*
+ * This is the "strict" version which is more daring and ambitious than
+ * the check_free.c file.  The difference is that this looks at split
+ * returns and the other only looks at if every path frees a parameter.
+ * Also this has a bunch of kernel specific things to do with reference
+ * counted memory.
+ */
+
+#include <string.h>
+#include "smatch.h"
+#include "smatch_slist.h"
+#include "smatch_extra.h"
+
+static int my_id;
+
+STATE(freed);
+STATE(maybe_freed);
+STATE(ok);
+
+static void ok_to_use(struct sm_state *sm, struct expression *mod_expr)
+{
+	set_state(my_id, sm->name, sm->sym, &ok);
+}
+
+static void pre_merge_hook(struct sm_state *cur, struct sm_state *other)
+{
+	if (is_impossible_path())
+		set_state(my_id, cur->name, cur->sym, &ok);
+}
+
+static int get_freed_line(struct expression *expr)
+{
+	struct sm_state *sm, *tmp;
+
+	sm = get_sm_state_expr(my_id, expr);
+	if (!sm)
+		return -1;
+	FOR_EACH_PTR(sm->possible, tmp) {
+		if (tmp->state == &freed)
+			return tmp->line;
+	} END_FOR_EACH_PTR(tmp);
+	return -1;
+}
+
+bool is_freed_var_sym(const char *name, struct symbol *sym)
+{
+	struct smatch_state *state;
+
+	state = get_state(my_id, name, sym);
+	if (state == &freed || state == &maybe_freed)
+		return true;
+
+	return false;
+}
+
+static bool expr_is_condition(struct expression *expr)
+{
+	struct statement *stmt;
+
+	stmt = expr_get_parent_stmt(expr);
+	if (!stmt)
+		return false;
+	if (stmt->type == STMT_IF || stmt->type == STMT_ITERATOR)
+		return true;
+	return false;
+}
+
+bool is_part_of_condition(struct expression *expr)
+{
+	struct expression *parent;
+
+	if (expr_is_condition(expr))
+		return true;
+
+	parent = expr_get_parent_expr(expr);
+	if (!parent)
+		return false;
+	if (parent->type == EXPR_LOGICAL || parent->type == EXPR_COMPARE)
+		return true;
+	if (parent->type == EXPR_SELECT || parent->type == EXPR_CONDITIONAL)
+		return true;
+	if (parent->type == EXPR_PREOP && parent->op == '!')
+		return true;
+
+	return false;
+}
+
+static bool is_percent_p(struct expression *str_expr, int idx)
+{
+	char *p;
+	int cnt = 0;
+
+	p = str_expr->string->data;
+	while (p[0]) {
+		if (p[0] == '%' && p[1] == '%') {
+			p += 2;
+			continue;
+		}
+		/* If we have print("%.*s %p", prec, str, p); then it takes 2 params */
+		if ((p[0] == '%' && p[1] == '*') ||
+		    (p[0] == '%' && p[1] == '.' && p[2] == '*'))
+			cnt++;
+		if (p[0] == '%') {
+			cnt++;
+			if (idx == cnt && p[1] == 'p')
+				return true;
+		}
+		p++;
+	}
+	return false;
+}
+
+bool is_percent_p_print(struct expression *expr)
+{
+	struct expression *parent, *arg;
+	int expr_idx, string_idx;
+
+	parent = expr_get_parent_expr(expr);
+	if (!parent || parent->type != EXPR_CALL)
+		return false;
+
+	expr_idx = -1;
+	FOR_EACH_PTR(parent->args, arg) {
+		expr_idx++;
+		if (arg == expr)
+			goto found;
+	} END_FOR_EACH_PTR(arg);
+
+	return false;
+found:
+
+	string_idx = -1;
+	FOR_EACH_PTR(parent->args, arg) {
+		string_idx++;
+		if (arg->type != EXPR_STRING)
+			continue;
+		if (is_percent_p(arg, expr_idx - string_idx))
+			return true;
+	} END_FOR_EACH_PTR(arg);
+
+	return false;
+}
+
+bool is_passed_to_IS_ERR(struct expression *expr)
+{
+	struct expression *parent;
+
+	parent = expr_get_parent_expr(expr);
+	if (!parent || parent->type != EXPR_CALL)
+		return false;
+
+	if (sym_name_is("IS_ERR", parent->fn))
+		return true;
+	if (sym_name_is("IS_ERR_OR_NULL", parent->fn))
+		return true;
+
+	return false;
+}
+
+static void match_symbol(struct expression *expr)
+{
+	struct expression *parent;
+	char *name;
+	int line;
+
+	if (is_impossible_path())
+		return;
+	if (__in_fake_parameter_assign)
+		return;
+
+	if (is_part_of_condition(expr))
+		return;
+
+	/* This ignores stuff like "get_new_ptr(&foo);" */
+	parent = expr_get_parent_expr(expr);
+	while (parent && parent->type == EXPR_PREOP && parent->op == '(')
+		parent = expr_get_parent_expr(parent);
+	if (parent && parent->type == EXPR_PREOP && parent->op == '&')
+		return;
+
+	line = get_freed_line(expr);
+	if (line < 0)
+		return;
+
+	if (is_percent_p_print(expr))
+		return;
+
+	if (is_passed_to_IS_ERR(expr))
+		return;
+
+	name = expr_to_var(expr);
+	sm_warning("'%s' was already freed. (line %d)", name, line);
+	free_string(name);
+}
+
+static void deref_hook(struct expression *expr)
+{
+	char *name;
+	int line;
+
+	if (__in_fake_parameter_assign)
+		return;
+
+	if (is_impossible_path())
+		return;
+
+	line = get_freed_line(expr);
+	if (line < 0)
+		return;
+
+	name = expr_to_var(expr);
+	sm_error("dereferencing freed memory '%s' (line %d)", name, line);
+	set_state_expr(my_id, expr, &ok);
+	free_string(name);
+}
+
+static int ignored_params[16];
+
+static void set_ignored_params(struct expression *call)
+{
+	struct expression *arg;
+	const char *p;
+	int i;
+
+	memset(&ignored_params, 0, sizeof(ignored_params));
+
+	i = -1;
+	FOR_EACH_PTR(call->args, arg) {
+		i++;
+		if (arg->type != EXPR_STRING)
+			continue;
+		goto found;
+	} END_FOR_EACH_PTR(arg);
+
+	return;
+
+found:
+	i++;
+	p = arg->string->data;
+	while ((p = strchr(p, '%'))) {
+		if (i >= ARRAY_SIZE(ignored_params))
+			return;
+		p++;
+		if (*p == '%') {
+			p++;
+			continue;
+		}
+		if (*p == '.')
+			p++;
+		if (*p == '*')
+			i++;
+		if (*p == 'p')
+			ignored_params[i] = 1;
+		i++;
+	}
+}
+
+static int is_free_func(struct expression *fn)
+{
+	char *name;
+	int ret = 0;
+
+	name = expr_to_str(fn);
+	if (!name)
+		return 0;
+	if (strstr(name, "free"))
+		ret = 1;
+	free_string(name);
+
+	return ret;
+}
+
+static void match_call(struct expression *expr)
+{
+	struct expression *arg;
+	char *name;
+	int line;
+	int i;
+
+	if (is_impossible_path())
+		return;
+
+	set_ignored_params(expr);
+
+	i = -1;
+	FOR_EACH_PTR(expr->args, arg) {
+		i++;
+		if (!is_pointer(arg))
+			continue;
+		line = get_freed_line(arg);
+		if (line < 0)
+			continue;
+		if (ignored_params[i])
+			continue;
+		if (is_percent_p_print(arg))
+			continue;
+		if (is_passed_to_IS_ERR(arg))
+			return;
+
+		name = expr_to_var(arg);
+		if (is_free_func(expr->fn))
+			sm_error("double free of '%s' (line %d)", name, line);
+		else
+			sm_warning("passing freed memory '%s' (line %d)", name, line);
+		set_state_expr(my_id, arg, &ok);
+		free_string(name);
+	} END_FOR_EACH_PTR(arg);
+}
+
+static void match_return(struct expression *expr)
+{
+	char *name;
+	int line;
+
+	if (is_impossible_path())
+		return;
+
+	line = get_freed_line(expr);
+	if (line < 0)
+		return;
+
+	if (type_bits(cur_func_return_type()) == 1)
+		return;
+
+	name = expr_to_var(expr);
+	sm_warning("returning freed memory '%s' (line %d)", name, line);
+	set_state_expr(my_id, expr, &ok);
+	free_string(name);
+}
+
+int parent_is_free_var_sym(const char *name, struct symbol *sym)
+{
+	char buf[256];
+	char *start;
+	char *end;
+	char orig;
+	struct smatch_state *state;
+
+	strncpy(buf, name, sizeof(buf) - 1);
+	buf[sizeof(buf) - 1] = '\0';
+
+	start = &buf[0];
+	while ((*start == '&'))
+		start++;
+
+	end = start;
+	while ((end = strrchr(end, '-'))) {
+		orig = *end;
+		*end = '\0';
+
+		state = __get_state(my_id, start, sym);
+		if (state == &freed)
+			return 1;
+		*end = orig;
+		end++;
+	}
+	return 0;
+}
+
+int parent_is_free_strict(struct expression *expr)
+{
+	struct symbol *sym;
+	char *var;
+	int ret = 0;
+
+	expr = strip_expr(expr);
+	var = expr_to_var_sym(expr, &sym);
+	if (!var || !sym)
+		goto free;
+	ret = parent_is_free_var_sym(var, sym);
+free:
+	free_string(var);
+	return ret;
+}
+
+static void match_untracked(struct expression *call, int param)
+{
+	struct state_list *slist = NULL;
+	struct expression *arg;
+	struct sm_state *sm;
+	char *name;
+	char buf[64];
+	int len;
+
+	arg = get_argument_from_call_expr(call->args, param);
+	if (!arg)
+		return;
+
+	name = expr_to_var(arg);
+	if (!name)
+		return;
+	snprintf(buf, sizeof(buf), "%s->", name);
+	free_string(name);
+	len = strlen(buf);
+
+	FOR_EACH_MY_SM(my_id, __get_cur_stree(), sm) {
+		if (strncmp(sm->name, buf, len) == 0)
+			add_ptr_list(&slist, sm);
+	} END_FOR_EACH_SM(sm);
+
+	FOR_EACH_PTR(slist, sm) {
+		set_state(sm->owner, sm->name, sm->sym, &ok);
+	} END_FOR_EACH_PTR(sm);
+
+	free_slist(&slist);
+}
+
+static void match_free(struct expression *expr, const char *name, struct symbol *sym)
+{
+	struct expression *tmp;
+	int line;
+
+	// FIXME: check if these are NULL before we free
+
+	line = get_freed_line(expr);
+	if (line >= 0)
+		sm_error("double free of '%s' (line %d)", name, line);
+	set_state(my_id, name, sym, &freed);
+
+	tmp = get_assigned_expr_name_sym(name, sym);
+	if (tmp)
+		set_state_expr(my_id, tmp, &freed);
+}
+
+void check_free(int id)
+{
+	my_id = id;
+
+	add_free_hook(match_free);
+
+	if (option_spammy)
+		add_hook(&match_symbol, SYM_HOOK);
+	add_dereference_hook(deref_hook);
+	add_hook(&match_call, FUNCTION_CALL_HOOK);
+	add_hook(&match_return, RETURN_HOOK);
+
+	add_modification_hook_late(my_id, &ok_to_use);
+	add_pre_merge_hook(my_id, &pre_merge_hook);
+
+	add_untracked_param_hook(&match_untracked);
+}

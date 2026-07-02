@@ -1,0 +1,169 @@
+Please resolve a conflict in the analysis pipeline for function `<{target_func_name}>`.
+
+Function code:
+{target_func_code}
+
+Callee Information:
+{callee_get_put_func_info}
+
+CONFLICT: The judge stage determined this function IS a reference-count wrapper/helper.
+The extract stage found the following candidate operations:
+{candidate_result_list}
+
+However, the check stage REJECTED all candidates and returned an empty ResultList.
+Check reason: {check_reason}
+
+---
+## Few-Shot Examples
+
+### Example 1 (Positive): Check was wrong — extract was correct
+
+Function: mlx5dr_definer_get
+Code:
+```c
+int mlx5dr_definer_get(struct mlx5dr_domain *dmn, u16 format_id,
+		       u8 *dw_selectors, u8 *byte_selectors,
+		       u8 *match_mask, u32 *definer_id)
+{{
+	struct dr_definer_object *definer_obj;
+	int ret = 0;
+
+	definer_obj = dr_definer_find_obj(dmn, format_id, dw_selectors,
+					  byte_selectors, match_mask);
+	if (!definer_obj) {{
+		definer_obj = dr_definer_create_obj(dmn, format_id,
+						    dw_selectors, byte_selectors,
+						    match_mask);
+		if (!definer_obj)
+			return -ENOMEM;
+	}} else {{
+		refcount_inc(&definer_obj->refcount);
+	}}
+
+	*definer_id = definer_obj->id;
+
+	return ret;
+}}
+```
+Candidate ResultList:
+```json
+[["get", "return", "0", "definer_obj.refcount.refcnt", "dr_definer_object--refcount_struct--atomic_t"]]
+```
+Check reason: "The function returns int (ret), not the definer_obj. The return value is just an error code, so the refcount operation cannot be on the return value."
+
+Expected output (overrule check — function IS a wrapper, operations are correct):
+```json
+{{
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "ResultList": [
+    ["get", "return", "0", "definer_obj.refcount.refcnt", "dr_definer_object--refcount_struct--atomic_t"]
+  ],
+  "reason": "The critical variable definer_obj IS passed to the caller via *definer_id (parameter 4), not via the int return value. The function's primary purpose is to get-or-create a definer_obj with a reference. The extraction is correct — definer_obj is the critical variable that flows out to the caller. The return=int does not invalidate the wrapper classification."
+}}
+```
+
+### Example 2 (Positive): Check was partially wrong — restore corrected operations
+
+Function: sk_dst_get
+Code:
+```c
+static inline struct dst_entry *
+sk_dst_get(const struct sock *sk)
+{{
+	struct dst_entry *dst;
+
+	rcu_read_lock();
+	dst = rcu_dereference(sk->sk_dst_cache);
+	if (dst && !rcuref_get(&dst->__rcuref))
+		dst = NULL;
+	rcu_read_unlock();
+	return dst;
+}}
+```
+Candidate ResultList:
+```json
+[["get", "return", "0", "dst.__rcuref.refcnt", "dst_entry--rcuref_t--atomic_t"]]
+```
+Check reason: "dst is a local variable, not a parameter or return value."
+
+Expected output (overrule check — dst IS the return value):
+```json
+{{
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "ResultList": [
+    ["get", "return", "0", "dst.__rcuref.refcnt", "dst_entry--rcuref_t--atomic_t"]
+  ],
+  "reason": "dst IS the return value — the function returns dst. Although dst is declared as a local variable, it is the return value. The access path dst.__rcuref.refcnt and type chain dst_entry--rcuref_t--atomic_t are correct. The function is a clear get-wrapper."
+}}
+```
+
+### Example 3 (Negative): Check was correct — function is NOT a wrapper
+
+Function: bfq_init_entity
+Code:
+```c
+void bfq_init_entity(struct bfq_entity *entity, struct bfq_group *bfqg)
+{{
+	struct bfq_queue *bfqq = bfq_entity_to_bfqq(entity);
+
+	entity->weight = entity->new_weight;
+	entity->orig_weight = entity->new_weight;
+	if (bfqq) {{
+		bfqq->ioprio = bfqq->new_ioprio;
+		bfqq->ioprio_class = bfqq->new_ioprio_class;
+		bfqg_and_blkg_get(bfqg);
+	}}
+	entity->parent = bfqg->my_entity;
+	entity->sched_data = &bfqg->sched_data;
+}}
+```
+Candidate ResultList:
+```json
+[["get", "parameter", "2", "bfqg.blkg.refcnt", "bfq_group--blkg--refcount_t"]]
+```
+Check reason: "The primary purpose is entity initialization with weight/ioprio/parent/sched_data assignment. bfqg_and_blkg_get is one call among many unrelated operations. This is not a refcount wrapper."
+
+Expected output (agree with check — NOT a wrapper):
+```json
+{{
+  "is_wrapper": false,
+  "passes_critical_variable": false,
+  "purity": "low",
+  "ResultList": [],
+  "reason": "The check was correct. bfq_init_entity performs broad entity initialization (weight, ioprio, parent, sched_data). The bfqg_and_blkg_get call is incidental — the function's primary purpose is not reference-count management. The judge incorrectly classified this as a wrapper."
+}}
+```
+
+---
+## Task
+
+1. Re-examine the function code carefully. Does the code actually belong to `<{target_func_name}>`?
+   - If the code clearly does NOT contain the target function, respond with is_wrapper=false and
+     passes_critical_variable=false, and explain the mismatch.
+2. If the code IS the target function, determine whether it is truly a reference-count wrapper/helper.
+   - Check if critical variables (reference-counted objects) are passed through parameters/return values.
+   - Check if the function has focused refcount semantics (high purity) or mixed business logic.
+   - If it IS a wrapper: identify which candidate operations are correct.
+   - If it is NOT a wrapper: respond with is_wrapper=false and explain.
+3. Do not add new operations that the candidate list did not propose, unless they are
+   unambiguously visible in the code.
+4. Valid directions in ResultList are "get", "put", or "set" — preserve the direction from the candidate list.
+
+Output only JSON behind <OUTPUT JSON>:
+<OUTPUT JSON>
+```json
+{{
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "ResultList": [
+    ["get", "parameter", "1", "obj.kref.refcount", "my_type--kref--refcount_t"]
+  ],
+  "reason": "short explanation of the resolution"
+}}
+```
+</OUTPUT JSON>

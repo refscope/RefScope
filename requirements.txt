@@ -1,0 +1,4 @@
+# RefScope — Python dependencies
+# Install: pip install -r requirements.txt
+
+requests>=2.25.0

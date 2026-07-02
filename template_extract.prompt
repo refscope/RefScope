@@ -1,0 +1,316 @@
+Please extract the reference-count operations and critical variables from function `<{target_func_name}>`.
+
+{target_func_code}
+
+Callee Information (known get/put/set functions called by this function):
+{callee_get_put_func_info}
+
+Additional Callee Implementations (fetched on request):
+{fetched_callee_code}
+
+---
+## Few-Shot Examples
+
+### Example 1 (Positive): mlx5dr_definer_get — needs callee lookup then extracts
+
+**Round 1** — no callee implementations provided yet:
+Code:
+```c
+int mlx5dr_definer_get(struct mlx5dr_domain *dmn, u16 format_id,
+		       u8 *dw_selectors, u8 *byte_selectors,
+		       u8 *match_mask, u32 *definer_id)
+{{
+	struct dr_definer_object *definer_obj;
+	int ret = 0;
+
+	definer_obj = dr_definer_find_obj(dmn, format_id, dw_selectors,
+					  byte_selectors, match_mask);
+	if (!definer_obj) {{
+		definer_obj = dr_definer_create_obj(dmn, format_id,
+						    dw_selectors, byte_selectors,
+						    match_mask);
+		if (!definer_obj)
+			return -ENOMEM;
+	}} else {{
+		refcount_inc(&definer_obj->refcount);
+	}}
+
+	*definer_id = definer_obj->id;
+
+	return ret;
+}}
+```
+
+Expected Round 1 output (request callee):
+```json
+{{
+  "need_more_info": true,
+  "requested_callees": ["dr_definer_create_obj"],
+  "reason": "Need dr_definer_create_obj implementation to trace whether it initializes refcount on the returned object, and to determine the full type chain to the refcount field."
+}}
+```
+
+**Round 2** — callee implementation now provided:
+Additional Callee Implementations:
+```
+// Implementation of callee: dr_definer_create_obj
+static struct dr_definer_object *
+dr_definer_create_obj(struct mlx5dr_domain *dmn, u16 format_id,
+		      u8 *dw_selectors, u8 *byte_selectors,
+		      u8 *match_mask)
+{{
+	struct dr_definer_object *obj;
+	obj = kzalloc(sizeof(*obj), GFP_KERNEL);
+	if (!obj)
+		return NULL;
+	obj->dmn = dmn;
+	obj->format_id = format_id;
+	refcount_set(&obj->refcount, 1);
+	return obj;
+}}
+```
+
+Expected Round 2 output (extraction complete):
+```json
+{{
+  "need_more_info": false,
+  "ResultList": [
+    ["get", "return", "0", "definer_obj.refcount", "dr_definer_object--refcount_struct"]
+  ]
+}}
+```
+
+### Example 2 (Positive): sk_dst_get — needs callee lookup then extracts
+
+**Round 1** — no callee implementations provided yet:
+Code:
+```c
+static inline struct dst_entry *
+sk_dst_get(const struct sock *sk)
+{{
+	struct dst_entry *dst;
+
+	rcu_read_lock();
+	dst = rcu_dereference(sk->sk_dst_cache);
+	if (dst && !rcuref_get(&dst->__rcuref))
+		dst = NULL;
+	rcu_read_unlock();
+	return dst;
+}}
+```
+
+Expected Round 1 output (request callee):
+```json
+{{
+  "need_more_info": true,
+  "requested_callees": ["rcu_dereference"],
+  "reason": "Need rcu_dereference to confirm the type of the returned pointer and trace the access path through sk->sk_dst_cache to dst->__rcuref."
+}}
+```
+
+**Round 2** — callee implementation now provided:
+Additional Callee Implementations:
+```
+// Implementation of callee: rcu_dereference
+#define rcu_dereference(p) \
+({{ \
+	typeof(p) _________p1 = READ_ONCE(p); \
+	smp_read_barrier_depends(); \
+	(_________p1); \
+}})
+```
+
+Expected Round 2 output (extraction complete):
+```json
+{{
+  "need_more_info": false,
+  "ResultList": [
+    ["get", "return", "0", "dst.__rcuref", "dst_entry--rcuref"]
+  ]
+}}
+```
+
+**NOTE for sk_dst_get**: The critical variable is `dst` (struct dst_entry *), which is the return value. The refcount operation `rcuref_get(&dst->__rcuref)` acts on the `__rcuref` field of the returned `dst`. The parameter `sk` is only used to load `dst` from `sk->sk_dst_cache`; `sk` itself is NOT the critical variable — `dst` (the return) is. The member access path starts from the function interface: the return value `dst` → its field `__rcuref`.
+
+### Example 3 (Negative): direct extraction without callee lookup
+
+Code:
+```c
+static inline struct kobject *kobject_get(struct kobject *kobj)
+{{
+	if (kobj)
+		kref_get(&kobj->kref);
+	return kobj;
+}}
+```
+Callee Info:
+```
+1. The function kref_get in the implementation is a get function for its parameter index 1, its member-access path is kref.refcount, which is of type kref--refcount_t.
+```
+
+Expected output (no callee lookup needed — type chain is directly visible):
+```json
+{{
+  "need_more_info": false,
+  "ResultList": [
+    ["get", "parameter", "1", "kobj.kref.refcount", "kobject--kref--refcount_t"]
+  ]
+}}
+```
+This function does NOT need additional callee lookup because:
+- `kref_get(&kobj->kref)` directly operates on parameter 1 (`kobj`), accessing `.kref.refcount`
+- The callee info already tells us `kref_get` operates on `kref--refcount_t`
+- The type chain `kobject--kref--refcount_t` can be built by combining `kobj`'s type with the callee's known access path
+
+### Example 4 (Positive): direct extraction of a set-wrapper without callee lookup
+
+Code:
+```c
+static inline void kref_init(struct kref *kref)
+{{
+	refcount_set(&kref->refcount, 1);
+}}
+```
+Callee Info:
+```
+1. The function refcount_set in the implementation is a set function for its parameter index 1, its member-access path is refs, which is of type refcount_struct--atomic_t.
+```
+
+Expected output (no callee lookup needed — type chain is directly visible):
+```json
+{{
+  "need_more_info": false,
+  "ResultList": [
+    ["set", "parameter", "1", "kref.refcount.refs", "kref--refcount_struct--atomic_t"]
+  ]
+}}
+```
+This function does NOT need additional callee lookup because:
+- `refcount_set(&kref->refcount, 1)` directly operates on parameter 1 (`kref`), accessing `.refcount.refs`
+- The callee info already tells us `refcount_set` operates on `refcount_struct--atomic_t`
+- The type chain `kref--refcount_struct--atomic_t` can be built by combining `kref`'s type with the callee's known access path
+- Direction is "set" because the function INITIALIZES the refcount (creates the initial reference)
+
+---
+## Task
+
+This function has already been judged to be a reference-count wrapper/helper.
+
+### Phase 1: Determine information sufficiency
+Examine the target function code and the callee information provided.
+
+If the CURRENT information is insufficient to trace the COMPLETE member_access_path and member_type_chain from the function's interface (parameter/return) to the actual refcount field, you MUST output a request for additional callee implementations FIRST.
+
+**When to request callee implementations:**
+- A callee function returns or initializes an object whose refcount field location is unknown
+- A callee function wraps the refcount operation and you need its implementation to see which field is accessed
+- The type chain cannot be completed because intermediate struct members are unclear
+
+**When NOT to request callee implementations:**
+- The refcount field access is directly visible in the target function code (e.g. `&obj->refcount`)
+- The callee info already provides the complete access path and type chain
+- The requested callee has already been fetched and provided in "Additional Callee Implementations"
+
+**If you need more callee implementations, output:**
+```json
+{{
+  "need_more_info": true,
+  "requested_callees": ["func_name_1", "func_name_2"],
+  "reason": "short reason explaining what information each callee would provide"
+}}
+```
+
+### Phase 2: Extract operations
+If you have sufficient information, identify the CRITICAL VARIABLE(s) — the return value or parameter that carries the reference-counted object through this function.
+
+- For a get-wrapper, the critical variable is typically the object whose refcount was increased.
+- For a put-wrapper, the critical variable is typically the object whose refcount was decreased.
+- For a set-wrapper, the critical variable is the object whose refcount is being initialized/set (typically a parameter that receives the newly-allocated object, or the parameter passed to an init function like kref_init).
+
+**How to construct member_access_path (STEP BY STEP):**
+
+The callee info gives you the callee's internal access_path (from the callee's own interface to the refcount field). You must transform this into YOUR function's access_path.
+
+Step 1 — Strip the callee's variable name:
+  callee access_path = "zwplug.ref" → strip first segment → get ["ref"]
+  callee access_path = "dom.ref.refcount" → strip first segment → get ["ref", "refcount"]
+  callee access_path = "kref.refcount" → strip first segment → get ["refcount"]
+
+Step 2 — Determine YOUR critical variable name:
+  - For RETURN VALUE operations: use the local variable name that gets returned (e.g., "zwplug", "dst", "definer_obj")
+  - For PARAMETER operations: use the parameter name (e.g., "sk", "kref", "clp")
+  Do NOT omit this step — the access path MUST start with a variable name.
+
+Step 3 — Add your own field accesses (the path from your variable to the callee's entry type):
+  If you call `callee(obj->field)`, add "field" between your variable name and the callee's remaining path.
+  If you call `callee(obj)` with NO field access, do not add any fields.
+
+Step 4 — Join: your_variable + your_fields + callee_remaining_path
+  Example: your_variable="zwplug", your_fields=[], callee_remaining=["ref"]
+    → "zwplug.ref"  (2 segments, matches type_chain "blk_zone_wplug--refcount_t" which has 2 types)
+  Example: your_variable="nfs_uuid", your_fields=["dom"], callee_remaining=["ref", "refcount"]
+    → "nfs_uuid.dom.ref.refcount"  (4 segments, matches 4-type chain)
+  WRONG: "ref" (1 segment, does NOT match 2-type chain)
+
+Step 5 — **VERIFY before outputting:**
+  Count the `.`-separated segments in your access_path.
+  Count the `--`-separated types in your type_chain.
+  These two numbers MUST BE EQUAL. If they are not equal, go back and fix your access_path.
+
+**How to construct member_type_chain:**
+  Same as above but with type names instead of field names. The callee's type_chain gives you the suffix. Prepend your critical variable's outermost type and the types of any fields you traverse.
+  - Do NOT include C keywords like "struct", "enum", or "union" in type names — use only the bare type name.
+
+**Examples of correct access_path construction:**
+
+1. Callee info: path="zwplug.ref", chain="blk_zone_wplug--refcount_t"
+   Your function returns zwplug (return value, type blk_zone_wplug), NO extra field access.
+   → Strip callee: ["ref"]. Your variable: "zwplug". Join: "zwplug.ref"
+   → Type chain: your type "blk_zone_wplug" + callee chain suffix "refcount_t" = "blk_zone_wplug--refcount_t"
+   → Verify: 2 segments vs 2 types ✅
+
+2. Callee info: path="dom.ref.refcount", chain="auth_domain--kref--refcount_t"
+   Your function has parameter "nfs_uuid" (type nfs_uuid_t), calls `callee(nfs_uuid->dom)`.
+   → Strip callee: ["ref", "refcount"]. Your variable: "nfs_uuid". Your field: "dom".
+   → Join: "nfs_uuid.dom.ref.refcount"
+   → Type chain: "nfs_uuid_t" + "auth_domain" + "kref" + "refcount_t" = "nfs_uuid_t--auth_domain--kref--refcount_t"
+   → Verify: 4 segments vs 4 types ✅
+
+3. Callee info: path="kref.refcount", chain="kref--refcount_t"
+   Your function has parameter "kobj" (type kobject), calls `callee(&kobj->kref)`.
+   → Strip callee: ["refcount"]. Your variable: "kobj". Your field: "kref".
+   → Join: "kobj.kref.refcount"
+   → Type chain: "kobject" + "kref" + "refcount_t" = "kobject--kref--refcount_t"
+   → Verify: 3 segments vs 3 types ✅
+
+**If you have sufficient information, output:**
+```json
+{{
+  "need_more_info": false,
+  "ResultList": [
+    ["get", "return", "0", "sk.sk_dst_cache.__rcuref.refcnt", "sock--dst_entry--rcuref_t--atomic_t"]
+  ]
+}}
+```
+
+Output a ResultList where each element is:
+["get"|"put"|"set", "return"|"parameter"|"global", "index", "member_access_path", "member_type_chain"]
+- index: parameter number (1-based), "0" for return value, or global variable name
+
+### Critical rules
+- Do NOT output both need_more_info and ResultList in the same response.
+- If you already requested a callee and it has been provided, do NOT request it again — proceed to Phase 2.
+- Do not judge whether the function is a wrapper in this task (already done).
+- The member_access_path MUST start from the CRITICAL VARIABLE at the function interface (parameter or return), NOT from intermediate local variables.
+
+Output only JSON behind <OUTPUT JSON>:
+<OUTPUT JSON>
+```json
+{{
+  "need_more_info": false,
+  "ResultList": [
+    ["get", "return", "0", "obj.field.refcnt", "my_type--inner_type--refcount_t"]
+  ]
+}}
+```
+</OUTPUT JSON>

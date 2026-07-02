@@ -1,0 +1,1063 @@
+#!/usr/bin/python3
+
+# Copyright (C) 2013 Oracle.
+#
+# Licensed under the Open Software License version 1.1
+
+import sqlite3
+import sys
+import re
+import subprocess
+import io
+
+try:
+    con = sqlite3.connect('smatch_db.sqlite')
+except sqlite3.Error as e:
+    print("Error %s:" % e.args[0])
+    sys.exit(1)
+
+def usage():
+    print("%s" % (sys.argv[0]))
+    print("<function> - how a function is called")
+    print("info <function> <type> - how a function is called, filtered by type")
+    print("return_states <function> - what a function returns")
+    print("call_tree <function> [depth] - show the call tree")
+    print("where <struct_type> <member> - where a struct member is set")
+    print("type_size <struct_type> <member> - how a struct member is allocated")
+    print("type_info <struct_type> <member> - stuff from type_info")
+    print("data_info <struct_type> <member> - information about a given data type")
+    print("function_ptr <function> - which function pointers point to this")
+    print("trace_param <function> <param> - trace where a parameter came from")
+    print("find_tagged <function> <param> - find the source of a tagged value (arm64)")
+    print("parse_warns_tagged <smatch_warns.txt> - parse warns file for summary of tagged issues (arm64)")
+    print("locals <file> - print the local values in a file.")
+    sys.exit(1)
+
+function_ptrs = []
+searched_ptrs = []
+def get_function_pointers_helper(func):
+    cur = con.cursor()
+    cur.execute("select distinct ptr from function_ptr where function = '%s';" %(func))
+    for row in cur:
+        ptr = row[0]
+        if ptr in function_ptrs:
+            continue
+        function_ptrs.append(ptr)
+        if not ptr in searched_ptrs:
+            searched_ptrs.append(ptr)
+            get_function_pointers_helper(ptr)
+
+def get_function_pointers(func):
+    global function_ptrs
+    global searched_ptrs
+    function_ptrs = [func]
+    searched_ptrs = [func]
+    get_function_pointers_helper(func)
+    return function_ptrs
+
+db_types = {
+#DB TYPES START
+    0: "INTERNAL",
+    103: "PARAM_LIMIT",
+    104: "PARAM_FILTER",
+    500: "RELEASE",
+    1001: "PARAM_VALUE",
+    9001: "TMP_VALUE",
+    1002: "BUF_SIZE",
+    1004: "CAPPED_DATA",
+    2004: "LOWER_BOUND",
+    1005: "RETURN_VALUE",
+    1006: "DEREFERENCE",
+    1007: "RANGE_CAP",
+    1010: "ABSOLUTE_LIMITS",
+    1013: "FREED",
+    2014: "MAYBE_FREED",
+    1014: "DATA_SOURCE",
+    1015: "FUZZY_MAX",
+    2015: "HARD_MAX",
+    1016: "STR_LEN",
+    1017: "ARRAY_LEN",
+    1018: "CAPABLE",
+    1019: "NS_CAPABLE",
+    1020: "CONTAINER",
+    1022: "TYPE_LINK",
+    1023: "UNTRACKED_PARAM",
+    2023: "LOST_PARAM",
+    1024: "CULL_PATH",
+    1026: "PARAM_USED",
+    1027: "BYTE_UNITS",
+    1028: "COMPARE_LIMIT",
+    1029: "PARAM_COMPARE",
+    1030: "EXPECTS_TYPE",
+    1031: "CONSTRAINT",
+    1032: "PASSES_TYPE",
+    1033: "CONSTRAINT_REQUIRED",
+    1034: "BIT_INFO",
+    1035: "NOSPEC",
+    1036: "NOSPEC_WB",
+    1037: "STMT_CNT",
+    1038: "TERMINATED",
+    1039: "SLEEP",
+    1041: "SMALLISH",
+    1042: "FRESH_MTAG",
+    1043: "MARK_UNKNOWN",
+    1044: "FRESH_ALLOC",
+    1045: "ALLOCATOR",
+    1046: "MTAG_TYPE",
+    1047: "FUNC_TIME",
+    1048: "POWER_OF_TWO",
+    1049: "POWER_OF_TWO_SET",
+    1051: "BIT_SET",
+    1052: "BIT_CLEAR",
+    1053: "BIT_IS_SET",
+    1054: "BIT_IS_CLEAR",
+    1055: "EXPLICIT_NULL",
+    1056: "RECV_PATH",
+    1057: "NEGATIVE_ERROR",
+    1058: "EXPECTS_MEMBER",
+    1060: "ERR_PTR",
+    1061: "LIST_HEAD",
+    1062: "//EMBEDDED_HEAD",
+    1063: "LIST_ADD_ENTRY",
+    1064: "LIST_DEL",
+    1065: "EPROBE_DEFER",
+    1066: "EXPECTS_SENTINAL",
+    1067: "ZERO_ERROR",
+    1068: "LEAF_FN",
+    1069: "CASTED_TO",
+    2000: "SPLIT_LIMIT",
+    2001: "NEXT_LIMIT",
+    2002: "END_SPLIT",
+    2048: "MEM_CPY",
+    2049: "MEM_ZERO",
+    2050: "MEM_CPY2",
+    2051: "DEVICE_MANAGED",
+    2052: "DEV_PUT",
+    2053: "DEVICE_RELEASED",
+    2054: "PREEMPT_ADD",
+    2055: "PREEMPT_SUB",
+    2056: "PROBE_FN",
+    2057: "CALLED_FROM_PROBE",
+    2058: "FD_INSTALL",
+    3059: "FGET",
+    2059: "USER_CONTEXT",
+    2060: "NOUSER_CONTEXT",
+    2061: "RX_PATH",
+    2062: "IRQ_CONTEXT",
+    2063: "TASK_RUNNING",
+    2064: "TASK_NOT_RUNNING",
+    2065: "EQUAL",
+    2066: "NOCHECK_CALL",
+    2067: "RCU_LOCK",
+    2068: "RCU_HALF_LOCK",
+    2069: "RCU_UNLOCK",
+    2070: "RCU_DEREFERENCE",
+    2501: "BUF_CLEARED",
+    2502: "BUF_ADD",
+    2525: "PARAM_SET",
+    2535: "PARAM_ADD",
+    2536: "PARAM_INC",
+    2537: "PARAM_DEC",
+    7016: "HOST_DATA",
+    7017: "HOST_DATA_SET",
+    7018: "HOST_PTR",
+    7019: "HOST_PTR_SET",
+    8017: "USER_DATA",
+    9017: "USER_DATA_SET",
+    9018: "USER_PTR",
+    9019: "USER_PTR_SET",
+    8018: "NO_OVERFLOW",
+    8019: "NO_OVERFLOW_SIMPLE",
+    8020: "LOCK",
+    8021: "UNLOCK",
+    9022: "HALF_LOCKED",
+    9023: "RESTORE",
+    9024: "KNOWN_LOCKED",
+    9025: "KNOWN_UNLOCKED",
+    9026: "IGNORE_LOCK",
+    9030: "LOCK2",
+    9031: "UNLOCK2",
+    9032: "HALF_LOCKED2",
+    9033: "RESTORE2",
+    9034: "TYPE_LOCK",
+    9035: "TYPE_UNLOCK",
+    9038: "TYPE_LOCK2",
+    9039: "TYPE_UNLOCK2",
+    9036: "CLEAR_LOCK",
+    9037: "DESTROY_LOCK",
+    8022: "SET_FS",
+    8023: "ATOMIC_INC",
+    8024: "ATOMIC_DEC",
+    9025: "REFCOUNT_INIT",
+    9027: "REFCOUNT_INC",
+    9028: "REFCOUNT_DEC",
+    8025: "NO_SIDE_EFFECT",
+    8026: "IOCTL_CMD",
+    8027: "IOCTL_ARG",
+    8028: "FN_ARG_LINK",
+    8029: "DATA_VALUE",
+    8030: "PARAM_BOUND",
+    8031: "BOUND_ARRAY_SIZE",
+    8032: "BOUND_SIZEOF",
+    8033: "ARRAYSIZE_ARG",
+    8034: "SIZEOF_ARG",
+    8035: "DATA_PTR",
+    8037: "ARG_TYPE",
+    8038: "TRUSTED_DATA",
+    8039: "MTAG_ASSIGN",
+    8040: "UNITS",
+    8041: "STRING_VALUE",
+    8042: "UNTERMINATED",
+    8043: "EXPECTS_TERMINATED",
+    8044: "PUT_DEVICE",
+    8046: "PTR_MATH",
+    8047: "PAGE_STUFF",
+    8045: "ALLOC",
+    8050: "BYTE_COUNT",
+    8051: "ELEM_COUNT",
+    8052: "ELEM_LAST",
+    8053: "USED_LAST",
+    8054: "USED_COUNT",
+    8060: "EXPECTS_LOCK",
+    8061: "FREED_IN_LOCK",
+    8062: "SET_IN_LOCK",
+#DB TYPES END
+};
+
+def add_range(rl, min_val, max_val):
+    check_next = 0
+    done = 0
+    ret = []
+    idx = 0
+
+    if len(rl) == 0:
+        return [[min_val, max_val]]
+
+    for idx in range(len(rl)):
+        cur_min = rl[idx][0]
+        cur_max = rl[idx][1]
+
+        # we already merged the new range but we might need to change later
+        # ranges if they over lap with more than one
+        if check_next:
+            # join with added range
+            if max_val + 1 == cur_min:
+                ret[len(ret) - 1][1] = cur_max
+                done = 1
+                break
+            # don't overlap
+            if max_val < cur_min:
+                ret.append([cur_min, cur_max])
+                done = 1
+                break
+            # partially overlap
+            if max_val < cur_max:
+                ret[len(ret) - 1][1] = cur_max
+                done = 1
+                break
+            # completely overlap
+            continue
+
+        # join 2 ranges into one
+        if max_val + 1 == cur_min:
+            ret.append([min_val, cur_max])
+            done = 1
+            break
+        # range is entirely below
+        if max_val < cur_min:
+            ret.append([min_val, max_val])
+            ret.append([cur_min, cur_max])
+            done = 1
+            break
+        # range is partially below
+        if min_val < cur_min:
+            if max_val <= cur_max:
+                ret.append([min_val, cur_max])
+                done = 1
+                break
+            else:
+                ret.append([min_val, max_val])
+                check_next = 1
+                continue
+        # range already included
+        if max_val <= cur_max:
+            ret.append([cur_min, cur_max])
+            done = 1
+            break;
+        # range partially above
+        if min_val <= cur_max:
+            ret.append([cur_min, max_val])
+            check_next = 1
+            continue
+        # join 2 ranges on the other side
+        if min_val - 1 == cur_max:
+            ret.append([cur_min, max_val])
+            check_next = 1
+            continue
+        # range is above
+        ret.append([cur_min, cur_max])
+
+    if idx + 1 < len(rl):          # we hit a break statement
+        ret = ret + rl[idx + 1:]
+    elif done:                     # we hit a break on the last iteration
+        pass
+    elif not check_next:           # it's past the end of the rl
+        ret.append([min_val, max_val])
+
+    return ret;
+
+def rl_union(rl1, rl2):
+    ret = []
+    for r in rl1:
+        ret = add_range(ret, r[0], r[1])
+    for r in rl2:
+        ret = add_range(ret, r[0], r[1])
+
+    if (rl1 or rl2) and not ret:
+        print("bug: merging %s + %s gives empty" %(rl1, rl2))
+
+    return ret
+
+def txt_to_val(txt):
+    if txt == "s64min":
+        return -(2**63)
+    elif txt == "s32min":
+        return -(2**31)
+    elif txt == "s16min":
+        return -(2**15)
+    elif txt == "s64max":
+        return 2**63 - 1
+    elif txt == "s32max":
+        return 2**31 - 1
+    elif txt == "s16max":
+        return 2**15 - 1
+    elif txt == "u64max":
+        return 2**64 - 1
+    elif txt == "ptr_max":
+        return 2**64 - 1
+    elif txt == "u32max":
+        return 2**32 - 1
+    elif txt == "u16max":
+        return 2**16 - 1
+    else:
+        try:
+            return int(txt)
+        except ValueError:
+            return 0
+
+def val_to_txt(val):
+    if val == -(2**63):
+        return "s64min"
+    elif val == -(2**31):
+        return "s32min"
+    elif val == -(2**15):
+        return "s16min"
+    elif val == 2**63 - 1:
+        return "s64max"
+    elif val == 2**31 - 1:
+        return "s32max"
+    elif val == 2**15 - 1:
+        return "s16max"
+    elif val == 2**64 - 1:
+        return "u64max"
+    elif val == 2**32 - 1:
+        return "u32max"
+    elif val == 2**16 - 1:
+        return "u16max"
+    elif val < 0:
+        return "(%d)" %(val)
+    else:
+        return "%d" %(val)
+
+hash_strings = {}
+def hash_to_string(sha):
+    if sha in hash_strings:
+        return hash_strings[sha]
+
+    cur = con.cursor()
+    cur.execute("select value from hash_string where hash = '%d';" %(sha))
+    found = 0;
+    for txt in cur:
+        found = 1
+        hash_strings[sha] = txt[0]
+    if not found:
+        return "unknown"
+    if not sha in hash_strings:
+        hash_strings[sha] = "%x" %(sha)
+    return hash_strings[sha]
+
+def string_to_hash(string):
+    if not string:
+        return 0
+    proc = subprocess.Popen(['sm_hash %s' %(string)], shell=True, stdout=subprocess.PIPE)
+    line = proc.stdout.readline()
+    if not line:
+        return 0
+    return int(line)
+
+def get_next_str(txt):
+    val = ""
+    parsed = 0
+
+    if txt[0] == '(':
+        parsed += 1
+        for char in txt[1:]:
+            if char == ')':
+                break
+            parsed += 1
+        val = txt[1:parsed]
+        parsed += 1
+    elif txt[0] == 's' or txt[0] == 'u':
+        parsed += 6
+        val = txt[:parsed]
+    else:
+        if txt[0] == '-':
+            parsed += 1
+        for char in txt[parsed:]:
+            if char == '-' or char == '[':
+                break
+            parsed += 1
+        val = txt[:parsed]
+    return [parsed, val]
+
+def txt_to_rl(txt):
+    if len(txt) == 0:
+        return []
+
+    ret = []
+    pairs = txt.split(",")
+    for pair in pairs:
+        cnt, min_str = get_next_str(pair)
+        if cnt == len(pair):
+            max_str = min_str
+        else:
+            cnt, max_str = get_next_str(pair[cnt + 1:])
+        min_val = txt_to_val(min_str)
+        max_val = txt_to_val(max_str)
+        ret.append([min_val, max_val])
+
+#    Hm...  Smatch won't call INT_MAX s32max if the variable is unsigned.
+#    if txt != rl_to_txt(ret):
+#        print("bug: converting: text = %s rl = %s internal = %s" %(txt, rl_to_txt(ret), ret))
+
+    return ret
+
+def rl_to_txt(rl):
+    ret = ""
+    for idx in range(len(rl)):
+        cur_min = rl[idx][0]
+        cur_max = rl[idx][1]
+
+        if idx != 0:
+            ret += ","
+
+        if cur_min == cur_max:
+            ret += val_to_txt(cur_min)
+        else:
+            ret += val_to_txt(cur_min)
+            ret += "-"
+            ret += val_to_txt(cur_max)
+    return ret
+
+def type_to_str(type_int):
+
+    t = int(type_int)
+    if t in db_types:
+        return db_types[t]
+    return type_int
+
+def type_to_int(type_string):
+    for k in db_types.keys():
+        if db_types[k] == type_string:
+            return k
+    return -1
+
+def display_caller_info(printed, cur, param_names):
+    for txt in cur:
+        if not printed:
+            print("file | caller | function | type | parameter | key | value |")
+        printed = 1
+
+        parameter = int(txt[6])
+        key = txt[7]
+        if len(param_names) and parameter in param_names:
+            key = key.replace("$", param_names[parameter])
+
+        print("%20s | %20s | %20s |" %(hash_to_string(txt[0]), txt[1], txt[2]), end = '')
+        print(" %18s |" %(type_to_str(txt[5])), end = '')
+        print(" %2d | %15s | %s" %(parameter, key, txt[8]))
+    return printed
+
+def get_caller_info(filename, ptrs, my_type):
+    cur = con.cursor()
+    param_names = get_param_names(filename, func)
+    printed = 0
+    type_filter = ""
+    if my_type != "":
+        type_filter = "and type = %d" %(type_to_int(my_type))
+    for ptr in ptrs:
+        cur.execute("select * from caller_info where function = '%s' %s;" %(ptr, type_filter))
+        printed = display_caller_info(printed, cur, param_names)
+
+def print_caller_info(filename, func, my_type = ""):
+    ptrs = get_function_pointers(func)
+    get_caller_info(filename, ptrs, my_type)
+
+def merge_values(param_names, vals, cur):
+    for txt in cur:
+        parameter = int(txt[0])
+        name = txt[1]
+        rl = txt_to_rl(txt[2])
+        if parameter in param_names:
+            name = name.replace("$", param_names[parameter])
+
+        if not parameter in vals:
+            vals[parameter] = {}
+
+        # the first item on the list is the number of rows.  it's incremented
+        # every time we call merge_values().
+        if name in vals[parameter]:
+            vals[parameter][name] = [vals[parameter][name][0] + 1, rl_union(vals[parameter][name][1], rl)]
+        else:
+            vals[parameter][name] = [1, rl]
+
+def get_param_names(filename, func):
+    cur = con.cursor()
+    param_names = {}
+    cur.execute("select parameter, value from parameter_name where file = '%s' and function = '%s';" %(string_to_hash(filename), func))
+    for txt in cur:
+        parameter = int(txt[0])
+        name = txt[1]
+        param_names[parameter] = name
+    if len(param_names):
+        return param_names
+
+    cur.execute("select parameter, value from parameter_name where function = '%s';" %(func))
+    for txt in cur:
+        parameter = int(txt[0])
+        name = txt[1]
+        param_names[parameter] = name
+    return param_names
+
+def get_caller_count(ptrs):
+    cur = con.cursor()
+    count = 0
+    for ptr in ptrs:
+        cur.execute("select count(distinct(call_id)) from caller_info where function = '%s';" %(ptr))
+        for txt in cur:
+            count += int(txt[0])
+    return count
+
+def print_merged_caller_values(filename, func, ptrs, param_names, call_cnt):
+    cur = con.cursor()
+    vals = {}
+    for ptr in ptrs:
+        cur.execute("select parameter, key, value from caller_info where function = '%s' and type = %d;" %(ptr, type_to_int("PARAM_VALUE")))
+        merge_values(param_names, vals, cur);
+
+    for param in sorted(vals):
+        for name in sorted(vals[param]):
+            if vals[param][name][0] != call_cnt:
+                continue
+            print("%d %s -> %s" %(param, name, rl_to_txt(vals[param][name][1])))
+
+
+def print_unmerged_caller_values(filename, func, ptrs, param_names):
+    cur = con.cursor()
+    for ptr in ptrs:
+        prev = -1
+        cur.execute("select file, caller, call_id, parameter, key, value from caller_info where function = '%s' and type = %d;" %(ptr, type_to_int("PARAM_VALUE")))
+        for filename, caller, call_id, parameter, name, value in cur:
+            if prev != int(call_id):
+                prev = int(call_id)
+
+            parameter = int(parameter)
+            if parameter < len(param_names):
+                name = name.replace("$", param_names[parameter])
+            else:
+                name = name.replace("$", "$%d" %(parameter))
+
+            print("%s | %s | %s | %s" %(hash_to_string(filename), caller, name, value))
+        print("==========================")
+
+def print_caller_values(filename, func, ptrs):
+    param_names = get_param_names(filename, func)
+    call_cnt = get_caller_count(ptrs)
+
+    print_merged_caller_values(filename, func, ptrs, param_names, call_cnt)
+    print("==========================")
+    print_unmerged_caller_values(filename, func, ptrs, param_names)
+
+def caller_info_values(filename, func):
+    ptrs = get_function_pointers(func)
+    print_caller_values(filename, func, ptrs)
+
+def print_return_states(func):
+    cur = con.cursor()
+    cur.execute("select * from return_states where function = '%s' order by return_id, type;" %(func))
+    count = 0
+    try:
+        for txt in cur:
+            printed = 1
+            if count == 0:
+                print("file | function | return_id | return_value | type | param | key | value |")
+            count += 1
+            print("%s | %s | %2s | %13s" %(hash_to_string(txt[0]), txt[1], txt[3], txt[4]), end = '')
+            print("| %15s |" %(type_to_str(txt[6])), end = '')
+            print(" %2d | %20s | %20s |" %(txt[7], txt[8], txt[9]))
+    except:
+        print("\n<ERROR parsing: 'select * from return_states where function = '%s';'>\n" %(func))
+
+def print_return_implies(func):
+    cur = con.cursor()
+    cur.execute("select * from return_implies where function = '%s';" %(func))
+    count = 0
+    for txt in cur:
+        if not count:
+            print("file | function | type | param | key | value |")
+        count += 1
+        print("%15s | %15s" %(hash_to_string(txt[0]), txt[1]), end = '')
+        print("| %15s" %(type_to_str(txt[4])), end = '')
+        print("| %3d | %15s | %15s |" %(txt[5], txt[6], txt[7]))
+
+def print_type_size(struct_type, member):
+    cur = con.cursor()
+    cur.execute("select * from function_type_value where type = '(struct %s)->%s';" %(struct_type, member))
+    print("file | type | size")
+    for txt in cur:
+        print("%-15s | %-15s | %s | %s" %(hash_to_string(txt[0]), txt[1], txt[2], txt[3]))
+
+    cur.execute("select * from function_type_size where type like '(struct %s)->%s';" %(struct_type, member))
+    print("file | function | type | size")
+    for txt in cur:
+        print("%-15s | %-15s | %-15s | %s" %(hash_to_string(txt[0]), txt[1], txt[2], txt[3]))
+
+def print_type_info(struct_type, member):
+    cur = con.cursor()
+    cur.execute("select * from type_info where key = '(struct %s)->%s';" %(struct_type, member))
+    for txt in cur:
+        print("%-15s | %-15s | %s | %s" %(hash_to_string(txt[0]), type_to_str(txt[1]), txt[2], txt[3]))
+
+def print_data_info(struct_type, member):
+    cur = con.cursor()
+    cur.execute("select * from data_info where data like '(struct %s)->%s';" %(struct_type, member))
+    print("file | data | type | value")
+    for txt in cur:
+        print("%-15s | %-15s | %-15s | %s" %(hash_to_string(txt[0]), txt[1], type_to_str(txt[2]), txt[3]))
+
+def print_fn_ptrs(func):
+    ptrs = get_function_pointers(func)
+    if not ptrs:
+        return
+    print("%s = " %(func), end = '')
+    print(ptrs)
+
+def print_functions(struct, member):
+    cur = con.cursor()
+    if struct:
+         cur.execute("select * from function_ptr where ptr like '(struct %s)->%s';" %(struct, member))
+    elif member.find(" ") >= 0:
+        cur.execute("select * from function_ptr where ptr = '%s';" %(member))
+    else:
+        cur.execute("select * from function_ptr where ptr like '%%->%s';" %(member))
+    for txt in cur:
+        print("%-15s | %-15s | %-15s | %s" %(hash_to_string(txt[0]), txt[2], txt[1], txt[3]))
+
+class CallTree:
+    def __init__(self, func, printed = ""):
+        self.name = func;
+        if printed == "":
+            self.printed = func + "()"
+        else:
+            self.printed = printed;
+        self.callers = []
+
+    def has_func(self, func):
+        if func == self.name:
+            return True
+        for c in self.callers:
+            if c.has_func(func):
+                return True
+        return False
+
+    def print_tree(self, out):
+        max_indent = 0
+        for c in self.callers:
+            indent = c.print_tree(out)
+            if indent > max_indent:
+                max_indent = indent
+        if max_indent != 0:
+            out.write("%s-> " %(" " *((max_indent - 1) * 3)))
+        out.write("%s\n" %(self.printed))
+        return max_indent + 1
+
+    def __repr__(self):
+        out = io.StringIO()
+        indent = 0
+        self.print_tree(out)
+        return out.getvalue()
+
+    def add_caller(self, func, printed = ""):
+        for c in self.callers:
+            if func == c.name:
+                return None
+        t = CallTree(func, printed)
+        self.callers.append(t)
+        return t
+
+def get_callers(func, restrict = ""):
+    if restrict == "":
+        restrict = "and type = 0"
+    ret = []
+    cur = con.cursor()
+    ptrs = get_function_pointers(func)
+    for ptr in ptrs:
+        cur.execute("select distinct caller from caller_info where function = '%s' %s;" %(ptr, restrict))
+        for row in cur:
+                ret.append(row[0])
+    return ret
+
+printed_funcs = []
+def call_tree_helper(func, restrict = "", indent = 0, maxdepth = 999, depth = 0):
+    global printed_funcs
+    if func in printed_funcs:
+        return
+    if func == "too common":
+        return
+    if indent > 30:
+        return
+    if depth >= maxdepth:
+        return
+    printed_funcs.append(func)
+    callers = get_callers(func, restrict)
+    if len(callers) >= 20:
+        print("Over 20 callers for %s()" %(func))
+        return
+    for caller in callers:
+        if caller in printed_funcs:
+            print("%s+ %s()" %(" " * indent, caller))
+        else:
+            print("%s%s()" %(" " * (indent + 2), caller))
+        call_tree_helper(caller, restrict, indent + 2, maxdepth, depth + 1)
+
+def print_call_tree(func, maxdepth):
+    global printed_funcs
+    printed_funcs = []
+    print("%s()" %(func))
+    call_tree_helper(func, maxdepth = maxdepth)
+
+def get_type_callers(call_tree, branch, func, my_type):
+    cur = con.cursor()
+    ptrs = get_function_pointers(func)
+    for ptr in ptrs:
+        cur.execute("select caller, function, value from caller_info where function = '%s' and type = %d;" %(ptr, my_type))
+        for row in cur:
+            caller = row[0]
+            func = row[1]
+            value = row[2]
+
+            printed = caller + "()"
+            if " " in func:
+                printed = printed + " <" + func + "()>"
+            if value != "":
+                printed = printed + " " + value
+
+            if not call_tree.has_func(caller):
+                b = branch.add_caller(caller, printed)
+                get_type_callers(call_tree, b, caller, my_type)
+            else:
+                printed = printed + " <duplicate>"
+                branch.add_caller(caller, printed)
+
+    return call_tree
+
+def print_preempt_tree(func):
+    global printed_funcs
+    printed_funcs = []
+    call_tree = CallTree(func)
+    get_type_callers(call_tree, call_tree, func, 2054)
+    print(call_tree)
+
+def print_irq_tree(func):
+    global printed_funcs
+    printed_funcs = []
+    call_tree = CallTree(func)
+    get_type_callers(call_tree, call_tree, func, 2062)
+    print(call_tree)
+
+def function_type_value(struct_type, member):
+    cur = con.cursor()
+    if struct_type == "%":
+        cur.execute("select * from function_type_value where type like '(struct %s)->%s';" %(struct_type, member))
+    else:
+        cur.execute("select * from function_type_value where type = '(struct %s)->%s';" %(struct_type, member))
+
+    for txt in cur:
+        print("%-30s | %-30s | %s | %s" %(hash_to_string(txt[0]), txt[1], txt[2], txt[3]))
+
+def rl_too_big(txt):
+    rl = txt_to_rl(txt)
+    ret = ""
+    for idx in range(len(rl)):
+        cur_max = rl[idx][1]
+        if (cur_max > 0xFFFFFFFFFFFFFF):
+            return 1
+
+    return 0
+
+def rl_has_min_untagged(txt):
+    rl = txt_to_rl(txt)
+    ret = ""
+    for idx in range(len(rl)):
+        cur_min = rl[idx][0]
+        if (cur_min == 0xff80000000000000):
+            return 1
+
+    return 0
+
+def rl_is_tagged(txt):
+    if not rl_too_big(txt):
+        return 0
+
+    if rl_has_min_untagged(txt):
+        return 0
+
+    return 1
+
+def rl_is_treat_untagged(txt):
+    if "[u]" in txt:
+        return 1;
+
+    return 0
+
+def parse_warns_tagged(filename):
+    proc = subprocess.Popen(['cat %s | grep "potentially tagged" | sort | uniq' %(filename)], shell=True, stdout=subprocess.PIPE)
+    while True:
+        line = proc.stdout.readline()
+        if not line:
+            break
+
+    linepos = re.search("([^ \\s]+)", line).group(1)
+    groupre = re.search("potentially tagged address \\(([^,]+), ([^,]+), ([^\\)]+)\\)", line)
+    groupre.group(1)
+
+    func = groupre.group(1)
+    param = int(groupre.group(2))
+    var = groupre.group(3)
+
+    if ("end" in var or "size" in var or "len" in var):
+        return
+
+    print("\n%s (func: %s, param: %d:%s) may be caused by:" %(linepos, func, param, var))
+
+    if (param != -1):
+        if not find_tagged(func, param, 0, []):
+            print("    %s (param %d) (can't walk call tree)" % (func, param))
+    else:
+        print("    %s (variable %s (can't walk call tree)" % (func, var))
+
+def find_tagged(func, param, caller_call_id, printed):
+
+    callers = {}
+    cur = con.cursor()
+    ptrs = get_function_pointers(func)
+    found = 0
+
+    for ptr in ptrs:
+        cur.execute("select call_id, value from caller_info where function = '%s' and parameter=%d and type=%d" %(ptr, param, type_to_int("DATA_SOURCE")))
+
+        for row in cur:
+            if (row[1][0] == '$'):
+                if row[0] not in callers:
+                    callers[row[0]] = {}
+                callers[row[0]]["param"] = int(row[1][1])
+
+    for ptr in ptrs:
+        cur.execute("select caller, call_id, value from caller_info where function = '%s' and parameter=%d and type=%d" %(ptr, param, type_to_int("USER_DATA")))
+
+        for row in cur:
+            if not rl_is_tagged(row[2]):
+                continue
+        if rl_is_treat_untagged(row[2]):
+            continue
+        found = 1
+        if row[1] not in callers:
+            callers[row[1]] = {}
+        if "param" not in callers[row[1]]:
+            line = "    %s (param ?) -> %s (param %d)" % (row[0], func, param)
+            if line not in printed:
+                    printed.append(line)
+                    print(line)
+            continue
+        if row[0] not in printed:
+            printed.append(row[0])
+            if not find_tagged(row[0], callers[row[1]]["param"], row[1], printed):
+                print("    %s (param %d)" % (row[0], param))
+
+    return found
+
+def trace_callers(func, param):
+    sources = []
+    prev_type = 0
+
+    cur = con.cursor()
+    ptrs = get_function_pointers(func)
+    for ptr in ptrs:
+        cur.execute("select type, caller, value from caller_info where function = '%s' and (type = 0 or type = 1014 or type = 1028) and (parameter = -1 or parameter = %d);" %(ptr, param))
+        for row in cur:
+            data_type = int(row[0])
+            if data_type == 1014:
+                sources.append((row[1], row[2]))
+            elif data_type == 1028:
+                sources.append(("%", row[2])) # hack...
+            elif data_type == 0 and prev_type == 0:
+                sources.append((row[1], ""))
+            prev_type = data_type
+    return sources
+
+def trace_param_helper(func, param, indent = 0):
+    global printed_funcs
+    if func in printed_funcs:
+        return
+    print("%s%s(param %d)" %(" " * indent, func, param))
+    if func == "too common":
+        return
+    if indent > 20:
+        return
+    printed_funcs.append(func)
+    sources = trace_callers(func, param)
+    for path in sources:
+
+        if len(path[1]) and path[1][0] == '$':
+            p = int(re.findall('\\d+', path[1][1:])[0])
+            trace_param_helper(path[0], p, indent + 2)
+        elif len(path[0]) and path[0][0] == '%':
+            print("  %s%s" %(" " * indent, path[1]))
+        else:
+            print("* %s%s %s" %(" " * (indent - 1), path[0], path[1]))
+
+def trace_param(func, param):
+    global printed_funcs
+    printed_funcs = []
+    print("tracing %s %d" %(func, param))
+    trace_param_helper(func, param)
+
+def print_locals(filename):
+    cur = con.cursor()
+    cur.execute("select file,data,value from data_info where file = '%s' and type = 8029 and value != 0;" %(filename))
+    for txt in cur:
+        print("%s | %s | %s" %(hash_to_string(txt[0]), txt[1], txt[2]))
+
+def constraint(struct_type, member):
+    cur = con.cursor()
+    cur.execute("select * from constraints_required where data like '(struct %s)->%s' or bound like '(struct %s)->%s';" %(struct_type, member, struct_type, member))
+    for txt in cur:
+        print("%-30s | %-30s | %s | %s" %(txt[0], txt[1], txt[2], txt[3]))
+
+if len(sys.argv) < 2:
+    usage()
+
+if len(sys.argv) == 2:
+    func = sys.argv[1]
+    print_caller_info("", func)
+elif sys.argv[1] == "info":
+    my_type = ""
+    if len(sys.argv) == 4:
+        my_type = sys.argv[3]
+    func = sys.argv[2]
+    print_caller_info("", func, my_type)
+elif sys.argv[1] == "call_info":
+    if len(sys.argv) != 4:
+        usage()
+    filename = sys.argv[2]
+    func = sys.argv[3]
+    caller_info_values(filename, func)
+    print_caller_info(filename, func)
+elif sys.argv[1] == "function_ptr" or sys.argv[1] == "fn_ptr":
+    func = sys.argv[2]
+    print_fn_ptrs(func)
+elif sys.argv[1] == "return_states":
+    func = sys.argv[2]
+    print_return_states(func)
+    print("================================================")
+    print_return_implies(func)
+elif sys.argv[1] == "return_implies":
+    func = sys.argv[2]
+    print_return_implies(func)
+elif sys.argv[1] == "type_size" or sys.argv[1] == "buf_size":
+    struct_type = sys.argv[2]
+    member = sys.argv[3]
+    print_type_size(struct_type, member)
+elif sys.argv[1] == "type_info":
+    struct_type = sys.argv[2]
+    member = sys.argv[3]
+    print_type_info(struct_type, member)
+elif sys.argv[1] == "data_info":
+    struct_type = sys.argv[2]
+    member = sys.argv[3]
+    print_data_info(struct_type, member)
+elif sys.argv[1] == "call_tree":
+    func = sys.argv[2]
+    maxdepth = 999
+    if len(sys.argv) >= 4:
+        maxdepth = int(sys.argv[3])
+        if (maxdepth <= 0):
+            print("depth for call_tree must be greater than zero")
+            sys.exit(1)
+    print_call_tree(func, maxdepth)
+elif sys.argv[1] == "preempt":
+    func = sys.argv[2]
+    print_preempt_tree(func)
+elif sys.argv[1] == "irq":
+    func = sys.argv[2]
+    print_irq_tree(func)
+elif sys.argv[1] == "find_tagged":
+    func = sys.argv[2]
+    param = int(sys.argv[3])
+    find_tagged(func, param, 0, [])
+elif sys.argv[1] == "parse_warns_tagged":
+    filename = sys.argv[2]
+    parse_warns_tagged(filename)
+elif sys.argv[1] == "where":
+    if len(sys.argv) == 3:
+        struct_type = "%"
+        member = sys.argv[2]
+    elif len(sys.argv) == 4:
+        struct_type = sys.argv[2]
+        member = sys.argv[3]
+    function_type_value(struct_type, member)
+elif sys.argv[1] == "local":
+    filename = sys.argv[2]
+    variable = ""
+    if len(sys.argv) == 4:
+        variable = sys.argv[3]
+    local_values(filename, variable)
+elif sys.argv[1] == "functions":
+    if len(sys.argv) == 4:
+        struct = sys.argv[2]
+        member = sys.argv[3]
+    else:
+        struct = ""
+        member = sys.argv[2]
+    print_functions(struct, member)
+elif sys.argv[1] == "trace_param":
+    if len(sys.argv) != 4:
+        usage()
+    func = sys.argv[2]
+    param = int(sys.argv[3])
+    trace_param(func, param)
+elif sys.argv[1] == "locals":
+    if len(sys.argv) != 3:
+        usage()
+    filename = sys.argv[2]
+    print_locals(filename);
+elif sys.argv[1] == "constraint":
+    if len(sys.argv) == 3:
+        struct_type = "%"
+        member = sys.argv[2]
+    elif len(sys.argv) == 4:
+        struct_type = sys.argv[2]
+        member = sys.argv[3]
+    constraint(struct_type, member)
+else:
+    usage()

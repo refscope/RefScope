@@ -1,0 +1,156 @@
+Please validate whether the extracted reference-count operations are consistent with the function code and callee information.
+
+Function: <{target_func_name}>
+
+Code:
+{target_func_code}
+
+Callee Information:
+{callee_get_put_func_info}
+
+Candidate ResultList:
+{candidate_result_list}
+
+---
+## Few-Shot Examples
+
+### Example 1 (Positive): Correct extraction — validate all operations
+
+Function: mlx5dr_definer_get
+Code:
+```c
+int mlx5dr_definer_get(struct mlx5dr_domain *dmn, u16 format_id,
+		       u8 *dw_selectors, u8 *byte_selectors,
+		       u8 *match_mask, u32 *definer_id)
+{{
+	struct dr_definer_object *definer_obj;
+	int ret = 0;
+
+	definer_obj = dr_definer_find_obj(dmn, format_id, dw_selectors,
+					  byte_selectors, match_mask);
+	if (!definer_obj) {{
+		definer_obj = dr_definer_create_obj(dmn, format_id,
+						    dw_selectors, byte_selectors,
+						    match_mask);
+		if (!definer_obj)
+			return -ENOMEM;
+	}} else {{
+		refcount_inc(&definer_obj->refcount);
+	}}
+
+	*definer_id = definer_obj->id;
+
+	return ret;
+}}
+```
+Callee Info:
+```
+1. The function refcount_inc in the implementation is a get function for its parameter index 1, its member-access path is refcount.refcnt, which is of type refcount_struct--atomic_t.
+```
+Candidate ResultList:
+```json
+[["get", "return", "0", "definer_obj.refcount.refcnt", "dr_definer_object--refcount_struct--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "validated": true,
+  "ResultList": [
+    ["get", "return", "0", "definer_obj.refcount.refcnt", "dr_definer_object--refcount_struct--atomic_t"]
+  ],
+  "reason": "refcount_inc is called on &definer_obj->refcount (via the 'else' branch), or the object is created with refcount_set in the callee. definer_obj is exposed to caller via *definer_id. The access path definer_obj.refcount.refcnt and type chain dr_definer_object--refcount_struct--atomic_t are consistent with the code."
+}}
+```
+
+### Example 2 (Positive): Correct extraction — validate get-wrapper operations
+
+Function: sk_dst_get
+Code:
+```c
+static inline struct dst_entry *
+sk_dst_get(const struct sock *sk)
+{{
+	struct dst_entry *dst;
+
+	rcu_read_lock();
+	dst = rcu_dereference(sk->sk_dst_cache);
+	if (dst && !rcuref_get(&dst->__rcuref))
+		dst = NULL;
+	rcu_read_unlock();
+	return dst;
+}}
+```
+Callee Info:
+```
+1. The function rcuref_get in the implementation is a get function for its parameter index 1, its member-access path is __rcuref.refcnt, which is of type rcuref_t--atomic_t.
+```
+Candidate ResultList:
+```json
+[["get", "return", "0", "dst.__rcuref.refcnt", "dst_entry--rcuref_t--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "validated": true,
+  "ResultList": [
+    ["get", "return", "0", "dst.__rcuref.refcnt", "dst_entry--rcuref_t--atomic_t"]
+  ],
+  "reason": "rcuref_get(&dst->__rcuref) operates on dst->__rcuref where dst is the return value. The access path dst.__rcuref.refcnt matches the callee's path (__rcuref.refcnt). The type chain dst_entry--rcuref_t--atomic_t is consistent: dst is struct dst_entry, its __rcuref field is rcuref_t, and the inner refcnt is atomic_t."
+}}
+```
+
+### Example 3 (Negative): Incorrect extraction — wrong critical variable
+
+Function: sk_dst_get (same code as above)
+Candidate ResultList:
+```json
+[["get", "parameter", "1", "sk.sk_dst_cache.__rcuref.refcnt", "sock--dst_entry--rcuref_t--atomic_t"]]
+```
+
+Expected output:
+```json
+{{
+  "validated": false,
+  "ResultList": [],
+  "reason": "The access path incorrectly starts from parameter 1 (sk). The critical variable passed to the caller is 'dst' (the return value), not 'sk'. sk is only the input used to load dst; the refcount is acquired on dst and dst is returned. The correct location is 'return', index '0', with access path starting from 'dst' (the return variable, not the input parameter)."
+}}
+```
+
+---
+## Task
+
+1. Check whether each extracted operation is supported by the actual code.
+2. Verify that the member_access_path correctly traces from the function interface
+   (parameter or return) to the actual refcount field.
+   IMPORTANT: The starting point of the access path MUST be the CRITICAL VARIABLE at the
+   function interface — the object that flows into or out of the function. Do NOT accept
+   paths that start from an input parameter when the refcount operation acts on a different
+   object (e.g., a return value or a different parameter).
+3. Verify that the member_type_chain is consistent with the callee's type chain
+   and the actual struct definitions visible in the code.
+4. Remove any operations whose path or type chain is unsupported or inconsistent.
+5. If the critical variable (location/index) is wrong, reject ALL operations that depend on it.
+6. Do not add new operations that are not justified.
+7. Valid directions in ResultList are "get", "put", or "set" — preserve the direction from the candidate list.
+8. **ACCESS PATH SEGMENT COUNT CHECK**: For each operation in ResultList, verify that:
+   - Count the `.`-separated segments in member_access_path
+   - Count the `--`-separated types in member_type_chain
+   - These two numbers MUST BE EQUAL. If they are not equal, the access_path is incomplete.
+   - Example: path="ref" (1 segment) with chain="blk_zone_wplug--refcount_t" (2 types) → REJECT
+   - Example: path="zwplug.ref" (2 segments) with chain="blk_zone_wplug--refcount_t" (2 types) → ACCEPT
+   - If the segment counts don't match, either fix the path (add the missing variable/field prefix) or reject the operation.
+
+Output only JSON behind <OUTPUT JSON>:
+<OUTPUT JSON>
+```json
+{{
+  "validated": true,
+  "ResultList": [
+    ["get", "parameter", "1", "obj.kref.refcount", "my_type--kref--refcount_t"]
+  ],
+  "reason": "short reason"
+}}
+```
+</OUTPUT JSON>

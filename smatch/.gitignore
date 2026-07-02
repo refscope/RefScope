@@ -1,0 +1,64 @@
+# generic
+*.a
+*.o
+*.o.d
+*.pyc
+*.so
+*~
+.*.swp
+.gdb_history
+*.c.smatch
+*.c.smatch.caller_info
+*.c.smatch.sql
+
+# generated
+/version.h
+
+# programs
+/c2xml
+/compile
+/ctags
+/example
+/graph
+/obfuscate
+/scheck
+/semind
+/smatch
+/bak.smatch
+/sparse
+/sparse-llvm
+/test-dissect
+/test-inspect
+/test-lexing
+/test-linearize
+/test-parsing
+/test-show-type
+/test-unssa
+
+# tags
+tags
+TAGS
+
+# stgit generated dirs
+patches-*
+
+# quilt's files
+patches
+series
+
+#cscope
+cscope.files
+
+# local makefile
+local.mk
+.*.mk
+
+# local smatch checks
+check_list_local.h
+
+# cscope and Qt files
+cscope.out
+*.pro*
+
+#python
+*.pyc

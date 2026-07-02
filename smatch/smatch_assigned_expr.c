@@ -1,0 +1,354 @@
+/*
+ * Copyright (C) 2009 Dan Carpenter.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see http://www.gnu.org/copyleft/gpl.txt
+ */
+
+/*
+ * This is not a check.  It just saves an struct expression pointer
+ * whenever something is assigned.  This can be used later on by other scripts.
+ */
+
+#include "smatch.h"
+#include "smatch_slist.h"
+#include "smatch_extra.h"
+
+int check_assigned_expr_id;
+static int my_id;
+static int link_id;
+
+static struct expression *skip_mod;
+static struct stree *global_stree;
+
+static struct smatch_state *merge_expr(struct smatch_state *s1, struct smatch_state *s2)
+{
+	struct expression *one, *two;
+
+	one = s1->data;
+	two = s2->data;
+	if (!one || !two)
+		return &merged;
+	if (expr_equiv(one, two))
+		return s1;
+	return &merged;
+}
+
+static void undef(struct sm_state *sm, struct expression *mod_expr)
+{
+	if (mod_expr == skip_mod)
+		return;
+	set_state(my_id, sm->name, sm->sym, &undefined);
+}
+
+struct expression *get_assigned_expr(struct expression *expr)
+{
+	struct expression *ret = NULL;
+	struct smatch_state *state;
+	char *name;
+	struct symbol *sym;
+
+	name = expr_to_var_sym(expr, &sym);
+	if (!name || !sym)
+		goto free;
+
+	state = get_state(my_id, name, sym);
+	if (!state && (sym->ctype.modifiers & MOD_TOPLEVEL))
+		state = get_state_stree(global_stree, my_id, name, sym);
+	if (!state)
+		goto free;
+
+	ret = (struct expression *)state->data;
+free:
+	free_string(name);
+	return ret;
+}
+
+struct sm_state *get_assigned_sm(struct expression *expr)
+{
+	return get_sm_state_expr(my_id, expr);
+}
+
+struct expression *get_assigned_expr_recurse(struct expression *expr)
+{
+	struct expression *ret;
+	int cnt = 0;
+
+	ret = NULL;
+	while ((expr = get_assigned_expr(expr))) {
+		ret = expr;
+		if (cnt++ > 4)
+			break;
+	}
+
+	return ret;
+}
+
+struct expression *get_assigned_expr_name_sym(const char *name, struct symbol *sym)
+{
+	struct smatch_state *state;
+
+	state = __get_state(my_id, name, sym);
+	if (!state)
+		return NULL;
+	return (struct expression *)state->data;
+}
+
+struct expression *get_assigned_expr_name_sym_recurse(const char *name, struct symbol *sym)
+{
+	struct expression *expr, *recurse;
+
+	expr = get_assigned_expr_name_sym(name, sym);
+	if (!expr)
+		return NULL;
+	recurse = get_assigned_expr_recurse(expr);
+	if (recurse)
+		return recurse;
+	return expr;
+}
+
+static struct expression *strip_useless_scope(struct expression *right)
+{
+	struct expression *orig;
+	struct token *token;
+	struct symbol *sym;
+
+	right = strip_expr(right);
+	if (!right || right->type != EXPR_SYMBOL)
+		return right;
+
+	sym = right->symbol;
+	if (!sym || !sym->scope || !sym->scope->token)
+		return right;
+	token = sym->scope->token;
+	if (token->pos.line != right->pos.line ||
+	    token->pos.pos != right->pos.pos)
+		return right;
+
+	orig = get_assigned_expr(right);
+	if (!orig)
+		return right;
+
+	return orig;
+}
+
+static struct sm_state *pre_sm;
+static struct expression *unfaked_call;
+
+static void merge_unfaked_call(struct sm_state *cur, struct sm_state *other)
+{
+	struct smatch_state *state;
+	struct expression *right;
+
+	/*
+	 * Imagine we have a function that returns param0 on some paths
+	 * but returns literals on other paths.  We end up creating a
+	 * fake "ret = param0;" assignment which is parsed before the
+	 * "ret = frob(param0);" real assignment.
+	 * Fine.  But what about the other returns where we don't create
+	 * a fake assignment? In that case they were keeping they're
+	 * original assignment or they were undefined.
+	 *
+	 * Maybe we should create fake assignments for every return.  But
+	 * for now I guess I'm just going to bodge this function together
+	 * to fix this one module.
+	 *
+	 * Another thing is that actually maybe sometimes we want to save
+	 * the function here instead of the fake assignment.  Probably
+	 * we will introduce a new module to save fake assignments and
+	 * save the function here.  But for now there is no need.
+	 */
+	if (!pre_sm || pre_sm != cur)
+		return;
+	if (!unfaked_call || unfaked_call->type != EXPR_ASSIGNMENT)
+		return;
+
+	right = unfaked_call->right;
+	if (right->type == EXPR_ASSIGNMENT && right->op == '=')
+		right = right->left;
+
+	right = strip__builtin_choose_expr(right);
+	right = strip_Generic(right);
+	right = strip_useless_scope(right);
+	right = strip_expr(right);
+
+	state = alloc_state_expr(right);
+	if (!state)
+		return;
+
+	set_state(my_id, cur->name, cur->sym, state);
+}
+
+static void match_assignment(struct expression *expr)
+{
+	struct symbol *left_sym, *right_sym;
+	struct smatch_state *state;
+	struct expression *right;
+	char *left_name = NULL;
+	char *right_name = NULL;
+
+	if (!cur_func_sym)
+		return;
+
+	if (__in_buf_clear)
+		return;
+
+	if (expr->op != '=')
+		return;
+	if (is_fake_call(expr->right))
+		return;
+	if (is_fake_var_assign(expr))
+		return;
+	if (__in_fake_struct_assign) {
+		struct range_list *rl;
+
+		if (!get_implied_rl(expr->right, &rl))
+			return;
+		if (is_whole_rl(rl))
+			return;
+	}
+
+	if (unfaked_call == expr) {
+		pre_sm = NULL;
+		unfaked_call = NULL;
+		return;
+	}
+	if (__in_fake_parameter_assign) {
+		pre_sm = get_sm_state_expr(my_id, expr->left);
+		unfaked_call = get_unfaked_call();
+	}
+
+	left_name = expr_to_var_sym(expr->left, &left_sym);
+	if (!left_name || !left_sym)
+		goto free;
+
+	right = expr->right;
+	if (right->type == EXPR_ASSIGNMENT && right->op == '=')
+		right = right->left;
+
+	right = strip__builtin_choose_expr(right);
+	right = strip_Generic(right);
+	right = strip_useless_scope(right);
+
+	state = alloc_state_expr(strip_expr(right));
+	if (!state)
+		goto free;
+
+	skip_mod = expr;
+	if (get_unfaked_call())
+		skip_mod = get_unfaked_call();
+	set_state(my_id, left_name, left_sym, state);
+
+	right_name = expr_to_var_sym(right, &right_sym);
+	if (!right_name || !right_sym)
+		goto free;
+
+	store_link(link_id, right_name, right_sym, left_name, left_sym);
+
+free:
+	free_string(left_name);
+	free_string(right_name);
+}
+
+static void record_param_assignment(struct expression *expr, int param, char *key, char *value)
+{
+	struct expression *arg, *right;
+	struct symbol *sym;
+	char *name;
+	char *p;
+	int right_param;
+
+	while (expr->type == EXPR_ASSIGNMENT)
+		expr = strip_expr(expr->right);
+	if (!expr || expr->type != EXPR_CALL)
+		return;
+
+	p = strstr(value, "[$");
+	if (!p)
+		return;
+
+	p += 2;
+	right_param = strtol(p, &p, 10);
+	if (*p != ']')
+		return;
+
+	arg = get_argument_from_call_expr(expr->args, param);
+	right = get_argument_from_call_expr(expr->args, right_param);
+	if (!right || !arg)
+		return;
+	name = get_variable_from_key(arg, key, &sym);
+	if (!name || !sym)
+		goto free;
+
+	skip_mod = expr;
+	set_state(my_id, name, sym, alloc_state_expr(right));
+free:
+	free_string(name);
+}
+
+static void match_global_assignment(struct expression *expr)
+{
+	static struct expression *right;
+	struct smatch_state *state;
+	char *name;
+	struct symbol *sym;
+
+	if (__in_array_initializer)
+		return;
+
+	name = expr_to_var_sym(expr->left, &sym);
+	if (!name || !sym)
+		return;
+
+	right = expr->right;
+	if (right->type == EXPR_ASSIGNMENT && right->op == '=')
+		right = right->left;
+
+	right = strip__builtin_choose_expr(right);
+	right = strip_Generic(right);
+	right = strip_useless_scope(right);
+
+	if (!right || right->smatch_flags & Tmp)
+		return;
+
+	state = alloc_state_expr(right);
+	if (!state)
+		return;
+
+	state  = clone_state_perm(state);
+	set_state_stree_perm(&global_stree, my_id, name, sym, state);
+}
+
+void register_assigned_expr(int id)
+{
+	my_id = check_assigned_expr_id = id;
+	add_function_data((unsigned long *)&skip_mod);
+	set_dynamic_states(check_assigned_expr_id);
+	add_function_data((unsigned long *)&unfaked_call);
+	add_hook(&match_assignment, ASSIGNMENT_HOOK_AFTER);
+	add_pre_merge_hook(my_id, &merge_unfaked_call);
+	add_modification_hook_late(my_id, &undef);
+	select_return_states_hook(PARAM_SET, &record_param_assignment);
+
+	add_hook(&match_global_assignment, GLOBAL_ASSIGNMENT_HOOK);
+}
+
+void register_assigned_expr_links(int id)
+{
+	link_id = id;
+	add_merge_hook(my_id, &merge_expr);
+	set_dynamic_states(link_id);
+	db_ignore_states(link_id);
+	set_up_link_functions(my_id, link_id);
+}
+

@@ -1,0 +1,289 @@
+Please determine whether the function `<{target_func_name}>` is primarily a reference-count wrapper/helper function.
+
+{target_func_code}
+
+Callee Information:
+{callee_get_put_func_info}
+
+Additional Fetched Code (requested in previous rounds):
+{fetched_code}
+
+---
+## Few-Shot Examples
+
+### Example 1 (Positive): mlx5dr_definer_get — a get-wrapper
+Code:
+```c
+int mlx5dr_definer_get(struct mlx5dr_domain *dmn, u16 format_id,
+		       u8 *dw_selectors, u8 *byte_selectors,
+		       u8 *match_mask, u32 *definer_id)
+{{
+	struct dr_definer_object *definer_obj;
+	int ret = 0;
+
+	definer_obj = dr_definer_find_obj(dmn, format_id, dw_selectors,
+					  byte_selectors, match_mask);
+	if (!definer_obj) {{
+		definer_obj = dr_definer_create_obj(dmn, format_id,
+						    dw_selectors, byte_selectors,
+						    match_mask);
+		if (!definer_obj)
+			return -ENOMEM;
+	}} else {{
+		refcount_inc(&definer_obj->refcount);
+	}}
+
+	*definer_id = definer_obj->id;
+
+	return ret;
+}}
+```
+Callee Info: None available.
+
+Expected output:
+```json
+{{
+  "need_more_info": false,
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "reason": "Primary purpose is to get-or-create a dr_definer_object and increment its refcount; the definer_obj is exposed to the caller via *definer_id. The only non-refcount logic is the ID assignment.",
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "On failure the caller gets -ENOMEM (allocation failed); retrying without changing conditions would also fail.",
+  "contract_summary": "Get-or-create wrapper: acquires a reference on an existing definer_obj via refcount_inc, or initializes a new one via the callee's refcount_set. The object is returned to the caller via output parameter *definer_id. Caller must release with a corresponding put."
+}}
+```
+
+### Example 2 (Positive): sk_dst_get — a get-wrapper
+Code:
+```c
+static inline struct dst_entry *
+sk_dst_get(const struct sock *sk)
+{{
+	struct dst_entry *dst;
+
+	rcu_read_lock();
+	dst = rcu_dereference(sk->sk_dst_cache);
+	if (dst && !rcuref_get(&dst->__rcuref))
+		dst = NULL;
+	rcu_read_unlock();
+	return dst;
+}}
+```
+Callee Info: None available.
+
+Expected output:
+```json
+{{
+  "need_more_info": false,
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "reason": "Primary purpose is to acquire a reference on sk->sk_dst_cache via rcuref_get and return it to the caller. The RCU lock is only setup/teardown for the refcount operation.",
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "rcuref_get fails when refcount is zero (object being destroyed); once zero the object is gone so retry is pointless.",
+  "contract_summary": "RCU-protected get-wrapper: acquires an RCU reference on the dst_entry cached in sk->sk_dst_cache. Returns NULL if the object is dying (refcount zero). Caller must call dst_release() to release the reference. The RCU lock is only held temporarily during the get operation."
+}}
+```
+
+### Example 3 (Negative): bfq_init_entity — NOT a wrapper
+Code:
+```c
+void bfq_init_entity(struct bfq_entity *entity, struct bfq_group *bfqg)
+{{
+	struct bfq_queue *bfqq = bfq_entity_to_bfqq(entity);
+
+	entity->weight = entity->new_weight;
+	entity->orig_weight = entity->new_weight;
+	if (bfqq) {{
+		bfqq->ioprio = bfqq->new_ioprio;
+		bfqq->ioprio_class = bfqq->new_ioprio_class;
+		bfqg_and_blkg_get(bfqg);
+	}}
+	entity->parent = bfqg->my_entity;
+	entity->sched_data = &bfqg->sched_data;
+}}
+```
+Callee Info: None available.
+
+Expected output:
+```json
+{{
+  "need_more_info": false,
+  "is_wrapper": false,
+  "passes_critical_variable": false,
+  "purity": "low",
+  "reason": "Primary purpose is entity initialization (weight, ioprio, parent, sched_data assignment). The bfqg_and_blkg_get call is one incidental step within broader initialization logic.",
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the get is incidental and not the function's primary purpose.",
+  "contract_summary": ""
+}}
+```
+
+### Example 4 (Positive): kref_get_unless_zero — conditional get-wrapper
+Code:
+```c
+static inline int __must_check kref_get_unless_zero(struct kref *kref)
+{{
+	return refcount_add_not_zero(1, &kref->refcount);
+}}
+```
+Callee Info: None available.
+
+Expected output:
+```json
+{{
+  "need_more_info": false,
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "reason": "Pure get-wrapper that conditionally acquires a reference only if the refcount is non-zero. Primary purpose is entirely refcount management.",
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Returns 0 if refcount was zero — the object is already dead/dying. Retrying will not revive the object.",
+  "contract_summary": "Conditional get-wrapper: acquires a kref reference ONLY if the refcount is non-zero (object is still alive). Returns 0 on failure — caller MUST check the return value. If 0 is returned, the object is dead/dying and must not be used."
+}}
+```
+
+### Example 5 (Positive): kref_init — a set-wrapper
+Code:
+```c
+static inline void kref_init(struct kref *kref)
+{{
+	refcount_set(&kref->refcount, 1);
+}}
+```
+Callee Info: None available.
+
+Expected output:
+```json
+{{
+  "need_more_info": false,
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "reason": "Primary purpose is to initialize the kref refcount to 1 via refcount_set. Pure set-wrapper — the caller MUST pair with a kref_put to release the reference. The set establishes the initial reference.",
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_set is unconditional and always succeeds — no failure path exists, no retry needed.",
+  "contract_summary": "Set-wrapper: initializes a kref to 1 (the initial reference). Called after object allocation to establish the first reference. Caller must pair every kref_init with exactly one kref_put when the object is no longer needed. This is the 'birth' point of the reference-count lifecycle."
+}}
+```
+
+---
+## Task
+
+This is an ITERATIVE task — you may request additional source code before making your final judgment.
+
+### Code Query Protocol
+
+If the provided function code and callee information are INSUFFICIENT to make a confident judgment — for example, you need to see the implementation of a callee function, a helper function, or type definitions to understand the refcount semantics — you MUST first request more code.
+
+**To request more code, output:**
+```json
+{{
+  "need_more_info": true,
+  "requested_functions": ["func_name_1", "func_name_2"],
+  "reason": "short reason explaining what information each requested function would provide"
+}}
+```
+
+**You may request code for:**
+- Callee functions whose refcount semantics are unclear from the callee info alone
+- Helper functions called within the target function that may affect refcount behavior
+- Functions that return or initialize structs with refcount fields
+- Any function whose implementation would clarify whether the target function is truly a wrapper
+
+**When NOT to request more code:**
+- The target function's refcount semantics are fully clear from its own code and the callee info
+- All requested functions have already been provided in "Additional Fetched Code" above
+- You have already reached the maximum of 5 rounds
+
+**If you have sufficient information, make your final judgment:**
+
+1. Judge whether the PRIMARY purpose of this function is reference-count management (get/put/set).
+   A true wrapper has very focused refcount semantics with minimal unrelated logic.
+2. Identify whether the function passes a reference-counted object (critical variable)
+   through its return value, parameters, or global variables.
+3. A get wrapper should acquire a reference that the caller is responsible for releasing.
+   A put wrapper should release a reference, after which the critical variable must not
+   be used again and no further put should be called on it.
+   A set wrapper initializes/sets a refcount to a specific value (e.g., calling refcount_set,
+   refcount_set_release, or kref_init). The set operation creates an initial reference that
+   the caller must later release with a corresponding put. A set wrapper is the "create"
+   side of the lifecycle — it does NOT increment an existing refcount, it establishes one.
+4. A function that merely calls get/put/set as one step inside broader business logic is NOT a wrapper.
+5. Do not extract parameter paths or type chains in this task.
+6. Analyze the conditionality of the refcount operation and whether the caller should retry on failure.
+7. If is_wrapper is true, write a contract_summary — a concise paragraph (2-5 sentences) capturing
+   the semantic contract of this wrapper. This summary will be used during later audit stages to
+   provide context when analyzing potential bugs related to this wrapper.
+
+1. Judge whether the PRIMARY purpose of this function is reference-count management (get/put/set).
+   A true wrapper has very focused refcount semantics with minimal unrelated logic.
+2. Identify whether the function passes a reference-counted object (critical variable)
+   through its return value, parameters, or global variables.
+3. A get wrapper should acquire a reference that the caller is responsible for releasing.
+   A put wrapper should release a reference, after which the critical variable must not
+   be used again and no further put should be called on it.
+   A set wrapper initializes/sets a refcount to a specific value (e.g., calling refcount_set,
+   refcount_set_release, or kref_init). The set operation creates an initial reference that
+   the caller must later release with a corresponding put. A set wrapper is the "create"
+   side of the lifecycle — it does NOT increment an existing refcount, it establishes one.
+4. A function that merely calls get/put/set as one step inside broader business logic is NOT a wrapper.
+5. Do not extract parameter paths or type chains in this task.
+6. Analyze the conditionality of the refcount operation and whether the caller should retry on failure.
+
+Output only JSON behind <OUTPUT JSON>:
+<OUTPUT JSON>
+```json
+{{
+  "need_more_info": false,
+  "is_wrapper": true,
+  "passes_critical_variable": true,
+  "purity": "high",
+  "reason": "short reason",
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "short reason for retry decision",
+  "contract_summary": "concise paragraph describing the semantic contract (empty string if not a wrapper)"
+}}
+```
+</OUTPUT JSON>
+
+purity values:
+- "high": almost entirely refcount management, negligible unrelated logic
+- "medium": primarily refcount but includes some setup/validation
+- "low": significant non-refcount business logic mixed in
+
+conditionality values for the get/put/set operation in this wrapper:
+- "unconditional": the operation always executes and always succeeds (e.g., unconditional kref_get, refcount_inc, refcount_set, kref_init); the operation never fails so retry is never needed
+- "conditional_on_nonzero": the get only succeeds if the refcount is non-zero (e.g., kref_get_unless_zero, rcuref_get); failure means the object is dying/dead already — retry is pointless
+- "conditional_on_nonnull": the operation only executes if the object pointer is non-NULL; failure is a no-op (nothing to operate on) — retry is also pointless
+- "conditional_on_path": the operation only executes on certain code paths (e.g., inside an if-branch, or only when a lookup succeeds); failure means the path condition was not met — caller may retry if conditions change
+
+must_check (true/false): whether the CALLER MUST check the return value of this wrapper to determine if the refcount operation succeeded. For example, kref_get_unless_zero returns an int indicating success/failure — the caller must check it. An unconditional kref_get returns void — no need to check. A get-wrapper that returns NULL on failure also requires the caller to check.
+
+retry_on_failure (true/false): after this wrapper's refcount operation FAILS, should the CALLER retry the operation? Guidelines:
+- If the failure indicates the object is gone forever (refcount hit zero → object freed/dying), retry is pointless → false
+- If the failure is transient (e.g., temporary lock contention, retryable state), retry may succeed → true
+- If the operation is unconditional and never fails (typical for set wrappers like kref_init/refcount_set), this field is not applicable → false
+- For put wrappers: if the put "fails" because the refcount was already zero, retrying means a double-put (use-after-free risk) → false
+- retry_reason: provide a concise explanation (one sentence) justifying the retry_on_failure decision
+
+contract_summary (string): if is_wrapper is true, write a concise paragraph (2-5 sentences) that captures the semantic contract of this wrapper. This summary will be used during later audit stages to provide context when analyzing potential bugs. Include:
+- **Ownership**: Does the wrapper transfer ownership to the caller? Is the reference borrowed or permanent?
+- **Lifecycle role**: Is this an acquire (get), release (put), or creation (set)? What lifecycle stage does it represent?
+- **Special constraints**: Are there iterator patterns (e.g., for_each_* macros that require manual release on break/return)? Auto-cleanup mechanisms (__free)? RCU/lock requirements?
+- **Error path behavior**: Does the function properly handle errors? Are there paths that leak or double-release?
+- **Caller obligations**: What must the caller do after calling this function? (e.g., "must call xxx_put when done", "must not use object after put", "must hold rcu_read_lock")
+- If is_wrapper is false, contract_summary must be an empty string ""
