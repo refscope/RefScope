@@ -1,0 +1,82 @@
+{
+  "function_name": "btrfs_ioctl_send",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_grab_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_fs_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_root",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_put_root",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_grab_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; function is not a wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a complex ioctl handler for BTRFS_IOC_SEND. It performs extensive validation, allocations, initialization of send context, iteration over clone sources, sorting, and calls send_subvol. Reference-count operations (send_in_progress increments and btrfs_put_root calls) are incidental to the main business logic of executing a send. The primary purpose is not refcount management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; function is not a wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; function is not a wrapper.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "aspeed_g5_acquire_regmap",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures are due to missing or incompatible device tree nodes, which are not transient; retrying would not succeed without changes to the hardware configuration.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to acquire a regmap handle for a given IP index, not to manage reference counts. The only reference count operation is an incidental of_node_put for device tree node cleanup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures are due to missing or incompatible device tree nodes, which are not transient; retrying would not succeed without changes to the hardware configuration.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures are due to missing or incompatible device tree nodes, which are not transient; retrying would not succeed without changes to the hardware configuration.",
+    "contract_summary": ""
+  }
+}

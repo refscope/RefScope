@@ -1,0 +1,106 @@
+{
+  "function_name": "__open_export_target_session",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "session.s_ref.refs",
+      "ceph_mds_session--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__ceph_lookup_mds_session",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "session.s_ref.refs",
+      "member_type_chain": "ceph_mds_session--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__ceph_lookup_mds_session",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "session.s_ref.refs",
+      "member_type_chain": "ceph_mds_session--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures from register_session or __open_session typically indicate persistent issues (e.g., -ENOMEM, transport errors); retrying without context change is unlikely to succeed.",
+  "contract_summary": "Get-or-create wrapper for a Ceph MDS session to an export target. Returns a pointer to a session with an incremented reference count. If the session already exists, a reference is acquired via __ceph_lookup_mds_session; otherwise, a new session is created via register_session (which initializes its refcount to 1). Additionally, if the session is in NEW or CLOSING state, it is opened via __open_session. On error, returns an ERR_PTR. The caller must release the reference by calling the appropriate put function (e.g., ceph_put_mds_session) when finished with the session.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The function's primary purpose is to obtain a Ceph MDS session with an acquired reference (get-or-create). The additional state-dependent open logic is non-negligible but secondary to the refcount management.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures from register_session or __open_session typically indicate persistent issues (e.g., -ENOMEM, transport errors); retrying without context change is unlikely to succeed.",
+      "contract_summary": "Get-or-create wrapper for a Ceph MDS session to an export target. Returns a pointer to a session with an incremented reference count. If the session already exists, a reference is acquired via __ceph_lookup_mds_session; otherwise, a new session is created via register_session (which initializes its refcount to 1). Additionally, if the session is in NEW or CLOSING state, it is opened via __open_session. On error, returns an ERR_PTR. The caller must release the reference by calling the appropriate put function (e.g., ceph_put_mds_session) when finished with the session."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "session.s_ref",
+          "ceph_mds_session--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'session.s_ref' is incomplete; the callee indicates the path should be 'session.s_ref.refs' to reach the atomic_t counter. The type chain also mismatches: candidate has 'ceph_mds_session--refcount_t' but callee has 'ceph_mds_session--refcount_t--atomic_t'. Therefore, the extracted operation is inconsistent with the callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "session.s_ref.refs",
+          "ceph_mds_session--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a session pointer with a reference held, acquired either via __ceph_lookup_mds_session (a get wrapper) or register_session. The extracted candidate operation direction and index are correct; the path and type chain were incomplete in the extraction. Correcting them to match the callee information (session.s_ref.refs, ceph_mds_session--refcount_t--atomic_t). The function's primary purpose is to obtain a reference-counted session, making it a refcount wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "session.s_ref.refs",
+        "ceph_mds_session--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures from register_session or __open_session typically indicate persistent issues (e.g., -ENOMEM, transport errors); retrying without context change is unlikely to succeed.",
+    "contract_summary": "Get-or-create wrapper for a Ceph MDS session to an export target. Returns a pointer to a session with an incremented reference count. If the session already exists, a reference is acquired via __ceph_lookup_mds_session; otherwise, a new session is created via register_session (which initializes its refcount to 1). Additionally, if the session is in NEW or CLOSING state, it is opened via __open_session. On error, returns an ERR_PTR. The caller must release the reference by calling the appropriate put function (e.g., ceph_put_mds_session) when finished with the session."
+  }
+}

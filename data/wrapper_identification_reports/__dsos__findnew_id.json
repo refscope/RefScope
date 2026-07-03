@@ -1,0 +1,99 @@
+{
+  "function_name": "__dsos__findnew_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dso.refcnt.refs",
+      "dso--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__dsos__find_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__dsos__find_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to allocation failure; retrying may succeed later but is not part of the wrapper's contract—callers are expected to propagate the error.",
+  "contract_summary": "Get-or-create wrapper for a dso in the dsos list. Returns a dso with an acquired reference (either from an existing entry via __dsos__find_id which increments the refcount, or from a newly created entry via __dsos__addnew_id which sets the refcount to 1). The caller holds a reference on the returned dso and must eventually release it with a corresponding put (e.g., dso__put). If the function returns NULL, allocation failed and no reference was acquired. The dsos->lock must be held in shared mode (SHARED_LOCKS_REQUIRED).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a dso (via get on existing or set on new) and return it to the caller. The only non-refcount logic is a minor call to __dso__improve_id to update metadata.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to allocation failure; retrying may succeed later but is not part of the wrapper's contract—callers are expected to propagate the error.",
+      "contract_summary": "Get-or-create wrapper for a dso in the dsos list. Returns a dso with an acquired reference (either from an existing entry via __dsos__find_id which increments the refcount, or from a newly created entry via __dsos__addnew_id which sets the refcount to 1). The caller holds a reference on the returned dso and must eventually release it with a corresponding put (e.g., dso__put). If the function returns NULL, allocation failed and no reference was acquired. The dsos->lock must be held in shared mode (SHARED_LOCKS_REQUIRED)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dso.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dso.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The callee __dsos__find_id is a get function for its return value, incrementing refcnt.refs. The function returns a dso with increased refcount (either from __dsos__find_id or __dsos__addnew_id). The access path dso.refcnt.refs and type chain dso--refcount_struct--atomic_t are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dso.refcnt.refs",
+        "dso--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to allocation failure; retrying may succeed later but is not part of the wrapper's contract—callers are expected to propagate the error.",
+    "contract_summary": "Get-or-create wrapper for a dso in the dsos list. Returns a dso with an acquired reference (either from an existing entry via __dsos__find_id which increments the refcount, or from a newly created entry via __dsos__addnew_id which sets the refcount to 1). The caller holds a reference on the returned dso and must eventually release it with a corresponding put (e.g., dso__put). If the function returns NULL, allocation failed and no reference was acquired. The dsos->lock must be held in shared mode (SHARED_LOCKS_REQUIRED)."
+  }
+}

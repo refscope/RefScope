@@ -1,0 +1,106 @@
+{
+  "function_name": "__bfq_put_async_bfqq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "bfqq.ref",
+      "bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper always succeeds; after put the pointer is set to NULL so retry is meaningless.",
+  "contract_summary": "Release wrapper for an async bfqq: decrements the reference count via bfq_put_queue, moves the queue to the root group as part of teardown, and sets the caller's pointer to NULL to prevent use-after-free. The caller must not access the bfqq after this call, and must not call this function again on the same pointer. No return value; the operation is a no-op if the pointer is already NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on an async bfqq, with necessary cleanup (move to root group) and nullification of the pointer. The only non-refcount logic is logging and pointer assignment.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper always succeeds; after put the pointer is set to NULL so retry is meaningless.",
+      "contract_summary": "Release wrapper for an async bfqq: decrements the reference count via bfq_put_queue, moves the queue to the root group as part of teardown, and sets the caller's pointer to NULL to prevent use-after-free. The caller must not access the bfqq after this call, and must not call this function again on the same pointer. No return value; the operation is a no-op if the pointer is already NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqq_ptr.ref",
+          "bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'bfqq_ptr.ref' is invalid: bfqq_ptr is a pointer-to-pointer (struct bfq_queue **), not a struct with a 'ref' field. To reach bfqq.ref, two dereferences are required, but the path has only one segment. Segment count mismatch (1 vs 2 types in chain). Moreover, the critical variable (the queue bfqq) is derived from parameter 2, not directly a parameter or return, making the given location and path incorrect."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqq.ref",
+          "bfq_queue--int"
+        ]
+      ],
+      "reason": "The function is a classic put wrapper: it takes a pointer-to-pointer to a bfq_queue, performs a put on the queue's refcount via bfq_put_queue, and then clears the pointer. The critical variable bfqq is derived from *bfqq_ptr (parameter 2). The extracted candidate's path was incorrect ('bfqq_ptr.ref') due to mis-parsing the dereference; the correct path is 'bfqq.ref', as bfqq is the local variable holding the queue. The operation is a put on bfqq->ref, and the type chain bfq_queue--int is correct. The function has no other business logic, making it a high-purity wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "bfqq.ref",
+        "bfq_queue--int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper always succeeds; after put the pointer is set to NULL so retry is meaningless.",
+    "contract_summary": "Release wrapper for an async bfqq: decrements the reference count via bfq_put_queue, moves the queue to the root group as part of teardown, and sets the caller's pointer to NULL to prevent use-after-free. The caller must not access the bfqq after this call, and must not call this function again on the same pointer. No return value; the operation is a no-op if the pointer is already NULL."
+  }
+}

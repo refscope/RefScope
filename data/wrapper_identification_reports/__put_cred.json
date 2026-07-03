@@ -1,0 +1,363 @@
+{
+  "function_name": "__put_cred",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.thread_keyring.usage.refs",
+      "cred--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.ucounts.count",
+      "cred--ucounts--rcuref_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.session_keyring.usage.refs",
+      "cred--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.process_keyring.usage.refs",
+      "cred--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.request_key_auth.usage.refs",
+      "cred--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.user.__count.refs",
+      "cred--user_struct--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cred.group_info.usage.refs",
+      "cred--group_info--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.thread_keyring.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.request_key_auth.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.session_keyring.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.process_keyring.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.thread_keyring.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.session_keyring.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.process_keyring.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.request_key_auth.usage.refs",
+      "member_type_chain": "cred--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_cred_rcu",
+      "get_or_put": "put",
+      "index": "cred",
+      "location": "global",
+      "member_access_path": "cred.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is called only when the refcount is already zero, so the cred must be freed. Retrying would be a use-after-free bug.",
+  "contract_summary": "Release wrapper for a `struct cred`. The caller must ensure that the usage count is zero (e.g., by calling `put_cred` in a thread-safe manner) before invoking `__put_cred`. After this function is called, the cred object is freed (either synchronously or via RCU) and must not be accessed again. The function is the final release step in the cred lifetime; it does not transfer ownership but rather destroys the object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a `struct cred` once its usage count reaches zero, handling either immediate or deferred RCU-based cleanup. The only non-refcount logic is debug prints and BUG_ON assertions to catch misuse.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is called only when the refcount is already zero, so the cred must be freed. Retrying would be a use-after-free bug.",
+      "contract_summary": "Release wrapper for a `struct cred`. The caller must ensure that the usage count is zero (e.g., by calling `put_cred` in a thread-safe manner) before invoking `__put_cred`. After this function is called, the cred object is freed (either synchronously or via RCU) and must not be accessed again. The function is the final release step in the cred lifetime; it does not transfer ownership but rather destroys the object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.thread_keyring.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.ucounts.count",
+          "cred--ucounts--rcuref_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.session_keyring.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.process_keyring.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.request_key_auth.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.user.__count.refs",
+          "cred--user_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.group_info.usage.refs",
+          "cred--group_info--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.thread_keyring.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.ucounts.count",
+          "cred--ucounts--rcuref_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.session_keyring.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.process_keyring.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.request_key_auth.usage.refs",
+          "cred--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.user.__count.refs",
+          "cred--user_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cred.group_info.usage.refs",
+          "cred--group_info--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All operations are consistent with the function code and callee information: __put_cred calls put_cred_rcu (either directly or via call_rcu), which decrements the refcounts on the sub-objects of the cred parameter. The access paths and type chains match exactly what the callee performs, and the starting point (parameter 1, i.e., cred) is correct. Segment counts match type counts for each operation."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.thread_keyring.usage.refs",
+        "cred--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.ucounts.count",
+        "cred--ucounts--rcuref_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.session_keyring.usage.refs",
+        "cred--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.process_keyring.usage.refs",
+        "cred--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.request_key_auth.usage.refs",
+        "cred--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.user.__count.refs",
+        "cred--user_struct--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cred.group_info.usage.refs",
+        "cred--group_info--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 7,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is called only when the refcount is already zero, so the cred must be freed. Retrying would be a use-after-free bug.",
+    "contract_summary": "Release wrapper for a `struct cred`. The caller must ensure that the usage count is zero (e.g., by calling `put_cred` in a thread-safe manner) before invoking `__put_cred`. After this function is called, the cred object is freed (either synchronously or via RCU) and must not be accessed again. The function is the final release step in the cred lifetime; it does not transfer ownership but rather destroys the object."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_next_extent_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "next.refs.refs",
+      "extent_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is only a NULL pointer (no next state); retrying the same call with unchanged inputs will always yield the same result.",
+  "contract_summary": "This function is a get-wrapper for iterating over extent states in an extent_io_tree. It takes the current state, finds the next state in the tree, increments its reference count, and returns it. The caller receives a pointer to the next state with an elevated refcount and must release it with a corresponding put (e.g., free_extent_state) when no longer needed. This is analogous to a 'get_next' pattern: the caller is responsible for properly putting the returned state, especially when breaking out of an iteration loop. The function holds the tree lock only during the lookup and refcount increment.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on the next extent_state in the tree via refcount_inc and return it. Minimal logic beyond locking, NULL check, and assertion.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is only a NULL pointer (no next state); retrying the same call with unchanged inputs will always yield the same result.",
+      "contract_summary": "This function is a get-wrapper for iterating over extent states in an extent_io_tree. It takes the current state, finds the next state in the tree, increments its reference count, and returns it. The caller receives a pointer to the next state with an elevated refcount and must release it with a corresponding put (e.g., free_extent_state) when no longer needed. This is analogous to a 'get_next' pattern: the caller is responsible for properly putting the returned state, especially when breaking out of an iteration loop. The function holds the tree lock only during the lookup and refcount increment."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.refs.refs",
+          "extent_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.refs.refs",
+          "extent_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&next->refs) increments the refcount on the returned extent_state object 'next'. The access path from the return variable 'next' to the atomic_t field is 'next.refs.refs' (extent_state.refs.refcount_t.refs.atomic_t), matching the callee's path 'r.refs'. The type chain extent_state--refcount_t--atomic_t is consistent with kernel definitions (refcount_t contains atomic_t refs). The operation is a get on the returned object."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "next.refs.refs",
+        "extent_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is only a NULL pointer (no next state); retrying the same call with unchanged inputs will always yield the same result.",
+    "contract_summary": "This function is a get-wrapper for iterating over extent states in an extent_io_tree. It takes the current state, finds the next state in the tree, increments its reference count, and returns it. The caller receives a pointer to the next state with an elevated refcount and must release it with a corresponding put (e.g., free_extent_state) when no longer needed. This is analogous to a 'get_next' pattern: the caller is responsible for properly putting the returned state, especially when breaking out of an iteration loop. The function holds the tree lock only during the lookup and refcount increment."
+  }
+}

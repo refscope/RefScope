@@ -1,0 +1,40 @@
+{
+  "function_name": "ap_sm_wait",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": null,
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ap_get_qdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "aq.ap_dev.device.kobj.kref.refcount",
+      "member_type_chain": "ap_queue--ap_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ap_get_qdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "aq.ap_dev.device.kobj.kref.refcount",
+      "member_type_chain": "ap_queue--ap_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {},
+  "final": {
+    "status": "incomplete",
+    "reason": "source_code_mismatch: no_function_pattern",
+    "is_wrapper": false,
+    "functionality_list": [],
+    "callee_count": 1
+  }
+}

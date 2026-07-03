@@ -1,0 +1,70 @@
+{
+  "function_name": "acpi_device_remove_files",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpi_hide_nondev_subnodes",
+      "get_or_put": "put",
+      "index": "dn",
+      "location": "global",
+      "member_access_path": "dn.kobj.kref.refcount",
+      "member_type_chain": "acpi_data_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpi_hide_nondev_subnodes",
+      "get_or_put": "put",
+      "index": "dn",
+      "location": "global",
+      "member_access_path": "dn.kobj.kref.refcount",
+      "member_type_chain": "acpi_data_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is unconditional and cannot fail; retry is not applicable.",
+  "contract_summary": "This function is a put wrapper that decrements the reference count of the acpi_data_node associated with the device's data (via &dev->data). It should be called when removing sysfs files from the ACPI device, representing the release of a reference. After this call, the data node may be freed if its reference count reaches zero, and the caller must not access it further.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Entire function body is a single call to a known put function (acpi_hide_nondev_subnodes), which decrements a kref refcount. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is unconditional and cannot fail; retry is not applicable.",
+      "contract_summary": "This function is a put wrapper that decrements the reference count of the acpi_data_node associated with the device's data (via &dev->data). It should be called when removing sysfs files from the ACPI device, representing the release of a reference. After this call, the data node may be freed if its reference count reaches zero, and the caller must not access it further."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "kobject_put"
+      ],
+      "reason": "Need kobject_put implementation to confirm the exact member_access_path and type chain from its parameter (kobject) to the refcount field, which will then allow mapping from dev through dev->data.subnodes to the kobject of each subnode."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "The candidate ResultList is empty, which is consistent with the function code that calls acpi_hide_nondev_subnodes but no explicit refcount operations are extracted. No operations to validate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is unconditional and cannot fail; retry is not applicable.",
+    "contract_summary": "This function is a put wrapper that decrements the reference count of the acpi_data_node associated with the device's data (via &dev->data). It should be called when removing sysfs files from the ACPI device, representing the release of a reference. After this call, the data node may be freed if its reference count reaches zero, and the caller must not access it further."
+  }
+}

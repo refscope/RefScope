@@ -1,0 +1,99 @@
+{
+  "function_name": "__scsi_find_target",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "found_starget.dev.kobj.kref.refcount",
+      "scsi_target--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) indicates no matching target exists; retrying would not change the outcome unless a target is created separately.",
+  "contract_summary": "This is a get-wrapper that searches for an existing scsi_target matching the given channel and id, and if found, increments its reference count via get_device on the embedded struct device. The caller receives a pointer to the scsi_target with an additional reference, and must release it with a corresponding put (e.g., put_device or scsi_target_put) when done. If no matching target is found, NULL is returned and no reference is taken. The function does not allocate or create a new target; it only acquires a reference on an existing one.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find an existing scsi_target and acquire a reference on it via get_device. The lookup logic is minimal and solely supports the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) indicates no matching target exists; retrying would not change the outcome unless a target is created separately.",
+      "contract_summary": "This is a get-wrapper that searches for an existing scsi_target matching the given channel and id, and if found, increments its reference count via get_device on the embedded struct device. The caller receives a pointer to the scsi_target with an additional reference, and must release it with a corresponding put (e.g., put_device or scsi_target_put) when done. If no matching target is found, NULL is returned and no reference is taken. The function does not allocate or create a new target; it only acquires a reference on an existing one."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "found_starget.dev.kobj.kref.refcount",
+          "scsi_target--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "found_starget.dev.kobj.kref.refcount",
+          "scsi_target--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get_device call increments the refcount on found_starget->dev when a matching target is found. The return value is the scsi_target pointer (found_starget). The access path found_starget.dev.kobj.kref.refcount correctly traces from the returned scsi_target through its embedded device, kobject, kref to refcount_t. The segment count (5) matches the type chain length (5). The type chain scsi_target--device--kobject--kref--refcount_t is consistent with the struct definitions. The operation is only performed when a target is found, which aligns with the conditional get_device."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "found_starget.dev.kobj.kref.refcount",
+        "scsi_target--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) indicates no matching target exists; retrying would not change the outcome unless a target is created separately.",
+    "contract_summary": "This is a get-wrapper that searches for an existing scsi_target matching the given channel and id, and if found, increments its reference count via get_device on the embedded struct device. The caller receives a pointer to the scsi_target with an additional reference, and must release it with a corresponding put (e.g., put_device or scsi_target_put) when done. If no matching target is found, NULL is returned and no reference is taken. The function does not allocate or create a new target; it only acquires a reference on an existing one."
+  }
+}

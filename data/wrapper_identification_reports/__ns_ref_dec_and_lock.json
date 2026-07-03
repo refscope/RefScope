@@ -1,0 +1,99 @@
+{
+  "function_name": "__ns_ref_dec_and_lock",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.__ns_ref.refs",
+      "ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_lock",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_lock",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If ns is the init namespace, no operation occurs and retrying would not change that. If refcount did not reach zero, the function returns false normally; the caller should handle both outcomes without retrying.",
+  "contract_summary": "This is a put-with-lock wrapper for namespace reference counting. It decrements the namespace's refcount and, if the refcount becomes zero, acquires the provided spinlock to signal that the namespace is the last reference and should be destroyed. It prevents the init namespace from being released by returning false early. The caller must check the return value: if true, the caller holds ns_lock and is responsible for final cleanup (e.g., freeing the namespace). If false, the namespace remains alive; the caller must not free it but may still use it normally. This function is typically used on the last put path to synchronize destruction.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the namespace refcount and conditionally acquire a lock, with a guard for init namespace. The only non-refcount logic is the init namespace check and warnings, which are minimal validation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If ns is the init namespace, no operation occurs and retrying would not change that. If refcount did not reach zero, the function returns false normally; the caller should handle both outcomes without retrying.",
+      "contract_summary": "This is a put-with-lock wrapper for namespace reference counting. It decrements the namespace's refcount and, if the refcount becomes zero, acquires the provided spinlock to signal that the namespace is the last reference and should be destroyed. It prevents the init namespace from being released by returning false early. The caller must check the return value: if true, the caller holds ns_lock and is responsible for final cleanup (e.g., freeing the namespace). If false, the namespace remains alive; the caller must not free it but may still use it normally. This function is typically used on the last put path to synchronize destruction."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_lock(&ns->__ns_ref, ns_lock) decrements the refcount on ns->__ns_ref, a put operation. The access path ns.__ns_ref.refs and type chain ns_common--refcount_t--atomic_t correctly trace from the parameter ns to the atomic_t field. Segment counts match (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.__ns_ref.refs",
+        "ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If ns is the init namespace, no operation occurs and retrying would not change that. If refcount did not reach zero, the function returns false normally; the caller should handle both outcomes without retrying.",
+    "contract_summary": "This is a put-with-lock wrapper for namespace reference counting. It decrements the namespace's refcount and, if the refcount becomes zero, acquires the provided spinlock to signal that the namespace is the last reference and should be destroyed. It prevents the init namespace from being released by returning false early. The caller must check the return value: if true, the caller holds ns_lock and is responsible for final cleanup (e.g., freeing the namespace). If false, the namespace remains alive; the caller must not free it but may still use it normally. This function is typically used on the last put path to synchronize destruction."
+  }
+}

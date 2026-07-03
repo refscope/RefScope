@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_orig_hash_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "orig_node_tmp.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure may be due to the node not yet being in the hash; retrying later could succeed if the node is added. If the node existed but had zero refcount (dying), retry won't help, but the caller cannot distinguish; retry is still safe (just returns NULL again).",
+  "contract_summary": "This function looks up an originator node (orig_node) by key in the hash table and returns it with an acquired reference. The caller must release the reference via batadv_orig_node_put when done. The lookup is performed under RCU protection, and kref_get_unless_zero ensures safe acquisition without racing against concurrent destruction. Returns NULL if the node is not found or if its refcount is zero (indicating it is being freed). Callers should check the return value and may retry later if the node might become available.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an orig_node and acquire a reference via kref_get_unless_zero, returning the node with an elevated refcount. The hash traversal is minimal machinery for finding the object; the core semantic is 'find and get reference'.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure may be due to the node not yet being in the hash; retrying later could succeed if the node is added. If the node existed but had zero refcount (dying), retry won't help, but the caller cannot distinguish; retry is still safe (just returns NULL again).",
+      "contract_summary": "This function looks up an originator node (orig_node) by key in the hash table and returns it with an acquired reference. The caller must release the reference via batadv_orig_node_put when done. The lookup is performed under RCU protection, and kref_get_unless_zero ensures safe acquisition without racing against concurrent destruction. Returns NULL if the node is not found or if its refcount is zero (indicating it is being freed). Callers should check the return value and may retry later if the node might become available."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node_tmp.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node_tmp.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The refcount operation kref_get_unless_zero is performed on orig_node->refcount, and the object is returned as orig_node_tmp. The access path orig_node_tmp.refcount.refcount correctly traces from the return value to the refcount field (batadv_orig_node has a kref field named refcount, whose refcount field is refcount_t). The segment count and type chain match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "orig_node_tmp.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure may be due to the node not yet being in the hash; retrying later could succeed if the node is added. If the node existed but had zero refcount (dying), retry won't help, but the caller cannot distinguish; retry is still safe (just returns NULL again).",
+    "contract_summary": "This function looks up an originator node (orig_node) by key in the hash table and returns it with an acquired reference. The caller must release the reference via batadv_orig_node_put when done. The lookup is performed under RCU protection, and kref_get_unless_zero ensures safe acquisition without racing against concurrent destruction. Returns NULL if the node is not found or if its refcount is zero (indicating it is being freed). Callers should check the return value and may retry later if the node might become available."
+  }
+}

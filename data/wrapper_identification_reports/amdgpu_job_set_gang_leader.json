@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_job_set_gang_leader",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "leader.base.s_fence.scheduled.refcount.refcount",
+      "amdgpu_job--drm_sched_job--drm_sched_fence--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dma_fence_get never fails; failure (e.g., from warning) is a bug that retrying cannot fix.",
+  "contract_summary": "This function sets the gang_submit field of a job to the leader's scheduled fence. If the job is not the leader itself, it increments the fence's reference count to record the job as a gang member; otherwise, it avoids a self-reference cycle. The caller must ensure the leader job remains alive while this job uses the fence, and the fence's reference is released when the job completes or is destroyed (via a corresponding put). The function is only intended to be called once per job (enforced by a WARN_ON on re-assignment).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to set gang_submit fence of a job with proper reference counting (get from leader if not self). The only non-refcount logic is a WARN_ON check and the assignment, both integral to the operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dma_fence_get never fails; failure (e.g., from warning) is a bug that retrying cannot fix.",
+      "contract_summary": "This function sets the gang_submit field of a job to the leader's scheduled fence. If the job is not the leader itself, it increments the fence's reference count to record the job as a gang member; otherwise, it avoids a self-reference cycle. The caller must ensure the leader job remains alive while this job uses the fence, and the fence's reference is released when the job completes or is destroyed (via a corresponding put). The function is only intended to be called once per job (enforced by a WARN_ON on re-assignment)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "leader.base.s_fence.scheduled.refcount.refcount",
+          "amdgpu_job--drm_sched_job--drm_sched_fence--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "leader.base.s_fence.scheduled.refcount.refcount",
+          "amdgpu_job--drm_sched_job--drm_sched_fence--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The access path from parameter 2 (leader) correctly traces through base.s_fence.scheduled to the dma_fence's refcount. The dma_fence_get call operates on the fence object derived from leader, and the path and type chain match the callee info. Segment counts are equal (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "leader.base.s_fence.scheduled.refcount.refcount",
+        "amdgpu_job--drm_sched_job--drm_sched_fence--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dma_fence_get never fails; failure (e.g., from warning) is a bug that retrying cannot fix.",
+    "contract_summary": "This function sets the gang_submit field of a job to the leader's scheduled fence. If the job is not the leader itself, it increments the fence's reference count to record the job as a gang member; otherwise, it avoids a self-reference cycle. The caller must ensure the leader job remains alive while this job uses the fence, and the fence's reference is released when the job completes or is destroyed (via a corresponding put). The function is only intended to be called once per job (enforced by a WARN_ON on re-assignment)."
+  }
+}

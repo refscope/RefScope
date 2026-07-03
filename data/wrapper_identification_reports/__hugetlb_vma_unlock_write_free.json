@@ -1,0 +1,99 @@
+{
+  "function_name": "__hugetlb_vma_unlock_write_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vma.vm_private_data.refs.refcount",
+      "vm_area_struct--hugetlb_vma_lock--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__hugetlb_vma_unlock_write_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_lock.refs.refcount",
+      "member_type_chain": "hugetlb_vma_lock--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__hugetlb_vma_unlock_write_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_lock.refs.refcount",
+      "member_type_chain": "hugetlb_vma_lock--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation always succeeds when called correctly; unlock is also unconditional. No failure path that would benefit from retry.",
+  "contract_summary": "This function is a release wrapper: it unlocks a hugetlb VMA lock held for write and, for shareable locks (those with 'struct hugetlb_vma_lock'), calls a put (kref_put) which may free the lock structure if its refcount reaches zero. For private locks (anon vmas), it simply releases the rw_sema. The caller must have previously acquired the lock via a matching write-lock function. After this call, the caller must not access the lock object (for shareable locks) because it may have been freed. No return value; the caller does not need to check for failure. This function represents the release side of the lock lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to unlock the hugetlb VMA lock and, for shareable locks, decrement the refcount (put) and possibly free the lock structure. No significant unrelated logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation always succeeds when called correctly; unlock is also unconditional. No failure path that would benefit from retry.",
+      "contract_summary": "This function is a release wrapper: it unlocks a hugetlb VMA lock held for write and, for shareable locks (those with 'struct hugetlb_vma_lock'), calls a put (kref_put) which may free the lock structure if its refcount reaches zero. For private locks (anon vmas), it simply releases the rw_sema. The caller must have previously acquired the lock via a matching write-lock function. After this call, the caller must not access the lock object (for shareable locks) because it may have been freed. No return value; the caller does not need to check for failure. This function represents the release side of the lock lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vma.vm_private_data.refs.refcount",
+          "vm_area_struct--hugetlb_vma_lock--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vma.vm_private_data.refs.refcount",
+          "vm_area_struct--hugetlb_vma_lock--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code calls __hugetlb_vma_unlock_write_put(vma_lock) where vma_lock = vma->vm_private_data, which is a pointer to struct hugetlb_vma_lock. The callee's put operation acts on parameter 1 with access path vma_lock.refs.refcount and type chain hugetlb_vma_lock--kref--refcount_t. In the caller, the refcount field is accessed via vma.vm_private_data.refs.refcount, and the type chain vm_area_struct--hugetlb_vma_lock--kref--refcount_t correctly traces from the function parameter vma. The segment counts (4) match, and the direction 'put' is preserved."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vma.vm_private_data.refs.refcount",
+        "vm_area_struct--hugetlb_vma_lock--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation always succeeds when called correctly; unlock is also unconditional. No failure path that would benefit from retry.",
+    "contract_summary": "This function is a release wrapper: it unlocks a hugetlb VMA lock held for write and, for shareable locks (those with 'struct hugetlb_vma_lock'), calls a put (kref_put) which may free the lock structure if its refcount reaches zero. For private locks (anon vmas), it simply releases the rw_sema. The caller must have previously acquired the lock via a matching write-lock function. After this call, the caller must not access the lock object (for shareable locks) because it may have been freed. No return value; the caller does not need to check for failure. This function represents the release side of the lock lifecycle."
+  }
+}

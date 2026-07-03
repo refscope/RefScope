@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_lookup_first_ordered_extent",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "entry.refs.refs",
+      "btrfs_ordered_extent--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If the lookup fails (returns NULL), the ordered extent may not have been created yet; a later retry could succeed if the extent is added in the meantime.",
+  "contract_summary": "Get-wrapper that looks up an ordered extent by file offset in the inode's ordered tree. If found, it increments the extent's refcount and returns a referenced pointer. If not found, returns NULL. The caller must check the return value and, if non-NULL, is responsible for releasing the reference with a corresponding put (e.g., btrfs_put_ordered_extent) when done. The function holds the ordered_tree_lock during the lookup and refcount increment, so no additional locking is required by the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function performs a tree lookup and, if found, increments the refcount of the ordered extent before returning it. The lock and trace are minimal overhead; the primary purpose is to acquire a reference on the extent for the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If the lookup fails (returns NULL), the ordered extent may not have been created yet; a later retry could succeed if the extent is added in the meantime.",
+      "contract_summary": "Get-wrapper that looks up an ordered extent by file offset in the inode's ordered tree. If found, it increments the extent's refcount and returns a referenced pointer. If not found, returns NULL. The caller must check the return value and, if non-NULL, is responsible for releasing the reference with a corresponding put (e.g., btrfs_put_ordered_extent) when done. The function holds the ordered_tree_lock during the lookup and refcount increment, so no additional locking is required by the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry.refs",
+          "btrfs_ordered_extent--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry.refs.refs",
+          "btrfs_ordered_extent--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The critical variable is the return value 'entry'. refcount_inc is called on &entry->refs. The full access path from entry to the atomic_t field is entry.refs.refs (entry is btrfs_ordered_extent, refs is refcount_t/refcount_struct, and the inner atomic_t is also named refs). The type chain btrfs_ordered_extent--refcount_struct--atomic_t is consistent. The candidate's path 'entry.refs' had only 2 segments while the type chain has 3, so it was corrected to 'entry.refs.refs' to match the required segment count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "entry.refs.refs",
+        "btrfs_ordered_extent--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If the lookup fails (returns NULL), the ordered extent may not have been created yet; a later retry could succeed if the extent is added in the meantime.",
+    "contract_summary": "Get-wrapper that looks up an ordered extent by file offset in the inode's ordered tree. If found, it increments the extent's refcount and returns a referenced pointer. If not found, returns NULL. The caller must check the return value and, if non-NULL, is responsible for releasing the reference with a corresponding put (e.g., btrfs_put_ordered_extent) when done. The function holds the ordered_tree_lock during the lookup and refcount increment, so no additional locking is required by the caller."
+  }
+}

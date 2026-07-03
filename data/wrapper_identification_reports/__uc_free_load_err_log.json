@@ -1,0 +1,99 @@
+{
+  "function_name": "__uc_free_load_err_log",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "uc.load_err_log.base.refcount.refcount",
+      "intel_uc--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put is unconditional when log is non-NULL; if log is NULL, no operation. Retry is not applicable.",
+  "contract_summary": "This function releases the reference held by the load_err_log pointer in the intel_uc structure. It atomically clears the pointer (using fetch_and_zero) to prevent double-release, then calls i915_gem_object_put on the previously stored object. After this call, the caller must not access the object, as ownership of the reference is returned to the object's refcount management. This is a release (put) wrapper used to clean up the load error log at the end of its lifecycle in this context.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on uc->load_err_log atomically and call i915_gem_object_put. No other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put is unconditional when log is non-NULL; if log is NULL, no operation. Retry is not applicable.",
+      "contract_summary": "This function releases the reference held by the load_err_log pointer in the intel_uc structure. It atomically clears the pointer (using fetch_and_zero) to prevent double-release, then calls i915_gem_object_put on the previously stored object. After this call, the caller must not access the object, as ownership of the reference is returned to the object's refcount management. This is a release (put) wrapper used to clean up the load error log at the end of its lifecycle in this context."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "uc.load_err_log.base.refcount.refcount",
+          "intel_uc--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "uc.load_err_log.base.refcount.refcount",
+          "intel_uc--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function takes uc as parameter (index 1) and calls i915_gem_object_put on uc->load_err_log after fetch_and_zero. The access path from uc through load_err_log, then base, refcount, to refcount_t matches the callee's description. The type chain intel_uc--... is correct. The segment count (5) equals the number of types (5)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "uc.load_err_log.base.refcount.refcount",
+        "intel_uc--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put is unconditional when log is non-NULL; if log is NULL, no operation. Retry is not applicable.",
+    "contract_summary": "This function releases the reference held by the load_err_log pointer in the intel_uc structure. It atomically clears the pointer (using fetch_and_zero) to prevent double-release, then calls i915_gem_object_put on the previously stored object. After this call, the caller must not access the object, as ownership of the reference is returned to the object's refcount management. This is a release (put) wrapper used to clean up the load error log at the end of its lifecycle in this context."
+  }
+}

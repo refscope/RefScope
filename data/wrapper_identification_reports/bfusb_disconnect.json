@@ -1,0 +1,82 @@
+{
+  "function_name": "bfusb_disconnect",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hci_free_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdev.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hci_free_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdev.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation succeeds silently or frees the object; retrying after a successful put would cause a double-free.",
+  "contract_summary": "This function is a disconnect cleanup wrapper that releases the reference on the HCI device after proper shutdown. It calls bfusb_close and hci_unregister_dev to quiesce the device, then drops the reference via hci_free_dev. After execution, the HCI device may be freed and must not be accessed. The caller (USB subsystem) is responsible for having already removed the interface from active use. The function sets the interface data to NULL to prevent further interaction.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the reference to the HCI device (hci_free_dev) after performing device shutdown (bfusb_close, hci_unregister_dev). The final put is the core refcount operation, with necessary cleanup as preconditions.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation succeeds silently or frees the object; retrying after a successful put would cause a double-free.",
+      "contract_summary": "This function is a disconnect cleanup wrapper that releases the reference on the HCI device after proper shutdown. It calls bfusb_close and hci_unregister_dev to quiesce the device, then drops the reference via hci_free_dev. After execution, the HCI device may be freed and must not be accessed. The caller (USB subsystem) is responsible for having already removed the interface from active use. The function sets the interface data to NULL to prevent further interaction."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "intf.dev.driver_data.hdev.dev.kobj.kref.refcount",
+          "usb_interface--device--void--bfusb_data--hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'intf.dev.driver_data.hdev.dev.kobj.kref.refcount' has 8 segments, but the type chain has 9 types, indicating a missing segment for the pointer dereference from void* driver_data to bfusb_data. Segments and types must match; since they don't, the operation is invalid. Additionally, the location 'parameter' index 1 is not the direct object of the refcount operation (hdev is a derived local variable), but the primary issue is the path mismatch."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function bfusb_disconnect is a USB disconnect handler that performs multiple cleanup steps (bfusb_close, hci_unregister_dev, hci_free_dev) on the HCI device derived from the interface. The refcount decrement via hci_free_dev is one part of a general teardown, not the primary focus. Moreover, the critical variable (hdev) is not a parameter; it is a local derived variable, and the candidate path from parameter 1 is malformed (missing pointer dereference from void* driver_data to bfusb_data). Therefore, this function is not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation succeeds silently or frees the object; retrying after a successful put would cause a double-free.",
+    "contract_summary": "This function is a disconnect cleanup wrapper that releases the reference on the HCI device after proper shutdown. It calls bfusb_close and hci_unregister_dev to quiesce the device, then drops the reference via hci_free_dev. After execution, the HCI device may be freed and must not be accessed. The caller (USB subsystem) is responsible for having already removed the interface from active use. The function sets the interface data to NULL to prevent further interaction."
+  }
+}

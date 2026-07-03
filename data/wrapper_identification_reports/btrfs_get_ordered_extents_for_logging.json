@@ -1,0 +1,98 @@
+{
+  "function_name": "btrfs_get_ordered_extents_for_logging",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount_inc always succeeds; no failure path exists, so retry is not applicable.",
+  "contract_summary": "Acquires a reference on each ordered extent in the inode's ordered_tree that has not yet been logged, and adds them to the caller-provided list. The caller obtains a list of referenced ordered extents and must release each one via btrfs_put_ordered_extent when done. This function must be called with the inode lock held. The references are unconditional; no failure path exists.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to collect ordered extents for logging and acquire a reference on each; minor overhead like flag check, list_add, tracepoint.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount_inc always succeeds; no failure path exists, so retry is not applicable.",
+      "contract_summary": "Acquires a reference on each ordered extent in the inode's ordered_tree that has not yet been logged, and adds them to the caller-provided list. The caller obtains a list of referenced ordered extents and must release each one via btrfs_put_ordered_extent when done. This function must be called with the inode lock held. The references are unconditional; no failure path exists."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          1,
+          "inode.ordered_tree.rb_node.refs",
+          "btrfs_inode--rb_root--rb_node--btrfs_ordered_extent--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path 'inode.ordered_tree.rb_node.refs' has 4 segments, but the member_type_chain 'btrfs_inode--rb_root--rb_node--btrfs_ordered_extent--refcount_t' has 5 types, violating the segment count equality rule. Additionally, the path incorrectly tries to go from 'rb_node' to 'refs' without a field representing the container 'btrfs_ordered_extent', and the critical variable (ordered) does not start directly from the parameter interface as specified."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function `btrfs_get_ordered_extents_for_logging` collects ordered extents from an inode into a list. The critical variable `ordered` (a `btrfs_ordered_extent`) is derived locally via tree traversal and not passed as a parameter or returned. It is not a simple refcount wrapper because the reference is not taken on a directly provided object; the function's primary purpose is to build a list for logging, not to act as a standalone get/put helper. The candidate operation incorrectly assumes a member_access_path from `inode` directly to `refs`, skipping the necessary container lookup, and does not satisfy the requirement that the refcounted object originates from the parameter interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount_inc always succeeds; no failure path exists, so retry is not applicable.",
+    "contract_summary": "Acquires a reference on each ordered extent in the inode's ordered_tree that has not yet been logged, and adds them to the caller-provided list. The caller obtains a list of referenced ordered extents and must release each one via btrfs_put_ordered_extent when done. This function must be called with the inode lock held. The references are unconditional; no failure path exists."
+  }
+}

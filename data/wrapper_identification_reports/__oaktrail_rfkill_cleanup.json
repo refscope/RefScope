@@ -1,0 +1,99 @@
+{
+  "function_name": "__oaktrail_rfkill_cleanup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "rf.dev.kobj.kref.refcount",
+      "rfkill--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rfkill_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rfkill.dev.kobj.kref.refcount",
+      "member_type_chain": "rfkill--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rfkill_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rfkill.dev.kobj.kref.refcount",
+      "member_type_chain": "rfkill--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the pointer is non-NULL, unregister and destroy are expected to succeed; retrying on failure is not meaningful because the object is already being torn down.",
+  "contract_summary": "Put/cleanup wrapper that unregisters an rfkill device from the kernel and then releases its reference via rfkill_destroy. The caller must not use the rf object after calling this function and must ensure it is not called multiple times for the same object. Passing NULL is safe and results in a no-op.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to safely release an rfkill object by unregistering and destroying it. The destroy step is a put operation that decrements the refcount, making this a cleanup wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the pointer is non-NULL, unregister and destroy are expected to succeed; retrying on failure is not meaningful because the object is already being torn down.",
+      "contract_summary": "Put/cleanup wrapper that unregisters an rfkill device from the kernel and then releases its reference via rfkill_destroy. The caller must not use the rf object after calling this function and must ensure it is not called multiple times for the same object. Passing NULL is safe and results in a no-op."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rf.dev.kobj.kref.refcount",
+          "rfkill--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rf.dev.kobj.kref.refcount",
+          "rfkill--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Code calls rfkill_destroy(rf). The callee info indicates it is a put operation on parameter 1 with path rf.dev.kobj.kref.refcount, which matches the actual struct rfkill layout (rf->dev.kobj.kref.refcount). The segment count (5) equals type count (5)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "rf.dev.kobj.kref.refcount",
+        "rfkill--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the pointer is non-NULL, unregister and destroy are expected to succeed; retrying on failure is not meaningful because the object is already being torn down.",
+    "contract_summary": "Put/cleanup wrapper that unregisters an rfkill device from the kernel and then releases its reference via rfkill_destroy. The caller must not use the rf object after calling this function and must ensure it is not called multiple times for the same object. Passing NULL is safe and results in a no-op."
+  }
+}

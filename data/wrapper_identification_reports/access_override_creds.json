@@ -1,0 +1,122 @@
+{
+  "function_name": "access_override_creds",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation failure in prepare_creds, which is not a refcount failure; retrying may succeed if memory becomes available, but this is not a refcount wrapper so retry reasoning is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to create and install a modified set of credentials for access override, not just reference-count management. Prepares a new cred object, modifies security fields, and installs it as the subjective cred. The refcount operations (prepare_creds) are internal and incidental to the main task.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation failure in prepare_creds, which is not a refcount failure; retrying may succeed if memory becomes available, but this is not a refcount wrapper so retry reasoning is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation failure in prepare_creds, which is not a refcount failure; retrying may succeed if memory becomes available, but this is not a refcount wrapper so retry reasoning is not applicable.",
+    "contract_summary": ""
+  }
+}

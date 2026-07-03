@@ -1,0 +1,115 @@
+{
+  "function_name": "acpi_dev_get_first_match_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "return.dev.kobj.kref.refcount",
+      "acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpi_dev_get_next_match_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "acpi_dev_get_next_match_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpi_dev_get_next_match_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "acpi_dev_get_next_match_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (return of NULL) means no matching device exists at this moment; retrying may succeed if the device appears later, but the wrapper itself does not indicate a transient refcount error—callers typically do not retry.",
+  "contract_summary": "This is a get-wrapper that searches for the first ACPI device matching the given HID, UID, and HRV. It returns the device with an incremented reference count; the caller must call acpi_dev_put() to release the reference when done. If no matching device is found, it returns NULL, indicating absence rather than an error. The caller should check the return value before using the device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls acpi_dev_get_next_match_dev with NULL as the first argument, which acts as a get operation that returns a matching ACPI device with an incremented reference count. There is no additional logic beyond this delegation.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (return of NULL) means no matching device exists at this moment; retrying may succeed if the device appears later, but the wrapper itself does not indicate a transient refcount error—callers typically do not retry.",
+      "contract_summary": "This is a get-wrapper that searches for the first ACPI device matching the given HID, UID, and HRV. It returns the device with an incremented reference count; the caller must call acpi_dev_put() to release the reference when done. If no matching device is found, it returns NULL, indicating absence rather than an error. The caller should check the return value before using the device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function acpi_dev_get_first_match_dev returns the result of acpi_dev_get_next_match_dev, which is documented as a get function for its return value. The access path 'return.dev.kobj.kref.refcount' and type chain 'acpi_device--device--kobject--kref--refcount_t' are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "return.dev.kobj.kref.refcount",
+        "acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (return of NULL) means no matching device exists at this moment; retrying may succeed if the device appears later, but the wrapper itself does not indicate a transient refcount error—callers typically do not retry.",
+    "contract_summary": "This is a get-wrapper that searches for the first ACPI device matching the given HID, UID, and HRV. It returns the device with an incremented reference count; the caller must call acpi_dev_put() to release the reference when done. If no matching device is found, it returns NULL, indicating absence rather than an error. The caller should check the return value before using the device."
+  }
+}

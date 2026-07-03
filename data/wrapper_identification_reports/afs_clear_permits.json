@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_clear_permits",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vnode.permit_cache.usage.refs",
+      "afs_vnode--afs_permits--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "afs_put_permits",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "permits.usage.refs",
+      "member_type_chain": "afs_permits--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "afs_put_permits",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "permits.usage.refs",
+      "member_type_chain": "afs_permits--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and does not fail; retrying would be a double-put (use-after-free).",
+  "contract_summary": "This is a put-wrapper that clears the permit_cache pointer in the vnode and drops the reference to the associated afs_permits object by calling afs_put_permits. The function must be called when the permits are no longer needed or are being replaced. After calling this function, the caller must not access the permits object via vnode->permit_cache, and the permits may be freed if its refcount reaches zero. The operation is performed under the vnode lock and protects against concurrent access. The caller is responsible for ensuring that no other references to the permits are used after this release.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to clear the permit_cache pointer and release the reference via afs_put_permits, which decrements the refcount of the afs_permits object. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and does not fail; retrying would be a double-put (use-after-free).",
+      "contract_summary": "This is a put-wrapper that clears the permit_cache pointer in the vnode and drops the reference to the associated afs_permits object by calling afs_put_permits. The function must be called when the permits are no longer needed or are being replaced. After calling this function, the caller must not access the permits object via vnode->permit_cache, and the permits may be freed if its refcount reaches zero. The operation is performed under the vnode lock and protects against concurrent access. The caller is responsible for ensuring that no other references to the permits are used after this release."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vnode.permit_cache.usage.refs",
+          "afs_vnode--afs_permits--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vnode.permit_cache.usage.refs",
+          "afs_vnode--afs_permits--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "afs_put_permits is called on permits, which is loaded from vnode->permit_cache. The access path vnode.permit_cache.usage.refs correctly traces from the function parameter vnode through permit_cache pointer to the usage.refs field. The type chain afs_vnode--afs_permits--refcount_t--atomic_t matches the struct hierarchy."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vnode.permit_cache.usage.refs",
+        "afs_vnode--afs_permits--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and does not fail; retrying would be a double-put (use-after-free).",
+    "contract_summary": "This is a put-wrapper that clears the permit_cache pointer in the vnode and drops the reference to the associated afs_permits object by calling afs_put_permits. The function must be called when the permits are no longer needed or are being replaced. After calling this function, the caller must not access the permits object via vnode->permit_cache, and the permits may be freed if its refcount reaches zero. The operation is performed under the vnode lock and protects against concurrent access. The caller is responsible for ensuring that no other references to the permits are used after this release."
+  }
+}

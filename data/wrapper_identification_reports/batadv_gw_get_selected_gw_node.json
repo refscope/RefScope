@@ -1,0 +1,122 @@
+{
+  "function_name": "batadv_gw_get_selected_gw_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "gw_node.refcount.refcount.refs",
+      "batadv_gw_node--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure of kref_get_unless_zero means the refcount was zero (object is dying/dead); retrying will not revive the object, and NULL from no gateway indicates no current selection.",
+  "contract_summary": "RCU-protected get-wrapper: acquires a reference on the currently selected gateway node (bat_priv->gw.curr_gw) if present and still alive (refcount > 0). Returns a pointer with an elevated refcount, which the caller must later release via batadv_gw_node_put. If NULL is returned, no valid gateway exists or the gateway is being destroyed. The caller does not need to hold any lock beyond the function's internal RCU read-side critical section.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on bat_priv->gw.curr_gw via kref_get_unless_zero and return it to the caller. The only other logic is RCU lock/unlock and NULL checks, all directly supporting the get operation.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure of kref_get_unless_zero means the refcount was zero (object is dying/dead); retrying will not revive the object, and NULL from no gateway indicates no current selection.",
+      "contract_summary": "RCU-protected get-wrapper: acquires a reference on the currently selected gateway node (bat_priv->gw.curr_gw) if present and still alive (refcount > 0). Returns a pointer with an elevated refcount, which the caller must later release via batadv_gw_node_put. If NULL is returned, no valid gateway exists or the gateway is being destroyed. The caller does not need to hold any lock beyond the function's internal RCU read-side critical section."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "gw_node.refcount.refs",
+          "batadv_gw_node--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate access path 'gw_node.refcount.refs' has 3 segments but the type chain 'batadv_gw_node--kref--refcount_t--atomic_t' has 4 types, violating the segment count check (must be equal). The correct path should include the kref's internal refcount field, e.g., 'gw_node.refcount.refcount.refs' (4 segments) or the simpler variant without the atomic_t. Thus, the operation is inconsistent and rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "gw_node.refcount.refcount.refs",
+          "batadv_gw_node--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function clearly is a get-wrapper: it obtains a reference to the current gateway node via kref_get_unless_zero and returns the pointer. The critical variable gw_node is the return value. The candidate access path was missing one level (the inner refcount field of kref); it has been corrected to gw_node.refcount.refcount.refs to match the type chain of 4 types (batadv_gw_node->kref->refcount_t->atomic_t). The check was correct in rejecting the inconsistent original path but the operation itself is valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "gw_node.refcount.refcount.refs",
+        "batadv_gw_node--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure of kref_get_unless_zero means the refcount was zero (object is dying/dead); retrying will not revive the object, and NULL from no gateway indicates no current selection.",
+    "contract_summary": "RCU-protected get-wrapper: acquires a reference on the currently selected gateway node (bat_priv->gw.curr_gw) if present and still alive (refcount > 0). Returns a pointer with an elevated refcount, which the caller must later release via batadv_gw_node_put. If NULL is returned, no valid gateway exists or the gateway is being destroyed. The caller does not need to hold any lock beyond the function's internal RCU read-side critical section."
+  }
+}

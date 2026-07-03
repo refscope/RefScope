@@ -1,0 +1,99 @@
+{
+  "function_name": "__netdev_adjacent_dev_remove",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "adj_dev.dev_refcnt.refs",
+      "net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "netdev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "netdev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (adjacency not found) indicates a bug/inconsistency, not a transient condition. Retrying will not resolve the inconsistency.",
+  "contract_summary": "This function removes a reference (adjacency) from a net_device's adjacency list. It decrements the internal reference count (ref_nr) of the adjacency entry. If the decremented count reaches zero (i.e., the requested ref_nr equals the current count), the adjacency is fully removed: sysfs links are torn down, the entry is deleted from the list, and the reference on the adjacent net_device (adj_dev) is released via netdev_put. The caller must ensure the adjacency exists and the ref_nr is valid. After calling, the adjacency entry must not be used. This is a put-like operation that triggers cleanup when the last reference is dropped.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Core function is to remove a reference (adjacency) by decrementing ref_nr and conditionally releasing the net device refcount and cleaning up. Additional sysfs/list operations are part of last-reference cleanup, typical for a put wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (adjacency not found) indicates a bug/inconsistency, not a transient condition. Retrying will not resolve the inconsistency.",
+      "contract_summary": "This function removes a reference (adjacency) from a net_device's adjacency list. It decrements the internal reference count (ref_nr) of the adjacency entry. If the decremented count reaches zero (i.e., the requested ref_nr equals the current count), the adjacency is fully removed: sysfs links are torn down, the entry is deleted from the list, and the reference on the adjacent net_device (adj_dev) is released via netdev_put. The caller must ensure the adjacency exists and the ref_nr is valid. After calling, the adjacency entry must not be used. This is a put-like operation that triggers cleanup when the last reference is dropped."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "adj_dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "adj_dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation correctly identifies netdev_put on adj_dev (parameter 2) with access path adj_dev.dev_refcnt.refs matching the callee's implementation and type chain net_device--refcount_t--atomic_t. The segment count is consistent (3 segments, 3 types). The put direction is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "adj_dev.dev_refcnt.refs",
+        "net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (adjacency not found) indicates a bug/inconsistency, not a transient condition. Retrying will not resolve the inconsistency.",
+    "contract_summary": "This function removes a reference (adjacency) from a net_device's adjacency list. It decrements the internal reference count (ref_nr) of the adjacency entry. If the decremented count reaches zero (i.e., the requested ref_nr equals the current count), the adjacency is fully removed: sysfs links are torn down, the entry is deleted from the list, and the reference on the adjacent net_device (adj_dev) is released via netdev_put. The caller must ensure the adjacency exists and the ref_nr is valid. After calling, the adjacency entry must not be used. This is a put-like operation that triggers cleanup when the last reference is dropped."
+  }
+}

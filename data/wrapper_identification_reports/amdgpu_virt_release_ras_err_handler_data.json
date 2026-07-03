@@ -1,0 +1,58 @@
+{
+  "function_name": "amdgpu_virt_release_ras_err_handler_data",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_virt_ras_release_bp",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.virt.virt_eh_data.bps_bo[i].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_device--amdgpu_virt--amdgpu_virt_ras_err_handler_data--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_virt_ras_release_bp",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.virt.virt_eh_data.bps_bo[i].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_device--amdgpu_virt--amdgpu_virt_ras_err_handler_data--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — the function is not a refcount wrapper; it is a cleanup function that only executes when data is non-NULL, and its refcount operations are internal to the cleanup.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to release RAS error handler data and free associated memory (bps, bps_bo, and the data structure). The refcount put via amdgpu_virt_ras_release_bp is an incidental cleanup step within the overall deallocation, not the main focus. The function does not return or expose any reference-counted object to the caller; it merely destroys local data.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — the function is not a refcount wrapper; it is a cleanup function that only executes when data is non-NULL, and its refcount operations are internal to the cleanup.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — the function is not a refcount wrapper; it is a cleanup function that only executes when data is non-NULL, and its refcount operations are internal to the cleanup.",
+    "contract_summary": ""
+  }
+}

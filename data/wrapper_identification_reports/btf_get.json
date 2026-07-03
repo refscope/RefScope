@@ -1,0 +1,115 @@
+{
+  "function_name": "btf_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "btf.refcnt.refs",
+      "btf--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc is unconditional and always succeeds; no failure path exists.",
+  "contract_summary": "This is a get-wrapper that unconditionally increments the reference count of a struct btf object. The caller must already hold a valid pointer to the BTF object; after calling btf_get, the caller acquires an additional reference and is responsible for releasing it via a corresponding btf_put call when the reference is no longer needed. The function does not return any status and cannot fail.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function consists solely of a refcount_inc call on btf->refcnt; its sole purpose is to acquire a reference on the BTF object.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc is unconditional and always succeeds; no failure path exists.",
+      "contract_summary": "This is a get-wrapper that unconditionally increments the reference count of a struct btf object. The caller must already hold a valid pointer to the BTF object; after calling btf_get, the caller acquires an additional reference and is responsible for releasing it via a corresponding btf_put call when the reference is no longer needed. The function does not return any status and cannot fail."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&btf->refcnt) operates on the refcnt field of parameter btf. Access path btf.refcnt.refs correctly traces from parameter to the atomic_t member, and type chain btf--refcount_struct--atomic_t matches the struct definitions. Segment counts (3 each) are consistent. Direction 'get' is correct for refcount_inc."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "btf.refcnt.refs",
+        "btf--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc is unconditional and always succeeds; no failure path exists.",
+    "contract_summary": "This is a get-wrapper that unconditionally increments the reference count of a struct btf object. The caller must already hold a valid pointer to the BTF object; after calling btf_get, the caller acquires an additional reference and is responsible for releasing it via a corresponding btf_put call when the reference is no longer needed. The function does not return any status and cannot fail."
+  }
+}

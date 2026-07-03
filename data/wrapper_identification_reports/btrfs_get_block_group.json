@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_get_block_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "cache.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc is unconditional and always succeeds; retry is not applicable.",
+  "contract_summary": "Increments the reference count of a `struct btrfs_block_group` via `refcount_inc`. This is a pure get wrapper — it unconditionally acquires an additional reference. The caller must ensure that the block group is alive (refcount > 0) before calling. The acquired reference must eventually be released by calling `btrfs_put_block_group` (or equivalent) when the reference is no longer needed. The operation is atomic and does not require external locking. There is no error path; the function always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function consists solely of an unconditional `refcount_inc` call, with no other logic. Its sole purpose is reference-count acquisition.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc is unconditional and always succeeds; retry is not applicable.",
+      "contract_summary": "Increments the reference count of a `struct btrfs_block_group` via `refcount_inc`. This is a pure get wrapper — it unconditionally acquires an additional reference. The caller must ensure that the block group is alive (refcount > 0) before calling. The acquired reference must eventually be released by calling `btrfs_put_block_group` (or equivalent) when the reference is no longer needed. The operation is atomic and does not require external locking. There is no error path; the function always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls refcount_inc(&cache->refs), which increments the refcount field of the btrfs_block_group structure passed as the first parameter. The access path cache.refs.refs correctly traces from the parameter 'cache' to the 'refs' field of btrfs_block_group (type refcount_t) and then to the internal 'refs' field (atomic_t). The callee information describes refcount_inc with member-access path r.refs and type refcount_t--atomic_t, which matches the code. The operation direction 'get' is correct for a refcount increment."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "cache.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc is unconditional and always succeeds; retry is not applicable.",
+    "contract_summary": "Increments the reference count of a `struct btrfs_block_group` via `refcount_inc`. This is a pure get wrapper — it unconditionally acquires an additional reference. The caller must ensure that the block group is alive (refcount > 0) before calling. The acquired reference must eventually be released by calling `btrfs_put_block_group` (or equivalent) when the reference is no longer needed. The operation is atomic and does not require external locking. There is no error path; the function always succeeds."
+  }
+}

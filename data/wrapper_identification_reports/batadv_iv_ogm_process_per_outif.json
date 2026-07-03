@@ -1,0 +1,258 @@
+{
+  "function_name": "batadv_iv_ogm_process_per_outif",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_orig_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_new",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_iv_ogm_orig_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hardif_neigh.refcount.refcount.refs",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_to_direct_router",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_new",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "if_outgoing.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_ifinfo.refcount.refcount.refs",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_router_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_router_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount.refs",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "consume_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_iv_ogm_orig_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_new",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "if_outgoing.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_router_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_new",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is processing OGM packets (updating routing, forwarding, duplicate detection), not reference-count management. Get/put calls are only for internal memory management of nodes and are incidental to the OGM processing logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 11,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

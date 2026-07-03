@@ -1,0 +1,114 @@
+{
+  "function_name": "alloc_lookup_fw_priv",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tmp.ref.refcount",
+      "fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The only failure path is -ENOMEM from allocation; retrying without freeing memory or changing conditions is unlikely to succeed.",
+  "contract_summary": "Get-or-create wrapper for firmware private structures. Either increments the refcount on an existing cached fw_priv (via kref_get) or allocates a new one (initializing its refcount to 1) and adds it to the cache list (unless FW_OPT_NOCACHE is set). The caller receives the fw_priv via output parameter and must release it with a corresponding put (e.g., fw_priv_put). The return value indicates: 1 (shared existing object), 0 (new allocation), or -ENOMEM (allocation failure). Caller must check the return value to properly handle ownership and error recovery.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on an existing fw_priv (via kref_get) or allocate a new one (implicitly setting refcount to 1) and return the object to the caller. The list management is minimal and directly tied to caching/refcount lifecycle.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The only failure path is -ENOMEM from allocation; retrying without freeing memory or changing conditions is unlikely to succeed.",
+      "contract_summary": "Get-or-create wrapper for firmware private structures. Either increments the refcount on an existing cached fw_priv (via kref_get) or allocates a new one (initializing its refcount to 1) and adds it to the cache list (unless FW_OPT_NOCACHE is set). The caller receives the fw_priv via output parameter and must release it with a corresponding put (e.g., fw_priv_put). The return value indicates: 1 (shared existing object), 0 (new allocation), or -ENOMEM (allocation failure). Caller must check the return value to properly handle ownership and error recovery."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tmp.ref.refcount",
+          "fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable that flows to the caller is the struct fw_priv written to *fw_priv, which is an output parameter (parameter index 2). The candidate incorrectly uses location 'return' index 0 and the access path starts from local variable 'tmp' instead of from the function interface parameter. Since the location is wrong, the operation cannot be validated."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tmp.ref.refcount",
+          "fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a reference-count wrapper/helper. The get operation on tmp->ref is performed before returning the object via *fw_priv (parameter index 2). Although the candidate uses location 'return' and local variable 'tmp', the critical variable flows out to the caller through the output parameter, making the operation valid. Precedent in `mlx5dr_definer_get` (Example 1) confirms that such an extraction is acceptable when the object is passed to the caller, even if the function returns an error code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tmp.ref.refcount",
+        "fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The only failure path is -ENOMEM from allocation; retrying without freeing memory or changing conditions is unlikely to succeed.",
+    "contract_summary": "Get-or-create wrapper for firmware private structures. Either increments the refcount on an existing cached fw_priv (via kref_get) or allocates a new one (initializing its refcount to 1) and adds it to the cache list (unless FW_OPT_NOCACHE is set). The caller receives the fw_priv via output parameter and must release it with a corresponding put (e.g., fw_priv_put). The return value indicates: 1 (shared existing object), 0 (new allocation), or -ENOMEM (allocation failure). Caller must check the return value to properly handle ownership and error recovery."
+  }
+}

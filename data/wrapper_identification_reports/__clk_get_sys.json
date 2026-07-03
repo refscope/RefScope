@@ -1,0 +1,106 @@
+{
+  "function_name": "__clk_get_sys",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hw.core.ref.refcount",
+      "clk_hw--clk_core--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "clk_hw_create_clk",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "hw.core.ref.refcount",
+      "member_type_chain": "clk_hw--clk_core--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "clk_hw_create_clk",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "hw.core.ref.refcount",
+      "member_type_chain": "clk_hw--clk_core--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Lookup may succeed later if the clock provider is registered between calls; retry can be useful in deferred probe scenarios.",
+  "contract_summary": "Get-wrapper that looks up a clock by device and connection ID, then acquires a reference on the clock core via clk_hw_create_clk and returns a struct clk pointer. The caller must check for errors (typically with IS_ERR) and must call clk_put() to release the reference when done. The returned clock is an additional reference owned by the caller. Failure primarily occurs when the clock is not yet registered; the caller may retry later (e.g., via deferred probing) when the clock provider becomes available.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to find a clock and acquire a reference (via clk_hw_create_clk) and return it. It consists of only a lookup and a get, with no unrelated logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Lookup may succeed later if the clock provider is registered between calls; retry can be useful in deferred probe scenarios.",
+      "contract_summary": "Get-wrapper that looks up a clock by device and connection ID, then acquires a reference on the clock core via clk_hw_create_clk and returns a struct clk pointer. The caller must check for errors (typically with IS_ERR) and must call clk_put() to release the reference when done. The returned clock is an additional reference owned by the caller. Failure primarily occurs when the clock is not yet registered; the caller may retry later (e.g., via deferred probing) when the clock provider becomes available."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "hw.core.ref.refcount",
+          "clk_hw--clk_core--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate claims a get on parameter index 2, but parameter 2 of __clk_get_sys is dev_id (a const char*), not hw. The object hw is a local variable, not a function interface parameter. The refcount operation acts on a local object, not on any parameter or return value of this function. Thus the operation cannot be attributed to the function's interface."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hw.core.ref.refcount",
+          "clk_hw--clk_core--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function __clk_get_sys is a wrapper that obtains a clk by first finding a clk_hw via clk_find_hw, then calling clk_hw_create_clk (which increments the refcount on hw.core.ref.refcount) and returning the resulting clk. The original candidate incorrectly attributed the operation to parameter 2 (dev_id), but hw is a local variable that holds the object whose refcount is incremented. Since the returned clk encapsulates this reference, the correct attribution is to the return value. The function is a pure get-wrapper with no other business logic."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hw.core.ref.refcount",
+        "clk_hw--clk_core--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Lookup may succeed later if the clock provider is registered between calls; retry can be useful in deferred probe scenarios.",
+    "contract_summary": "Get-wrapper that looks up a clock by device and connection ID, then acquires a reference on the clock core via clk_hw_create_clk and returns a struct clk pointer. The caller must check for errors (typically with IS_ERR) and must call clk_put() to release the reference when done. The returned clock is an additional reference owned by the caller. Failure primarily occurs when the clock is not yet registered; the caller may retry later (e.g., via deferred probing) when the clock provider becomes available."
+  }
+}

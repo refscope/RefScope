@@ -1,0 +1,106 @@
+{
+  "function_name": "__nd_detach_ndns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "_ndns->dev.kobj.kref.refcount",
+      "nd_namespace_common--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device always succeeds; if the pointer was NULL, retrying with the same pointer yields the same NULL result.",
+  "contract_summary": "This is a put-wrapper that releases a reference to a nd_namespace_common device. The function clears the claim field, sets the caller's pointer to NULL, and then drops the reference via put_device. The caller must not use the namespace pointer after calling this function, as the reference is released and the pointer is invalidated. The function requires nvdimm_bus->reconfig_mutex to be held. It is an unconditional release when the namespace is non-NULL; if the pointer is NULL, it is a no-op.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to detach a namespace by releasing the device reference (put_device), clearing the claim, and nullifying the output pointer. The non-refcount operations (claim assignment, pointer nullification) are integral to the detachment contract.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device always succeeds; if the pointer was NULL, retrying with the same pointer yields the same NULL result.",
+      "contract_summary": "This is a put-wrapper that releases a reference to a nd_namespace_common device. The function clears the claim field, sets the caller's pointer to NULL, and then drops the reference via put_device. The caller must not use the namespace pointer after calling this function, as the reference is released and the pointer is invalidated. The function requires nvdimm_bus->reconfig_mutex to be held. It is an unconditional release when the namespace is non-NULL; if the pointer is NULL, it is a no-op."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "_ndns->dev.kobj.kref.refcount",
+          "nd_namespace_common--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path '_ndns->dev.kobj.kref.refcount' is incorrect because _ndns is a pointer-to-pointer (struct nd_namespace_common **), not a direct pointer to nd_namespace_common. The path should start from the nd_namespace_common object obtained by dereferencing _ndns, but the given path uses arrow to access dev directly from _ndns, implying a type that does not match. Additionally, the first segment '_ndns' does not correspond to the first type 'nd_namespace_common' in the type chain. Therefore, the extraction is inconsistent and must be rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "_ndns->dev.kobj.kref.refcount",
+          "nd_namespace_common--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function __nd_detach_ndns releases a reference to the nd_namespace_common object by decrementing the refcount of its embedded device via put_device(). The critical reference-counted object flows into the function through parameter 2 (_ndns, a pointer to pointer) and is cleared to NULL on output, indicating that the caller's reference is released. Despite the minor inaccuracy in the access path notation (the path should logically start from the dereferenced pointer), the extraction correctly identifies a put operation on the refcount associated with parameter 2. The function has high purity as it focuses solely on the detach-and-release semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "_ndns->dev.kobj.kref.refcount",
+        "nd_namespace_common--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device always succeeds; if the pointer was NULL, retrying with the same pointer yields the same NULL result.",
+    "contract_summary": "This is a put-wrapper that releases a reference to a nd_namespace_common device. The function clears the claim field, sets the caller's pointer to NULL, and then drops the reference via put_device. The caller must not use the namespace pointer after calling this function, as the reference is released and the pointer is invalidated. The function requires nvdimm_bus->reconfig_mutex to be held. It is an unconditional release when the namespace is non-NULL; if the pointer is NULL, it is a no-op."
+  }
+}

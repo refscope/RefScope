@@ -1,0 +1,99 @@
+{
+  "function_name": "bus_find_device_by_acpi_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no device matches, retrying without changing the bus or ACPI device will likely still fail; the caller should not retry unconditionally.",
+  "contract_summary": "Get-wrapper: finds the first device on the given bus that matches the given ACPI device via device_match_acpi_dev. If found, increments the device's reference count and returns it. If not found, returns NULL. The caller must check the return value and must call put_device() on the returned device when done to release the reference. This function does not create a new reference but acquires an existing one from the bus's device list.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a device by ACPI companion and acquire a reference via bus_find_device, which increments the device's refcount. No other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no device matches, retrying without changing the bus or ACPI device will likely still fail; the caller should not retry unconditionally.",
+      "contract_summary": "Get-wrapper: finds the first device on the given bus that matches the given ACPI device via device_match_acpi_dev. If found, increments the device's reference count and returns it. If not found, returns NULL. The caller must check the return value and must call put_device() on the returned device when done to release the reference. This function does not create a new reference but acquires an existing one from the bus's device list."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "bus_find_device_by_acpi_dev returns the result of bus_find_device, which performs a get on the returned device's refcount. The access path dev.kobj.kref.refcount and type chain device--kobject--kref--refcount_t are consistent with the callee's description and the function's interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no device matches, retrying without changing the bus or ACPI device will likely still fail; the caller should not retry unconditionally.",
+    "contract_summary": "Get-wrapper: finds the first device on the given bus that matches the given ACPI device via device_match_acpi_dev. If found, increments the device's reference count and returns it. If not found, returns NULL. The caller must check the return value and must call put_device() on the returned device when done to release the reference. This function does not create a new reference but acquires an existing one from the bus's device list."
+  }
+}

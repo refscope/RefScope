@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_meshif_vlan_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vlan.refcount.refcount",
+      "batadv_meshif_vlan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If vlan is NULL, no operation occurs; if non-NULL, kref_put always succeeds from the caller's perspective (the underlying release might free memory, but kref_put itself does not fail). No retry logic is applicable.",
+  "contract_summary": "This is a put wrapper that releases a reference on a 'batadv_meshif_vlan' object. It decrements the kref and if the refcount reaches zero, it calls batadv_meshif_vlan_release to free the object. After calling this function, the caller must not access the vlan pointer, as it may have been freed. The function safely handles a NULL argument by returning immediately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely performs a NULL check and then calls kref_put to release a reference. No other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If vlan is NULL, no operation occurs; if non-NULL, kref_put always succeeds from the caller's perspective (the underlying release might free memory, but kref_put itself does not fail). No retry logic is applicable.",
+      "contract_summary": "This is a put wrapper that releases a reference on a 'batadv_meshif_vlan' object. It decrements the kref and if the refcount reaches zero, it calls batadv_meshif_vlan_release to free the object. After calling this function, the caller must not access the vlan pointer, as it may have been freed. The function safely handles a NULL argument by returning immediately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ],
+      "reason": "The kref_put call uses &vlan->refcount, where vlan is the input parameter. The member access path vlan.refcount.refcount correctly traces from the parameter to the refcount_t field, and the type chain batadv_meshif_vlan--kref--refcount_t is consistent with the struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vlan.refcount.refcount",
+        "batadv_meshif_vlan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If vlan is NULL, no operation occurs; if non-NULL, kref_put always succeeds from the caller's perspective (the underlying release might free memory, but kref_put itself does not fail). No retry logic is applicable.",
+    "contract_summary": "This is a put wrapper that releases a reference on a 'batadv_meshif_vlan' object. It decrements the kref and if the refcount reaches zero, it calls batadv_meshif_vlan_release to free the object. After calling this function, the caller must not access the vlan pointer, as it may have been freed. The function safely handles a NULL argument by returning immediately."
+  }
+}

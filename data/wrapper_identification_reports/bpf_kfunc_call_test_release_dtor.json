@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_kfunc_call_test_release_dtor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.cnt.refs",
+      "prog_test_ref_kfunc--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_kfunc_call_test_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.cnt.refs",
+      "member_type_chain": "prog_test_ref_kfunc--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_kfunc_call_test_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.cnt.refs",
+      "member_type_chain": "prog_test_ref_kfunc--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations do not fail and retrying would cause double-free or use-after-free.",
+  "contract_summary": "This is a release (put) wrapper that decrements the reference count of the object passed via 'p'. The caller must ensure that 'p' points to a valid, refcounted object. After calling this function, the caller must not use the object again, as the reference count may drop to zero and trigger deallocation. This function is intended as a KFunc destructor for BPF programs, providing a safe release path.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function exclusively calls bpf_kfunc_call_test_release, which is a put operation on the refcount of the passed object. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations do not fail and retrying would cause double-free or use-after-free.",
+      "contract_summary": "This is a release (put) wrapper that decrements the reference count of the object passed via 'p'. The caller must ensure that 'p' points to a valid, refcounted object. After calling this function, the caller must not use the object again, as the reference count may drop to zero and trigger deallocation. This function is intended as a KFunc destructor for BPF programs, providing a safe release path."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.cnt.refs",
+          "prog_test_ref_kfunc--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.cnt.refs",
+          "prog_test_ref_kfunc--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls bpf_kfunc_call_test_release(p) which is a put function on parameter 1. The access path starts from p, the parameter, and follows p.cnt.refs to the refcount field. The type chain prog_test_ref_kfunc--refcount_t--atomic_t is consistent with the struct definitions. Access path segment count (3) equals type chain count (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.cnt.refs",
+        "prog_test_ref_kfunc--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations do not fail and retrying would cause double-free or use-after-free.",
+    "contract_summary": "This is a release (put) wrapper that decrements the reference count of the object passed via 'p'. The caller must ensure that 'p' points to a valid, refcounted object. After calling this function, the caller must not use the object again, as the reference count may drop to zero and trigger deallocation. This function is intended as a KFunc destructor for BPF programs, providing a safe release path."
+  }
+}

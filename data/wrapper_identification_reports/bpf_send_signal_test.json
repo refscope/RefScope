@@ -1,0 +1,74 @@
+{
+  "function_name": "bpf_send_signal_test",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_task_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_task_from_pid",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_task_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_task_from_pid",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry semantics are irrelevant to refcount management.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to send a BPF signal based on conditions (status, pid, signal_thread, target_pid). The refcount operations (bpf_task_from_pid/bpf_task_release) are incidental support for obtaining a task pointer when target_pid is set, not the main objective. Significant non-refcount business logic (signal sending, status update) dominates.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry semantics are irrelevant to refcount management.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry semantics are irrelevant to refcount management.",
+    "contract_summary": ""
+  }
+}

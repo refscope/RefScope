@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_cpumask_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cpumask.usage.refs",
+      "bpf_cpumask--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Unconditional put; after the call the caller must not use the object and retrying would be a double-put.",
+  "contract_summary": "Release wrapper: decrements the reference count on a bpf_cpumask. If the count reaches zero, the object is freed via RCU. The caller must hold a valid reference and must not access the object after this call. This function does not return a success/failure indicator; the release always succeeds in dropping a reference. The caller is responsible for ensuring that no further operations on the object occur after the last put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count (refcount_dec_and_test) and free the object on zero; no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Unconditional put; after the call the caller must not use the object and retrying would be a double-put.",
+      "contract_summary": "Release wrapper: decrements the reference count on a bpf_cpumask. If the count reaches zero, the object is freed via RCU. The caller must hold a valid reference and must not access the object after this call. This function does not return a success/failure indicator; the release always succeeds in dropping a reference. The caller is responsible for ensuring that no further operations on the object occur after the last put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cpumask.usage.refs",
+          "bpf_cpumask--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cpumask.usage.refs",
+          "bpf_cpumask--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls refcount_dec_and_test(&cpumask->usage), which is a put operation on the refcount_t member usage of the bpf_cpumask struct. The access path from parameter 1 (cpumask) is cpumask -> usage -> refs, matching the callee's path r.refs. The type chain bpf_cpumask--refcount_t--atomic_t is consistent with the struct field types. The segment counts (3) match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cpumask.usage.refs",
+        "bpf_cpumask--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Unconditional put; after the call the caller must not use the object and retrying would be a double-put.",
+    "contract_summary": "Release wrapper: decrements the reference count on a bpf_cpumask. If the count reaches zero, the object is freed via RCU. The caller must hold a valid reference and must not access the object after this call. This function does not return a success/failure indicator; the release always succeeds in dropping a reference. The caller is responsible for ensuring that no further operations on the object occur after the last put."
+  }
+}

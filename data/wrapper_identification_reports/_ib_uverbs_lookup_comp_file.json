@@ -1,0 +1,163 @@
+{
+  "function_name": "_ib_uverbs_lookup_comp_file",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "uobj.ref.refcount",
+      "ib_uobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "uobj_put_read",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uobj_put_read",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "uverbs_uobject_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobject.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uobj_put_read",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "ufd_get_read",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "uobj_put_read",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "uverbs_uobject_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobject.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uobj_put_read",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "uobj_put_read",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ufd_get_read",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates invalid fd or object already freed; retry with same fd would likely fail again.",
+  "contract_summary": "This is a get wrapper that looks up a completion event file object by file descriptor, acquires an additional reference on the object (via uverbs_uobject_get), releases the temporary lookup reference (via uobj_put_read), and returns the object to the caller. The caller must release the acquired reference with the appropriate put function when done. The function returns an ERR_PTR on failure (e.g., invalid fd). It is typically used to obtain a stable pointer to a uverbs_completion_event_file for subsequent operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a uverbs completion event file object via file descriptor lookup and return it to the caller. The only other logic is a container_of to obtain the containing structure and error handling.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates invalid fd or object already freed; retry with same fd would likely fail again.",
+      "contract_summary": "This is a get wrapper that looks up a completion event file object by file descriptor, acquires an additional reference on the object (via uverbs_uobject_get), releases the temporary lookup reference (via uobj_put_read), and returns the object to the caller. The caller must release the acquired reference with the appropriate put function when done. The function returns an ERR_PTR on failure (e.g., invalid fd). It is typically used to obtain a stable pointer to a uverbs_completion_event_file for subsequent operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "uobj.ref.refcount",
+          "ib_uobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "uobj.ref.refcount",
+          "ib_uobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "uverbs_uobject_get(uobj) increments the refcount on uobj; the function returns a pointer derived from uobj via container_of, so the caller receives an object with an extra reference. The access path uobj.ref.refcount and type chain ib_uobject--kref--refcount_t are consistent with the callee information for uverbs_uobject_get."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "uobj.ref.refcount",
+        "ib_uobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 5,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates invalid fd or object already freed; retry with same fd would likely fail again.",
+    "contract_summary": "This is a get wrapper that looks up a completion event file object by file descriptor, acquires an additional reference on the object (via uverbs_uobject_get), releases the temporary lookup reference (via uobj_put_read), and returns the object to the caller. The caller must release the acquired reference with the appropriate put function when done. The function returns an ERR_PTR on failure (e.g., invalid fd). It is typically used to obtain a stable pointer to a uverbs_completion_event_file for subsequent operations."
+  }
+}

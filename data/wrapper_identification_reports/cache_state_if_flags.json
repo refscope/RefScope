@@ -1,0 +1,122 @@
+{
+  "function_name": "cache_state_if_flags",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "0",
+      "state.refs.refs",
+      "extent_state--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs only when the cache slot is already filled or the flags condition is not met; neither is transient, so retrying with the same inputs will not succeed.",
+  "contract_summary": "Conditional get-wrapper that caches a reference to an extent_state. It increments the refcount and sets *cached_ptr only if the cache slot is empty and the flags condition matches. After a successful call, the caller obtains a reference (via the cache pointer) that must later be released with the appropriate put function. The function does not return a success indicator; the caller must check *cached_ptr to determine if a reference was acquired. The operation fails silently if conditions are not met, but the caller can reattempt with different state or flags.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally cache a reference to an extent_state by incrementing its refcount. The only non-refcount logic is the pointer assignment and the flags check.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs only when the cache slot is already filled or the flags condition is not met; neither is transient, so retrying with the same inputs will not succeed.",
+      "contract_summary": "Conditional get-wrapper that caches a reference to an extent_state. It increments the refcount and sets *cached_ptr only if the cache slot is empty and the flags condition matches. After a successful call, the caller obtains a reference (via the cache pointer) that must later be released with the appropriate put function. The function does not return a success indicator; the caller must check *cached_ptr to determine if a reference was acquired. The operation fails silently if conditions are not met, but the caller can reattempt with different state or flags."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "state.refs.refs",
+          "extent_state--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation specifies parameter index 1 (cached_ptr), but the refcount_inc call operates on state (parameter index 0). The access path 'state.refs.refs' cannot be reached from parameter 1. The location/index is incorrect, so the operation must be rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "0",
+          "state.refs.refs",
+          "extent_state--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function conditionally increments the reference count on `state` (parameter 0) and caches the pointer in `*cached_ptr`. The candidate extraction incorrectly specified parameter index 1; the correct parameter is 0. The critical variable `state` is passed to the caller via the indirect parameter `cached_ptr`, and the function has high purity as it only performs the refcount operation and pointer assignment."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "0",
+        "state.refs.refs",
+        "extent_state--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs only when the cache slot is already filled or the flags condition is not met; neither is transient, so retrying with the same inputs will not succeed.",
+    "contract_summary": "Conditional get-wrapper that caches a reference to an extent_state. It increments the refcount and sets *cached_ptr only if the cache slot is empty and the flags condition matches. After a successful call, the caller obtains a reference (via the cache pointer) that must later be released with the appropriate put function. The function does not return a success indicator; the caller must check *cached_ptr to determine if a reference was acquired. The operation fails silently if conditions are not met, but the caller can reattempt with different state or flags."
+  }
+}

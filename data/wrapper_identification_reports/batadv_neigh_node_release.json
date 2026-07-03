@@ -1,0 +1,159 @@
+{
+  "function_name": "batadv_neigh_node_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "neigh_node.hardif_neigh.refcount.refcount",
+      "batadv_neigh_node--batadv_hardif_neigh_node--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "neigh_node.if_incoming.refcount.refcount",
+      "batadv_neigh_node--batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Release function always succeeds; retry would imply use-after-free since the object is freed.",
+  "contract_summary": "This is the kref release callback for batadv_neigh_node. When the last reference is dropped (via batadv_neigh_node_put), this function is called to release all held references: it puts each neigh_ifinfo in the ifinfo_list, puts the hardif_neigh, puts the if_incoming, and finally frees the neigh_node via kfree_rcu. After this function returns, the neigh_node is freed and must not be accessed. The caller (via kref_put) is responsible for ensuring no further references exist. This wrapper represents the final cleanup stage of the neigh_node lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is managing the release of a batadv_neigh_node when its kref reaches zero; it performs puts on internal references and kfree_rcu. This is a typical kref release wrapper with minimal unrelated logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Release function always succeeds; retry would imply use-after-free since the object is freed.",
+      "contract_summary": "This is the kref release callback for batadv_neigh_node. When the last reference is dropped (via batadv_neigh_node_put), this function is called to release all held references: it puts each neigh_ifinfo in the ifinfo_list, puts the hardif_neigh, puts the if_incoming, and finally frees the neigh_node via kfree_rcu. After this function returns, the neigh_node is freed and must not be accessed. The caller (via kref_put) is responsible for ensuring no further references exist. This wrapper represents the final cleanup stage of the neigh_node lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "neigh_node.hardif_neigh.refcount.refcount",
+          "batadv_neigh_node--batadv_hardif_neigh_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "neigh_node.if_incoming.refcount.refcount",
+          "batadv_neigh_node--batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "neigh_node.hardif_neigh.refcount.refcount",
+          "batadv_neigh_node--batadv_hardif_neigh_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "neigh_node.if_incoming.refcount.refcount",
+          "batadv_neigh_node--batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations match the actual put calls in the code: batadv_hardif_neigh_put(neigh_node->hardif_neigh) and batadv_hardif_put(neigh_node->if_incoming). The access paths and type chains are consistent with the callee information and the container structure derived from the parameter via container_of. Segment counts are equal (4 each) and type chains are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "neigh_node.hardif_neigh.refcount.refcount",
+        "batadv_neigh_node--batadv_hardif_neigh_node--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "neigh_node.if_incoming.refcount.refcount",
+        "batadv_neigh_node--batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Release function always succeeds; retry would imply use-after-free since the object is freed.",
+    "contract_summary": "This is the kref release callback for batadv_neigh_node. When the last reference is dropped (via batadv_neigh_node_put), this function is called to release all held references: it puts each neigh_ifinfo in the ifinfo_list, puts the hardif_neigh, puts the if_incoming, and finally frees the neigh_node via kfree_rcu. After this function returns, the neigh_node is freed and must not be accessed. The caller (via kref_put) is responsible for ensuring no further references exist. This wrapper represents the final cleanup stage of the neigh_node lifecycle."
+  }
+}

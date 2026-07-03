@@ -1,0 +1,106 @@
+{
+  "function_name": "append_inlines",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "map__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.thread.orig.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "map__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.thread.orig.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the get/put are not the function's primary purpose; failure in inline parsing or insertion is not a refcount retry issue.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is appending inline frames to a callchain cursor; the get/put operations on map and thread are incidental lifecycle management within broader inline parsing and cursor appending logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the get/put are not the function's primary purpose; failure in inline parsing or insertion is not a refcount retry issue.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the get/put are not the function's primary purpose; failure in inline parsing or insertion is not a refcount retry issue.",
+    "contract_summary": ""
+  }
+}

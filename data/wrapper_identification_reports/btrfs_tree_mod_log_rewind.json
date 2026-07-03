@@ -1,0 +1,58 @@
+{
+  "function_name": "btrfs_tree_mod_log_rewind",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "On failure, the original buffer is already freed, so retrying with the same pointer is invalid. The caller must handle the error without retrying the same call.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function performs a tree-mod-log rewind operation, which includes buffer allocation/cloning, unlocking, freeing the original buffer, acquiring a read lock on the new buffer, and applying modifications. The reference-count operations (freeing the old buffer and using the new one) are part of a larger lifecycle management pattern, not the primary purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "On failure, the original buffer is already freed, so retrying with the same pointer is invalid. The caller must handle the error without retrying the same call.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "On failure, the original buffer is already freed, so retrying with the same pointer is invalid. The caller must handle the error without retrying the same call.",
+    "contract_summary": ""
+  }
+}

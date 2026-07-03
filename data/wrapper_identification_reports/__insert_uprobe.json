@@ -1,0 +1,99 @@
+{
+  "function_name": "__insert_uprobe",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "u.ref.refs",
+      "uprobe--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "try_get_uprobe",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uprobe.ref.refs",
+      "member_type_chain": "uprobe--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "try_get_uprobe",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uprobe.ref.refs",
+      "member_type_chain": "uprobe--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure of try_get_uprobe indicates a race condition where the existing node's refcount reached zero but the node is still in the tree; after erasing the dying node, the insertion can be retried and will likely succeed.",
+  "contract_summary": "Get-or-create wrapper for uprobe objects: inserts a new uprobe into the global tree, or if an identical uprobe already exists, acquires an additional reference on it via try_get_uprobe. Returns the uprobe with a reference held. The caller must eventually call put_uprobe() to release the reference. If an existing uprobe is found but its refcount is already zero (dying), the function removes it from the tree and retries the insertion, ensuring a fresh or valid uprobe is always returned.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to return a reference-counted uprobe object (either newly inserted or existing) with an acquired reference. The tree insertion and duplicate handling are integral to the get-or-create semantics, but the core function is refcount management: the caller always gets a uprobe with a held reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure of try_get_uprobe indicates a race condition where the existing node's refcount reached zero but the node is still in the tree; after erasing the dying node, the insertion can be retried and will likely succeed.",
+      "contract_summary": "Get-or-create wrapper for uprobe objects: inserts a new uprobe into the global tree, or if an identical uprobe already exists, acquires an additional reference on it via try_get_uprobe. Returns the uprobe with a reference held. The caller must eventually call put_uprobe() to release the reference. If an existing uprobe is found but its refcount is already zero (dying), the function removes it from the tree and retries the insertion, ensuring a fresh or valid uprobe is always returned."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "u.ref.refs",
+          "uprobe--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "u.ref.refs",
+          "uprobe--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "try_get_uprobe() is called on 'u' (existing uprobe) and increments its refcount; the return value in that branch is 'u'. The access path 'u.ref.refs' correctly traces from the return value (u) to the refcount field ref.refs, and the type chain uprobe--refcount_t--atomic_t matches. Segment counts are equal (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "u.ref.refs",
+        "uprobe--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure of try_get_uprobe indicates a race condition where the existing node's refcount reached zero but the node is still in the tree; after erasing the dying node, the insertion can be retried and will likely succeed.",
+    "contract_summary": "Get-or-create wrapper for uprobe objects: inserts a new uprobe into the global tree, or if an identical uprobe already exists, acquires an additional reference on it via try_get_uprobe. Returns the uprobe with a reference held. The caller must eventually call put_uprobe() to release the reference. If an existing uprobe is found but its refcount is already zero (dying), the function removes it from the tree and retries the insertion, ensuring a fresh or valid uprobe is always returned."
+  }
+}

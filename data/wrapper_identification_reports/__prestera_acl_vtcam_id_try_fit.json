@@ -1,0 +1,122 @@
+{
+  "function_name": "__prestera_acl_vtcam_id_try_fit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "vtcam.refcount.refs",
+      "prestera_acl_vtcam--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "ENOENT indicates no matching vtcam exists in the list under current conditions; immediate retry would likely fail again unless external state changes.",
+  "contract_summary": "This function searches the vtcam list for an entry matching the given lookup and keymask. If found, it increments the vtcam's refcount and stores its ID in the output parameter. The caller obtains a reference to the vtcam and must release it (e.g., via a corresponding refcount decrement) when done. On failure (ENOENT), no reference is acquired and the caller should not use the output parameter. The caller must check the return value to determine success.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to find a matching vtcam and acquire a reference via refcount_inc; the lookup logic is non-trivial but is integral to the get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "ENOENT indicates no matching vtcam exists in the list under current conditions; immediate retry would likely fail again unless external state changes.",
+      "contract_summary": "This function searches the vtcam list for an entry matching the given lookup and keymask. If found, it increments the vtcam's refcount and stores its ID in the output parameter. The caller obtains a reference to the vtcam and must release it (e.g., via a corresponding refcount decrement) when done. On failure (ENOENT), no reference is acquired and the caller should not use the output parameter. The caller must check the return value to determine success."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vtcam.refcount.refs",
+          "prestera_acl_vtcam--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The operation specifies location 'return' index '0', but the function returns an int, not a pointer to struct prestera_acl_vtcam. The refcount_inc is performed on the local variable vtcam, which is not directly exposed at the function interface. The critical variable (the object whose refcount is increased) is not a parameter or return value, so the extracted operation has an invalid location. All operations dependent on this location must be rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vtcam.refcount.refs",
+          "prestera_acl_vtcam--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a reference-count wrapper that finds a matching vtcam, increments its refcount, and outputs its ID via the vtcam_id parameter. Although the function returns an integer error code, the critical variable (vtcam) is effectively passed to the caller through the output parameter. The extraction location 'return' index '0' is acceptable by analogy with mlx5dr_definer_get, where the same pattern was validated. The check's rejection is overruled."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "vtcam.refcount.refs",
+        "prestera_acl_vtcam--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "ENOENT indicates no matching vtcam exists in the list under current conditions; immediate retry would likely fail again unless external state changes.",
+    "contract_summary": "This function searches the vtcam list for an entry matching the given lookup and keymask. If found, it increments the vtcam's refcount and stores its ID in the output parameter. The caller obtains a reference to the vtcam and must release it (e.g., via a corresponding refcount decrement) when done. On failure (ENOENT), no reference is acquired and the caller should not use the output parameter. The caller must check the return value to determine success."
+  }
+}

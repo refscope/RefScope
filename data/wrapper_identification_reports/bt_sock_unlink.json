@@ -1,0 +1,99 @@
+{
+  "function_name": "bt_sock_unlink",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sk.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sk_del_node_init",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sk_del_node_init",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation (sk_del_node_init) always succeeds as it decrements the refcount; retrying would double-put and cause use-after-free.",
+  "contract_summary": "Put wrapper: removes the socket from a Bluetooth socket list and releases a reference to it (via sk_del_node_init, which deletes the node and decrements the sock's refcount). The caller must hold a valid reference to the socket before calling this function; after the call, the caller must not use the socket pointer as it may have been freed. The function acquires and releases a write lock to protect the list manipulation, but no other lock is needed by the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to unlink a socket from a list and release a reference via sk_del_node_init, which is a put wrapper. The only other operations are locking/unlocking to protect the list.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation (sk_del_node_init) always succeeds as it decrements the refcount; retrying would double-put and cause use-after-free.",
+      "contract_summary": "Put wrapper: removes the socket from a Bluetooth socket list and releases a reference to it (via sk_del_node_init, which deletes the node and decrements the sock's refcount). The caller must hold a valid reference to the socket before calling this function; after the call, the caller must not use the socket pointer as it may have been freed. The function acquires and releases a write lock to protect the list manipulation, but no other lock is needed by the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The callee sk_del_node_init is a put function on its parameter sk (parameter index 1). In bt_sock_unlink, it is called with the function's own parameter sk, which flows directly into the callee. The access path sk.sk_refcnt.refs and type chain sock--refcount_t--atomic_t are consistent with struct sock definition. The segment counts (3 each) match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sk.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation (sk_del_node_init) always succeeds as it decrements the refcount; retrying would double-put and cause use-after-free.",
+    "contract_summary": "Put wrapper: removes the socket from a Bluetooth socket list and releases a reference to it (via sk_del_node_init, which deletes the node and decrements the sock's refcount). The caller must hold a valid reference to the socket before calling this function; after the call, the caller must not use the socket pointer as it may have been freed. The function acquires and releases a write lock to protect the list manipulation, but no other lock is needed by the caller."
+  }
+}

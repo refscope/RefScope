@@ -1,0 +1,99 @@
+{
+  "function_name": "__pse_pw_d_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "kref.@.supply.rdev.dev.kobj.kref.refcount",
+      "kref--pse_power_domain--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "regulator_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "regulator.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "regulator_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "regulator.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The release callback is invoked only once when the refcount becomes zero; after that the object is freed or invalidated, so retry is meaningless.",
+  "contract_summary": "This is the release call for a kref-managed pse_power_domain object. When the last reference is dropped via kref_put, this function is invoked to release the power supply regulator (regulator_put), remove the domain's ID from the global XArray (xa_erase), and unlock the mutex (pse_pw_d_mutex). After this function completes, the pse_power_domain must not be accessed. The caller (kref_put) is responsible for ensuring that no further references are taken after the final put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release resources when the kref reference count reaches zero; it is the release callback for the kref, performing cleanup actions (regulator_put, XArray erase, mutex unlock) that are all directly tied to the reference-count lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The release callback is invoked only once when the refcount becomes zero; after that the object is freed or invalidated, so retry is meaningless.",
+      "contract_summary": "This is the release call for a kref-managed pse_power_domain object. When the last reference is dropped via kref_put, this function is invoked to release the power supply regulator (regulator_put), remove the domain's ID from the global XArray (xa_erase), and unlock the mutex (pse_pw_d_mutex). After this function completes, the pse_power_domain must not be accessed. The caller (kref_put) is responsible for ensuring that no further references are taken after the final put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.@.supply.rdev.dev.kobj.kref.refcount",
+          "kref--pse_power_domain--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.@.supply.rdev.dev.kobj.kref.refcount",
+          "kref--pse_power_domain--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls regulator_put(pw_d->supply), which decrements the regulator's refcount. The access path starts from the function parameter kref, uses container_of (denoted by @) to reach pse_power_domain, then follows supply->rdev->dev->kobj->kref->refcount. The type chain and segment count are consistent. The direction 'put' matches the callee information for regulator_put."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "kref.@.supply.rdev.dev.kobj.kref.refcount",
+        "kref--pse_power_domain--regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The release callback is invoked only once when the refcount becomes zero; after that the object is freed or invalidated, so retry is meaningless.",
+    "contract_summary": "This is the release call for a kref-managed pse_power_domain object. When the last reference is dropped via kref_put, this function is invoked to release the power supply regulator (regulator_put), remove the domain's ID from the global XArray (xa_erase), and unlock the mutex (pse_pw_d_mutex). After this function completes, the pse_power_domain must not be accessed. The caller (kref_put) is responsible for ensuring that no further references are taken after the final put."
+  }
+}

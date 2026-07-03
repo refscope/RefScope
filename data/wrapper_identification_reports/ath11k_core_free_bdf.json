@@ -1,0 +1,99 @@
+{
+  "function_name": "ath11k_core_free_bdf",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "bd.fw.priv.ref.refcount",
+      "ath11k_board_data--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "release_firmware is void and always succeeds; if the firmware pointer is an error (IS_ERR), there is nothing to release, so no retry needed.",
+  "contract_summary": "Releases the firmware reference held in the board data (bd->fw) by calling release_firmware, and then zeros the entire board data structure to prevent use-after-free. This is a put wrapper: the caller must not access bd->fw after calling this function. Typically invoked during driver teardown or when freeing board data. The function does not return a value and does not require checking; it is a one-way cleanup operation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the firmware reference via release_firmware and zero out the board data structure to prevent subsequent use. The only significant non-refcount logic is the memset, which is part of cleanup.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "release_firmware is void and always succeeds; if the firmware pointer is an error (IS_ERR), there is nothing to release, so no retry needed.",
+      "contract_summary": "Releases the firmware reference held in the board data (bd->fw) by calling release_firmware, and then zeros the entire board data structure to prevent use-after-free. This is a put wrapper: the caller must not access bd->fw after calling this function. Typically invoked during driver teardown or when freeing board data. The function does not return a value and does not require checking; it is a one-way cleanup operation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bd.fw.priv.ref.refcount",
+          "ath11k_board_data--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bd.fw.priv.ref.refcount",
+          "ath11k_board_data--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "release_firmware is called on bd->fw, which is a put on the firmware's refcount. The access path bd.fw.priv.ref.refcount and type chain ath11k_board_data--firmware--fw_priv--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "bd.fw.priv.ref.refcount",
+        "ath11k_board_data--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "release_firmware is void and always succeeds; if the firmware pointer is an error (IS_ERR), there is nothing to release, so no retry needed.",
+    "contract_summary": "Releases the firmware reference held in the board data (bd->fw) by calling release_firmware, and then zeros the entire board data structure to prevent use-after-free. This is a put wrapper: the caller must not access bd->fw after calling this function. Typically invoked during driver teardown or when freeing board data. The function does not return a value and does not require checking; it is a one-way cleanup operation."
+  }
+}

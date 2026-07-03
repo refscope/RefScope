@@ -1,0 +1,99 @@
+{
+  "function_name": "__tcf_get_next_proto",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tp.refcnt.refs",
+      "tcf_proto--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tcf_proto_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tp.refcnt.refs",
+      "member_type_chain": "tcf_proto--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tcf_proto_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tp.refcnt.refs",
+      "member_type_chain": "tcf_proto--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Returning NULL indicates no more valid protos; retrying the same chain will not yield a different result unless external changes occur, which are not retryable from the caller's perspective.",
+  "contract_summary": "Iterator function that acquires a reference (via tcf_proto_get) on the next valid tcf_proto in the chain, starting from the given tp or the chain head. The caller receives a pointer with an elevated refcount and must call tcf_proto_put to release it. The function handles deletion races by restarting the search when the current tp is marked deleting. The caller must hold RTNL lock; the function internally acquires and releases filter_chain_lock. This is the standard method to safely traverse and pin filter objects, and must be used in a loop until NULL is returned.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference on the next non-deleting tcf_proto in the chain, with traversal logic to skip deleting entries and enforce priority ordering.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Returning NULL indicates no more valid protos; retrying the same chain will not yield a different result unless external changes occur, which are not retryable from the caller's perspective.",
+      "contract_summary": "Iterator function that acquires a reference (via tcf_proto_get) on the next valid tcf_proto in the chain, starting from the given tp or the chain head. The caller receives a pointer with an elevated refcount and must call tcf_proto_put to release it. The function handles deletion races by restarting the search when the current tp is marked deleting. The caller must hold RTNL lock; the function internally acquires and releases filter_chain_lock. This is the standard method to safely traverse and pin filter objects, and must be used in a loop until NULL is returned."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tp.refcnt.refs",
+          "tcf_proto--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tp.refcnt.refs",
+          "tcf_proto--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function calls tcf_proto_get(tp) when tp is non-null, incrementing the refcount of the returned tcf_proto object. The access path tp.refcnt.refs correctly traces from the returned pointer to the refcount field, matching the callee's member path. The type chain tcf_proto--refcount_struct--atomic_t is consistent: tcf_proto contains a refcount_struct field (refcnt), which contains an atomic_t refs. The segment count (3 segments for path, 3 types for chain) matches. The location 'return' with index 0 is correct since the reference count is acquired on the object that is returned."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tp.refcnt.refs",
+        "tcf_proto--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Returning NULL indicates no more valid protos; retrying the same chain will not yield a different result unless external changes occur, which are not retryable from the caller's perspective.",
+    "contract_summary": "Iterator function that acquires a reference (via tcf_proto_get) on the next valid tcf_proto in the chain, starting from the given tp or the chain head. The caller receives a pointer with an elevated refcount and must call tcf_proto_put to release it. The function handles deletion races by restarting the search when the current tp is marked deleting. The caller must hold RTNL lock; the function internally acquires and releases filter_chain_lock. This is the standard method to safely traverse and pin filter objects, and must be used in a loop until NULL is returned."
+  }
+}

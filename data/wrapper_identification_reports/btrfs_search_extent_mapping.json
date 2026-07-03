@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_search_extent_mapping",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "em.refs.refs",
+      "extent_map--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "lookup_extent_mapping",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "lookup_extent_mapping",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If lookup_extent_mapping returns NULL, the requested mapping does not exist; retrying with same parameters will not change the result.",
+  "contract_summary": "A get-wrapper that calls lookup_extent_mapping to find an extent_map covering the given range [start, start+len). On success, the returned extent_map has its reference count incremented, transferring ownership to the caller. The caller must ensure that a corresponding release is called via free_extent_map() when done. If no matching extent is found, NULL is returned and no reference is acquired. The function itself does not perform any additional logic or error handling.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to call lookup_extent_mapping which acquires a reference on an extent_map; no other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If lookup_extent_mapping returns NULL, the requested mapping does not exist; retrying with same parameters will not change the result.",
+      "contract_summary": "A get-wrapper that calls lookup_extent_mapping to find an extent_map covering the given range [start, start+len). On success, the returned extent_map has its reference count incremented, transferring ownership to the caller. The caller must ensure that a corresponding release is called via free_extent_map() when done. If no matching extent is found, NULL is returned and no reference is acquired. The function itself does not perform any additional logic or error handling."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "em.refs.refs",
+          "extent_map--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "em.refs.refs",
+          "extent_map--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "btrfs_search_extent_mapping directly returns the result of lookup_extent_mapping, which is a get function that increments the refcount on the returned extent_map. The access path em.refs.refs and type chain extent_map--refcount_struct--atomic_t are consistent with the callee information and the actual code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "em.refs.refs",
+        "extent_map--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If lookup_extent_mapping returns NULL, the requested mapping does not exist; retrying with same parameters will not change the result.",
+    "contract_summary": "A get-wrapper that calls lookup_extent_mapping to find an extent_map covering the given range [start, start+len). On success, the returned extent_map has its reference count incremented, transferring ownership to the caller. The caller must ensure that a corresponding release is called via free_extent_map() when done. If no matching extent is found, NULL is returned and no reference is acquired. The function itself does not perform any additional logic or error handling."
+  }
+}

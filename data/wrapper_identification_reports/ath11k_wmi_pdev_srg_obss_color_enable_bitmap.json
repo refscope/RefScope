@@ -1,0 +1,58 @@
+{
+  "function_name": "ath11k_wmi_pdev_srg_obss_color_enable_bitmap",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to send a WMI command (set SRG OBSS color enable bitmap). It allocates an skb, formats a TLV command, sends it, and frees the skb on error. The only refcount-related call is dev_kfree_skb (put) during error cleanup, which is incidental and not the main function of the function. No reference-counted object is acquired, returned, or passed to the caller for lifecycle management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

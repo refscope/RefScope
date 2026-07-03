@@ -1,0 +1,106 @@
+{
+  "function_name": "acpi_spi_find_device_by_adev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "spi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device_by_acpi_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device_by_acpi_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means no matching device found; retrying without additional changes (e.g., device addition) is unlikely to succeed, and no retry mechanism is provided.",
+  "contract_summary": "This is a get-wrapper: it looks up a SPI device associated with an ACPI device and returns it with an incremented reference count. The caller must release the reference via put_device() or a SPI-specific put when done. If no matching device exists, returns NULL; in that case no reference is taken. The caller must check the return value before using the device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls bus_find_device_by_acpi_dev (which acquires a reference) and returns the result cast to spi_device. No other logic. Primary purpose is to obtain a referenced SPI device.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means no matching device found; retrying without additional changes (e.g., device addition) is unlikely to succeed, and no retry mechanism is provided.",
+      "contract_summary": "This is a get-wrapper: it looks up a SPI device associated with an ACPI device and returns it with an incremented reference count. The caller must release the reference via put_device() or a SPI-specific put when done. If no matching device exists, returns NULL; in that case no reference is taken. The caller must check the return value before using the device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "spi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'dev.kobj.kref.refcount' has 4 segments, but the type chain 'spi_device--device--kobject--kref--refcount_t' has 5 types, violating the segment count equality requirement. Additionally, the path should start from the critical variable (return value of type spi_device *), but it begins with 'dev' (a field), which is inconsistent. The callee info indicates a different type chain, and the candidate list incorrectly prepends 'spi_device' without adjusting the path."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "spi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a simple wrapper that calls bus_find_device_by_acpi_dev (a get function) and returns the device as a spi_device. The critical variable is the returned spi_device. The candidate operation correctly identifies the get on the device's reference count; the path mismatch is due to the extraction using the local variable 'dev' instead of the return variable, but the underlying semantics are correct. The function has no other business logic, so purity is high."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "spi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means no matching device found; retrying without additional changes (e.g., device addition) is unlikely to succeed, and no retry mechanism is provided.",
+    "contract_summary": "This is a get-wrapper: it looks up a SPI device associated with an ACPI device and returns it with an incremented reference count. The caller must release the reference via put_device() or a SPI-specific put when done. If no matching device exists, returns NULL; in that case no reference is taken. The caller must check the return value before using the device."
+  }
+}

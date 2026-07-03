@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_grab_root",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the refcount is zero (object is dying/dead); retrying will not revive the object.",
+  "contract_summary": "Conditional get-wrapper: acquires a reference on a btrfs_root object only if its refcount is still non-zero (object alive). Returns the root pointer on success, NULL if the object is already being freed. Caller must check the return value and later release the reference with btrfs_put_root (or equivalent). Typically used to safely obtain a reference from an RCU-protected or otherwise unstable pointer, ensuring the object survives during use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally increment the refcount of a btrfs_root via refcount_inc_not_zero. Only additional logic is a NULL pointer check.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the refcount is zero (object is dying/dead); retrying will not revive the object.",
+      "contract_summary": "Conditional get-wrapper: acquires a reference on a btrfs_root object only if its refcount is still non-zero (object alive). Returns the root pointer on success, NULL if the object is already being freed. Caller must check the return value and later release the reference with btrfs_put_root (or equivalent). Typically used to safely obtain a reference from an RCU-protected or otherwise unstable pointer, ensuring the object survives during use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function uses refcount_inc_not_zero(&root->refs), which increments if non-zero and returns root. The access path from the returned pointer (same as input root) to the atomic_t is root.refs.refs, matching the callee's path (r.refs). Type chain btrfs_root->refcount_t->atomic_t is correct. Segment counts match (3 each). Location ('return', index 0) correctly identifies the object passed to the caller."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the refcount is zero (object is dying/dead); retrying will not revive the object.",
+    "contract_summary": "Conditional get-wrapper: acquires a reference on a btrfs_root object only if its refcount is still non-zero (object alive). Returns the root pointer on success, NULL if the object is already being freed. Caller must check the return value and later release the reference with btrfs_put_root (or equivalent). Typically used to safely obtain a reference from an RCU-protected or otherwise unstable pointer, ensuring the object survives during use."
+  }
+}

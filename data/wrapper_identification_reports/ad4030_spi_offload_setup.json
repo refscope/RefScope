@@ -1,0 +1,58 @@
+{
+  "function_name": "ad4030_spi_offload_setup",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_spi_offload_trigger_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "trigger.ref.refcount",
+      "member_type_chain": "spi_offload_trigger--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_spi_offload_trigger_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "trigger.ref.refcount",
+      "member_type_chain": "spi_offload_trigger--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — refcount operation is incidental; failure in devm_ calls is handled by dev_err_probe and propagates error, but the function is not a get/set wrapper so retry logic is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to set up SPI offload hardware, DMA channel, and IIO DMA buffer; the devm_spi_offload_trigger_get call is one step within broader configuration logic, not the function's main focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — refcount operation is incidental; failure in devm_ calls is handled by dev_err_probe and propagates error, but the function is not a get/set wrapper so retry logic is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — refcount operation is incidental; failure in devm_ calls is handled by dev_err_probe and propagates error, but the function is not a get/set wrapper so retry logic is not applicable.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "function_name": "acpi_dpc_port_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "pci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pci_dev_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_domain_bus_and_slot",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pci_dev_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_domain_bus_and_slot",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures come from DSM evaluation (firmware bug) or device lookup failure; both indicate a persistent condition unlikely to change on retry.",
+  "contract_summary": "Get-wrapper that returns a PCI device with an elevated reference count. If the ACPI EDR_PORT_LOCATE_DSM is not implemented or fails, it returns the input device with an extra reference via pci_dev_get(). If the DSM succeeds, it returns the DPC port device (obtained via pci_get_domain_bus_and_slot()) with its own reference. On error (DSM returns failure or invalid type), it returns NULL. The caller must call pci_dev_put() on the returned pointer to release the reference. This function is used to acquire a reference to the port that experienced a containment event for DPC/EDR handling.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a pci_dev with an elevated reference count, either the input device or a DPC port device determined via ACPI DSM. The function has minimal additional logic (DSM check/evaluation, error handling) directly related to deciding which device to return and ensuring a valid reference is acquired.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures come from DSM evaluation (firmware bug) or device lookup failure; both indicate a persistent condition unlikely to change on retry.",
+      "contract_summary": "Get-wrapper that returns a PCI device with an elevated reference count. If the ACPI EDR_PORT_LOCATE_DSM is not implemented or fails, it returns the input device with an extra reference via pci_dev_get(). If the DSM succeeds, it returns the DPC port device (obtained via pci_get_domain_bus_and_slot()) with its own reference. On error (DSM returns failure or invalid type), it returns NULL. The caller must call pci_dev_put() on the returned pointer to release the reference. This function is used to acquire a reference to the port that experienced a containment event for DPC/EDR handling."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'dev.dev.kobj.kref.refcount' is inconsistent with the actual pci_dev structure. The correct path from a pci_dev pointer to its refcount is 'dev.kobj.kref.refcount' (variable -> dev -> kobj -> kref -> refcount). The candidate path includes an erroneous second 'dev' segment instead of 'kobj', making it invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a pci_dev with an incremented refcount via pci_dev_get or pci_get_domain_bus_and_slot, making it a pure get wrapper. The extraction correctly identified the operation, but the access path was erroneously 'dev.dev.kobj.kref.refcount' instead of the correct 'dev.kobj.kref.refcount'. The check rejected due to this path inconsistency, but the core wrapper classification is valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "pci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures come from DSM evaluation (firmware bug) or device lookup failure; both indicate a persistent condition unlikely to change on retry.",
+    "contract_summary": "Get-wrapper that returns a PCI device with an elevated reference count. If the ACPI EDR_PORT_LOCATE_DSM is not implemented or fails, it returns the input device with an extra reference via pci_dev_get(). If the DSM succeeds, it returns the DPC port device (obtained via pci_get_domain_bus_and_slot()) with its own reference. On error (DSM returns failure or invalid type), it returns NULL. The caller must call pci_dev_put() on the returned pointer to release the reference. This function is used to acquire a reference to the port that experienced a containment event for DPC/EDR handling."
+  }
+}

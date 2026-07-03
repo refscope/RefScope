@@ -1,0 +1,106 @@
+{
+  "function_name": "btrfs_backref_error_cleanup",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_backref_drop_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_drop_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_backref_drop_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_drop_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper - retry not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is error cleanup of backref cache structures, involving list traversals, edge freeing, and multiple put operations on node references. The puts are part of the cleanup logic, not the primary intent.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper - retry not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper - retry not applicable.",
+    "contract_summary": ""
+  }
+}

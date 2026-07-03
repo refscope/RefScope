@@ -1,0 +1,89 @@
+{
+  "function_name": "cachefiles_get_security_ID",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_cred",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cred.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_cred",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cred.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates allocation failure (ENOMEM) or permanent security denial; retrying would likely fail again and is not part of the contract.",
+  "contract_summary": "Creates a new set of kernel credentials via prepare_kernel_cred(current), optionally applies a security override (secid) if have_secid is set, and stores the result in cache->cache_cred, taking ownership of the reference. On error (allocation failure or security override failure), any allocated cred is released. The caller must check the return value; on success, cache->cache_cred holds a reference that must be released (via put_cred) when the cache is torn down.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to create and store a new kernel credential (a reference-counted object) into cache->cache_cred, with proper error handling (put_cred on failure). The only additional logic is an optional security override, which is part of credential initialization.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates allocation failure (ENOMEM) or permanent security denial; retrying would likely fail again and is not part of the contract.",
+      "contract_summary": "Creates a new set of kernel credentials via prepare_kernel_cred(current), optionally applies a security override (secid) if have_secid is set, and stores the result in cache->cache_cred, taking ownership of the reference. On error (allocation failure or security override failure), any allocated cred is released. The caller must check the return value; on success, cache->cache_cred holds a reference that must be released (via put_cred) when the cache is torn down."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "new.usage",
+          "cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "new.usage",
+          "cred--atomic_long_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operations incorrectly use 'return 0' as the location for refcount operations. The function returns an int, not a pointer to a cred. The cred object is either stored in cache->cache_cred (no explicit refcount operation) or freed via put_cred on error, which is a local operation and not associated with the function's return. There is no 'set' operation in the code. Therefore, both operations are inconsistent with the function interface."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function cachefiles_get_security_ID creates a new cred and stores it in cache->cache_cred, returning an int error code. It does not pass the cred object to the caller via its return value or parameters. The candidate operations incorrectly placed refcount operations at 'return 0' which is not a valid location. The function is a helper that initializes an internal field, not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates allocation failure (ENOMEM) or permanent security denial; retrying would likely fail again and is not part of the contract.",
+    "contract_summary": "Creates a new set of kernel credentials via prepare_kernel_cred(current), optionally applies a security override (secid) if have_secid is set, and stores the result in cache->cache_cred, taking ownership of the reference. On error (allocation failure or security override failure), any allocated cred is released. The caller must check the return value; on success, cache->cache_cred holds a reference that must be released (via put_cred) when the cache is torn down."
+  }
+}

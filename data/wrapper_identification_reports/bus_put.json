@@ -1,0 +1,171 @@
+{
+  "function_name": "bus_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "bus.p.subsys.kobj.kref.refcount",
+      "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "bus.p.subsys.kobj.kref.refcount",
+      "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "bus.p.subsys.kobj.kref.refcount",
+      "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "subsys_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "subsys_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The puts are unconditional and always occur; failure would indicate a double-put bug, not a transient condition, so retry is not applicable.",
+  "contract_summary": "This is a put wrapper that releases a reference on a bus_type. It must be called exactly once to drop a reference previously acquired via bus_get or equivalent. After calling bus_put, the bus pointer must not be dereferenced. The double put inside is an intentional pattern to balance the extra get from bus_to_subsys; callers should not call subsys_put directly on the underlying object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release a reference on a bus_type by calling subsys_put twice to compensate for the extra reference taken by bus_to_subsys. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The puts are unconditional and always occur; failure would indicate a double-put bug, not a transient condition, so retry is not applicable.",
+      "contract_summary": "This is a put wrapper that releases a reference on a bus_type. It must be called exactly once to drop a reference previously acquired via bus_get or equivalent. After calling bus_put, the bus pointer must not be dereferenced. The double put inside is an intentional pattern to balance the extra get from bus_to_subsys; callers should not call subsys_put directly on the underlying object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code performs one get (via bus_to_subsys) and two puts (via subsys_put) on the same refcount object accessed through bus->p. The access path 'bus.p.subsys.kobj.kref.refcount' correctly traces from parameter bus to the refcount field, and the type chain matches the callee information. The number of segments in the path (6) equals the number of types in the chain (6). All three operations are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "bus.p.subsys.kobj.kref.refcount",
+        "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "bus.p.subsys.kobj.kref.refcount",
+        "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "bus.p.subsys.kobj.kref.refcount",
+        "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The puts are unconditional and always occur; failure would indicate a double-put bug, not a transient condition, so retry is not applicable.",
+    "contract_summary": "This is a put wrapper that releases a reference on a bus_type. It must be called exactly once to drop a reference previously acquired via bus_get or equivalent. After calling bus_put, the bus pointer must not be dereferenced. The double put inside is an intentional pattern to balance the extra get from bus_to_subsys; callers should not call subsys_put directly on the underlying object."
+  }
+}

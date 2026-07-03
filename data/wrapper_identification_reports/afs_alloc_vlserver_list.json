@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_alloc_vlserver_list",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "vllist.ref.refs",
+      "afs_vlserver_list--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_set is unconditional and never fails; allocation failure is separate and may be retried if conditions change, but the refcount operation itself does not fail.",
+  "contract_summary": "Creation (set) wrapper: allocates a new afs_vlserver_list object, initializes its refcount to 1 (establishing the initial reference), and initializes the embedded lock. Returns the object with one reference owned by the caller. The caller must eventually call the corresponding put function (e.g., afs_put_vlserverlist) to release the reference when the object is no longer needed. On allocation failure, returns NULL; the caller should check for this. There are no additional locking or RCU obligations beyond the internal lock initialization.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate and initialize an afs_vlserver_list with refcount set to 1 (initial reference) and lock initialized. The only other logic is allocation and minimal initialization.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_set is unconditional and never fails; allocation failure is separate and may be retried if conditions change, but the refcount operation itself does not fail.",
+      "contract_summary": "Creation (set) wrapper: allocates a new afs_vlserver_list object, initializes its refcount to 1 (establishing the initial reference), and initializes the embedded lock. Returns the object with one reference owned by the caller. The caller must eventually call the corresponding put function (e.g., afs_put_vlserverlist) to release the reference when the object is no longer needed. On allocation failure, returns NULL; the caller should check for this. There are no additional locking or RCU obligations beyond the internal lock initialization."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "vllist.ref.refs",
+          "afs_vlserver_list--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "vllist.ref.refs",
+          "afs_vlserver_list--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set(&vllist->ref) sets the refcount field to 1. vllist is the return pointer, and the access path vllist.ref.refs with type chain afs_vlserver_list--refcount_t--atomic_t matches the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "vllist.ref.refs",
+        "afs_vlserver_list--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_set is unconditional and never fails; allocation failure is separate and may be retried if conditions change, but the refcount operation itself does not fail.",
+    "contract_summary": "Creation (set) wrapper: allocates a new afs_vlserver_list object, initializes its refcount to 1 (establishing the initial reference), and initializes the embedded lock. Returns the object with one reference owned by the caller. The caller must eventually call the corresponding put function (e.g., afs_put_vlserverlist) to release the reference when the object is no longer needed. On allocation failure, returns NULL; the caller should check for this. There are no additional locking or RCU obligations beyond the internal lock initialization."
+  }
+}

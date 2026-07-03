@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_map_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "map.btf.refcnt.refs",
+      "bpf_map--btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Free operation releases the map and its resources; after freeing, the object is no longer valid, so retry is impossible.",
+  "contract_summary": "This is a put wrapper that releases the references held by a bpf_map and frees its memory. After calling this function, the map must not be accessed. It handles freeing of internal structures like btf_record and decrementing the btf reference count via btf_put. The caller should have obtained the map through a proper get (e.g., bpf_map_get) and must not use the map after this call. There is no return value, so the caller must ensure the map is not used again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references and free a bpf_map; it calls map_free for implementation-specific cleanup, frees btf_record, and decrements btf refcount via btf_put.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Free operation releases the map and its resources; after freeing, the object is no longer valid, so retry is impossible.",
+      "contract_summary": "This is a put wrapper that releases the references held by a bpf_map and frees its memory. After calling this function, the map must not be accessed. It handles freeing of internal structures like btf_record and decrementing the btf reference count via btf_put. The caller should have obtained the map through a proper get (e.g., bpf_map_get) and must not use the map after this call. There is no return value, so the caller must ensure the map is not used again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "map.btf.refcnt.refs",
+          "bpf_map--btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "map.btf.refcnt.refs",
+          "bpf_map--btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btf_put is called with map->btf, which decrements the refcount via btf.refcnt.refs. The access path from the function parameter (map) correctly traces to the refcount field, and the type chain matches the callee's description."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "map.btf.refcnt.refs",
+        "bpf_map--btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Free operation releases the map and its resources; after freeing, the object is no longer valid, so retry is impossible.",
+    "contract_summary": "This is a put wrapper that releases the references held by a bpf_map and frees its memory. After calling this function, the map must not be accessed. It handles freeing of internal structures like btf_record and decrementing the btf reference count via btf_put. The caller should have obtained the map through a proper get (e.g., bpf_map_get) and must not use the map after this call. There is no return value, so the caller must ensure the map is not used again."
+  }
+}

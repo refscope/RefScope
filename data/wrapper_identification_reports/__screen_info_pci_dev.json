@@ -1,0 +1,115 @@
+{
+  "function_name": "__screen_info_pci_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pdev.dev.kobj.kref.refcount",
+      "pci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pci_get_base_class",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "from.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_base_class",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pci_get_base_class",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "from.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_base_class",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) means no matching device exists in the current PCI device list; retrying without new device enumeration is pointless.",
+  "contract_summary": "This function finds the PCI display device whose resources match a given memory resource. It iterates over PCI display class devices using pci_get_base_class, which internally handles reference counting (put on previous, get on next). The returned pdev has an acquired reference that the caller must release with pci_dev_put(). If no matching device is found, NULL is returned. The caller must not assume the device remains present across events.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to find and return a PCI display device matching a given resource. Reference counting is managed via the pci_get_base_class callee, which acquires a reference on each iteration and releases the previous. The function returns a pdev with an elevated refcount to the caller, making it a get wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) means no matching device exists in the current PCI device list; retrying without new device enumeration is pointless.",
+      "contract_summary": "This function finds the PCI display device whose resources match a given memory resource. It iterates over PCI display class devices using pci_get_base_class, which internally handles reference counting (put on previous, get on next). The returned pdev has an acquired reference that the caller must release with pci_dev_put(). If no matching device is found, NULL is returned. The caller must not assume the device remains present across events."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns pdev obtained from pci_get_base_class, which increments the refcount of the returned pci_dev. The access path starting from the return variable pdev and type chain are consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pdev.dev.kobj.kref.refcount",
+        "pci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) means no matching device exists in the current PCI device list; retrying without new device enumeration is pointless.",
+    "contract_summary": "This function finds the PCI display device whose resources match a given memory resource. It iterates over PCI display class devices using pci_get_base_class, which internally handles reference counting (put on previous, get on next). The returned pdev has an acquired reference that the caller must release with pci_dev_put(). If no matching device is found, NULL is returned. The caller must not assume the device remains present across events."
+  }
+}

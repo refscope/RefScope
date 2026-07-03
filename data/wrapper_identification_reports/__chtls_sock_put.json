@@ -1,0 +1,107 @@
+{
+  "function_name": "__chtls_sock_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "csk.kref.refcount",
+      "chtls_sock--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put always succeeds; if the refcount reaches zero the object is freed. Retrying would constitute a double-put leading to use-after-free.",
+  "contract_summary": "This is a put wrapper: it releases a reference to a chtls_sock object. When the reference count reaches zero, the release function chtls_sock_free is called to clean up the object. After calling __chtls_sock_put, the caller must not use the csk pointer unless it holds another valid reference. The 'fn' parameter is intended for debugging/tracing and does not affect the refcount semantics. Callers must have previously acquired a reference (e.g., via a get operation) before calling this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the reference count of a chtls_sock via kref_put. There is no other logic besides the call itself; the unused 'fn' parameter does not affect the refcount operation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put always succeeds; if the refcount reaches zero the object is freed. Retrying would constitute a double-put leading to use-after-free.",
+      "contract_summary": "This is a put wrapper: it releases a reference to a chtls_sock object. When the reference count reaches zero, the release function chtls_sock_free is called to clean up the object. After calling __chtls_sock_put, the caller must not use the csk pointer unless it holds another valid reference. The 'fn' parameter is intended for debugging/tracing and does not affect the refcount semantics. Callers must have previously acquired a reference (e.g., via a get operation) before calling this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "csk.kref.refcount",
+          "chtls_sock--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "csk.kref.refcount",
+          "chtls_sock--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put(&csk->kref) operates on csk->kref.refcount. The critical variable is parameter 2 (csk). The access path csk.kref.refcount and type chain chtls_sock--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "csk.kref.refcount",
+        "chtls_sock--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put always succeeds; if the refcount reaches zero the object is freed. Retrying would constitute a double-put leading to use-after-free.",
+    "contract_summary": "This is a put wrapper: it releases a reference to a chtls_sock object. When the reference count reaches zero, the release function chtls_sock_free is called to clean up the object. After calling __chtls_sock_put, the caller must not use the csk pointer unless it holds another valid reference. The 'fn' parameter is intended for debugging/tracing and does not affect the refcount semantics. Callers must have previously acquired a reference (e.g., via a get operation) before calling this function."
+  }
+}

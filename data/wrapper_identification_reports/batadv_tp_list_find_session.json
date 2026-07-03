@@ -1,0 +1,122 @@
+{
+  "function_name": "batadv_tp_list_find_session",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pos.refcount.refcount.refs",
+      "batadv_tp_vars--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs either because no matching session exists or the refcount was zero (object dying). In both cases, retrying the same lookup without any change in state is unlikely to succeed; if the object was dying it is already gone, and if it did not exist the conditions would need to change externally.",
+  "contract_summary": "This is a get-wrapper that looks up a tp_vars session by destination, session ID, and role. If a matching entry is found and its reference count is non-zero (i.e., the object is still alive), it acquires a new reference via kref_get_unless_zero and returns the object pointer. The caller receives ownership of this reference and must later call a corresponding release function (e.g., batadv_tp_vars_put) to avoid leaks. The lookup is performed under RCU read lock, but the acquired reference pins the object so it remains valid after RCU unlock. Returns NULL if no matching entry exists or if the entry is already being freed (refcount zero); the caller must check the return value before use. The function does not allocate or create sessions, only retrieves an existing one with a reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to find a matching batadv_tp_vars from the tp_list and, if found and still alive, acquire a reference via kref_get_unless_zero. The only non-refcount logic is the list iteration and comparison of attributes (dst, session, role), which are minimal and necessary for the lookup. The returned pointer carries an elevated refcount.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs either because no matching session exists or the refcount was zero (object dying). In both cases, retrying the same lookup without any change in state is unlikely to succeed; if the object was dying it is already gone, and if it did not exist the conditions would need to change externally.",
+      "contract_summary": "This is a get-wrapper that looks up a tp_vars session by destination, session ID, and role. If a matching entry is found and its reference count is non-zero (i.e., the object is still alive), it acquires a new reference via kref_get_unless_zero and returns the object pointer. The caller receives ownership of this reference and must later call a corresponding release function (e.g., batadv_tp_vars_put) to avoid leaks. The lookup is performed under RCU read lock, but the acquired reference pins the object so it remains valid after RCU unlock. Returns NULL if no matching entry exists or if the entry is already being freed (refcount zero); the caller must check the return value before use. The function does not allocate or create sessions, only retrieves an existing one with a reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pos.refcount.refs",
+          "batadv_tp_vars--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate member_access_path 'pos.refcount.refs' has 3 segments but the member_type_chain 'batadv_tp_vars--kref--refcount_t--atomic_t' has 4 types, violating the segment count equality rule. The correct path should include the intermediate refcount_t field (e.g., 'refcount.refcount.refs'). Therefore the operation is inconsistent with the code and callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pos.refcount.refcount.refs",
+          "batadv_tp_vars--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a classic 'find and get' wrapper: it searches a list and increments the refcount using kref_get_unless_zero. The critical variable (pos) is returned to the caller. The candidate's access path was missing the intermediate refcount_t field; the correct path is pos.refcount.refcount.refs (as indicated by the callee information). The check stage's rejection was based on a path-length mismatch, but the operation is valid with the corrected path."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pos.refcount.refcount.refs",
+        "batadv_tp_vars--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs either because no matching session exists or the refcount was zero (object dying). In both cases, retrying the same lookup without any change in state is unlikely to succeed; if the object was dying it is already gone, and if it did not exist the conditions would need to change externally.",
+    "contract_summary": "This is a get-wrapper that looks up a tp_vars session by destination, session ID, and role. If a matching entry is found and its reference count is non-zero (i.e., the object is still alive), it acquires a new reference via kref_get_unless_zero and returns the object pointer. The caller receives ownership of this reference and must later call a corresponding release function (e.g., batadv_tp_vars_put) to avoid leaks. The lookup is performed under RCU read lock, but the acquired reference pins the object so it remains valid after RCU unlock. Returns NULL if no matching entry exists or if the entry is already being freed (refcount zero); the caller must check the return value before use. The function does not allocate or create sessions, only retrieves an existing one with a reference."
+  }
+}

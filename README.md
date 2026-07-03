@@ -163,11 +163,11 @@ RefScope/
 ├── s7_run_smatch_refcount.sh        # Stage 7: Smatch intra-procedural scan
 ├── s8_run_smatch_crossfunc.sh       # Stage 8: Smatch cross-function scan
 ├── s9_prepare_audit_context.py      # Stage 9: audit context (v1)
-├── s9_v2_enrich_context.py          # Stage 9 v2: enriched context
-├── s9_v3_contract_context.py        # Stage 9 v3: contract context
+├── s9_enrich_context.py             # Stage 9: enriched context
+├── s9_contract_context.py           # Stage 9: contract context
 ├── s10_audit_agent.py               # Stage 10: iterative audit (v1)
-├── s10_v2_audit_agent.py            # Stage 10 v2: parallel audit
-├── s10_v3_batch_audit.py            # Stage 10 v3: batch audit
+├── s10_parallel_audit.py            # Stage 10: parallel audit
+├── s10_batch_audit.py               # Stage 10: batch audit
 │
 ├── callgraph.py                     # dependency: call graph
 ├── accurate_func_locator.py         # dependency: function locator
@@ -186,6 +186,37 @@ RefScope/
 ├── template_audit_v3.md             # template: audit v3
 └── template_api_config.env          # template: API config
 ```
+
+## Data Directory
+
+The pipeline reads from and writes to a shared data directory (`REFCOUNT_DATA_DIR`, default `./data`). A pre-populated dataset is available under `/home/liang/workspace/Bak/data/` with the following structure:
+
+```
+data/
+├── bug_reports/                         # Bug reports confirmed as real by LLM audit
+│   └── *.json                           #   per-function confirmed bug reports (s10 output)
+│
+├── checker_warns/                       # Raw checker warnings (Smatch + auto-cleanup)
+│   ├── smatch/                          #   Smatch intra- & cross-function refcount warnings
+│   └── auto_cleanup/                    #   s6b auto-cleanup bug detection warnings
+│
+├── comparision_study/                   # Comparison study: APISpecGen vs RefScope
+│   └── APISpecGen_deepth*.json          #   APISpecGen reports at various depths
+│
+└── wrapper_identification_reports/      # Wrapper function identification results (s1 output)
+    ├── refcount_callgraph.json          #   full refcount call graph
+    ├── wrapper_stage_traces.json        #   per-stage agent traces for debugging
+    └── function_pair_candidates.json    #   get/put pair candidates (s2 output)
+```
+
+| Subdirectory | Description | Produced By |
+|-------------|-------------|-------------|
+| `bug_reports/` | LLM-confirmed real refcount bugs | s10 (audit) |
+| `checker_warns/` | Raw Smatch & auto-cleanup detector warnings | s6b, s7, s8 |
+| `comparision_study/` | Comparison-study reports (APISpecGen baseline) | external |
+| `wrapper_identification_reports/` | Wrapper function analysis & pair candidates | s1, s2 |
+| `FunctionResult/` | Per-function type-chain & contract analysis | s1 |
+| `SmatchResult/` | Timestamped Smatch scan outputs | s7, s8 |
 
 ## CLI Reference (`run_pipeline.py`)
 

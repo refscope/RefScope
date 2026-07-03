@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_xdp_xfrm_state_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "x.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xfrm_state_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xfrm_state_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations release a reference; if the refcount were already zero, calling again would be a use-after-free. Retry is not meaningful.",
+  "contract_summary": "This BPF kfunc releases a reference to an xfrm_state object by decrementing its refcount. It is a pure put wrapper. After calling this function, the caller must not use the passed x pointer any further, as the object may be freed when the refcount reaches zero. It is intended to be paired with a corresponding get-operation (e.g., bpf_xdp_xfrm_state_acquire) for reference-count management in BPF programs. There is no return value and the operation is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls xfrm_state_put() to decrement the refcount of the given xfrm_state. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations release a reference; if the refcount were already zero, calling again would be a use-after-free. Retry is not meaningful.",
+      "contract_summary": "This BPF kfunc releases a reference to an xfrm_state object by decrementing its refcount. It is a pure put wrapper. After calling this function, the caller must not use the passed x pointer any further, as the object may be freed when the refcount reaches zero. It is intended to be paired with a corresponding get-operation (e.g., bpf_xdp_xfrm_state_acquire) for reference-count management in BPF programs. There is no return value and the operation is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "xfrm_state_put(x) decrements the refcount at x->refcnt.refs. The access path x.refcnt.refs and type chain xfrm_state--refcount_t--atomic_t are consistent with the callee info and the code. The critical variable is parameter 1 (x), and the operation is a put on that object."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "x.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations release a reference; if the refcount were already zero, calling again would be a use-after-free. Retry is not meaningful.",
+    "contract_summary": "This BPF kfunc releases a reference to an xfrm_state object by decrementing its refcount. It is a pure put wrapper. After calling this function, the caller must not use the passed x pointer any further, as the object may be freed when the refcount reaches zero. It is intended to be paired with a corresponding get-operation (e.g., bpf_xdp_xfrm_state_acquire) for reference-count management in BPF programs. There is no return value and the operation is unconditional."
+  }
+}

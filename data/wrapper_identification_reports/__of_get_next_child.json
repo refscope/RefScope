@@ -1,0 +1,143 @@
+{
+  "function_name": "__of_get_next_child",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "next.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "prev.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_node_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_node_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure to get a next child simply means iteration is complete; retrying will not produce a new child.",
+  "contract_summary": "Iterator get-wrapper for device node children: acquires a reference on the next child (returned) and releases the reference on the previous child (argument). Caller must use this in a loop, typically starting with prev=NULL, and must call of_node_put on the last returned node when done (e.g., after break or normal termination). Returns NULL when no more children, indicating end of iteration. Ownership of the returned node is transferred to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to iterate over children of a device node while managing refcounts: it takes a reference on the next child and releases the previous child. No other business logic present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure to get a next child simply means iteration is complete; retrying will not produce a new child.",
+      "contract_summary": "Iterator get-wrapper for device node children: acquires a reference on the next child (returned) and releases the reference on the previous child (argument). Caller must use this in a loop, typically starting with prev=NULL, and must call of_node_put on the last returned node when done (e.g., after break or normal termination). Returns NULL when no more children, indicating end of iteration. Ownership of the returned node is transferred to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "prev.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "prev.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code. of_node_get(next) increments refcount on the return value 'next', and of_node_put(prev) decrements refcount on the second parameter 'prev'. The access paths correctly trace from the respective critical variables (return value and parameter 2) to the refcount field, and the type chains match the struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "next.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "prev.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure to get a next child simply means iteration is complete; retrying will not produce a new child.",
+    "contract_summary": "Iterator get-wrapper for device node children: acquires a reference on the next child (returned) and releases the reference on the previous child (argument). Caller must use this in a loop, typically starting with prev=NULL, and must call of_node_put on the last returned node when done (e.g., after break or normal termination). Returns NULL when no more children, indicating end of iteration. Ownership of the returned node is transferred to the caller."
+  }
+}

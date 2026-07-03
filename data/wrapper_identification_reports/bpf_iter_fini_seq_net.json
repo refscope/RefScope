@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_iter_fini_seq_net",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "priv_data.net.__ns.ns.__ns_ref.refs",
+      "seq_net_private--net--namespace--ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_net_track",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_net_track",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_net_track always decrements the refcount and never fails; retrying would cause a double-put (use-after-free).",
+  "contract_summary": "This is a put wrapper that releases a reference on a network namespace that was previously acquired (typically in the corresponding bpf_iter_init_seq_net function). It is called when the BPF iterator is done using the namespace, and after this call the caller must not access the net pointer. The operation is unconditional and cannot fail. The wrapper does not return any value; it simply decrements the reference count with put_net_track, which may free the namespace if the count reaches zero.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to call put_net_track on the net member of seq_net_private; it is a thin put wrapper that releases a reference on a network namespace.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_net_track always decrements the refcount and never fails; retrying would cause a double-put (use-after-free).",
+      "contract_summary": "This is a put wrapper that releases a reference on a network namespace that was previously acquired (typically in the corresponding bpf_iter_init_seq_net function). It is called when the BPF iterator is done using the namespace, and after this call the caller must not access the net pointer. The operation is unconditional and cannot fail. The wrapper does not return any value; it simply decrements the reference count with put_net_track, which may free the namespace if the count reaches zero."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv_data.net.__ns.ns.__ns_ref.refs",
+          "seq_net_private--net--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv_data.net.__ns.ns.__ns_ref.refs",
+          "seq_net_private--net--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function call put_net_track(p->net, ...) decrements the reference count on the net namespace accessible from priv_data. The access path from parameter 1 (priv_data) through the cast to struct seq_net_private, field net, and then the callee's path net.__ns.ns.__ns_ref.refs is consistent with the code and the callee information. The type chain matches the segment count and reflects the actual structures."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "priv_data.net.__ns.ns.__ns_ref.refs",
+        "seq_net_private--net--namespace--ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_net_track always decrements the refcount and never fails; retrying would cause a double-put (use-after-free).",
+    "contract_summary": "This is a put wrapper that releases a reference on a network namespace that was previously acquired (typically in the corresponding bpf_iter_init_seq_net function). It is called when the BPF iterator is done using the namespace, and after this call the caller must not access the net pointer. The operation is unconditional and cannot fail. The wrapper does not return any value; it simply decrements the reference count with put_net_track, which may free the namespace if the count reaches zero."
+  }
+}

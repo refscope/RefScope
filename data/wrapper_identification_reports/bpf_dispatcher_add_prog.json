@@ -1,0 +1,187 @@
+{
+  "function_name": "bpf_dispatcher_add_prog",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      2,
+      "prog.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ],
+    [
+      "get",
+      "parameter",
+      1,
+      "d.progs.users.refs",
+      "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+    ],
+    [
+      "set",
+      "parameter",
+      1,
+      "d.progs.users.refs",
+      "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (returning false) occurs either when prog is NULL (invalid input) or when no free entry exists in the dispatcher; both conditions are not transient in normal operation, so retrying without changing conditions is unlikely to succeed.",
+  "contract_summary": "This function adds a program to a BPF dispatcher. If the program already has an entry, it acquires a reference on that entry via refcount_inc and returns false (indicating no new entry was created). If no entry exists, it allocates a free entry, increments the program's reference count via bpf_prog_inc, initializes the entry's refcount to 1 via refcount_set, updates the dispatcher's entry count, and returns true. The caller must eventually release each acquired reference (via a corresponding put operation). Note that return false does not mean the program was not added; it means a new entry was not created but a reference was still taken. The return value must be checked to correctly track whether a new entry was added.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary logic is to either increment an existing entry's refcount (refcount_inc) or set a new entry's refcount to 1 (refcount_set), along with the minimal bookkeeping required to manage the dispatcher's internal data structure (finding free entry, updating num_progs). The refcount operations are central and the additional steps are directly tied to the reference management lifecycle.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (returning false) occurs either when prog is NULL (invalid input) or when no free entry exists in the dispatcher; both conditions are not transient in normal operation, so retrying without changing conditions is unlikely to succeed.",
+      "contract_summary": "This function adds a program to a BPF dispatcher. If the program already has an entry, it acquires a reference on that entry via refcount_inc and returns false (indicating no new entry was created). If no entry exists, it allocates a free entry, increments the program's reference count via bpf_prog_inc, initializes the entry's refcount to 1 via refcount_set, updates the dispatcher's entry count, and returns true. The caller must eventually release each acquired reference (via a corresponding put operation). Note that return false does not mean the program was not added; it means a new entry was not created but a reference was still taken. The return value must be checked to correctly track whether a new entry was added."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          2,
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "get",
+          "parameter",
+          1,
+          "d.progs.users.refs",
+          "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "parameter",
+          1,
+          "d.progs.users.refs",
+          "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          2,
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "get",
+          "parameter",
+          1,
+          "d.progs.users.refs",
+          "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "parameter",
+          1,
+          "d.progs.users.refs",
+          "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All three extracted operations are consistent with the code: 1) refcount_inc(&entry->users) on an existing entry corresponds to a get on d.progs.users.refs; 2) refcount_set(&entry->users, 1) on a new entry corresponds to a set on the same path; 3) bpf_prog_inc(prog) is a get on prog.aux.refcnt. The access paths and type chains match the callee information and actual struct definitions, and segment counts are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        2,
+        "prog.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ],
+      [
+        "get",
+        "parameter",
+        1,
+        "d.progs.users.refs",
+        "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+      ],
+      [
+        "set",
+        "parameter",
+        1,
+        "d.progs.users.refs",
+        "bpf_dispatcher--bpf_dispatcher_prog--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (returning false) occurs either when prog is NULL (invalid input) or when no free entry exists in the dispatcher; both conditions are not transient in normal operation, so retrying without changing conditions is unlikely to succeed.",
+    "contract_summary": "This function adds a program to a BPF dispatcher. If the program already has an entry, it acquires a reference on that entry via refcount_inc and returns false (indicating no new entry was created). If no entry exists, it allocates a free entry, increments the program's reference count via bpf_prog_inc, initializes the entry's refcount to 1 via refcount_set, updates the dispatcher's entry count, and returns true. The caller must eventually release each acquired reference (via a corresponding put operation). Note that return false does not mean the program was not added; it means a new entry was not created but a reference was still taken. The return value must be checked to correctly track whether a new entry was added."
+  }
+}

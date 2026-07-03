@@ -1,0 +1,166 @@
+{
+  "function_name": "__media_device_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "mdi.refcount.refcount",
+      "media_device_instance--kref--refcount_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "mdi.refcount.refcount.refs",
+      "media_device_instance--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Allocation failure is not transient; retrying without freeing memory or changing conditions would likely fail again.",
+  "contract_summary": "This is a get-or-create wrapper for a reference-counted media device. It searches the global list for an existing media device matching the given struct device. If found, it increments the reference count via kref_get and also attempts to get a module reference for the owner. If not found, it allocates a new instance, initializes the reference count to 1 via kref_init, stores it in the list, and sets the owner. The caller receives a pointer to the media_device with an acquired reference and must release it by calling the corresponding put function (e.g., media_device_put) when done. Returns NULL if allocation fails; the caller must check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a media_device (via get-or-create pattern) using kref_get/kref_init. The only non-refcount logic is the list traversal and allocation, which are integral to the get-or-create semantics. The function returns the media_device pointer with an acquired reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Allocation failure is not transient; retrying without freeing memory or changing conditions would likely fail again.",
+      "contract_summary": "This is a get-or-create wrapper for a reference-counted media device. It searches the global list for an existing media device matching the given struct device. If found, it increments the reference count via kref_get and also attempts to get a module reference for the owner. If not found, it allocates a new instance, initializes the reference count to 1 via kref_init, stores it in the list, and sets the owner. The caller receives a pointer to the media_device with an acquired reference and must release it by calling the corresponding put function (e.g., media_device_put) when done. Returns NULL if allocation fails; the caller must check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mdi.refcount.refcount",
+          "media_device_instance--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "mdi.refcount.refcount.refs",
+          "media_device_instance--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Both candidate operations incorrectly start the member_access_path from 'mdi', which is a local variable, but the function interface critical variable is the return value (struct media_device*). The refcount operations act on mdi->refcount, which is accessible only via container_of from the returned pointer; the path does not start from the return variable. Therefore, the entries are inconsistent with the function's interface."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mdi.refcount.refcount",
+          "media_device_instance--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "mdi.refcount.refcount.refs",
+          "media_device_instance--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function is a classic get-or-create reference-count wrapper. The critical variable is the returned `struct media_device *`, and the reference count lives in its container `media_device_instance`. The extraction uses the local variable `mdi`, which is the container holding the refcount, and both candidate operations correctly capture the refcount manipulations (`kref_get` on the refcount_t and `kref_init` on the underlying atomic_t). The check's objection about the path not starting from the return value is overly strict: `mdi` is directly tied to the return value via `&mdi->mdev`, and the operations are semantically correct for a wrapper that returns an embedded structure. The function has high purity as it exclusively manages device instance lookup/allocation and refcount handling."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "mdi.refcount.refcount",
+        "media_device_instance--kref--refcount_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "mdi.refcount.refcount.refs",
+        "media_device_instance--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Allocation failure is not transient; retrying without freeing memory or changing conditions would likely fail again.",
+    "contract_summary": "This is a get-or-create wrapper for a reference-counted media device. It searches the global list for an existing media device matching the given struct device. If found, it increments the reference count via kref_get and also attempts to get a module reference for the owner. If not found, it allocates a new instance, initializes the reference count to 1 via kref_init, stores it in the list, and sets the owner. The caller receives a pointer to the media_device with an acquired reference and must release it by calling the corresponding put function (e.g., media_device_put) when done. Returns NULL if allocation fails; the caller must check the return value."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "function_name": "bnx2_release_firmware",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bp.mips_firmware.priv.ref.refcount",
+      "bnx2--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "bp.rv2p_firmware.priv.ref.refcount",
+      "bnx2--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations should not be retried; if the firmware was already released, retrying would cause a double-put use-after-free.",
+  "contract_summary": "Put wrapper that releases both mips and rv2p firmware references when the rv2p firmware pointer is non-NULL. After calling, both firmware pointers are set to NULL. The caller must ensure that no further access to the released firmware objects occurs. The function assumes that `mips_firmware` is also valid when `rv2p_firmware` is non-NULL; if not, it could release a dangling pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release firmware references via `release_firmware` (put) for both mips and rv2p firmware, and NULL the pointers. No other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations should not be retried; if the firmware was already released, retrying would cause a double-put use-after-free.",
+      "contract_summary": "Put wrapper that releases both mips and rv2p firmware references when the rv2p firmware pointer is non-NULL. After calling, both firmware pointers are set to NULL. The caller must ensure that no further access to the released firmware objects occurs. The function assumes that `mips_firmware` is also valid when `rv2p_firmware` is non-NULL; if not, it could release a dangling pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp.mips_firmware.priv.ref.refcount",
+          "bnx2--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp.rv2p_firmware.priv.ref.refcount",
+          "bnx2--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp.mips_firmware.priv.ref.refcount",
+          "bnx2--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp.rv2p_firmware.priv.ref.refcount",
+          "bnx2--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "release_firmware is called on bp->mips_firmware and bp->rv2p_firmware; callee info confirms it decrements the refcount via priv.ref.refcount. The access path starts from parameter bp and correctly traces through the firmware pointer and priv structure to the refcount field. The member_access_path segment count (5) matches the number of types in the type_chain (5). Both operations are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bp.mips_firmware.priv.ref.refcount",
+        "bnx2--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "bp.rv2p_firmware.priv.ref.refcount",
+        "bnx2--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations should not be retried; if the firmware was already released, retrying would cause a double-put use-after-free.",
+    "contract_summary": "Put wrapper that releases both mips and rv2p firmware references when the rv2p firmware pointer is non-NULL. After calling, both firmware pointers are set to NULL. The caller must ensure that no further access to the released firmware objects occurs. The function assumes that `mips_firmware` is also valid when `rv2p_firmware` is non-NULL; if not, it could release a dangling pointer."
+  }
+}

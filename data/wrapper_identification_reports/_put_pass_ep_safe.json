@@ -1,0 +1,70 @@
+{
+  "function_name": "_put_pass_ep_safe",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "c4iw_put_ep",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ep.kref.refcount",
+      "member_type_chain": "c4iw_ep--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "c4iw_put_ep",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ep.kref.refcount",
+      "member_type_chain": "c4iw_ep--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operations are unconditional and always succeed; there is no failure path that would require retry.",
+  "contract_summary": "This function performs a safe release of an endpoint and its parent endpoint references. It extracts the endpoint from the skb control block, puts the parent endpoint's reference, and then releases the endpoint's own resources (which includes another put). It is intended to be called as the final cleanup for an endpoint after processing an skb. The caller must not use the endpoint after calling this function. The function does not return any value and always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to perform two reference-count put operations (on the parent endpoint and on the endpoint itself) and then release endpoint resources. No other logic is present; it is a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operations are unconditional and always succeed; there is no failure path that would require retry.",
+      "contract_summary": "This function performs a safe release of an endpoint and its parent endpoint references. It extracts the endpoint from the skb control block, puts the parent endpoint's reference, and then releases the endpoint's own resources (which includes another put). It is intended to be called as the final cleanup for an endpoint after processing an skb. The caller must not use the endpoint after calling this function. The function does not return any value and always succeeds."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "struct c4iw_ep"
+      ],
+      "reason": "Need the definition of struct c4iw_ep to determine the types of members 'parent_ep' and 'com', and to trace the member_access_path from the function's parameters to the refcount field. Also need to understand whether 'parent_ep' is a pointer and what 'com' is."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "The candidate list is empty because the callee's path (ep.kref.refcount) does not match the actual argument passed to c4iw_put_ep (&ep->parent_ep->com). Therefore no valid operation can be extracted."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operations are unconditional and always succeed; there is no failure path that would require retry.",
+    "contract_summary": "This function performs a safe release of an endpoint and its parent endpoint references. It extracts the endpoint from the skb control block, puts the parent endpoint's reference, and then releases the endpoint's own resources (which includes another put). It is intended to be called as the final cleanup for an endpoint after processing an skb. The caller must not use the endpoint after calling this function. The function does not return any value and always succeeds."
+  }
+}

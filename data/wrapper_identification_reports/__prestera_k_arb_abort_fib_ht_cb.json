@@ -1,0 +1,99 @@
+{
+  "function_name": "__prestera_k_arb_abort_fib_ht_cb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ptr.fen4_info.fi.fib_clntref.refs",
+      "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__prestera_kern_fib_cache_destruct",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "fib_cache.fen4_info.fi.fib_clntref.refs",
+      "member_type_chain": "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__prestera_kern_fib_cache_destruct",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "fib_cache.fen4_info.fi.fib_clntref.refs",
+      "member_type_chain": "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always executes; no failure path exists, so retry is not applicable.",
+  "contract_summary": "This function is a destructor for a prestera_kern_fib_cache entry. It clears offload state for the LPM and nexthop, then releases the cache's reference count via __prestera_kern_fib_cache_destruct (a put function), and finally frees the cache. The caller must ensure this function is called exactly once per allocated fib_cache; after the call, the fib_cache pointer becomes invalid and must not be dereferenced. This function is typically invoked as a callback during hash table abort/destroy operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to destroy a fib_cache entry — the put call (via __prestera_kern_fib_cache_destruct) is a critical refcount operation, but the function also includes non-refcount cleanup steps (offload_set calls). The destruction is the core lifecycle operation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always executes; no failure path exists, so retry is not applicable.",
+      "contract_summary": "This function is a destructor for a prestera_kern_fib_cache entry. It clears offload state for the LPM and nexthop, then releases the cache's reference count via __prestera_kern_fib_cache_destruct (a put function), and finally frees the cache. The caller must ensure this function is called exactly once per allocated fib_cache; after the call, the fib_cache pointer becomes invalid and must not be dereferenced. This function is typically invoked as a callback during hash table abort/destroy operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ptr.fen4_info.fi.fib_clntref.refs",
+          "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ptr.fen4_info.fi.fib_clntref.refs",
+          "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "__prestera_kern_fib_cache_destruct is a put function operating on fib_cache (ptr), accessed via ptr->fen4_info.fi.fib_clntref.refs. The access path matches the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ptr.fen4_info.fi.fib_clntref.refs",
+        "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always executes; no failure path exists, so retry is not applicable.",
+    "contract_summary": "This function is a destructor for a prestera_kern_fib_cache entry. It clears offload state for the LPM and nexthop, then releases the cache's reference count via __prestera_kern_fib_cache_destruct (a put function), and finally frees the cache. The caller must ensure this function is called exactly once per allocated fib_cache; after the call, the fib_cache pointer becomes invalid and must not be dereferenced. This function is typically invoked as a callback during hash table abort/destroy operations."
+  }
+}

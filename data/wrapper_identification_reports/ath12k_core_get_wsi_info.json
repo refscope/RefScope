@@ -1,0 +1,90 @@
+{
+  "function_name": "ath12k_core_get_wsi_info",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_graph_get_port_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_node_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_graph_get_port_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_node_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper – failure indicates an error in the device tree traversal (e.g., missing endpoint), and retrying with the same device tree would produce the same error.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to iterate the device tree graph, collect WSI device nodes into an array, and enforce a device count limit. Reference count operations (of_node_get/of_node_put) are incidental to walking and storing nodes; the function includes substantial business logic (graph traversal, counting, error cleanup with auto-free helpers) beyond refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper – failure indicates an error in the device tree traversal (e.g., missing endpoint), and retrying with the same device tree would produce the same error.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper – failure indicates an error in the device tree traversal (e.g., missing endpoint), and retrying with the same device tree would produce the same error.",
+    "contract_summary": ""
+  }
+}

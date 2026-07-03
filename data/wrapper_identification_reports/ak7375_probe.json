@@ -1,0 +1,90 @@
+{
+  "function_name": "ak7375_probe",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "v4l2_ctrl_handler_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdl.req_obj.kref.refcount",
+      "member_type_chain": "v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "v4l2_ctrl_handler_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdl.req_obj.kref.refcount",
+      "member_type_chain": "v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "This function is a device probe that performs many initialization steps: memory allocation, regulator acquisition, V4L2 subdev initialization, control setup, and runtime PM. The only refcount-related calls (devm_regulator_bulk_get, v4l2_ctrl_handler_free) are incidental to the broader purpose of initializing the device, not the primary purpose of the function.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

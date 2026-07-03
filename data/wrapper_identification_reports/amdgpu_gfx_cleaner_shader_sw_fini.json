@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_gfx_cleaner_shader_sw_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.gfx.cleaner_shader_obj[0].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_gfx--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional once the path is taken; if it fails, it indicates a kernel bug (e.g., double-free or refcount underflow), and retrying would be dangerous or pointless.",
+  "contract_summary": "This is a put wrapper that releases the reference held on the cleaner shader buffer object (adev->gfx.cleaner_shader_obj). It is called during driver teardown (fini). The function first checks the enable_cleaner_shader flag; if false, it returns immediately (no release needed). Otherwise, it calls amdgpu_bo_free_kernel, which decrements the buffer object's reference count and frees the underlying GPU memory if the refcount reaches zero. After this call, the caller must not use the cleaner shader buffer object or its CPU/GPU addresses. The function does not return a value, so the caller assumes the release is always successful when executed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release the cleaner shader buffer object via amdgpu_bo_free_kernel, which is a put operation. The only additional logic is a guard check on enable_cleaner_shader, which does not dilute the refcount focus.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional once the path is taken; if it fails, it indicates a kernel bug (e.g., double-free or refcount underflow), and retrying would be dangerous or pointless.",
+      "contract_summary": "This is a put wrapper that releases the reference held on the cleaner shader buffer object (adev->gfx.cleaner_shader_obj). It is called during driver teardown (fini). The function first checks the enable_cleaner_shader flag; if false, it returns immediately (no release needed). Otherwise, it calls amdgpu_bo_free_kernel, which decrements the buffer object's reference count and frees the underlying GPU memory if the refcount reaches zero. After this call, the caller must not use the cleaner shader buffer object or its CPU/GPU addresses. The function does not return a value, so the caller assumes the release is always successful when executed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.cleaner_shader_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.cleaner_shader_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls amdgpu_bo_free_kernel with &adev->gfx.cleaner_shader_obj as the first argument. According to callee info, that function performs a put on the refcount of the bo pointer (parameter 1). The access path adev.gfx.cleaner_shader_obj[0].tbo.base.refcount.refcount correctly traces from the function's parameter adev to the refcount field, and the type chain matches the struct nesting. Segment counts are equal (7 each). Therefore the operation is valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.gfx.cleaner_shader_obj[0].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_gfx--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional once the path is taken; if it fails, it indicates a kernel bug (e.g., double-free or refcount underflow), and retrying would be dangerous or pointless.",
+    "contract_summary": "This is a put wrapper that releases the reference held on the cleaner shader buffer object (adev->gfx.cleaner_shader_obj). It is called during driver teardown (fini). The function first checks the enable_cleaner_shader flag; if false, it returns immediately (no release needed). Otherwise, it calls amdgpu_bo_free_kernel, which decrements the buffer object's reference count and frees the underlying GPU memory if the refcount reaches zero. After this call, the caller must not use the cleaner shader buffer object or its CPU/GPU addresses. The function does not return a value, so the caller assumes the release is always successful when executed."
+  }
+}

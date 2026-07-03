@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_get_dfa",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dfa.count.refcount",
+      "aa_dfa--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The get only fails when dfa is NULL, meaning no valid object exists; retrying with the same NULL pointer will again result in NULL, so retry is pointless.",
+  "contract_summary": "aa_get_dfa is an unconditional get-wrapper for struct aa_dfa objects. It increments the kref reference count if the dfa pointer is non-NULL and returns the same pointer. The caller obtains a new reference to the dfa object and must balance this call with a corresponding put (aa_put_dfa) when the reference is no longer needed. The return value must be checked: if NULL was passed in, NULL is returned, and no reference is acquired. This wrapper does not allocate or initialize the object; it assumes the object already exists with a valid kref.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the refcount on an aa_dfa object via kref_get and return the dfa pointer. Only logic outside the refcount operation is a NULL guard, which is standard for defensive get wrappers.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The get only fails when dfa is NULL, meaning no valid object exists; retrying with the same NULL pointer will again result in NULL, so retry is pointless.",
+      "contract_summary": "aa_get_dfa is an unconditional get-wrapper for struct aa_dfa objects. It increments the kref reference count if the dfa pointer is non-NULL and returns the same pointer. The caller obtains a new reference to the dfa object and must balance this call with a corresponding put (aa_put_dfa) when the reference is no longer needed. The return value must be checked: if NULL was passed in, NULL is returned, and no reference is acquired. This wrapper does not allocate or initialize the object; it assumes the object already exists with a valid kref."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&(dfa->count)) increments the refcount on the input parameter dfa. The access path dfa.count.refcount correctly starts from parameter 1 (dfa) and matches the struct chain: aa_dfa has member 'count' of type kref, which contains 'refcount' of type refcount_t. The number of path segments (3) equals the number of types in the chain (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dfa.count.refcount",
+        "aa_dfa--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The get only fails when dfa is NULL, meaning no valid object exists; retrying with the same NULL pointer will again result in NULL, so retry is pointless.",
+    "contract_summary": "aa_get_dfa is an unconditional get-wrapper for struct aa_dfa objects. It increments the kref reference count if the dfa pointer is non-NULL and returns the same pointer. The caller obtains a new reference to the dfa object and must balance this call with a corresponding put (aa_put_dfa) when the reference is no longer needed. The return value must be checked: if NULL was passed in, NULL is returned, and no reference is acquired. This wrapper does not allocate or initialize the object; it assumes the object already exists with a valid kref."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "ap_get_qdev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "aq.ap_dev.device.kobj.kref.refcount",
+      "ap_queue--ap_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The queue may not exist in the hash; retrying without any change is pointless. Caller should handle NULL appropriately.",
+  "contract_summary": "Get-wrapper that finds an ap_queue by qid in a global hash table and increments the reference count on its embedded device via get_device. The caller receives the pointer with an elevated reference and must call put_device on &aq->ap_dev.device when done. The function holds a spinlock during the lookup but releases it before returning. Returns NULL if no matching queue exists; callers must check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an ap_queue by qid and acquire a reference on its device via get_device. The hash iteration is the necessary mechanism to find the object, not incidental business logic. The only refcount-relevant operation is get_device.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The queue may not exist in the hash; retrying without any change is pointless. Caller should handle NULL appropriately.",
+      "contract_summary": "Get-wrapper that finds an ap_queue by qid in a global hash table and increments the reference count on its embedded device via get_device. The caller receives the pointer with an elevated reference and must call put_device on &aq->ap_dev.device when done. The function holds a spinlock during the lookup but releases it before returning. Returns NULL if no matching queue exists; callers must check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "aq.ap_dev.device.kobj.kref.refcount",
+          "ap_queue--ap_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "aq.ap_dev.device.kobj.kref.refcount",
+          "ap_queue--ap_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The extracted operation is consistent: get_device(&aq->ap_dev.device) increments refcount on the device embedded in the returned ap_queue object. The access path starts from the return value (aq) and correctly traces through ap_dev, device, kobj, kref to refcount_t. Segment count (6) matches type chain count (6)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "aq.ap_dev.device.kobj.kref.refcount",
+        "ap_queue--ap_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The queue may not exist in the hash; retrying without any change is pointless. Caller should handle NULL appropriately.",
+    "contract_summary": "Get-wrapper that finds an ap_queue by qid in a global hash table and increments the reference count on its embedded device via get_device. The caller receives the pointer with an elevated reference and must call put_device on &aq->ap_dev.device when done. The function holds a spinlock during the lookup but releases it before returning. Returns NULL if no matching queue exists; callers must check the return value."
+  }
+}

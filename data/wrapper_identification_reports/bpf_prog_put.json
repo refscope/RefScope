@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_prog_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "prog.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always succeeds; there is no failure case to retry.",
+  "contract_summary": "This is a put wrapper that releases one reference on a BPF program by decrementing its refcount. It delegates entirely to __bpf_prog_put, which may free the program if the refcount reaches zero. After calling this function, the caller must not use the program pointer again, as it may be dangling. No special locking is required beyond what the caller already holds (typically RCU or mutex). This is the standard release operation for BPF program references.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function body consists solely of a call to __bpf_prog_put, which decrements the refcount at prog->aux.refcnt. No other logic, conditions, or side effects are present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always succeeds; there is no failure case to retry.",
+      "contract_summary": "This is a put wrapper that releases one reference on a BPF program by decrementing its refcount. It delegates entirely to __bpf_prog_put, which may free the program if the refcount reaches zero. After calling this function, the caller must not use the program pointer again, as it may be dangling. No special locking is required beyond what the caller already holds (typically RCU or mutex). This is the standard release operation for BPF program references."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The function bpf_prog_put calls __bpf_prog_put(prog), which is a put on the parameter prog. The member access path prog.aux.refcnt and type chain bpf_prog--bpf_prog_aux--atomic64_t are consistent with the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "prog.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always succeeds; there is no failure case to retry.",
+    "contract_summary": "This is a put wrapper that releases one reference on a BPF program by decrementing its refcount. It delegates entirely to __bpf_prog_put, which may free the program if the refcount reaches zero. After calling this function, the caller must not use the program pointer again, as it may be dangling. No special locking is required beyond what the caller already holds (typically RCU or mutex). This is the standard release operation for BPF program references."
+  }
+}

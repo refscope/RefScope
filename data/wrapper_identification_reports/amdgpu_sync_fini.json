@@ -1,0 +1,122 @@
+{
+  "function_name": "amdgpu_sync_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "amdgpu_sync_slab",
+      "amdgpu_sync_slab.kobj.kref.refcount",
+      "kmem_cache--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kmem_cache_destroy is a put operation that should only be called once; retrying would cause double-free.",
+  "contract_summary": "This function destroys the amdgpu_sync slab cache by releasing the reference on the kmem_cache object. It should be called exactly once during module cleanup after all objects allocated from this slab have been freed. After this call, the slab cache pointer should be considered invalid. No further references to the slab cache should be used.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is destroying a slab cache via kmem_cache_destroy, which is a put operation on the kmem_cache's refcount. No other logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kmem_cache_destroy is a put operation that should only be called once; retrying would cause double-free.",
+      "contract_summary": "This function destroys the amdgpu_sync slab cache by releasing the reference on the kmem_cache object. It should be called exactly once during module cleanup after all objects allocated from this slab have been freed. After this call, the slab cache pointer should be considered invalid. No further references to the slab cache should be used."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "amdgpu_sync_slab",
+          "amdgpu_sync_slab.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "global",
+          "amdgpu_sync_slab",
+          "amdgpu_sync_slab.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "amdgpu_sync_slab",
+          "amdgpu_sync_slab.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Only the second operation is consistent. The first operation's path 'amdgpu_sync_slab.refcount' with type chain 'kmem_cache--int' is invalid because struct kmem_cache does not have a direct 'refcount' field; the reference count is accessed via the embedded kobject (s.kobj.kref.refcount). The second operation correctly starts from the global variable, has matching segment counts (4 segments, 4 types), and the direction 'put' matches the behavior of kmem_cache_destroy. The first operation is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "amdgpu_sync_slab",
+        "amdgpu_sync_slab.kobj.kref.refcount",
+        "kmem_cache--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kmem_cache_destroy is a put operation that should only be called once; retrying would cause double-free.",
+    "contract_summary": "This function destroys the amdgpu_sync slab cache by releasing the reference on the kmem_cache object. It should be called exactly once during module cleanup after all objects allocated from this slab have been freed. After this call, the slab cache pointer should be considered invalid. No further references to the slab cache should be used."
+  }
+}

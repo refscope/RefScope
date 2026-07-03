@@ -1,0 +1,134 @@
+{
+  "function_name": "a5xx_preempt_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "a5xx_gpu",
+      "a5xx_gpu.preempt_bo[i].refcount.refcount",
+      "a5xx_gpu--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "a5xx_gpu",
+      "a5xx_gpu.preempt_counters_bo[i].refcount.refcount",
+      "a5xx_gpu--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "msm_gem_kernel_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "msm_gem_kernel_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "msm_gem_kernel_put unconditionally decrements the refcount; if called correctly the object is alive and put will succeed. Retry is not applicable because it releases ownership and double-put would be a bug.",
+  "contract_summary": "This put-wrapper releases the references held on each ring's preemption BO and preemption counters BO during GPU teardown (fini). It iterates over all rings and calls msm_gem_kernel_put for each, releasing the caller's reference and allowing the objects to be freed when the final reference is dropped. After this function returns, the preempt_bo and preempt_counters_bo arrays are effectively invalidated and must not be used further. There is no error path—all puts are unconditional and assumed to succeed in the context of a clean shutdown.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references to preemption-related GEM kernel objects via msm_gem_kernel_put, which decrements the refcount. The loop and helper calls constitute all the logic, with no significant unrelated operations.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "msm_gem_kernel_put unconditionally decrements the refcount; if called correctly the object is alive and put will succeed. Retry is not applicable because it releases ownership and double-put would be a bug.",
+      "contract_summary": "This put-wrapper releases the references held on each ring's preemption BO and preemption counters BO during GPU teardown (fini). It iterates over all rings and calls msm_gem_kernel_put for each, releasing the caller's reference and allowing the objects to be freed when the final reference is dropped. After this function returns, the preempt_bo and preempt_counters_bo arrays are effectively invalidated and must not be used further. There is no error path—all puts are unconditional and assumed to succeed in the context of a clean shutdown."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "a5xx_gpu",
+          "a5xx_gpu.preempt_bo[i].refcount.refcount",
+          "a5xx_gpu--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "a5xx_gpu",
+          "a5xx_gpu.preempt_counters_bo[i].refcount.refcount",
+          "a5xx_gpu--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access paths start from 'a5xx_gpu', but the critical variable at the function interface is the first argument to msm_gem_kernel_put, which is a pointer to drm_gem_object (a5xx_gpu->preempt_bo[i] or a5xx_gpu->preempt_counters_bo[i]). The path should start from that parameter, not the containing structure. Thus, both operations are invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "a5xx_gpu",
+          "a5xx_gpu.preempt_bo[i].refcount.refcount",
+          "a5xx_gpu--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "a5xx_gpu",
+          "a5xx_gpu.preempt_counters_bo[i].refcount.refcount",
+          "a5xx_gpu--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function a5xx_preempt_fini is a straightforward cleanup wrapper that iterates over ring buffer entries and calls msm_gem_kernel_put on each BO. The critical variables are the drm_gem_objects reached through a5xx_gpu->preempt_bo[i] and a5xx_gpu->preempt_counters_bo[i]. 'a5xx_gpu' is derived from the input parameter 'gpu', so the access path from the function's interface is valid. The function has no other logic—it purely performs put operations, making it a high-purity put wrapper. The check stage incorrectly required the path to start from the immediate callee parameter; however, for the wrapper classification, it is sufficient that the refcounted objects are reachable from the function's own parameters."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "a5xx_gpu",
+        "a5xx_gpu.preempt_bo[i].refcount.refcount",
+        "a5xx_gpu--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "a5xx_gpu",
+        "a5xx_gpu.preempt_counters_bo[i].refcount.refcount",
+        "a5xx_gpu--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "msm_gem_kernel_put unconditionally decrements the refcount; if called correctly the object is alive and put will succeed. Retry is not applicable because it releases ownership and double-put would be a bug.",
+    "contract_summary": "This put-wrapper releases the references held on each ring's preemption BO and preemption counters BO during GPU teardown (fini). It iterates over all rings and calls msm_gem_kernel_put for each, releasing the caller's reference and allowing the objects to be freed when the final reference is dropped. After this function returns, the preempt_bo and preempt_counters_bo arrays are effectively invalidated and must not be used further. There is no error path—all puts are unconditional and assumed to succeed in the context of a clean shutdown."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "alloc_drm_dp_aux_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "aux_dev.usecount",
+      "drm_dp_aux_dev--atomic_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "aux_dev.refcount.refcount.refs",
+      "drm_dp_aux_dev--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The kref_init call unconditionally succeeds; any failure (e.g., allocation, idr) is not a refcount failure and retrying would require freeing resources, not reattempting the refcount operation.",
+  "contract_summary": "alloc_drm_dp_aux_dev is a set wrapper (constructor) that allocates a drm_dp_aux_dev, initializes its internal reference count to 1 via kref_init, and registers it in the aux_idr. The caller receives ownership of the newly created object with a single reference. On success, the caller must eventually release this reference by calling a corresponding put (e.g., kref_put or the appropriate drm_dp_aux_dev_put). On failure (memory allocation or IDR exhaustion), the function returns an ERR_PTR and the caller should not attempt to use the object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate a drm_dp_aux_dev object and initialize its reference count to 1 via kref_init, establishing the initial reference. The idr allocation is a minor administrative step that is part of the object creation, not a separate business logic. Almost all logic is refcount setup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The kref_init call unconditionally succeeds; any failure (e.g., allocation, idr) is not a refcount failure and retrying would require freeing resources, not reattempting the refcount operation.",
+      "contract_summary": "alloc_drm_dp_aux_dev is a set wrapper (constructor) that allocates a drm_dp_aux_dev, initializes its internal reference count to 1 via kref_init, and registers it in the aux_idr. The caller receives ownership of the newly created object with a single reference. On success, the caller must eventually release this reference by calling a corresponding put (e.g., kref_put or the appropriate drm_dp_aux_dev_put). On failure (memory allocation or IDR exhaustion), the function returns an ERR_PTR and the caller should not attempt to use the object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "aux_dev.usecount",
+          "drm_dp_aux_dev--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "aux_dev.refcount.refcount.refs",
+          "drm_dp_aux_dev--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "aux_dev.usecount",
+          "drm_dp_aux_dev--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "aux_dev.refcount.refcount.refs",
+          "drm_dp_aux_dev--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: atomic_set(&aux_dev->usecount, 1) sets the usecount field; kref_init(&aux_dev->refcount) sets the refcount via kref_init, which, according to callee info, sets the path kref.refcount.refs. The access paths start from the returned object aux_dev and the segment counts match the type chains. All fields are properly initialized on the returned pointer."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "aux_dev.usecount",
+        "drm_dp_aux_dev--atomic_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "aux_dev.refcount.refcount.refs",
+        "drm_dp_aux_dev--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The kref_init call unconditionally succeeds; any failure (e.g., allocation, idr) is not a refcount failure and retrying would require freeing resources, not reattempting the refcount operation.",
+    "contract_summary": "alloc_drm_dp_aux_dev is a set wrapper (constructor) that allocates a drm_dp_aux_dev, initializes its internal reference count to 1 via kref_init, and registers it in the aux_idr. The caller receives ownership of the newly created object with a single reference. On success, the caller must eventually release this reference by calling a corresponding put (e.g., kref_put or the appropriate drm_dp_aux_dev_put). On failure (memory allocation or IDR exhaustion), the function returns an ERR_PTR and the caller should not attempt to use the object."
+  }
+}

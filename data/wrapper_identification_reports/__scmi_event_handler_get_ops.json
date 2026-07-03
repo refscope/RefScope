@@ -1,0 +1,166 @@
+{
+  "function_name": "__scmi_event_handler_get_ops",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hndl.users.refs",
+      "scmi_event_handler--refcount_struct--atomic_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "hndl.users.refs",
+      "scmi_event_handler--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "scmi_allocate_event_handler",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hndl.users.refs",
+      "member_type_chain": "scmi_event_handler--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "scmi_put_handler_unlocked",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "hndl.users.refs",
+      "member_type_chain": "scmi_event_handler--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "scmi_allocate_event_handler",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hndl.users.refs",
+      "member_type_chain": "scmi_event_handler--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Errors indicate permanent conditions (event not supported, allocation failure, or handler not found and not created); retrying is unlikely to succeed without external state changes.",
+  "contract_summary": "This wrapper acquires or creates an event handler for a given event key, returning a pointer to the handler with an elevated reference count. The caller must release the reference by calling a corresponding put function (e.g., scmi_put_handler_unlocked) when done. If the event is not supported by the platform, -EOPNOTSUPP is returned. If the handler is not found and creation is not requested, -ENODEV is returned. When creation is requested but registration fails, -EINVAL is returned after properly purging the allocated handler. The function holds ni->pending_mtx during the search/registration process to ensure consistency.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The primary purpose is to get or create an event handler and ensure the returned handler holds an elevated reference count (either via refcount_inc on existing handler or refcount_set during allocation). Additional logic includes validation of platform support, searching two handler lists, creation, registration, and error handling.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Errors indicate permanent conditions (event not supported, allocation failure, or handler not found and not created); retrying is unlikely to succeed without external state changes.",
+      "contract_summary": "This wrapper acquires or creates an event handler for a given event key, returning a pointer to the handler with an elevated reference count. The caller must release the reference by calling a corresponding put function (e.g., scmi_put_handler_unlocked) when done. If the event is not supported by the platform, -EOPNOTSUPP is returned. If the handler is not found and creation is not requested, -ENODEV is returned. When creation is requested but registration fails, -EINVAL is returned after properly purging the allocated handler. The function holds ni->pending_mtx during the search/registration process to ensure consistency."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "users.refs",
+          "scmi_event_handler--refcount_struct--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "users.refs",
+          "scmi_event_handler--refcount_struct--atomic_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "users.refs",
+          "scmi_event_handler--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hndl.users.refs",
+          "scmi_event_handler--refcount_struct--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "hndl.users.refs",
+          "scmi_event_handler--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "Two refcount operations are present: get (refcount_inc on hndl->users) and set (scmi_allocate_event_handler initializes hndl->users). The put operation candidate is invalid because it incorrectly uses 'return'; the actual put in the failure path is not on the return value. The access paths were fixed to include the variable name 'hndl' to match the segment count with the type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hndl.users.refs",
+        "scmi_event_handler--refcount_struct--atomic_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "hndl.users.refs",
+        "scmi_event_handler--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Errors indicate permanent conditions (event not supported, allocation failure, or handler not found and not created); retrying is unlikely to succeed without external state changes.",
+    "contract_summary": "This wrapper acquires or creates an event handler for a given event key, returning a pointer to the handler with an elevated reference count. The caller must release the reference by calling a corresponding put function (e.g., scmi_put_handler_unlocked) when done. If the event is not supported by the platform, -EOPNOTSUPP is returned. If the handler is not found and creation is not requested, -ENODEV is returned. When creation is requested but registration fails, -EINVAL is returned after properly purging the allocated handler. The function holds ni->pending_mtx during the search/registration process to ensure consistency."
+  }
+}

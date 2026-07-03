@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_tvlv_handler_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tvlv_handler.refcount.refcount",
+      "batadv_tvlv_handler--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the object is not found, it likely does not exist; if refcount zero, object is being freed — retrying will not succeed.",
+  "contract_summary": "RCU-protected get-wrapper that looks up a TVLV handler by type and version from the handler list and acquires a reference (via kref_get_unless_zero) on it if found and alive. Returns the handler with an elevated refcount, or NULL if not found or if the handler is being destroyed. The caller must release the reference with batadv_tvlv_handler_put() when done. The RCU lock is only held during the lookup; the returned object is safe to use without RCU as long as the caller holds the reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a TVLV handler by type/version and acquire a reference on it. The only additional logic is the list iteration match, which is minimal and necessary for the get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the object is not found, it likely does not exist; if refcount zero, object is being freed — retrying will not succeed.",
+      "contract_summary": "RCU-protected get-wrapper that looks up a TVLV handler by type and version from the handler list and acquires a reference (via kref_get_unless_zero) on it if found and alive. Returns the handler with an elevated refcount, or NULL if not found or if the handler is being destroyed. The caller must release the reference with batadv_tvlv_handler_put() when done. The RCU lock is only held during the lookup; the returned object is safe to use without RCU as long as the caller holds the reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on tvlv_handler_tmp->refcount, and tvlv_handler_tmp is assigned to the return value tvlv_handler. The access path tvlv_handler.refcount.refcount matches the struct hierarchy: batadv_tvlv_handler has a kref field refcount, which has a refcount_t field refcount. The callee's path kref.refcount is consistent. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tvlv_handler.refcount.refcount",
+        "batadv_tvlv_handler--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the object is not found, it likely does not exist; if refcount zero, object is being freed — retrying will not succeed.",
+    "contract_summary": "RCU-protected get-wrapper that looks up a TVLV handler by type and version from the handler list and acquires a reference (via kref_get_unless_zero) on it if found and alive. Returns the handler with an elevated refcount, or NULL if not found or if the handler is being destroyed. The caller must release the reference with batadv_tvlv_handler_put() when done. The RCU lock is only held during the lookup; the returned object is safe to use without RCU as long as the caller holds the reference."
+  }
+}

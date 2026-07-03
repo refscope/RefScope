@@ -1,0 +1,82 @@
+{
+  "function_name": "atmel_sha_authenc_free",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_ahash",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_ahash",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a no-op when auth is NULL; if auth is non-NULL, the put and free always succeed (no failure path) — retrying is unnecessary.",
+  "contract_summary": "Put-wrapper that releases a reference on the underlying ahash tfm via crypto_free_ahash and frees the atmel_sha_authenc_ctx structure. After this call, the auth pointer is invalid and must not be used. This is the standard destructor for the authenc context; it should be called exactly once when the context is no longer needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on the underlying ahash tfm and free the authenc context structure; the only non-refcount logic is the null check and kfree.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a no-op when auth is NULL; if auth is non-NULL, the put and free always succeed (no failure path) — retrying is unnecessary.",
+      "contract_summary": "Put-wrapper that releases a reference on the underlying ahash tfm via crypto_free_ahash and frees the atmel_sha_authenc_ctx structure. After this call, the auth pointer is invalid and must not be used. This is the standard destructor for the authenc context; it should be called exactly once when the context is no longer needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "auth.tfm.tfm.base.refcnt.refs",
+          "atmel_sha_authenc_ctx--crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate path 'auth.tfm.tfm.base.refcnt.refs' has 6 segments but the type chain 'atmel_sha_authenc_ctx--crypto_ahash--crypto_tfm--refcount_t--atomic_t' has only 5 types, violating the segment count equality rule. Additionally, the path includes an extra 'tfm' that is not consistent with typical struct definitions: crypto_ahash contains 'base' not 'tfm', and crypto_tfm does not have a 'base' field. The callee's member-access path 'tfm.base.refcnt.refs' is also ambiguous and does not match the candidate path. Therefore, the operation is not supported by the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function is a clear put wrapper: it calls crypto_free_ahash(auth->tfm), which is a put on the ahash's refcount, then frees the context. However, the extracted candidate operation had an invalid path ('auth.tfm.tfm.base.refcnt.refs', 6 segments) that does not match the type chain (5 types) and includes an extra 'tfm' not present in struct defs. The check stage's rejection of this candidate is technically correct, so no valid operation from the extract is available. This does not negate the wrapper classification."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a no-op when auth is NULL; if auth is non-NULL, the put and free always succeed (no failure path) — retrying is unnecessary.",
+    "contract_summary": "Put-wrapper that releases a reference on the underlying ahash tfm via crypto_free_ahash and frees the atmel_sha_authenc_ctx structure. After this call, the auth pointer is invalid and must not be used. This is the standard destructor for the authenc context; it should be called exactly once when the context is no longer needed."
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "function_name": "attach_task_ctx_data",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "alloc_perf_ctx_data",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cd.refcount.refs",
+      "member_type_chain": "perf_ctx_data--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "alloc_perf_ctx_data",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cd.refcount.refs",
+      "member_type_chain": "perf_ctx_data--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function only fails on memory allocation; the refcount logic always succeeds internally by either getting or creating.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to attach (install or share) a perf_ctx_data to a task, using reference-counting internally but not exposing the object to the caller. The function contains allocation, atomic swap, conditionally incrementing an existing reference, and cleanup logic. It is not a simple get/put/set wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function only fails on memory allocation; the refcount logic always succeeds internally by either getting or creating.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function only fails on memory allocation; the refcount logic always succeeds internally by either getting or creating.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "ax88772_mdio_unregister",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "priv.mdio.dev.kobj.kref.refcount",
+      "asix_common_private--mii_bus--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a void put wrapper; failure is undefined / would indicate a bug, and retrying would risk double-free.",
+  "contract_summary": "This function is a release wrapper for the mii_bus object. It first unregisters the bus from the system (deactivating it) and then decrements the reference count via mdiobus_free. After this call, the caller must not dereference or use priv->mdio. The operation is unconditional and does not return an error; it should be called exactly once when the bus is no longer needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on the mii_bus (priv->mdio) by calling mdiobus_unregister (subsystem cleanup) followed by mdiobus_free (put). The function performs no other operations.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a void put wrapper; failure is undefined / would indicate a bug, and retrying would risk double-free.",
+      "contract_summary": "This function is a release wrapper for the mii_bus object. It first unregisters the bus from the system (deactivating it) and then decrements the reference count via mdiobus_free. After this call, the caller must not dereference or use priv->mdio. The operation is unconditional and does not return an error; it should be called exactly once when the bus is no longer needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv.mdio.dev.kobj.kref.refcount",
+          "asix_common_private--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv.mdio.dev.kobj.kref.refcount",
+          "asix_common_private--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "mdiobus_free(priv->mdio) is a put operation on the mii_bus's refcount. The access path from parameter priv to the refcount via priv->mdio->dev->kobj->kref->refcount is correct and matches the callee's path bus.dev.kobj.kref.refcount. The type chain asix_common_private--mii_bus--device--kobject--kref--refcount_t is consistent with struct definitions. Segment counts match (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "priv.mdio.dev.kobj.kref.refcount",
+        "asix_common_private--mii_bus--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a void put wrapper; failure is undefined / would indicate a bug, and retrying would risk double-free.",
+    "contract_summary": "This function is a release wrapper for the mii_bus object. It first unregisters the bus from the system (deactivating it) and then decrements the reference count via mdiobus_free. After this call, the caller must not dereference or use priv->mdio. The operation is unconditional and does not return an error; it should be called exactly once when the bus is no longer needed."
+  }
+}

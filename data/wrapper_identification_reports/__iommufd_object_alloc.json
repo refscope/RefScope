@@ -1,0 +1,150 @@
+{
+  "function_name": "__iommufd_object_alloc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "obj.users.refs",
+      "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "obj.wait_cnt.refs",
+      "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_iommufd_object_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "_iommufd_object_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.wait_cnt.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_iommufd_object_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "_iommufd_object_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.wait_cnt.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount initialization itself never fails; the only failure mode is memory allocation failure, which is a generic resource exhaustion — the caller may or may not retry on that, but the refcount part is not retry-specific.",
+  "contract_summary": "Set wrapper that allocates a new iommufd object of the specified type and initializes its embedded reference count(s) (obj.users.refs and obj.wait_cnt.refs) to their starting values (typically 1). The caller receives a pointer to the allocated object with an initial reference. The caller must later call iommufd_object_finalize() to make the object visible to other users, or iommufd_object_abort_and_destroy() on error to free it. Ownership of this initial reference is transferred to the caller, who must release it with a corresponding put when the object is no longer needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate a typed iommufd object and initialize its reference count (via _iommufd_object_alloc). The only additional logic is a compile-time offset check (BUILD_BUG_ON_ZERO), which is negligible.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount initialization itself never fails; the only failure mode is memory allocation failure, which is a generic resource exhaustion — the caller may or may not retry on that, but the refcount part is not retry-specific.",
+      "contract_summary": "Set wrapper that allocates a new iommufd object of the specified type and initializes its embedded reference count(s) (obj.users.refs and obj.wait_cnt.refs) to their starting values (typically 1). The caller receives a pointer to the allocated object with an initial reference. The caller must later call iommufd_object_finalize() to make the object visible to other users, or iommufd_object_abort_and_destroy() on error to free it. Ownership of this initial reference is transferred to the caller, who must release it with a corresponding put when the object is no longer needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "obj.users.refs",
+          "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "obj.wait_cnt.refs",
+          "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted access paths (e.g., \"obj.users.refs\" with 3 segments) and type chains (e.g., \"iommufd_ioas--iommufd_object--refcount_t--atomic_t\" with 4 types) have mismatched segment counts (3 != 4), and the type chains include an extra type (iommufd_ioas) not present in the callee information. Additionally, the callee information specifies type chains starting from iommufd_object, not from iommufd_ioas, so the candidate paths are inconsistent with the callee's description."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "obj.users.refs",
+          "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "obj.wait_cnt.refs",
+          "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The macro calls _iommufd_object_alloc, which initializes both membership reflectors (obj.users.refs and obj.wait_cnt.refs) to 1. The macro itself is a thin wrapper that casts the raw iommufd_object pointer to the container type (e.g., iommufd_ioas) via container_of. The candidate operations correctly identify the set operations on the two refcounts, with the type chain built from the container type (iommufd_ioas) down to atomic_t. The check stage's rejection based on segment count mismatch is a technicality; the operations are semantically correct and the function is a pure refcount initialization wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "obj.users.refs",
+        "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "obj.wait_cnt.refs",
+        "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount initialization itself never fails; the only failure mode is memory allocation failure, which is a generic resource exhaustion — the caller may or may not retry on that, but the refcount part is not retry-specific.",
+    "contract_summary": "Set wrapper that allocates a new iommufd object of the specified type and initializes its embedded reference count(s) (obj.users.refs and obj.wait_cnt.refs) to their starting values (typically 1). The caller receives a pointer to the allocated object with an initial reference. The caller must later call iommufd_object_finalize() to make the object visible to other users, or iommufd_object_abort_and_destroy() on error to free it. Ownership of this initial reference is transferred to the caller, who must release it with a corresponding put when the object is no longer needed."
+  }
+}

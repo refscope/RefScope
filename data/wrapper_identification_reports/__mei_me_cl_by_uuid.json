@@ -1,0 +1,107 @@
+{
+  "function_name": "__mei_me_cl_by_uuid",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "me_cl.refcnt.refcount",
+      "mei_me_client--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mei_me_cl_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "me_cl.refcnt.refcount.refs",
+      "member_type_chain": "mei_me_client--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "mei_me_cl_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "me_cl.refcnt.refcount",
+      "member_type_chain": "mei_me_client--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mei_me_cl_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "me_cl.refcnt.refcount",
+      "member_type_chain": "mei_me_client--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) means no matching client exists in the current list; immediate retry without state change will also fail. The caller may wait for new clients to appear before retrying.",
+  "contract_summary": "Get-wrapper that finds a mei_me_client by UUID and returns it with an incremented reference count. If no matching client is found, returns NULL. The caller must hold the me_clients_rwsem (non-writable) during the call. On success, the caller owns a reference and must release it with mei_me_cl_put() when done. The function is safe to call under the rwsem; failure is deterministic based on current client list state.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an ME client by UUID and return it with an acquired reference via mei_me_cl_get. The only non-refcount logic is the list traversal and UUID comparison, which is integral to the lookup/get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) means no matching client exists in the current list; immediate retry without state change will also fail. The caller may wait for new clients to appear before retrying.",
+      "contract_summary": "Get-wrapper that finds a mei_me_client by UUID and returns it with an incremented reference count. If no matching client is found, returns NULL. The caller must hold the me_clients_rwsem (non-writable) during the call. On success, the caller owns a reference and must release it with mei_me_cl_put() when done. The function is safe to call under the rwsem; failure is deterministic based on current client list state."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "refcnt.refcount",
+          "mei_me_client--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "me_cl.refcnt.refcount",
+          "mei_me_client--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the result of mei_me_cl_get(me_cl), which increments the refcount on the me_cl object. The critical variable is the return value (me_cl pointer). The original access path 'refcnt.refcount' had 2 segments but type chain has 3 types; fixed by adding the missing variable segment 'me_cl.' to match. Location and index are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "me_cl.refcnt.refcount",
+        "mei_me_client--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) means no matching client exists in the current list; immediate retry without state change will also fail. The caller may wait for new clients to appear before retrying.",
+    "contract_summary": "Get-wrapper that finds a mei_me_client by UUID and returns it with an incremented reference count. If no matching client is found, returns NULL. The caller must hold the me_clients_rwsem (non-writable) during the call. On success, the caller owns a reference and must release it with mei_me_cl_put() when done. The function is safe to call under the rwsem; failure is deterministic based on current client list state."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "cache_get_rcu",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "h.ref.refcount",
+      "cache_head--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails only if the refcount is zero, indicating the object is being destroyed or already freed. Retrying cannot revive the object.",
+  "contract_summary": "RCU-aware conditional get-wrapper: attempts to acquire a reference on a cache_head under the assumption that the caller holds an RCU read-side lock (implied by the function name and typical usage). If the refcount is still positive (object alive), the reference is taken via kref_get_unless_zero and the pointer is returned. If the refcount is zero (object dying/freed), NULL is returned. The caller MUST check the return value and must later call a corresponding put (e.g., cache_put) to release the acquired reference. The function itself does not perform any RCU locking; the caller is responsible for proper RCU synchronization.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to conditionally acquire a reference via kref_get_unless_zero on the cache_head's refcount, returning the pointer if successful and NULL otherwise. No other logic is mixed in.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails only if the refcount is zero, indicating the object is being destroyed or already freed. Retrying cannot revive the object.",
+      "contract_summary": "RCU-aware conditional get-wrapper: attempts to acquire a reference on a cache_head under the assumption that the caller holds an RCU read-side lock (implied by the function name and typical usage). If the refcount is still positive (object alive), the reference is taken via kref_get_unless_zero and the pointer is returned. If the refcount is zero (object dying/freed), NULL is returned. The caller MUST check the return value and must later call a corresponding put (e.g., cache_put) to release the acquired reference. The function itself does not perform any RCU locking; the caller is responsible for proper RCU synchronization."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "h.ref.refcount",
+          "cache_head--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "h.ref.refcount",
+          "cache_head--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on h->ref, which increments the refcount if non-zero. The function returns h on success, so the critical variable is the return pointer h. The access path h.ref.refcount correctly traces from the return value to the refcount_t field, matching the callee info kref.refcount with type chain cache_head--kref--refcount_t. The path segments count (3: h, ref, refcount) equals type chain count (3: cache_head, kref, refcount_t). Direction 'get' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "h.ref.refcount",
+        "cache_head--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails only if the refcount is zero, indicating the object is being destroyed or already freed. Retrying cannot revive the object.",
+    "contract_summary": "RCU-aware conditional get-wrapper: attempts to acquire a reference on a cache_head under the assumption that the caller holds an RCU read-side lock (implied by the function name and typical usage). If the refcount is still positive (object alive), the reference is taken via kref_get_unless_zero and the pointer is returned. If the refcount is zero (object dying/freed), NULL is returned. The caller MUST check the return value and must later call a corresponding put (e.g., cache_put) to release the acquired reference. The function itself does not perform any RCU locking; the caller is responsible for proper RCU synchronization."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_claim_hash_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "claim_tmp.refcount.refcount",
+      "batadv_bla_claim--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means either the claim was not found or its refcount was already zero (object being freed); retrying cannot revive the object or change the lookup condition.",
+  "contract_summary": "This is a get-wrapper that looks up a BLA claim by its data in a hash table and acquires a reference on it. The caller receives the claim with an elevated refcount and must release it (e.g., via batadv_claim_put) when done. If the claim is not found or is already being freed (refcount zero), the function returns NULL. The function uses RCU for protection and atomically increments refcount only if the object is still alive.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is hash-table lookup to conditionally acquire a reference (via kref_get_unless_zero) on a claim and return it to the caller; the lookup logic is solely in service of the refcount get.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means either the claim was not found or its refcount was already zero (object being freed); retrying cannot revive the object or change the lookup condition.",
+      "contract_summary": "This is a get-wrapper that looks up a BLA claim by its data in a hash table and acquires a reference on it. The caller receives the claim with an elevated refcount and must release it (e.g., via batadv_claim_put) when done. If the claim is not found or is already being freed (refcount zero), the function returns NULL. The function uses RCU for protection and atomically increments refcount only if the object is still alive."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "claim_tmp.refcount.refcount",
+          "batadv_bla_claim--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "claim_tmp.refcount.refcount",
+          "batadv_bla_claim--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns claim_tmp with its refcount incremented via kref_get_unless_zero on claim->refcount. The access path from return variable claim_tmp through refcount (kref) and refcount (refcount_t) matches the callee's path kref.refcount. The type chain batadv_bla_claim->kref->refcount_t is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "claim_tmp.refcount.refcount",
+        "batadv_bla_claim--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means either the claim was not found or its refcount was already zero (object being freed); retrying cannot revive the object or change the lookup condition.",
+    "contract_summary": "This is a get-wrapper that looks up a BLA claim by its data in a hash table and acquires a reference on it. The caller receives the claim with an elevated refcount and must release it (e.g., via batadv_claim_put) when done. If the claim is not found or is already being freed (refcount zero), the function returns NULL. The function uses RCU for protection and atomically increments refcount only if the object is still alive."
+  }
+}

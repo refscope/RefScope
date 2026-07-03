@@ -1,0 +1,99 @@
+{
+  "function_name": "cancel_map_check",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "req.r_kref.refcount",
+      "ceph_osd_request--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ceph_osdc_put_request",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.r_kref.refcount",
+      "member_type_chain": "ceph_osd_request--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ceph_osdc_put_request",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.r_kref.refcount",
+      "member_type_chain": "ceph_osd_request--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the lookup fails (request not in map_checks), the request has already been cancelled or is otherwise absent; retrying the same operation would not change this condition.",
+  "contract_summary": "This is a put wrapper that cancels a pending map check request. It looks up the request in the osdc's map_checks list; if found, it erases the entry and releases the reference on the request via ceph_osdc_put_request. The caller must hold the osdc write lock. After this call, the caller must not use the request object any further, as it may be freed. If the request is not found in map_checks, the function is a no-op.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to cancel a pending map check by removing the request from the map_checks list and dropping the reference via ceph_osdc_put_request. The only other logic is the lookup and verification, which are essential for the cancel operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the lookup fails (request not in map_checks), the request has already been cancelled or is otherwise absent; retrying the same operation would not change this condition.",
+      "contract_summary": "This is a put wrapper that cancels a pending map check request. It looks up the request in the osdc's map_checks list; if found, it erases the entry and releases the reference on the request via ceph_osdc_put_request. The caller must hold the osdc write lock. After this call, the caller must not use the request object any further, as it may be freed. If the request is not found in map_checks, the function is a no-op."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "req.r_kref.refcount",
+          "ceph_osd_request--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "req.r_kref.refcount",
+          "ceph_osd_request--kref--refcount_t"
+        ]
+      ],
+      "reason": "ceph_osdc_put_request(req) is called on the first parameter req, which is the critical variable. The access path req.r_kref.refcount and type chain ceph_osd_request--kref--refcount_t match the callee's member path and the code structure."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "req.r_kref.refcount",
+        "ceph_osd_request--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the lookup fails (request not in map_checks), the request has already been cancelled or is otherwise absent; retrying the same operation would not change this condition.",
+    "contract_summary": "This is a put wrapper that cancels a pending map check request. It looks up the request in the osdc's map_checks list; if found, it erases the entry and releases the reference on the request via ceph_osdc_put_request. The caller must hold the osdc write lock. After this call, the caller must not use the request object any further, as it may be freed. If the request is not found in map_checks, the function is a no-op."
+  }
+}

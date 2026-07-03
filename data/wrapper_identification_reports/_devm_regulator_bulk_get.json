@@ -1,0 +1,187 @@
+{
+  "function_name": "_devm_regulator_bulk_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "3",
+      "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "3",
+      "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "3",
+      "consumers[i].consumer.rdev.dev.kobj.kref.refcount",
+      "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_regulator_bulk_get",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers[i].consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_regulator_bulk_get",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers[i].consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures are either memory allocation errors (which must be handled at a higher level) or regulator-get errors indicating the resource is unavailable; retrying without changing conditions is unlikely to succeed.",
+  "contract_summary": "This is a device-managed wrapper that acquires a set of regulators via _regulator_bulk_get and registers automatic cleanup via devres. The caller receives owned regulator handles in the consumers array; these regulators will be automatically released when the device is detached or when the driver calls the corresponding put function. The function transfers ownership to the devres framework, so the caller must not manually release the regulators. On failure, the function frees any allocated devres and returns an error; the caller should propagate the error. This wrapper simplifies lifecycle management for bulk regulators.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Delegates the actual regulator get (which increments refcounts) to _regulator_bulk_get, then wraps with devres allocation and registration for automatic cleanup. The non-refcount logic is modest but present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures are either memory allocation errors (which must be handled at a higher level) or regulator-get errors indicating the resource is unavailable; retrying without changing conditions is unlikely to succeed.",
+      "contract_summary": "This is a device-managed wrapper that acquires a set of regulators via _regulator_bulk_get and registers automatic cleanup via devres. The caller receives owned regulator handles in the consumers array; these regulators will be automatically released when the device is detached or when the driver calls the corresponding put function. The function transfers ownership to the devres framework, so the caller must not manually release the regulators. On failure, the function frees any allocated devres and returns an error; the caller should propagate the error. This wrapper simplifies lifecycle management for bulk regulators."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "consumers[i].consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "consumers[i].consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "All three refcount operations are performed by _regulator_bulk_get on the consumers array (parameter 3). The access paths and type chains match the callee's description and the struct definitions. Segment counts equal type counts for each path. The get/put directions are consistent with callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "3",
+        "consumers.consumer.rdev.dev.kobj.kref.refcount",
+        "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "3",
+        "consumers.consumer.rdev.dev.kobj.kref.refcount",
+        "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "3",
+        "consumers[i].consumer.rdev.dev.kobj.kref.refcount",
+        "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures are either memory allocation errors (which must be handled at a higher level) or regulator-get errors indicating the resource is unavailable; retrying without changing conditions is unlikely to succeed.",
+    "contract_summary": "This is a device-managed wrapper that acquires a set of regulators via _regulator_bulk_get and registers automatic cleanup via devres. The caller receives owned regulator handles in the consumers array; these regulators will be automatically released when the device is detached or when the driver calls the corresponding put function. The function transfers ownership to the devres framework, so the caller must not manually release the regulators. On failure, the function frees any allocated devres and returns an error; the caller should propagate the error. This wrapper simplifies lifecycle management for bulk regulators."
+  }
+}

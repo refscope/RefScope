@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_alloc_addrlist",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "alist.usage.refs",
+      "afs_addr_list--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_set always succeeds unconditionally; the only failure mode is memory allocation failure, which is not related to the refcount operation itself. Retrying an allocation without changing conditions is not beneficial in this context.",
+  "contract_summary": "Allocates and initializes a new afs_addr_list with an initial reference count of 1 (via refcount_set). This is a 'set' wrapper: after calling this function, the caller owns a reference to the newly created object and must eventually release it by calling the corresponding put function (e.g., afs_put_addrlist) when the object is no longer needed. The function clamps the requested address count to AFS_MAX_ADDRESSES and assigns a unique debug ID for tracing. If allocation fails, the function returns NULL; otherwise, the returned pointer must be passed to the put function exactly once to avoid memory leaks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate a new afs_addr_list, initialize its refcount to 1 via refcount_set, and return it. The minimal additional logic (clamping nr, setting fields, tracing) does not detract from its role as a 'set' wrapper that establishes the initial reference. The caller receives the object with a usage count of 1, taking ownership.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_set always succeeds unconditionally; the only failure mode is memory allocation failure, which is not related to the refcount operation itself. Retrying an allocation without changing conditions is not beneficial in this context.",
+      "contract_summary": "Allocates and initializes a new afs_addr_list with an initial reference count of 1 (via refcount_set). This is a 'set' wrapper: after calling this function, the caller owns a reference to the newly created object and must eventually release it by calling the corresponding put function (e.g., afs_put_addrlist) when the object is no longer needed. The function clamps the requested address count to AFS_MAX_ADDRESSES and assigns a unique debug ID for tracing. If allocation fails, the function returns NULL; otherwise, the returned pointer must be passed to the put function exactly once to avoid memory leaks."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "alist.usage.refs",
+          "afs_addr_list--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "alist.usage.refs",
+          "afs_addr_list--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set(&alist->usage, 1) initializes the refcount on the allocated struct before returning it. The access path from the return value (alist) to the refcount field is alist.usage.refs, with type chain afs_addr_list->refcount_struct->atomic_t, which matches the code and callee information. The operation is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "alist.usage.refs",
+        "afs_addr_list--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_set always succeeds unconditionally; the only failure mode is memory allocation failure, which is not related to the refcount operation itself. Retrying an allocation without changing conditions is not beneficial in this context.",
+    "contract_summary": "Allocates and initializes a new afs_addr_list with an initial reference count of 1 (via refcount_set). This is a 'set' wrapper: after calling this function, the caller owns a reference to the newly created object and must eventually release it by calling the corresponding put function (e.g., afs_put_addrlist) when the object is no longer needed. The function clamps the requested address count to AFS_MAX_ADDRESSES and assigns a unique debug ID for tracing. If allocation fails, the function returns NULL; otherwise, the returned pointer must be passed to the put function exactly once to avoid memory leaks."
+  }
+}

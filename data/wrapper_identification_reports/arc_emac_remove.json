@@ -1,0 +1,58 @@
+{
+  "function_name": "arc_emac_remove",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "arc_mdio_remove",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "priv.bus.dev.kobj.kref.refcount",
+      "member_type_chain": "arc_emac_priv--mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "arc_mdio_remove",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "priv.bus.dev.kobj.kref.refcount",
+      "member_type_chain": "arc_emac_priv--mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; the function is not a refcount wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a cleanup/remove routine that performs multiple operations (phy_disconnect, arc_mdio_remove, unregister_netdev, netif_napi_del, clk_disable_unprepare). The arc_mdio_remove call is a put operation on the mii_bus, but this is just one step among many. The primary purpose is not reference-count management but tearing down the network device.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; the function is not a refcount wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; the function is not a refcount wrapper.",
+    "contract_summary": ""
+  }
+}

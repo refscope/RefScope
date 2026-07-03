@@ -1,0 +1,82 @@
+{
+  "function_name": "acpi_ec_remove_query_handlers",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpi_ec_put_query_handler",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "handler.kref.refcount",
+      "member_type_chain": "acpi_ec_query_handler--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpi_ec_put_query_handler",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "handler.kref.refcount",
+      "member_type_chain": "acpi_ec_query_handler--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations never fail; once a handler is selected for removal, the put is unconditional and irrevocable. Retry is not applicable.",
+  "contract_summary": "Batch put wrapper that releases references to one or more query handlers attached to an EC device. The function iterates over the ec->handler list under ec->mutex, removes handlers that match either the 'remove_all' flag or a specific query_bit, and then calls acpi_ec_put_query_handler on each removed handler. After this call, the removed handlers are no longer valid and must not be accessed. The caller does not acquire any new references; instead, existing references are consumed. Proper locking (ec->mutex) is held during list manipulation to ensure consistency.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to remove query handlers from an EC's list and release their references via acpi_ec_put_query_handler. The iteration and conditional selection are part of the release lifecycle; no significant non-refcount logic exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations never fail; once a handler is selected for removal, the put is unconditional and irrevocable. Retry is not applicable.",
+      "contract_summary": "Batch put wrapper that releases references to one or more query handlers attached to an EC device. The function iterates over the ec->handler list under ec->mutex, removes handlers that match either the 'remove_all' flag or a specific query_bit, and then calls acpi_ec_put_query_handler on each removed handler. After this call, the removed handlers are no longer valid and must not be accessed. The caller does not acquire any new references; instead, existing references are consumed. Proper locking (ec->mutex) is held during list manipulation to ensure consistency."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "handler.kref.refcount",
+          "acpi_ec_query_handler--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation incorrectly uses 'return' index 0. The refcount put operation is performed on the argument passed to acpi_ec_put_query_handler, which corresponds to parameter index 1 (the handler pointer). The critical variable is not a return value. Therefore, the operation is inconsistent with the function code and callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function `acpi_ec_remove_query_handlers` is a cleanup routine that iterates over a list of query handlers and conditionally moves them to a free list, then calls `acpi_ec_put_query_handler` on each removed handler. It does not wrap a single refcount operation on a return value or parameter; it performs multiple puts on dynamically selected objects. The function's primary purpose is list management and selective removal, not reference-count wrapper semantics. The extracted candidate using 'return' index 0 is invalid because the function returns void. Therefore, the function is not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations never fail; once a handler is selected for removal, the put is unconditional and irrevocable. Retry is not applicable.",
+    "contract_summary": "Batch put wrapper that releases references to one or more query handlers attached to an EC device. The function iterates over the ec->handler list under ec->mutex, removes handlers that match either the 'remove_all' flag or a specific query_bit, and then calls acpi_ec_put_query_handler on each removed handler. After this call, the removed handlers are no longer valid and must not be accessed. The caller does not acquire any new references; instead, existing references are consumed. Proper locking (ec->mutex) is held during list manipulation to ensure consistency."
+  }
+}

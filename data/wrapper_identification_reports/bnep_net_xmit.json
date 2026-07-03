@@ -1,0 +1,58 @@
+{
+  "function_name": "bnep_net_xmit",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; function is not a wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of bnep_net_xmit is to transmit an sk_buff over a Bluetooth BNEP session. It performs filtering, enqueuing, wakeup, and queue management. The kfree_skb call is only invoked in drop paths (filter matches) and is not the main focus. The function does not acquire or pass a reference to the caller; it either frees or queues the skb, with no reference-count get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; function is not a wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; function is not a wrapper.",
+    "contract_summary": ""
+  }
+}

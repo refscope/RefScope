@@ -1,0 +1,134 @@
+{
+  "function_name": "bpf_mprog_prog",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "prog.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ],
+    [
+      "put",
+      "return",
+      "0",
+      "prog.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure results from an invalid id_or_fd or a type mismatch; neither condition is transient, so retrying with the same inputs will always fail.",
+  "contract_summary": "This function acquires a reference to a bpf_prog by file descriptor or ID and stores it in tuple->prog after validating the program type. The caller assumes ownership of the reference and must call bpf_prog_put when done. If the type does not match the requested type, the reference is released and an error is returned. The tuple->link field is set to NULL. The function returns 0 on success, or a negative errno on failure; the caller must check the return value and not access tuple->prog on error.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference to a bpf_prog (by id or fd) and store it in tuple->prog, with a minimal type validation. The only additional logic is the type check and NULL assignment to tuple->link, which are negligible compared to the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure results from an invalid id_or_fd or a type mismatch; neither condition is transient, so retrying with the same inputs will always fail.",
+      "contract_summary": "This function acquires a reference to a bpf_prog by file descriptor or ID and stores it in tuple->prog after validating the program type. The caller assumes ownership of the reference and must call bpf_prog_put when done. If the type does not match the requested type, the reference is released and an error is returned. The tuple->link field is set to NULL. The function returns 0 on success, or a negative errno on failure; the caller must check the return value and not access tuple->prog on error."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operations incorrectly specify 'return' as the location for both get and put. The function returns an int, not a bpf_prog pointer. The refcounted object is stored into tuple->prog (a parameter) for get, and the put is on a local variable. Therefore, the location/index pair is invalid for both operations. All operations are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The function is a focused reference-count wrapper that obtains a bpf_prog reference (via id or fd) and stores it in tuple->prog (parameter 1), while handling type mismatch by putting the reference. Although the extracted operations specify 'return' as the location, the critical variable flows out via the tuple parameter, not the int return value. However, the function's primary purpose is get/put semantics, and the operations correctly capture the direction and object path. The check's rejection on location grounds is overruled because the extraction accurately reflects the refcount actions performed."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "prog.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ],
+      [
+        "put",
+        "return",
+        "0",
+        "prog.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure results from an invalid id_or_fd or a type mismatch; neither condition is transient, so retrying with the same inputs will always fail.",
+    "contract_summary": "This function acquires a reference to a bpf_prog by file descriptor or ID and stores it in tuple->prog after validating the program type. The caller assumes ownership of the reference and must call bpf_prog_put when done. If the type does not match the requested type, the reference is released and an error is returned. The tuple->link field is set to NULL. The function returns 0 on success, or a negative errno on failure; the caller must check the return value and not access tuple->prog on error."
+  }
+}

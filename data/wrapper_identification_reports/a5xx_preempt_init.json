@@ -1,0 +1,74 @@
+{
+  "function_name": "a5xx_preempt_init",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "a5xx_preempt_fini",
+      "get_or_put": "put",
+      "index": "a5xx_gpu",
+      "location": "global",
+      "member_access_path": "a5xx_gpu.preempt_counters_bo[i].refcount.refcount",
+      "member_type_chain": "a5xx_gpu--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a5xx_preempt_fini",
+      "get_or_put": "put",
+      "index": "a5xx_gpu",
+      "location": "global",
+      "member_access_path": "a5xx_gpu.preempt_bo[i].refcount.refcount",
+      "member_type_chain": "a5xx_gpu--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "a5xx_preempt_fini",
+      "get_or_put": "put",
+      "index": "a5xx_gpu",
+      "location": "global",
+      "member_access_path": "a5xx_gpu.preempt_counters_bo[i].refcount.refcount",
+      "member_type_chain": "a5xx_gpu--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a5xx_preempt_fini",
+      "get_or_put": "put",
+      "index": "a5xx_gpu",
+      "location": "global",
+      "member_access_path": "a5xx_gpu.preempt_bo[i].refcount.refcount",
+      "member_type_chain": "a5xx_gpu--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to initialize preemption rings, spin lock, and timer for a5xx GPU. The refcount operations are only in the error cleanup path (a5xx_preempt_fini), not the main purpose. This is initialization logic, not a refcount wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

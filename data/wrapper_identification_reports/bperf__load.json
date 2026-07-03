@@ -1,0 +1,58 @@
+{
+  "function_name": "bperf__load",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_get_fd_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_get_fd_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable - the function is not a wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is loading and initializing a BPF follower program, including skeleton loading, map setup, attachment, and error handling. The reference-count operations (bpf_prog_get_fd_by_id, bpf_link_get_fd_by_id) are only small steps within broader business logic, not the main focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable - the function is not a wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable - the function is not a wrapper.",
+    "contract_summary": ""
+  }
+}

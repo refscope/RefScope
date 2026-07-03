@@ -1,0 +1,99 @@
+{
+  "function_name": "audit_put_parent",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "parent.mark.refcnt.refs",
+      "audit_parent--fsnotify_mark--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fsnotify_put_mark",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fsnotify_put_mark",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper: if parent is NULL, the call is a no-op; if non-NULL, the refcount decrement is unconditional and cannot fail. Retrying would either double-put (use-after-free risk) or be pointless.",
+  "contract_summary": "Release a reference on an audit_parent object via its embedded fsnotify mark. If parent is NULL, the call is safe (no-op). After calling, the caller must not access the parent object, as it may have been freed if the reference count reached zero. This is the standard release operation for audit_parent instances.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of an audit_parent by calling fsnotify_put_mark. The only additional logic is a NULL check, which is standard for defensive put helpers.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper: if parent is NULL, the call is a no-op; if non-NULL, the refcount decrement is unconditional and cannot fail. Retrying would either double-put (use-after-free risk) or be pointless.",
+      "contract_summary": "Release a reference on an audit_parent object via its embedded fsnotify mark. If parent is NULL, the call is safe (no-op). After calling, the caller must not access the parent object, as it may have been freed if the reference count reached zero. This is the standard release operation for audit_parent instances."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "parent.mark.refcnt.refs",
+          "audit_parent--fsnotify_mark--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "parent.mark.refcnt.refs",
+          "audit_parent--fsnotify_mark--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls fsnotify_put_mark(&parent->mark) which performs a put on mark.refcnt.refs. The access path starting from parameter 1 (parent) via parent.mark.refcnt.refs matches the callee's member access path and type chain. Segment counts are equal (4 segments, 4 types). The operation is correctly extracted."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "parent.mark.refcnt.refs",
+        "audit_parent--fsnotify_mark--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper: if parent is NULL, the call is a no-op; if non-NULL, the refcount decrement is unconditional and cannot fail. Retrying would either double-put (use-after-free risk) or be pointless.",
+    "contract_summary": "Release a reference on an audit_parent object via its embedded fsnotify mark. If parent is NULL, the call is safe (no-op). After calling, the caller must not access the parent object, as it may have been freed if the reference count reached zero. This is the standard release operation for audit_parent instances."
+  }
+}

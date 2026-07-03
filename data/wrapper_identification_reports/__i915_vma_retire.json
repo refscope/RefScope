@@ -1,0 +1,82 @@
+{
+  "function_name": "__i915_vma_retire",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_vma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma.obj.base.refcount.refcount",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_vma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma.obj.base.refcount.refcount",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The i915_vma_put operation unconditionally decrements the refcount; if the refcount reaches zero, the object is freed. Retrying a put on a released object is invalid.",
+  "contract_summary": "This function is a put-wrapper called by the i915_active retirer when GPU operations referencing the vma complete. It decrements the vma's reference count via i915_vma_put, and for non-GGTT vmas also decrements a GT power management reference asynchronously. After this function returns, the vma must not be accessed; its lifecycle is fully managed by the i915_active framework. The caller (i915_active subsystem) ensures the vma is alive before invoking this callback.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release a vma reference via i915_vma_put (unconditional) and optionally release a GT PM reference. Both actions are reference-count decrements with no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The i915_vma_put operation unconditionally decrements the refcount; if the refcount reaches zero, the object is freed. Retrying a put on a released object is invalid.",
+      "contract_summary": "This function is a put-wrapper called by the i915_active retirer when GPU operations referencing the vma complete. It decrements the vma's reference count via i915_vma_put, and for non-GGTT vmas also decrements a GT power management reference asynchronously. After this function returns, the vma must not be accessed; its lifecycle is fully managed by the i915_active framework. The caller (i915_active subsystem) ensures the vma is alive before invoking this callback."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "0",
+          "vma.obj.base.refcount.refcount",
+          "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation incorrectly identifies the critical variable location. Parameter index 0 of __i915_vma_retire is of type 'struct i915_active *' (named 'ref'), not 'struct i915_vma *'. The access path 'vma.obj.base.refcount.refcount' cannot start from this parameter. The vma is derived via container_of (active_to_vma), not by a direct member access path from the parameter. Hence the location/index is wrong."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function __i915_vma_retire takes struct i915_active* as parameter, not the struct i915_vma* whose refcount is modified. The vma is derived via active_to_vma() container_of, so the critical variable (vma) is not directly passed through the function's interface. The candidate operation incorrectly indexed parameter 0 as the vma. Since the refcounted object is not an input/output parameter or return value, the function does not qualify as a reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The i915_vma_put operation unconditionally decrements the refcount; if the refcount reaches zero, the object is freed. Retrying a put on a released object is invalid.",
+    "contract_summary": "This function is a put-wrapper called by the i915_active retirer when GPU operations referencing the vma complete. It decrements the vma's reference count via i915_vma_put, and for non-GGTT vmas also decrements a GT power management reference asynchronously. After this function returns, the vma must not be accessed; its lifecycle is fully managed by the i915_active framework. The caller (i915_active subsystem) ensures the vma is alive before invoking this callback."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "btrfs_mark_bg_fully_remapped",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount get is part of list management; failure would be a logic bug, not a transient error. Retry would not change the outcome.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to mark a block group as fully remapped and manage its placement on the fully_remapped_bgs list. The btrfs_get_block_group call is incidental, used only to ensure the block group is not freed while on the list, but the function's core logic is about state transitions and discard handling.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount get is part of list management; failure would be a logic bug, not a transient error. Retry would not change the outcome.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount get is part of list management; failure would be a logic bug, not a transient error. Retry would not change the outcome.",
+    "contract_summary": ""
+  }
+}

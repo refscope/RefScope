@@ -1,0 +1,99 @@
+{
+  "function_name": "__nlmsvc_find_lockowner",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "lockowner.count.refs",
+      "nlm_lockowner--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nlmsvc_get_lockowner",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lockowner.count.refs",
+      "member_type_chain": "nlm_lockowner--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nlmsvc_get_lockowner",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lockowner.count.refs",
+      "member_type_chain": "nlm_lockowner--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (return NULL) means no lockowner with that pid exists in the host's list; retrying without changing conditions (e.g., same host and pid) will also fail.",
+  "contract_summary": "This function searches the host's list of lockowners for one matching the given pid, and if found, increments its reference count via nlmsvc_get_lockowner and returns the pointer. The caller receives a reference that must be released with a corresponding put (e.g., nlmsvc_put_lockowner) when no longer needed. If no matching lockowner is found, NULL is returned. The caller must hold appropriate synchronization (e.g., lock protecting the list) during the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a lockowner by pid and acquire a reference via nlmsvc_get_lockowner, which increments the refcount. The list iteration is necessary lookup logic, but the only operation on success is the refcount increment and returning the pointer. No other business logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (return NULL) means no lockowner with that pid exists in the host's list; retrying without changing conditions (e.g., same host and pid) will also fail.",
+      "contract_summary": "This function searches the host's list of lockowners for one matching the given pid, and if found, increments its reference count via nlmsvc_get_lockowner and returns the pointer. The caller receives a reference that must be released with a corresponding put (e.g., nlmsvc_put_lockowner) when no longer needed. If no matching lockowner is found, NULL is returned. The caller must hold appropriate synchronization (e.g., lock protecting the list) during the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "lockowner.count.refs",
+          "nlm_lockowner--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "lockowner.count.refs",
+          "nlm_lockowner--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The return value of __nlmsvc_find_lockowner is the result of nlmsvc_get_lockowner, which increments the refcount on lockowner. The access path lockowner.count.refs and type chain nlm_lockowner--refcount_t--atomic_t are consistent with the callee's specification and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "lockowner.count.refs",
+        "nlm_lockowner--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (return NULL) means no lockowner with that pid exists in the host's list; retrying without changing conditions (e.g., same host and pid) will also fail.",
+    "contract_summary": "This function searches the host's list of lockowners for one matching the given pid, and if found, increments its reference count via nlmsvc_get_lockowner and returns the pointer. The caller receives a reference that must be released with a corresponding put (e.g., nlmsvc_put_lockowner) when no longer needed. If no matching lockowner is found, NULL is returned. The caller must hold appropriate synchronization (e.g., lock protecting the list) during the call."
+  }
+}

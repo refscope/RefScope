@@ -1,0 +1,58 @@
+{
+  "function_name": "bdisp_open",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bdisp_ctrls_delete",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.ctrl_handler.req_obj.kref.refcount",
+      "member_type_chain": "bdisp_ctx--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bdisp_ctrls_delete",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.ctrl_handler.req_obj.kref.refcount",
+      "member_type_chain": "bdisp_ctx--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to open the device and initialize per-file context (context allocation, control creation, format setup, m2m context init). The refcnt increment (bdisp->m2m.refcnt++) is one incidental step within broader initialization logic. No reference-counted object is returned to the caller.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

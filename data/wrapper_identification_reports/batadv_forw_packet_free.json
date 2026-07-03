@@ -1,0 +1,187 @@
+{
+  "function_name": "batadv_forw_packet_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "forw_packet.skb.users.refs",
+      "batadv_forw_packet--sk_buff--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "forw_packet.if_incoming.refcount.refcount",
+      "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "forw_packet.if_outgoing.refcount.refcount",
+      "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "consume_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "consume_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always succeeds; it does not have a failure path. After this call, the forw_packet is freed and must not be reused.",
+  "contract_summary": "This function is the destructor for a batadv_forw_packet. It releases the references held on the skb (consuming or dropping based on the 'dropped' flag), puts the incoming and outgoing hardif references, increments the queue_left counter if it is non-NULL, and finally frees the forw_packet memory. After calling this function, the caller must not access the forw_packet or any of its sub-objects. The function is safe to call only once per forw_packet and assumes that all other references have already been handled.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references (skb via consume_skb/kfree_skb, hardifs via batadv_hardif_put) and deallocate the forw_packet; minimal unrelated logic (atomic_inc on queue_left).",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always succeeds; it does not have a failure path. After this call, the forw_packet is freed and must not be reused.",
+      "contract_summary": "This function is the destructor for a batadv_forw_packet. It releases the references held on the skb (consuming or dropping based on the 'dropped' flag), puts the incoming and outgoing hardif references, increments the queue_left counter if it is non-NULL, and finally frees the forw_packet memory. After calling this function, the caller must not access the forw_packet or any of its sub-objects. The function is safe to call only once per forw_packet and assumes that all other references have already been handled."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "forw_packet.skb.users.refs",
+          "batadv_forw_packet--sk_buff--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "forw_packet.if_incoming.refcount.refcount",
+          "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "forw_packet.if_outgoing.refcount.refcount",
+          "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "forw_packet.skb.users.refs",
+          "batadv_forw_packet--sk_buff--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "forw_packet.if_incoming.refcount.refcount",
+          "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "forw_packet.if_outgoing.refcount.refcount",
+          "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "All candidate operations are consistent with the code. The function calls kfree_skb/consume_skb on forw_packet->skb, and batadv_hardif_put on forw_packet->if_incoming and forw_packet->if_outgoing, which are put operations on the respective refcount fields. The access paths start from the function parameter forw_packet and correctly trace to the refcount fields. The segment counts in paths match the type chain counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "forw_packet.skb.users.refs",
+        "batadv_forw_packet--sk_buff--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "forw_packet.if_incoming.refcount.refcount",
+        "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "forw_packet.if_outgoing.refcount.refcount",
+        "batadv_forw_packet--batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always succeeds; it does not have a failure path. After this call, the forw_packet is freed and must not be reused.",
+    "contract_summary": "This function is the destructor for a batadv_forw_packet. It releases the references held on the skb (consuming or dropping based on the 'dropped' flag), puts the incoming and outgoing hardif references, increments the queue_left counter if it is non-NULL, and finally frees the forw_packet memory. After calling this function, the caller must not access the forw_packet or any of its sub-objects. The function is safe to call only once per forw_packet and assumes that all other references have already been handled."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "function_name": "__mlx5_create_flow_table",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "up_write_ref_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_init_node",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "down_write_ref_node",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "up_write_ref_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_init_node",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "down_write_ref_node",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to allocate and initialize a new flow table, set up its tree node, connect it into the priority hierarchy, and perform hardware commands. Refcount operations (tree_init_node, down/up_write_ref_node) are necessary steps in the tree management but not the function's main focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

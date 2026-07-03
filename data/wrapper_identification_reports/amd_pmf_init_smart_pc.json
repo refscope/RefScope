@@ -1,0 +1,74 @@
+{
+  "function_name": "amd_pmf_init_smart_pc",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amd_pmf_tee_deinit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.tee_ctx.refcount.refcount",
+      "member_type_chain": "amd_pmf_dev--tee_context--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amd_pmf_tee_deinit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw_shm_pool.refcount.refs",
+      "member_type_chain": "amd_pmf_dev--tee_shm--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amd_pmf_tee_deinit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.tee_ctx.refcount.refcount",
+      "member_type_chain": "amd_pmf_dev--tee_context--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amd_pmf_tee_deinit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw_shm_pool.refcount.refs",
+      "member_type_chain": "amd_pmf_dev--tee_shm--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry semantics are not applicable to the function's overall purpose.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to initialize the Smart PC subsystem (setting up memory, policy, TEE session) rather than managing reference counts. The refcount operations (via tee_deinit) appear only in error paths and cleanup, not as the main objective.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry semantics are not applicable to the function's overall purpose.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry semantics are not applicable to the function's overall purpose.",
+    "contract_summary": ""
+  }
+}

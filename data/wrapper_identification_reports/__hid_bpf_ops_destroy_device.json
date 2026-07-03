@@ -1,0 +1,99 @@
+{
+  "function_name": "__hid_bpf_ops_destroy_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "hdev.dev.kobj.kref.refcount",
+      "hid_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hid_put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hid.dev.kobj.kref.refcount",
+      "member_type_chain": "hid_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hid_put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hid.dev.kobj.kref.refcount",
+      "member_type_chain": "hid_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations always succeed or indicate a bug (e.g., refcount underflow); retry would be meaningless and dangerous.",
+  "contract_summary": "This function releases all device references held by hid_bpf_ops entries in the hdev's prog_list. For each entry, it decrements the device's refcount via hid_put_device and clears the hdev pointer to prevent dangling access. After calling, the caller must not use any of the listed hid_bpf_ops to access the device, as those references are gone. The function does not free the list entries themselves; it only releases the shared device reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release device references held by each hid_bpf_ops entry in the list, which is a bulk put operation. Nullifying hdev pointers is a small side effect to prevent stale references.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations always succeed or indicate a bug (e.g., refcount underflow); retry would be meaningless and dangerous.",
+      "contract_summary": "This function releases all device references held by hid_bpf_ops entries in the hdev's prog_list. For each entry, it decrements the device's refcount via hid_put_device and clears the hdev pointer to prevent dangling access. After calling, the caller must not use any of the listed hid_bpf_ops to access the device, as those references are gone. The function does not free the list entries themselves; it only releases the shared device reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hdev.dev.kobj.kref.refcount",
+          "hid_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hdev.dev.kobj.kref.refcount",
+          "hid_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "hid_put_device is called on parameter hdev, and the access path hdev.dev.kobj.kref.refcount and type chain hid_device--device--kobject--kref--refcount_t are consistent with the code and callee info. Segment count matches (5 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "hdev.dev.kobj.kref.refcount",
+        "hid_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations always succeed or indicate a bug (e.g., refcount underflow); retry would be meaningless and dangerous.",
+    "contract_summary": "This function releases all device references held by hid_bpf_ops entries in the hdev's prog_list. For each entry, it decrements the device's refcount via hid_put_device and clears the hdev pointer to prevent dangling access. After calling, the caller must not use any of the listed hid_bpf_ops to access the device, as those references are gone. The function does not free the list entries themselves; it only releases the shared device reference."
+  }
+}

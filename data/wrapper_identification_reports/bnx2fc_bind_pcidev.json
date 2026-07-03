@@ -1,0 +1,58 @@
+{
+  "function_name": "bnx2fc_bind_pcidev",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pci_dev_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pci_dev_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns an error code; callers should check it, but failure indicates a missing or invalid device that will not become valid by retrying.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to bind the PCI device to the HBA structure: it validates pointers, copies a device-specific chip name string, and then increments the PCI device reference count as one step within broader initialization logic. The refcount get is incidental to the binding operation, not the function's main goal.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns an error code; callers should check it, but failure indicates a missing or invalid device that will not become valid by retrying.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns an error code; callers should check it, but failure indicates a missing or invalid device that will not become valid by retrying.",
+    "contract_summary": ""
+  }
+}

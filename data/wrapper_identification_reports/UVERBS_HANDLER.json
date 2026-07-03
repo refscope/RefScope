@@ -1,0 +1,194 @@
+{
+  "function_name": "UVERBS_HANDLER",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "eventfd_ctx_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.kref.refcount",
+      "member_type_chain": "eventfd_ctx--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_get_gid_attr",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "entry.kref.refcount",
+      "member_type_chain": "ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_restrack_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.kref.refcount",
+      "member_type_chain": "rdma_restrack_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "ib_uverbs_get_async_event",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "async_ev_file.uobj.ref.refcount",
+      "member_type_chain": "ib_uverbs_async_event_file--ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uverbs_uobject_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobject.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uverbs_finalize_object",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "uverbs_finalize_object",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "eventfd_ctx_fdget",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.kref.refcount",
+      "member_type_chain": "eventfd_ctx--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_user_mmap_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.ref.refcount",
+      "member_type_chain": "rdma_user_mmap_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uverbs_uobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobject.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_put_gid_attr",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.kref.refcount",
+      "member_type_chain": "ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uverbs_finalize_object",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs extensive QP creation logic: attribute validation, extracting multiple objects (PD, CQ, SRQ, etc.), calling ib_create_qp_user, and setting up response. The refcount operations (ib_qp_usecnt_inc and atomic_inc) are incidental steps within broader business logic, not the primary purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

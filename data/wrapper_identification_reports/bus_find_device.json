@@ -1,0 +1,146 @@
+{
+  "function_name": "bus_find_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "subsys_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "klist_iter_exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "i.i_cur.n_ref.refcount",
+      "member_type_chain": "klist_iter--klist_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "klist_iter_init_node",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "n.n_ref.refcount",
+      "member_type_chain": "klist_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "klist_iter_init_node",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "n.n_ref.refcount.refs",
+      "member_type_chain": "klist_node--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "klist_iter_init_node",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "n.n_ref.refcount",
+      "member_type_chain": "klist_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If no device matched, the caller may retry later when the device might appear on the bus.",
+  "contract_summary": "This function performs a device lookup on a bus, returning a pointer to the first device matching the given match function while incrementing its reference count via get_device. The caller is responsible for releasing the reference with put_device() when the device is no longer needed. The function returns NULL if no matching device is found. It uses a klist iterator internally and handles subsys reference counting; on success the returned device has an additional reference that the caller must drop.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a device by matching and acquire a reference on it via get_device, returning it to the caller. The klist iteration and subsys_put are infrastructure for the lookup, not business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If no device matched, the caller may retry later when the device might appear on the bus.",
+      "contract_summary": "This function performs a device lookup on a bus, returning a pointer to the first device matching the given match function while incrementing its reference count via get_device. The caller is responsible for releasing the reference with put_device() when the device is no longer needed. The function returns NULL if no matching device is found. It uses a klist iterator internally and handles subsys reference counting; on success the returned device has an additional reference that the caller must drop."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation references get_device(dev) but the provided callee information only pertains to klist_iter_init_node and does not cover get_device. Therefore, the operation's access path and type chain cannot be validated from the given callee information; it is unsupported."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function bus_find_device searches for a device matching a condition, and upon finding one, calls get_device(dev) to take a reference and returns the device. The primary purpose is to return a device with an elevated refcount, making it a classic get-wrapper. The critical variable dev is returned to the caller. The access path dev.kobj.kref.refcount and type chain are correct. The check stage's objection about missing callee information for get_device is overruled because get_device is a standard kernel function and is clearly visible in the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If no device matched, the caller may retry later when the device might appear on the bus.",
+    "contract_summary": "This function performs a device lookup on a bus, returning a pointer to the first device matching the given match function while incrementing its reference count via get_device. The caller is responsible for releasing the reference with put_device() when the device is no longer needed. The function returns NULL if no matching device is found. It uses a klist iterator internally and handles subsys reference counting; on success the returned device has an additional reference that the caller must drop."
+  }
+}

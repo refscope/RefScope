@@ -1,0 +1,99 @@
+{
+  "function_name": "__mpt3sas_get_pdev_by_idchannel",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pcie_device.refcount.refcount",
+      "_pcie_device--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pcie_device_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.refcount.refcount",
+      "member_type_chain": "_pcie_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pcie_device_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.refcount.refcount",
+      "member_type_chain": "_pcie_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no device is found, the device may not exist; retrying without change in state is unlikely to succeed. The caller should handle the NULL case (e.g., return an error) rather than retry.",
+  "contract_summary": "This is a get-wrapper that searches for a pcie_device by id and channel. If a matching device is found, it increments the device's reference count (via pcie_device_get) and returns the device pointer. The caller must hold the pcie_device_lock (asserted by assert_spin_locked) and must later call pcie_device_put to release the acquired reference. If no device is found, returns NULL without taking any reference. The caller must check the return value and handle the NULL case appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a pcie_device by id/channel and, if found, increment its refcount via pcie_device_get and return the pointer. The iteration and comparison are minimal lookup logic; the function's core purpose is reference acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no device is found, the device may not exist; retrying without change in state is unlikely to succeed. The caller should handle the NULL case (e.g., return an error) rather than retry.",
+      "contract_summary": "This is a get-wrapper that searches for a pcie_device by id and channel. If a matching device is found, it increments the device's reference count (via pcie_device_get) and returns the device pointer. The caller must hold the pcie_device_lock (asserted by assert_spin_locked) and must later call pcie_device_put to release the acquired reference. If no device is found, returns NULL without taking any reference. The caller must check the return value and handle the NULL case appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pcie_device.refcount.refcount",
+          "_pcie_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pcie_device.refcount.refcount",
+          "_pcie_device--kref--refcount_t"
+        ]
+      ],
+      "reason": "pcie_device_get is called on the found pcie_device, which is returned. The access path pcie_device.refcount.refcount and type chain _pcie_device--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pcie_device.refcount.refcount",
+        "_pcie_device--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no device is found, the device may not exist; retrying without change in state is unlikely to succeed. The caller should handle the NULL case (e.g., return an error) rather than retry.",
+    "contract_summary": "This is a get-wrapper that searches for a pcie_device by id and channel. If a matching device is found, it increments the device's reference count (via pcie_device_get) and returns the device pointer. The caller must hold the pcie_device_lock (asserted by assert_spin_locked) and must later call pcie_device_put to release the acquired reference. If no device is found, returns NULL without taking any reference. The caller must check the return value and handle the NULL case appropriately."
+  }
+}

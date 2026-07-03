@@ -1,0 +1,99 @@
+{
+  "function_name": "__lookup_replace",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "4",
+      "p[0].label.count.count.refcount",
+      "aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount operation always succeeds; errors from replacement check are permanent given the noreplace flag, and lookup returning NULL is a transient condition but retry is not within the scope of this wrapper.",
+  "contract_summary": "Get-wrapper that looks up an AppArmor profile by name and increments its reference count via aa_get_profile, returning the referenced profile through the output parameter *p (or NULL if not found). If the noreplace flag is set and the profile already exists, it returns an error (but still sets *p to a valid referenced profile; the caller must not rely on *p on error). The caller must release the acquired reference with aa_put_profile when done, and must check both the return value and *p for NULL to determine success.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to look up a profile and acquire a reference (aa_get_profile). The replacement_allowed check is tightly coupled but adds non-trivial error logic beyond pure refcount management.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount operation always succeeds; errors from replacement check are permanent given the noreplace flag, and lookup returning NULL is a transient condition but retry is not within the scope of this wrapper.",
+      "contract_summary": "Get-wrapper that looks up an AppArmor profile by name and increments its reference count via aa_get_profile, returning the referenced profile through the output parameter *p (or NULL if not found). If the noreplace flag is set and the profile already exists, it returns an error (but still sets *p to a valid referenced profile; the caller must not rely on *p on error). The caller must release the acquired reference with aa_put_profile when done, and must check both the return value and *p for NULL to determine success."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "4",
+          "p[0].label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "4",
+          "p[0].label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get operation on the profile via aa_get_profile is captured as the profile stored into *p (parameter 4). The access path p[0].label.count.count.refcount and type chain match the callee information and the actual struct definitions. The segment count (5) equals the type chain length (5), confirming consistency."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "4",
+        "p[0].label.count.count.refcount",
+        "aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount operation always succeeds; errors from replacement check are permanent given the noreplace flag, and lookup returning NULL is a transient condition but retry is not within the scope of this wrapper.",
+    "contract_summary": "Get-wrapper that looks up an AppArmor profile by name and increments its reference count via aa_get_profile, returning the referenced profile through the output parameter *p (or NULL if not found). If the noreplace flag is set and the profile already exists, it returns an error (but still sets *p to a valid referenced profile; the caller must not rely on *p on error). The caller must release the acquired reference with aa_put_profile when done, and must check both the return value and *p for NULL to determine success."
+  }
+}

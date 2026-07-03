@@ -1,0 +1,58 @@
+{
+  "function_name": "aspeed_mdio_probe",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_reset_control_get_optional_shared",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rstc.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_reset_control_get_optional_shared",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rstc.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is MDIO bus probe and registration, not reference-count management. The only refcount involved is internal to devm_reset_control_get_optional_shared, which is not the focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

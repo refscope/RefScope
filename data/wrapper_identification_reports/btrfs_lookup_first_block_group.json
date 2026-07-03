@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_lookup_first_block_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "block_group_cache_tree_search",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "block_group_cache_tree_search",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The block group either exists at the given bytenr or does not; retrying the same lookup without any intervening creation or allocation will produce the same result.",
+  "contract_summary": "Get-wrapper that looks up a block_group by starting bytenr and acquires a reference on it. Returns a pointer to the block_group with its refcount incremented, or NULL if no block_group is found at that bytenr. The caller must check the return value and, if non-NULL, must release the reference with btrfs_put_block_group when done. No locks or RCU are required by the caller; the wrapper internally handles synchronization.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a block group by bytenr and acquire a reference to it via block_group_cache_tree_search, which increments the refcount. The returned pointer is passed directly to the caller with an acquired reference. No other business logic exists in this function.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The block group either exists at the given bytenr or does not; retrying the same lookup without any intervening creation or allocation will produce the same result.",
+      "contract_summary": "Get-wrapper that looks up a block_group by starting bytenr and acquires a reference on it. Returns a pointer to the block_group with its refcount incremented, or NULL if no block_group is found at that bytenr. The caller must check the return value and, if non-NULL, must release the reference with btrfs_put_block_group when done. No locks or RCU are required by the caller; the wrapper internally handles synchronization."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function directly returns the result of block_group_cache_tree_search, which is a get function that increments the refcount. The access path 'ret.refs.refs' correctly traces from the return value to the refcount field, and the type chain matches the struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The block group either exists at the given bytenr or does not; retrying the same lookup without any intervening creation or allocation will produce the same result.",
+    "contract_summary": "Get-wrapper that looks up a block_group by starting bytenr and acquires a reference on it. Returns a pointer to the block_group with its refcount incremented, or NULL if no block_group is found at that bytenr. The caller must check the return value and, if non-NULL, must release the reference with btrfs_put_block_group when done. No locks or RCU are required by the caller; the wrapper internally handles synchronization."
+  }
+}

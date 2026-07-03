@@ -1,0 +1,107 @@
+{
+  "function_name": "__xprt_iter_init",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "xps.xps_kref.refcount",
+      "rpc_xprt_switch--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xprt_switch_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "xps.xps_kref.refcount",
+      "member_type_chain": "rpc_xprt_switch--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "xprt_switch_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "xps.xps_kref.refcount.refs",
+      "member_type_chain": "rpc_xprt_switch--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xprt_switch_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "xps.xps_kref.refcount",
+      "member_type_chain": "rpc_xprt_switch--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount increment (xprt_switch_get) always succeeds; no failure path exists, so retry is not applicable.",
+  "contract_summary": "This function initializes an rpc_xprt_iter by acquiring a reference on the given rpc_xprt_switch (via xprt_switch_get) and storing the pointer under RCU protection. The caller must later release this reference (e.g., via xprt_switch_put or a dedicated iterator cleanup) when the iterator is no longer needed. The function also zeroes the cursor and sets the ops for traversal. It is the 'acquire' step in the iterator lifecycle, transferring ownership of one reference from the caller to the iterator object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to initialize an rpc_xprt_iter by taking a reference on the rpc_xprt_switch and storing it; the only other work is trivial field initialization. The refcount acquisition is essential and not incidental.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount increment (xprt_switch_get) always succeeds; no failure path exists, so retry is not applicable.",
+      "contract_summary": "This function initializes an rpc_xprt_iter by acquiring a reference on the given rpc_xprt_switch (via xprt_switch_get) and storing the pointer under RCU protection. The caller must later release this reference (e.g., via xprt_switch_put or a dedicated iterator cleanup) when the iterator is no longer needed. The function also zeroes the cursor and sets the ops for traversal. It is the 'acquire' step in the iterator lifecycle, transferring ownership of one reference from the caller to the iterator object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "xps.xps_kref.refcount",
+          "rpc_xprt_switch--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "xps.xps_kref.refcount",
+          "rpc_xprt_switch--kref--refcount_t"
+        ]
+      ],
+      "reason": "xprt_switch_get is called on parameter xps (index 2) to increment its reference count via xps->xps_kref.refcount. The access path and type chain are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "xps.xps_kref.refcount",
+        "rpc_xprt_switch--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount increment (xprt_switch_get) always succeeds; no failure path exists, so retry is not applicable.",
+    "contract_summary": "This function initializes an rpc_xprt_iter by acquiring a reference on the given rpc_xprt_switch (via xprt_switch_get) and storing the pointer under RCU protection. The caller must later release this reference (e.g., via xprt_switch_put or a dedicated iterator cleanup) when the iterator is no longer needed. The function also zeroes the cursor and sets the ops for traversal. It is the 'acquire' step in the iterator lifecycle, transferring ownership of one reference from the caller to the iterator object."
+  }
+}

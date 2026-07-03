@@ -1,0 +1,74 @@
+{
+  "function_name": "amdgpu_cs_wait_all_fences",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_cs_get_fence",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_cs_get_fence",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a refcount wrapper; function-level failure indicates a timeout or error that may be retryable at a higher level, but retry logic is not inherent to wrap semantics.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to wait on a set of fences until they signal or timeout. The refcount operations (amdgpu_cs_get_fence / dma_fence_put) are merely internal bookkeeping to safely access the fences. No reference-counted object is exposed to the caller; the function only returns a status and error code. Significant non-refcount logic includes timeout conversion, loop iteration, error checking, and status writeback.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a refcount wrapper; function-level failure indicates a timeout or error that may be retryable at a higher level, but retry logic is not inherent to wrap semantics.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a refcount wrapper; function-level failure indicates a timeout or error that may be retryable at a higher level, but retry logic is not inherent to wrap semantics.",
+    "contract_summary": ""
+  }
+}

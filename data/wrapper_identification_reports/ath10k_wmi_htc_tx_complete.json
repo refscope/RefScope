@@ -1,0 +1,99 @@
+{
+  "function_name": "ath10k_wmi_htc_tx_complete",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dev_kfree_skb always succeeds; retrying would result in a double-free, which is undefined behavior.",
+  "contract_summary": "This function is a put wrapper that releases a reference on an sk_buff by calling dev_kfree_skb(skb). After this call, the caller must not access the skb anymore. The function unconditionally decrements the reference count, and on the last reference, the skb is freed. There is no return value to check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function body consists solely of a single call to dev_kfree_skb(skb), which is a put operation on the sk_buff's reference count. There is no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dev_kfree_skb always succeeds; retrying would result in a double-free, which is undefined behavior.",
+      "contract_summary": "This function is a put wrapper that releases a reference on an sk_buff by calling dev_kfree_skb(skb). After this call, the caller must not access the skb anymore. The function unconditionally decrements the reference count, and on the last reference, the skb is freed. There is no return value to check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb(skb) is called on parameter skb (index 2), which decrements the refcount at skb->users.refs. The path and type chain are consistent with callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dev_kfree_skb always succeeds; retrying would result in a double-free, which is undefined behavior.",
+    "contract_summary": "This function is a put wrapper that releases a reference on an sk_buff by calling dev_kfree_skb(skb). After this call, the caller must not access the skb anymore. The function unconditionally decrements the reference count, and on the last reference, the skb is freed. There is no return value to check."
+  }
+}

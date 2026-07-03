@@ -1,0 +1,99 @@
+{
+  "function_name": "audit_get_parent",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "parent.mark.refcnt.refs",
+      "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fsnotify_get_mark",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fsnotify_get_mark",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path exists; if parent is NULL the call is a no-op and should not be retried.",
+  "contract_summary": "Acquires an additional reference on the fsnotify_mark of an audit_parent. The caller must have a valid pointer (or NULL is safely ignored). After calling, the caller owns one extra reference and must pair with a corresponding put (e.g., audit_put_parent) when the reference is no longer needed. The function does not transfer ownership of the parent pointer itself.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to increment the reference count of the fsnotify_mark embedded in audit_parent via fsnotify_get_mark, with only a NULL guard.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path exists; if parent is NULL the call is a no-op and should not be retried.",
+      "contract_summary": "Acquires an additional reference on the fsnotify_mark of an audit_parent. The caller must have a valid pointer (or NULL is safely ignored). After calling, the caller owns one extra reference and must pair with a corresponding put (e.g., audit_put_parent) when the reference is no longer needed. The function does not transfer ownership of the parent pointer itself."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "parent.mark.refcnt.refs",
+          "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "parent.mark.refcnt.refs",
+          "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "fsnotify_get_mark is called on &parent->mark, which increments the refcount at parent->mark.refcnt.refs. The critical variable is parameter 1 (parent), and the access path and type chain match the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "parent.mark.refcnt.refs",
+        "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path exists; if parent is NULL the call is a no-op and should not be retried.",
+    "contract_summary": "Acquires an additional reference on the fsnotify_mark of an audit_parent. The caller must have a valid pointer (or NULL is safely ignored). After calling, the caller owns one extra reference and must pair with a corresponding put (e.g., audit_put_parent) when the reference is no longer needed. The function does not transfer ownership of the parent pointer itself."
+  }
+}

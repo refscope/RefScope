@@ -1,0 +1,122 @@
+{
+  "function_name": "__aa_proxy_redirect",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "new.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and never fails; no error path exists.",
+  "contract_summary": "Ownership-swapping wrapper: atomically replaces the label pointer in orig->proxy with a new label, taking a reference on new and releasing the reference on the old label. Also marks orig with FLAG_STALE to indicate the label is no longer current. The caller must hold the labels_set write lock and must already have a valid reference on new. After the call, the caller may drop their own reference on new; the proxy now owns a reference. The old label's reference is released and must not be accessed through this proxy afterwards.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to atomically swap the proxy label, acquiring a reference on the new label and releasing the old one; the only ancillary logic is setting a stale flag.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and never fails; no error path exists.",
+      "contract_summary": "Ownership-swapping wrapper: atomically replaces the label pointer in orig->proxy with a new label, taking a reference on new and releasing the reference on the old label. Also marks orig with FLAG_STALE to indicate the label is no longer current. The caller must hold the labels_set write lock and must already have a valid reference on new. After the call, the caller may drop their own reference on new; the proxy now owns a reference. The old label's reference is released and must not be accessed through this proxy afterwards."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "new.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig.proxy.label.count.count.refcount",
+          "aa_label--aa_proxy--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "new.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "Only the get operation on parameter 2 (new) is valid; it directly calls aa_get_label(new) and the access path starts from the critical variable new. The put operation on parameter 1 is rejected because the critical variable for the put is tmp (the label loaded from orig->proxy->label), not orig itself. The refcount operation acts on a different object, so starting from parameter 1 is incorrect per the rule that the access path must start from the critical variable at the function interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "new.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and never fails; no error path exists.",
+    "contract_summary": "Ownership-swapping wrapper: atomically replaces the label pointer in orig->proxy with a new label, taking a reference on new and releasing the reference on the old label. Also marks orig with FLAG_STALE to indicate the label is no longer current. The caller must hold the labels_set write lock and must already have a valid reference on new. After the call, the caller may drop their own reference on new; the proxy now owns a reference. The old label's reference is released and must not be accessed through this proxy afterwards."
+  }
+}

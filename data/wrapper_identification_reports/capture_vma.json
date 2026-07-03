@@ -1,0 +1,99 @@
+{
+  "function_name": "capture_vma",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "vma.resource.hold_count.refs",
+      "i915_vma--i915_vma_resource--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "capture_vma_snapshot",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "vma_res.hold_count.refs",
+      "member_type_chain": "i915_vma_resource--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "capture_vma_snapshot",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "vma_res.hold_count.refs",
+      "member_type_chain": "i915_vma_resource--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs if the vma is not pinned (precondition error) or if capture_vma_snapshot fails (likely memory allocation). Retrying without changing the pinned state or memory situation would not help; the caller should ensure pins are held before calling.",
+  "contract_summary": "This function captures a snapshot of a pinned vma for engine submission tracking. It validates that the vma is pinned (a prerequisite for safe snapshotting) and then calls capture_vma_snapshot, which creates a new capture node that holds a reference to the vma's resource. The caller receives a pointer to the capture node (or NULL on failure). The capture node must be released later (presumably by freeing the list), which decrements the resource's refcount. The function does not transfer ownership of the vma itself; the vma remains owned by the caller. Callers must ensure the vma remains pinned for the duration of use and must check the return value for NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on a vma resource (via capture_vma_snapshot) after validating the vma is pinned. Only trivial validation (NULL/pin check) is added, so refcount management is the core logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs if the vma is not pinned (precondition error) or if capture_vma_snapshot fails (likely memory allocation). Retrying without changing the pinned state or memory situation would not help; the caller should ensure pins are held before calling.",
+      "contract_summary": "This function captures a snapshot of a pinned vma for engine submission tracking. It validates that the vma is pinned (a prerequisite for safe snapshotting) and then calls capture_vma_snapshot, which creates a new capture node that holds a reference to the vma's resource. The caller receives a pointer to the capture node (or NULL on failure). The capture node must be released later (presumably by freeing the list), which decrements the resource's refcount. The function does not transfer ownership of the vma itself; the vma remains owned by the caller. Callers must ensure the vma remains pinned for the duration of use and must check the return value for NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "vma.resource.hold_count.refs",
+          "i915_vma--i915_vma_resource--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "vma.resource.hold_count.refs",
+          "i915_vma--i915_vma_resource--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "capture_vma increments the refcount of vma->resource by calling capture_vma_snapshot, which performs a get on the hold_count field. The access path from parameter vma (1-based index 2) through resource.hold_count.refs is consistent, and the type chain i915_vma->i915_vma_resource->refcount_t->atomic_t matches the actual struct hierarchy."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "vma.resource.hold_count.refs",
+        "i915_vma--i915_vma_resource--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs if the vma is not pinned (precondition error) or if capture_vma_snapshot fails (likely memory allocation). Retrying without changing the pinned state or memory situation would not help; the caller should ensure pins are held before calling.",
+    "contract_summary": "This function captures a snapshot of a pinned vma for engine submission tracking. It validates that the vma is pinned (a prerequisite for safe snapshotting) and then calls capture_vma_snapshot, which creates a new capture node that holds a reference to the vma's resource. The caller receives a pointer to the capture node (or NULL on failure). The capture node must be released later (presumably by freeing the list), which decrements the resource's refcount. The function does not transfer ownership of the vma itself; the vma remains owned by the caller. Callers must ensure the vma remains pinned for the duration of use and must check the return value for NULL."
+  }
+}

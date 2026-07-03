@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_get_chunk_map",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "map.refs.refs",
+      "btrfs_chunk_map--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_find_chunk_map",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "map.refs.refs",
+      "member_type_chain": "btrfs_chunk_map--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_find_chunk_map",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "map.refs.refs",
+      "member_type_chain": "btrfs_chunk_map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates no mapping exists or the mapping is corrupted; retrying is unlikely to succeed without external changes.",
+  "contract_summary": "This function is a get-wrapper that retrieves a chunk map from the filesystem info by logical address and returns it with an acquired reference. It validates that the found map covers the requested range; if validation fails, it releases the map and returns an error. The caller is responsible for releasing the reference by calling btrfs_free_chunk_map when done. The function reports critical errors via btrfs_crit but does not handle transient conditions, so retry on failure is not recommended.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to return a reference-counted chunk map obtained via btrfs_find_chunk_map; validation and error handling are secondary but necessary for correctness.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates no mapping exists or the mapping is corrupted; retrying is unlikely to succeed without external changes.",
+      "contract_summary": "This function is a get-wrapper that retrieves a chunk map from the filesystem info by logical address and returns it with an acquired reference. It validates that the found map covers the requested range; if validation fails, it releases the map and returns an error. The caller is responsible for releasing the reference by calling btrfs_free_chunk_map when done. The function reports critical errors via btrfs_crit but does not handle transient conditions, so retry on failure is not recommended."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "map.refs.refs",
+          "btrfs_chunk_map--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "map.refs.refs",
+          "btrfs_chunk_map--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns the chunk map obtained from btrfs_find_chunk_map, which acquires a reference. The access path 'map.refs.refs' and type chain 'btrfs_chunk_map--refcount_t--atomic_t' are consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "map.refs.refs",
+        "btrfs_chunk_map--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates no mapping exists or the mapping is corrupted; retrying is unlikely to succeed without external changes.",
+    "contract_summary": "This function is a get-wrapper that retrieves a chunk map from the filesystem info by logical address and returns it with an acquired reference. It validates that the found map covers the requested range; if validation fails, it releases the map and returns an error. The caller is responsible for releasing the reference by calling btrfs_free_chunk_map when done. The function reports critical errors via btrfs_crit but does not handle transient conditions, so retry on failure is not recommended."
+  }
+}

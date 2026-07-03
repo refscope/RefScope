@@ -1,0 +1,99 @@
+{
+  "function_name": "aarp_entry_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "a.refcnt.refs",
+      "aarp_entry--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper: retrying after a put would double-free or use-after-free.",
+  "contract_summary": "Put wrapper that releases a reference on a refcounted aarp_entry. When the last reference is dropped (refcount reaches zero), kfree is called to free the object. After calling aarp_entry_put, the caller must not access the aarp_entry pointer as it may be freed. Callers must have previously acquired a reference via a get or initialization.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the refcount and free the aarp_entry when last reference is dropped. No other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper: retrying after a put would double-free or use-after-free.",
+      "contract_summary": "Put wrapper that releases a reference on a refcounted aarp_entry. When the last reference is dropped (refcount reaches zero), kfree is called to free the object. After calling aarp_entry_put, the caller must not access the aarp_entry pointer as it may be freed. Callers must have previously acquired a reference via a get or initialization."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "a.refcnt.refs",
+          "aarp_entry--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "a.refcnt.refs",
+          "aarp_entry--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The extracted put operation correctly identifies that refcount_dec_and_test is called on &a->refcnt, which is the parameter passed to aarp_entry_put. The access path 'a.refcnt.refs' and type chain 'aarp_entry--refcount_t--atomic_t' are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "a.refcnt.refs",
+        "aarp_entry--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper: retrying after a put would double-free or use-after-free.",
+    "contract_summary": "Put wrapper that releases a reference on a refcounted aarp_entry. When the last reference is dropped (refcount reaches zero), kfree is called to free the object. After calling aarp_entry_put, the caller must not access the aarp_entry pointer as it may be freed. Callers must have previously acquired a reference via a get or initialization."
+  }
+}

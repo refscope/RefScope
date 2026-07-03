@@ -1,0 +1,74 @@
+{
+  "function_name": "__scsi_add_device",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "scsi_target_reap",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "starget.reap_ref.refcount",
+      "member_type_chain": "scsi_target--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "scsi_target_reap",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "starget.reap_ref.refcount",
+      "member_type_chain": "scsi_target--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the refcount operations are incidental and the function's failure modes (e.g., -ENOMEM, -ENODEV) are handled by the caller as part of device addition logic, not due to refcount failures.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to add a SCSI device (probe and add LUN) with significant business logic including early scan-type check, target allocation, locking, async scan completion, and autopm management. Refcount operations (scsi_alloc_target, scsi_autopm_get/put_target, scsi_target_reap, put_device) are supporting steps for lifecycle management, not the function's main objective.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the refcount operations are incidental and the function's failure modes (e.g., -ENOMEM, -ENODEV) are handled by the caller as part of device addition logic, not due to refcount failures.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the refcount operations are incidental and the function's failure modes (e.g., -ENOMEM, -ENODEV) are handled by the caller as part of device addition logic, not due to refcount failures.",
+    "contract_summary": ""
+  }
+}

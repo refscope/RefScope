@@ -1,0 +1,143 @@
+{
+  "function_name": "afs_free_request",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "rreq.netfs_priv.usage.refs",
+      "netfs_io_request--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "rreq.netfs_priv2.usage.refs",
+      "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_put_wb_key",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "wbk.usage.refs",
+      "member_type_chain": "afs_wb_key--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_put_wb_key",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "wbk.usage.refs",
+      "member_type_chain": "afs_wb_key--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations unconditionally decrement refcounts; failure indicates a use-after-free bug, not a transient condition.",
+  "contract_summary": "Release wrapper for afs_free_request: it calls key_put on rreq->netfs_priv and afs_put_wb_key on rreq->netfs_priv2 to decrement their reference counts. This function is the designated cleanup for the request; after calling it, the caller must not use the request or the referenced objects. The function unconditionally releases both references; there is no return value to indicate success/failure. It is intended to be called exactly once per request when the request is being freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release two reference-counted objects (key and wb_key) stored in the request structure. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations unconditionally decrement refcounts; failure indicates a use-after-free bug, not a transient condition.",
+      "contract_summary": "Release wrapper for afs_free_request: it calls key_put on rreq->netfs_priv and afs_put_wb_key on rreq->netfs_priv2 to decrement their reference counts. This function is the designated cleanup for the request; after calling it, the caller must not use the request or the referenced objects. The function unconditionally releases both references; there is no return value to indicate success/failure. It is intended to be called exactly once per request when the request is being freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rreq.netfs_priv.usage.refs",
+          "netfs_io_request--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "rreq.netfs_priv2.usage.refs",
+          "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rreq.netfs_priv.usage.refs",
+          "netfs_io_request--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "rreq.netfs_priv2.usage.refs",
+          "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations call put functions (key_put, afs_put_wb_key) on fields of the function parameter rreq. The access paths from rreq to the refcount fields (via .netfs_priv or .netfs_priv2 followed by .usage.refs) match the callee information. The type chains (starting with netfs_io_request and ending with atomic_t) are consistent. The segment counts between paths and type chains are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "rreq.netfs_priv.usage.refs",
+        "netfs_io_request--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "rreq.netfs_priv2.usage.refs",
+        "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations unconditionally decrement refcounts; failure indicates a use-after-free bug, not a transient condition.",
+    "contract_summary": "Release wrapper for afs_free_request: it calls key_put on rreq->netfs_priv and afs_put_wb_key on rreq->netfs_priv2 to decrement their reference counts. This function is the designated cleanup for the request; after calling it, the caller must not use the request or the referenced objects. The function unconditionally releases both references; there is no return value to indicate success/failure. It is intended to be called exactly once per request when the request is being freed."
+  }
+}

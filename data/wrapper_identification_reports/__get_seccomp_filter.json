@@ -1,0 +1,115 @@
+{
+  "function_name": "__get_seccomp_filter",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "filter.refs.refs",
+      "seccomp_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc never fails; it unconditionally increments and succeeds.",
+  "contract_summary": "This is an unconditional get-wrapper that increments the reference count of a seccomp_filter object. The caller must ensure that the filter is already alive (refcount > 0) before calling. After calling, the caller holds an additional reference and must pair this with a corresponding put (e.g., __put_seccomp_filter or put_seccomp_filter) when done to avoid leaks. No error checking is needed as the operation always succeeds. The function does not transfer ownership; it merely acquires a temporarily borrowed reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function only calls refcount_inc on the filter's refs member, with no other logic. It is a pure reference count increment wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc never fails; it unconditionally increments and succeeds.",
+      "contract_summary": "This is an unconditional get-wrapper that increments the reference count of a seccomp_filter object. The caller must ensure that the filter is already alive (refcount > 0) before calling. After calling, the caller holds an additional reference and must pair this with a corresponding put (e.g., __put_seccomp_filter or put_seccomp_filter) when done to avoid leaks. No error checking is needed as the operation always succeeds. The function does not transfer ownership; it merely acquires a temporarily borrowed reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "filter.refs.refs",
+          "seccomp_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "filter.refs.refs",
+          "seccomp_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&filter->refs) increments the refcount on the input parameter filter. The access path 'filter.refs.refs' correctly traces from the parameter (struct seccomp_filter) through its refs field (refcount_t) to the internal atomic_t member, matching the callee's path 'r.refs' and the type chain seccomp_filter--refcount_t--atomic_t. The segment counts (3 each) are consistent, and the direction 'get' is appropriate for a reference count increment."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "filter.refs.refs",
+        "seccomp_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc never fails; it unconditionally increments and succeeds.",
+    "contract_summary": "This is an unconditional get-wrapper that increments the reference count of a seccomp_filter object. The caller must ensure that the filter is already alive (refcount > 0) before calling. After calling, the caller holds an additional reference and must pair this with a corresponding put (e.g., __put_seccomp_filter or put_seccomp_filter) when done to avoid leaks. No error checking is needed as the operation always succeeds. The function does not transfer ownership; it merely acquires a temporarily borrowed reference."
+  }
+}

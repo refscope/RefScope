@@ -1,0 +1,58 @@
+{
+  "function_name": "amdgpu_acpi_get_isp4_dev",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when no matching device is found or no ACPI companion exists; these are lookup failures, not refcount operation failures. Retrying may succeed if the device appears later, but the function is not a ref-count wrapper and retry semantics are not part of its contract.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to retrieve an ACPI device pointer via bus_find_device and ACPI_COMPANION, not to manage reference counts. It temporarily gets a reference on the platform device but immediately releases it via __free(put_device). No refcount is acquired on the returned acpi_device; the caller receives a raw pointer without any ownership or reference. The reference-count operation is incidental and not the function's main intent.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when no matching device is found or no ACPI companion exists; these are lookup failures, not refcount operation failures. Retrying may succeed if the device appears later, but the function is not a ref-count wrapper and retry semantics are not part of its contract.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when no matching device is found or no ACPI companion exists; these are lookup failures, not refcount operation failures. Retrying may succeed if the device appears later, but the function is not a ref-count wrapper and retry semantics are not part of its contract.",
+    "contract_summary": ""
+  }
+}

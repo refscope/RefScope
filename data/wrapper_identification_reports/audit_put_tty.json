@@ -1,0 +1,99 @@
+{
+  "function_name": "audit_put_tty",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tty.kref.refcount",
+      "tty_struct--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tty_kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tty_kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is a put (release of a reference); retrying would cause a double-put and possible use-after-free. The operation always executes and cannot fail from the wrapper's perspective.",
+  "contract_summary": "audit_put_tty is a release wrapper that decrements the reference count of the provided tty_struct via tty_kref_put. It releases one reference that the caller previously acquired. After this call, the caller must not access the tty structure (unless they hold another reference), as the tty may be freed if the count reaches zero. The function does not check for NULL and does not return a value; it unconditionally decrements the kref.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call tty_kref_put(tty), which decrements the tty's kref reference count. There is no other logic; it is a pure release wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is a put (release of a reference); retrying would cause a double-put and possible use-after-free. The operation always executes and cannot fail from the wrapper's perspective.",
+      "contract_summary": "audit_put_tty is a release wrapper that decrements the reference count of the provided tty_struct via tty_kref_put. It releases one reference that the caller previously acquired. After this call, the caller must not access the tty structure (unless they hold another reference), as the tty may be freed if the count reaches zero. The function does not check for NULL and does not return a value; it unconditionally decrements the kref."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tty.kref.refcount",
+          "tty_struct--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tty.kref.refcount",
+          "tty_struct--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function audit_put_tty calls tty_kref_put(tty), which is a put operation on the tty parameter. The access path tty.kref.refcount correctly traces from the parameter to the refcount field (struct tty_struct->kref.refcount). The type chain tty_struct--kref--refcount_t matches the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tty.kref.refcount",
+        "tty_struct--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is a put (release of a reference); retrying would cause a double-put and possible use-after-free. The operation always executes and cannot fail from the wrapper's perspective.",
+    "contract_summary": "audit_put_tty is a release wrapper that decrements the reference count of the provided tty_struct via tty_kref_put. It releases one reference that the caller previously acquired. After this call, the caller must not access the tty structure (unless they hold another reference), as the tty may be freed if the count reaches zero. The function does not check for NULL and does not return a value; it unconditionally decrements the kref."
+  }
+}

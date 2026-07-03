@@ -1,0 +1,107 @@
+{
+  "function_name": "__rbd_get_client",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "rbdc.kref.refcount",
+      "rbd_client--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get always succeeds; there is no failure path to retry.",
+  "contract_summary": "Get wrapper: acquires an additional reference on an rbd_client by incrementing its kref refcount via kref_get. The caller receives back the same pointer (rbdc) with an extra reference. The caller must pair this call with a corresponding kref_put (or similar release) when done with the reference to avoid leaking the object. This operation is unconditional and always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function exclusively calls kref_get and returns the same pointer; no other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get always succeeds; there is no failure path to retry.",
+      "contract_summary": "Get wrapper: acquires an additional reference on an rbd_client by incrementing its kref refcount via kref_get. The caller receives back the same pointer (rbdc) with an extra reference. The caller must pair this call with a corresponding kref_put (or similar release) when done with the reference to avoid leaking the object. This operation is unconditional and always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "rbdc.kref.refcount",
+          "rbd_client--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "rbdc.kref.refcount",
+          "rbd_client--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&rbdc->kref) increments the refcount of the kref field of rbdc. The access path rbdc.kref.refcount and type chain rbd_client--kref--refcount_t are consistent with the code and callee info. The function returns rbdc, so the critical variable is parameter 1."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "rbdc.kref.refcount",
+        "rbd_client--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get always succeeds; there is no failure path to retry.",
+    "contract_summary": "Get wrapper: acquires an additional reference on an rbd_client by incrementing its kref refcount via kref_get. The caller receives back the same pointer (rbdc) with an extra reference. The caller must pair this call with a corresponding kref_put (or similar release) when done with the reference to avoid leaking the object. This operation is unconditional and always succeeds."
+  }
+}

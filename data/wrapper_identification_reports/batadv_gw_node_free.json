@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_gw_node_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bat_priv.gw.curr_gw.refcount.refcount",
+      "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_gw_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_gw_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operations assume valid refcounts; failure would indicate a bug (use-after-free or double-free). Retrying is meaningless and dangerous.",
+  "contract_summary": "This is a cleanup put-wrapper that releases all references to batadv_gw_node objects in the gateway list and clears the current gateway pointer. It must be called with bat_priv->gw.list_lock held (via spin_lock_bh). After calling this function, all gateway node references are dropped; the caller must not access any previously listed gateway nodes. This function is typically used during shutdown or when the gateway list is being rebuilt.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to release references (batadv_gw_node_put) on all gateway nodes in the list and clear the current gateway. List deletion and generation counter increment are minimal ancillary steps, not significant business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operations assume valid refcounts; failure would indicate a bug (use-after-free or double-free). Retrying is meaningless and dangerous.",
+      "contract_summary": "This is a cleanup put-wrapper that releases all references to batadv_gw_node objects in the gateway list and clears the current gateway pointer. It must be called with bat_priv->gw.list_lock held (via spin_lock_bh). After calling this function, all gateway node references are dropped; the caller must not access any previously listed gateway nodes. This function is typically used during shutdown or when the gateway list is being rebuilt."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bat_priv.gw.curr_gw.refcount.refcount",
+          "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bat_priv.gw.curr_gw.refcount.refcount",
+          "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put operation on curr_gw obtained from bat_priv->gw.curr_gw matches the callee's put on a batadv_gw_node. The access path from parameter bat_priv through gw.curr_gw to the refcount is consistent with the type chain and segment count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bat_priv.gw.curr_gw.refcount.refcount",
+        "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operations assume valid refcounts; failure would indicate a bug (use-after-free or double-free). Retrying is meaningless and dangerous.",
+    "contract_summary": "This is a cleanup put-wrapper that releases all references to batadv_gw_node objects in the gateway list and clears the current gateway pointer. It must be called with bat_priv->gw.list_lock held (via spin_lock_bh). After calling this function, all gateway node references are dropped; the caller must not access any previously listed gateway nodes. This function is typically used during shutdown or when the gateway list is being rebuilt."
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "function_name": "apparmor_sk_free_security",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sk.sk_security.label.count.count.refcount",
+      "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "sk.sk_security.peer.count.count.refcount",
+      "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "sk.sk_security.peer_lastupdate.count.count.refcount",
+      "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "aa_put_label is a release operation that cannot fail; retrying would be nonsensical.",
+  "contract_summary": "This function is invoked during socket destruction to release all label references stored in the AppArmor socket context (label, peer, peer_lastupdate). It unconditionally decrements the refcount of each label via aa_put_label. After this call, those pointers are no longer valid and must not be accessed. The function assumes exclusive ownership of the socket context at deallocation time; no locking is required as the socket is being freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "The entire function is dedicated to releasing three label references via aa_put_label; no other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "aa_put_label is a release operation that cannot fail; retrying would be nonsensical.",
+      "contract_summary": "This function is invoked during socket destruction to release all label references stored in the AppArmor socket context (label, peer, peer_lastupdate). It unconditionally decrements the refcount of each label via aa_put_label. After this call, those pointers are no longer valid and must not be accessed. The function assumes exclusive ownership of the socket context at deallocation time; no locking is required as the socket is being freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_security.label.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_security.peer.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_security.peer_lastupdate.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_security.label.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_security.peer.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_security.peer_lastupdate.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function apparmor_sk_free_security calls aa_put_label on ctx->label, ctx->peer, and ctx->peer_lastupdate. Each is a struct aa_label pointer whose refcount (via count.count.refcount) is decremented. The accesses start from the parameter sk, follow sk_security to aa_sk_ctx, then the label/peer/peer_lastupdate fields. The type chain and access path segment counts match the callee information and the actual struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sk.sk_security.label.count.count.refcount",
+        "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "sk.sk_security.peer.count.count.refcount",
+        "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "sk.sk_security.peer_lastupdate.count.count.refcount",
+        "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "aa_put_label is a release operation that cannot fail; retrying would be nonsensical.",
+    "contract_summary": "This function is invoked during socket destruction to release all label references stored in the AppArmor socket context (label, peer, peer_lastupdate). It unconditionally decrements the refcount of each label via aa_put_label. After this call, those pointers are no longer valid and must not be accessed. The function assumes exclusive ownership of the socket context at deallocation time; no locking is required as the socket is being freed."
+  }
+}

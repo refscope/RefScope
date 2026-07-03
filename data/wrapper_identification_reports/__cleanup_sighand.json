@@ -1,0 +1,99 @@
+{
+  "function_name": "__cleanup_sighand",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sighand.count.refs",
+      "sighand_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Decrement is unconditional; after the call, the object may be freed, so retrying would be a use-after-free.",
+  "contract_summary": "This is a put wrapper that decrements the reference count of a sighand_struct and, if the count reaches zero, performs cleanup (signalfd_cleanup) and frees the memory via kmem_cache_free. The caller must not use the object after this call, as it may have been freed. The function does not indicate whether the object was freed; the caller must assume the reference is released and the object may be invalid. This is the release side of the lifecycle—each get must be paired with exactly one __cleanup_sighand.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the reference count of a sighand_struct and conditionally free it; no business logic beyond refcount management and associated cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Decrement is unconditional; after the call, the object may be freed, so retrying would be a use-after-free.",
+      "contract_summary": "This is a put wrapper that decrements the reference count of a sighand_struct and, if the count reaches zero, performs cleanup (signalfd_cleanup) and frees the memory via kmem_cache_free. The caller must not use the object after this call, as it may have been freed. The function does not indicate whether the object was freed; the caller must assume the reference is released and the object may be invalid. This is the release side of the lifecycle—each get must be paired with exactly one __cleanup_sighand."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sighand.count.refs",
+          "sighand_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sighand.count.refs",
+          "sighand_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_dec_and_test call operates on &sighand->count, which is a put operation. The access path sighand.count.refs correctly traces from the parameter to the refcount field. The type chain sighand_struct--refcount_t--atomic_t matches the structure definition. Segment counts (3 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sighand.count.refs",
+        "sighand_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Decrement is unconditional; after the call, the object may be freed, so retrying would be a use-after-free.",
+    "contract_summary": "This is a put wrapper that decrements the reference count of a sighand_struct and, if the count reaches zero, performs cleanup (signalfd_cleanup) and frees the memory via kmem_cache_free. The caller must not use the object after this call, as it may have been freed. The function does not indicate whether the object was freed; the caller must assume the reference is released and the object may be invalid. This is the release side of the lifecycle—each get must be paired with exactly one __cleanup_sighand."
+  }
+}

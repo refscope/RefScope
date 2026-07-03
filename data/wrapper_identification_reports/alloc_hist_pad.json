@@ -1,0 +1,151 @@
+{
+  "function_name": "alloc_hist_pad",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "global",
+      "hist_pad_ref",
+      "hist_pad_ref.refs",
+      "refcount_t--atomic_t"
+    ],
+    [
+      "set",
+      "global",
+      "hist_pad_ref",
+      "hist_pad_ref.refs",
+      "refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs only on memory allocation failure; retrying immediately without freeing memory would likely also fail, so retry is pointless.",
+  "contract_summary": "Get-or-create wrapper for the global hist_pads percpu array. If the array already exists (refcount non-zero), increments the refcount and returns 0. If not, allocates the percpu array, sets refcount to 1, and returns 0. On allocation failure, returns -ENOMEM. The caller must hold event_mutex and must pair each successful call with a corresponding decrement (put) when done using the array. The caller must check the return value before using the array.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on the global hist_pads percpu array, either by incrementing an existing refcount or by allocating and initializing it with refcount 1. The only non-refcount logic is the percpu allocation itself, which is intrinsic to the get-or-create pattern.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs only on memory allocation failure; retrying immediately without freeing memory would likely also fail, so retry is pointless.",
+      "contract_summary": "Get-or-create wrapper for the global hist_pads percpu array. If the array already exists (refcount non-zero), increments the refcount and returns 0. If not, allocates the percpu array, sets refcount to 1, and returns 0. On allocation failure, returns -ENOMEM. The caller must hold event_mutex and must pair each successful call with a corresponding decrement (put) when done using the array. The caller must check the return value before using the array."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "hist_pad_ref",
+          "hist_pad_ref.refs",
+          "refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "global",
+          "hist_pad_ref",
+          "hist_pad_ref.refs",
+          "refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "hist_pad_ref",
+          "hist_pad_ref.refs",
+          "refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "global",
+          "hist_pad_ref",
+          "hist_pad_ref.refs",
+          "refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: refcount_inc is called on hist_pad_ref when its value is positive, and refcount_set is called when it is zero after allocation. The global variable hist_pad_ref is of type refcount_t, its member refs is atomic_t, matching the callee's path r.refs and type chain refcount_t--atomic_t. The access path has 2 segments matching 2 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "global",
+        "hist_pad_ref",
+        "hist_pad_ref.refs",
+        "refcount_t--atomic_t"
+      ],
+      [
+        "set",
+        "global",
+        "hist_pad_ref",
+        "hist_pad_ref.refs",
+        "refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs only on memory allocation failure; retrying immediately without freeing memory would likely also fail, so retry is pointless.",
+    "contract_summary": "Get-or-create wrapper for the global hist_pads percpu array. If the array already exists (refcount non-zero), increments the refcount and returns 0. If not, allocates the percpu array, sets refcount to 1, and returns 0. On allocation failure, returns -ENOMEM. The caller must hold event_mutex and must pair each successful call with a corresponding decrement (put) when done using the array. The caller must check the return value before using the array."
+  }
+}

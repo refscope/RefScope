@@ -1,0 +1,130 @@
+{
+  "function_name": "btrfs_search_slot_get_root",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lock_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_read_lock_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_try_read_lock_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns ERR_PTR on failure; some errors (e.g., -EIO from uptodate) are permanent, while others (e.g., -EAGAIN from nowait lock) may be transient, but the function does not distinguish and retrying without changing conditions is not advisable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to obtain the root node with appropriate locking and store it in the btrfs_path, not merely to manage a reference count. It includes significant logic for lock level selection, lock upgrading, error checking, and path assignment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns ERR_PTR on failure; some errors (e.g., -EIO from uptodate) are permanent, while others (e.g., -EAGAIN from nowait lock) may be transient, but the function does not distinguish and retrying without changing conditions is not advisable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns ERR_PTR on failure; some errors (e.g., -EIO from uptodate) are permanent, while others (e.g., -EAGAIN from nowait lock) may be transient, but the function does not distinguish and retrying without changing conditions is not advisable.",
+    "contract_summary": ""
+  }
+}

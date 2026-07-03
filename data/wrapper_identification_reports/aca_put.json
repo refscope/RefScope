@@ -1,0 +1,99 @@
+{
+  "function_name": "aca_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ac.aca_refcnt.refs",
+      "ifacaddr6--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is unconditional and should only be called once per reference; retrying would cause use-after-free.",
+  "contract_summary": "This is a put wrapper for `ifacaddr6` objects. It decrements the `aca_refcnt` reference count and, if it reaches zero, schedules a deferred RCU callback to free the object (`aca_free_rcu`). The function is unconditional and void; the caller must not access the object after calling this function, as it may be freed asynchronously. This is the standard release operation – each prior get/refcount_inc should be paired with exactly one call to `aca_put`.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count and free the object if it reaches zero; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is unconditional and should only be called once per reference; retrying would cause use-after-free.",
+      "contract_summary": "This is a put wrapper for `ifacaddr6` objects. It decrements the `aca_refcnt` reference count and, if it reaches zero, schedules a deferred RCU callback to free the object (`aca_free_rcu`). The function is unconditional and void; the caller must not access the object after calling this function, as it may be freed asynchronously. This is the standard release operation – each prior get/refcount_inc should be paired with exactly one call to `aca_put`."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ac.aca_refcnt.refs",
+          "ifacaddr6--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ac.aca_refcnt.refs",
+          "ifacaddr6--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code aca_put calls refcount_dec_and_test(&ac->aca_refcnt) which is a put operation on the refcount field aca_refcnt (refcount_t). The access path ac.aca_refcnt.refs correctly traces from parameter ac through struct ifacaddr6, field aca_refcnt (refcount_t), to the inner refs (atomic_t). The type chain ifacaddr6--refcount_t--atomic_t matches the callee info and has equal segment count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ac.aca_refcnt.refs",
+        "ifacaddr6--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is unconditional and should only be called once per reference; retrying would cause use-after-free.",
+    "contract_summary": "This is a put wrapper for `ifacaddr6` objects. It decrements the `aca_refcnt` reference count and, if it reaches zero, schedules a deferred RCU callback to free the object (`aca_free_rcu`). The function is unconditional and void; the caller must not access the object after calling this function, as it may be freed asynchronously. This is the standard release operation – each prior get/refcount_inc should be paired with exactly one call to `aca_put`."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "function_name": "autogroup_kref_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ag.kref.refcount",
+      "autogroup--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get always succeeds unconditionally, so retry is never needed.",
+  "contract_summary": "This is a kref get wrapper that unconditionally increments the reference count on an autogroup struct. It returns the same pointer with an additional reference. The caller must later call a corresponding put (e.g., autogroup_kref_put) to release the reference. There is no failure path; the operation always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to increment the kref refcount on the autogroup struct and return the pointer; no other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get always succeeds unconditionally, so retry is never needed.",
+      "contract_summary": "This is a kref get wrapper that unconditionally increments the reference count on an autogroup struct. It returns the same pointer with an additional reference. The caller must later call a corresponding put (e.g., autogroup_kref_put) to release the reference. There is no failure path; the operation always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ag.kref.refcount",
+          "autogroup--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ag.kref.refcount",
+          "autogroup--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &ag->kref, where ag is both the input and return value. The access path ag.kref.refcount correctly traces from the return value to the refcount field, and the type chain autogroup--kref--refcount_t matches the callee's type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ag.kref.refcount",
+        "autogroup--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get always succeeds unconditionally, so retry is never needed.",
+    "contract_summary": "This is a kref get wrapper that unconditionally increments the reference count on an autogroup struct. It returns the same pointer with an additional reference. The caller must later call a corresponding put (e.g., autogroup_kref_put) to release the reference. There is no failure path; the operation always succeeds."
+  }
+}

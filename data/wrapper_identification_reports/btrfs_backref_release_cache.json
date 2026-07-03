@@ -1,0 +1,143 @@
+{
+  "function_name": "btrfs_backref_release_cache",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "node",
+      "node.root.refs.refs",
+      "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "global",
+      "node",
+      "node.eb.refs.refs",
+      "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_cleanup_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation; retrying would cause double-release and use-after-free. The function always succeeds in decrementing references; any failure indicates a bug.",
+  "contract_summary": "This function releases all backref nodes and edges from the given cache. It iterates over all nodes in the rb_root and calls btrfs_backref_cleanup_node on each, which decrements reference counts for the node's root and extent_buffer. After cleanup, it asserts that all pending edges, useless nodes, and counts are zero, indicating the cache is fully released. The caller must ensure that the cache is no longer in use and that no further operations that rely on these references are performed. This function is typically called when freeing a backref cache.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all backref nodes in the cache by calling a cleanup function that decrements reference counts on node's root and extent_buffer. No significant non-refcount logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation; retrying would cause double-release and use-after-free. The function always succeeds in decrementing references; any failure indicates a bug.",
+      "contract_summary": "This function releases all backref nodes and edges from the given cache. It iterates over all nodes in the rb_root and calls btrfs_backref_cleanup_node on each, which decrements reference counts for the node's root and extent_buffer. After cleanup, it asserts that all pending edges, useless nodes, and counts are zero, indicating the cache is fully released. The caller must ensure that the cache is no longer in use and that no further operations that rely on these references are performed. This function is typically called when freeing a backref cache."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "node",
+          "node.root.refs.refs",
+          "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "node",
+          "node.eb.refs.refs",
+          "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "node",
+          "node.root.refs.refs",
+          "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "node",
+          "node.eb.refs.refs",
+          "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent: btrfs_backref_cleanup_node is a put function for node->root->refs and node->eb->refs. The access paths and type chains match the callee information and the code iterates over all nodes in the cache, calling cleanup_node on each."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "node",
+        "node.root.refs.refs",
+        "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "global",
+        "node",
+        "node.eb.refs.refs",
+        "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation; retrying would cause double-release and use-after-free. The function always succeeds in decrementing references; any failure indicates a bug.",
+    "contract_summary": "This function releases all backref nodes and edges from the given cache. It iterates over all nodes in the rb_root and calls btrfs_backref_cleanup_node on each, which decrements reference counts for the node's root and extent_buffer. After cleanup, it asserts that all pending edges, useless nodes, and counts are zero, indicating the cache is fully released. The caller must ensure that the cache is no longer in use and that no further operations that rely on these references are performed. This function is typically called when freeing a backref cache."
+  }
+}

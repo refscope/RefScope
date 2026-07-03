@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_remove_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "inode.delayed_node.refs.refs",
+      "btrfs_inode--btrfs_delayed_node--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_delayed_node",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_delayed_node",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation is a put that always succeeds if the object exists; no retry needed.",
+  "contract_summary": "This function releases the inode's reference to its btrfs_delayed_node. It clears the inode->delayed_node pointer and then calls btrfs_release_delayed_node which decrements the delayed_node's refcount. After this call, the inode no longer holds a reference; the caller must not access the delayed_node through the inode. This is a put operation that pairs with a previous get (e.g., btrfs_get_delayed_node).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference held by inode on its delayed_node, clear the pointer, and call the refcount decrement function.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation is a put that always succeeds if the object exists; no retry needed.",
+      "contract_summary": "This function releases the inode's reference to its btrfs_delayed_node. It clears the inode->delayed_node pointer and then calls btrfs_release_delayed_node which decrements the delayed_node's refcount. After this call, the inode no longer holds a reference; the caller must not access the delayed_node through the inode. This is a put operation that pairs with a previous get (e.g., btrfs_get_delayed_node)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "inode.delayed_node.refs.refs",
+          "btrfs_inode--btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "inode.delayed_node.refs.refs",
+          "btrfs_inode--btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btrfs_release_delayed_node is a put on delayed_node (first argument). In btrfs_remove_delayed_node, the delayed_node is obtained from inode->delayed_node, and the put is called on that delayed_node. The access path inode.delayed_node.refs.refs correctly starts from parameter 1 (inode) and goes through the delayed_node field to the refcount. The type chain matches: btrfs_inode -> btrfs_delayed_node -> refcount_t -> atomic_t. Segment counts match (4 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "inode.delayed_node.refs.refs",
+        "btrfs_inode--btrfs_delayed_node--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation is a put that always succeeds if the object exists; no retry needed.",
+    "contract_summary": "This function releases the inode's reference to its btrfs_delayed_node. It clears the inode->delayed_node pointer and then calls btrfs_release_delayed_node which decrements the delayed_node's refcount. After this call, the inode no longer holds a reference; the caller must not access the delayed_node through the inode. This is a put operation that pairs with a previous get (e.g., btrfs_get_delayed_node)."
+  }
+}

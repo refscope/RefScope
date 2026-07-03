@@ -1,0 +1,99 @@
+{
+  "function_name": "__test_release_all_firmware",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "0",
+      "test_fw_config.reqs[i].fw.priv.ref.refcount",
+      "test_fw_config--test_batched_req--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "release_firmware is a put that never fails; retrying would cause double-release of the same firmware object.",
+  "contract_summary": "Releases all firmware references held in test_fw_config->reqs array via release_firmware, which decrements the firmware's kref. Also frees the associated fw_buf strings and vfrees the reqs array itself. After this call, the test_fw_config->reqs pointer is set to NULL and should not be dereferenced. This is a cleanup wrapper that ensures all acquired firmware references are properly released before reinitializing or destroying the test configuration. Caller must ensure that no concurrent accesses to the firmware objects occur after this call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to release all firmware references via release_firmware (a put), but also includes cleanup of associated buffers and freeing the request array itself.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "release_firmware is a put that never fails; retrying would cause double-release of the same firmware object.",
+      "contract_summary": "Releases all firmware references held in test_fw_config->reqs array via release_firmware, which decrements the firmware's kref. Also frees the associated fw_buf strings and vfrees the reqs array itself. After this call, the test_fw_config->reqs pointer is set to NULL and should not be dereferenced. This is a cleanup wrapper that ensures all acquired firmware references are properly released before reinitializing or destroying the test configuration. Caller must ensure that no concurrent accesses to the firmware objects occur after this call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "0",
+          "test_fw_config.reqs[i].fw.priv.ref.refcount",
+          "test_fw_config--test_batched_req--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "0",
+          "test_fw_config.reqs[i].fw.priv.ref.refcount",
+          "test_fw_config--test_batched_req--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "release_firmware is called on req->fw, which corresponds to the refcount field fw.priv.ref.refcount. The access path from global variable test_fw_config through reqs[i] and fw matches the callee's member access. The type chain correctly extends from the global structure to the refcount_t field."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "0",
+        "test_fw_config.reqs[i].fw.priv.ref.refcount",
+        "test_fw_config--test_batched_req--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "release_firmware is a put that never fails; retrying would cause double-release of the same firmware object.",
+    "contract_summary": "Releases all firmware references held in test_fw_config->reqs array via release_firmware, which decrements the firmware's kref. Also frees the associated fw_buf strings and vfrees the reqs array itself. After this call, the test_fw_config->reqs pointer is set to NULL and should not be dereferenced. This is a cleanup wrapper that ensures all acquired firmware references are properly released before reinitializing or destroying the test configuration. Caller must ensure that no concurrent accesses to the firmware objects occur after this call."
+  }
+}

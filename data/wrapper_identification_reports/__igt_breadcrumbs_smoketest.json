@@ -1,0 +1,114 @@
+{
+  "function_name": "__igt_breadcrumbs_smoketest",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "heap_fence_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "h.ref.refcount.refs",
+      "member_type_chain": "heap_fence--heap_fence_ref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "i915_request_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_context_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "heap_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.container.ref.refcount",
+      "member_type_chain": "i915_sw_fence--heap_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_request_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_gem_context_get_engine",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "heap_fence_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "h.ref.refcount.refs",
+      "member_type_chain": "heap_fence--heap_fence_ref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "intel_context_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "heap_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.container.ref.refcount",
+      "member_type_chain": "i915_sw_fence--heap_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is test logic (creating requests, awaiting fences, verifying completion) with refcount operations only as part of test setup/teardown.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__neigh_lookup_errno",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "n.refcnt.refs",
+      "neighbour--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "neigh_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "n.refcnt.refs",
+      "member_type_chain": "neighbour--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "neigh_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "n.refcnt.refs",
+      "member_type_chain": "neighbour--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Creation failure is due to memory allocation failure; retrying would likely fail again.",
+  "contract_summary": "This is a get-or-create wrapper for neighbour entries. It attempts to look up an existing neighbour (incrementing its refcount via neigh_lookup), and if not found, creates a new one with refcount initialized to 1 via neigh_create. The caller receives a neighbour with an elevated refcount and must release it with neigh_release when done. On error (e.g., memory allocation failure), the function returns an error pointer, which the caller must check with IS_ERR. No special locking is required beyond the implicit RCU or hash bucket locks used internally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a neighbour with an acquired reference via get-or-create pattern. No extraneous logic beyond lookup and creation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Creation failure is due to memory allocation failure; retrying would likely fail again.",
+      "contract_summary": "This is a get-or-create wrapper for neighbour entries. It attempts to look up an existing neighbour (incrementing its refcount via neigh_lookup), and if not found, creates a new one with refcount initialized to 1 via neigh_create. The caller receives a neighbour with an elevated refcount and must release it with neigh_release when done. On error (e.g., memory allocation failure), the function returns an error pointer, which the caller must check with IS_ERR. No special locking is required beyond the implicit RCU or hash bucket locks used internally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a struct neighbour pointer obtained from neigh_lookup (which acquires a refcount) or neigh_create (initializes refcount). The candidate operation correctly identifies the get on the return value. The access path n.refcnt.refs matches the neighbour structure's refcount_t field, and the type chain neighbour--refcount_t--atomic_t is consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "n.refcnt.refs",
+        "neighbour--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Creation failure is due to memory allocation failure; retrying would likely fail again.",
+    "contract_summary": "This is a get-or-create wrapper for neighbour entries. It attempts to look up an existing neighbour (incrementing its refcount via neigh_lookup), and if not found, creates a new one with refcount initialized to 1 via neigh_create. The caller receives a neighbour with an elevated refcount and must release it with neigh_release when done. On error (e.g., memory allocation failure), the function returns an error pointer, which the caller must check with IS_ERR. No special locking is required beyond the implicit RCU or hash bucket locks used internally."
+  }
+}

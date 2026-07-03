@@ -1,0 +1,143 @@
+{
+  "function_name": "_regulator_bulk_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "3",
+      "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "3",
+      "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_regulator_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "regulator.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "regulator_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "regulator.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_regulator_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "regulator.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "regulator_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "regulator.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure can be transient (e.g., -EPROBE_DEFER) meaning the regulator may become available later; retrying after conditions change could succeed.",
+  "contract_summary": "Batch get-wrapper that acquires references to multiple regulators in one call. Caller supplies an array of regulator_bulk_data specifying supply names. On full success, each consumer->consumer is set to a valid regulator pointer with an increased refcount, and optional initial load is set. If any regulator fails to be obtained (including load setting failure), all previously acquired regulators are released and the function returns an error (all-or-nothing). Caller must eventually call regulator_bulk_free() or equivalent regulator_put() per consumer to release all references. The function properly cleans up on error, avoiding leaks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to batch-acquire references to multiple regulators via _regulator_get, with error handling and optional load setting. The reference-count management (get/put) is the core, but iteration and load setting add moderate non-trivial logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure can be transient (e.g., -EPROBE_DEFER) meaning the regulator may become available later; retrying after conditions change could succeed.",
+      "contract_summary": "Batch get-wrapper that acquires references to multiple regulators in one call. Caller supplies an array of regulator_bulk_data specifying supply names. On full success, each consumer->consumer is set to a valid regulator pointer with an increased refcount, and optional initial load is set. If any regulator fails to be obtained (including load setting failure), all previously acquired regulators are released and the function returns an error (all-or-nothing). Caller must eventually call regulator_bulk_free() or equivalent regulator_put() per consumer to release all references. The function properly cleans up on error, avoiding leaks."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "consumers.consumer.rdev.dev.kobj.kref.refcount",
+          "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operations correspond to _regulator_get (storing result in consumers[i].consumer) and regulator_put (on error path). The access path correctly starts from parameter 3 (consumers) and follows the field chain to the refcount. Type chain matches callee info. Both get and put are correctly identified."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "3",
+        "consumers.consumer.rdev.dev.kobj.kref.refcount",
+        "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "3",
+        "consumers.consumer.rdev.dev.kobj.kref.refcount",
+        "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure can be transient (e.g., -EPROBE_DEFER) meaning the regulator may become available later; retrying after conditions change could succeed.",
+    "contract_summary": "Batch get-wrapper that acquires references to multiple regulators in one call. Caller supplies an array of regulator_bulk_data specifying supply names. On full success, each consumer->consumer is set to a valid regulator pointer with an increased refcount, and optional initial load is set. If any regulator fails to be obtained (including load setting failure), all previously acquired regulators are released and the function returns an error (all-or-nothing). Caller must eventually call regulator_bulk_free() or equivalent regulator_put() per consumer to release all references. The function properly cleans up on error, avoiding leaks."
+  }
+}

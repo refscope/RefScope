@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_grab_block_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "cache.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "btrfs_get_block_group unconditionally increments the refcount (never fails under correct usage), so there is no failure path to retry. The down_read is a blocking operation that always succeeds.",
+  "contract_summary": "This function is a get-wrapper that unconditionally takes a reference on the block group via btrfs_get_block_group, preventing the object from being freed. If the delalloc flag is true, it also acquires the data_rwsem in read mode, which is necessary for certain delalloc operations that require consistent block group state. The caller must later release the reference by calling btrfs_put_block_group and, if the lock was taken, must up_read(cache->data_rwsem). The caller is responsible for ensuring proper pairing of the lock and reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference on the block group via btrfs_get_block_group, which is a refcount get. The function also conditionally acquires a read lock (down_read) for delalloc usage, making it a get-wrapper with a side-effect. The refcount operation is unconditional, and the locking is secondary but tied to the same block group lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "btrfs_get_block_group unconditionally increments the refcount (never fails under correct usage), so there is no failure path to retry. The down_read is a blocking operation that always succeeds.",
+      "contract_summary": "This function is a get-wrapper that unconditionally takes a reference on the block group via btrfs_get_block_group, preventing the object from being freed. If the delalloc flag is true, it also acquires the data_rwsem in read mode, which is necessary for certain delalloc operations that require consistent block group state. The caller must later release the reference by calling btrfs_put_block_group and, if the lock was taken, must up_read(cache->data_rwsem). The caller is responsible for ensuring proper pairing of the lock and reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btrfs_get_block_group(cache) increments refcount on cache->refs.refs, consistent with the callee info. Access path correctly starts from parameter cache, segments match type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "cache.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "btrfs_get_block_group unconditionally increments the refcount (never fails under correct usage), so there is no failure path to retry. The down_read is a blocking operation that always succeeds.",
+    "contract_summary": "This function is a get-wrapper that unconditionally takes a reference on the block group via btrfs_get_block_group, preventing the object from being freed. If the delalloc flag is true, it also acquires the data_rwsem in read mode, which is necessary for certain delalloc operations that require consistent block group state. The caller must later release the reference by calling btrfs_put_block_group and, if the lock was taken, must up_read(cache->data_rwsem). The caller is responsible for ensuring proper pairing of the lock and reference."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "bnep_sock_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sock.sk.sk_refcnt.refs",
+      "socket--sock--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "sock.sk.sk_refcnt.refs",
+      "socket--sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bt_sock_unlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bt_sock_unlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional (when sk is non-NULL) and always succeeds; there is no failure path to retry.",
+  "contract_summary": "This function is a put-wrapper that releases a BNEP socket. It unlinks the socket from the global list (which drops one reference) and calls sock_put (which drops a second reference), ensuring the socket is fully released. The socket is also orphaning to detach it from the file descriptor. After this function returns, the socket must not be used again and no further puts should be called. This function always succeeds and is typically invoked during socket closure.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "The primary purpose is to release a BNEP socket by decrementing its refcount twice (via bt_sock_unlink and sock_put) and performing ancillary cleanup (unlinking from list, orphaning). While there is small non-refcount logic, the core action is reference-count release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional (when sk is non-NULL) and always succeeds; there is no failure path to retry.",
+      "contract_summary": "This function is a put-wrapper that releases a BNEP socket. It unlinks the socket from the global list (which drops one reference) and calls sock_put (which drops a second reference), ensuring the socket is fully released. The socket is also orphaning to detach it from the file descriptor. After this function returns, the socket must not be used again and no further puts should be called. This function always succeeds and is typically invoked during socket closure."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sock.sk.sk_refcnt.refs",
+          "socket--sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sock.sk.sk_refcnt.refs",
+          "socket--sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sock.sk.sk_refcnt.refs",
+          "socket--sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sock.sk.sk_refcnt.refs",
+          "socket--sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both bt_sock_unlink() and sock_put() are called on sk, which is derived from sock->sk. The access path from parameter sock to sk_refcnt.refs is sock->sk->sk_refcnt.refs, and the type chain socket->sock->refcount_t->atomic_t matches the callee information and code. Two separate put operations on the same refcount are correctly recorded."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sock.sk.sk_refcnt.refs",
+        "socket--sock--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "sock.sk.sk_refcnt.refs",
+        "socket--sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional (when sk is non-NULL) and always succeeds; there is no failure path to retry.",
+    "contract_summary": "This function is a put-wrapper that releases a BNEP socket. It unlinks the socket from the global list (which drops one reference) and calls sock_put (which drops a second reference), ensuring the socket is fully released. The socket is also orphaning to detach it from the file descriptor. After this function returns, the socket must not be used again and no further puts should be called. This function always succeeds and is typically invoked during socket closure."
+  }
+}

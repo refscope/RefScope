@@ -1,0 +1,71 @@
+{
+  "function_name": "apparmor_sock_graft",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_current_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_current_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation (aa_get_current_label) always succeeds; failure is impossible here.",
+  "contract_summary": "Set-wrapper that initializes the socket's label reference. It acquires a reference to the current task's label and stores it in the socket security context via an RCU pointer assignment. This establishes the label for the socket. The caller must ensure that when the socket is destroyed, a corresponding put (e.g., aa_put_label) is called to release the reference. The function is idempotent: if the label is already set, it does nothing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on the current label and store it in the socket's security context (lazy initialization). Only refcount management logic present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation (aa_get_current_label) always succeeds; failure is impossible here.",
+      "contract_summary": "Set-wrapper that initializes the socket's label reference. It acquires a reference to the current task's label and stores it in the socket security context via an RCU pointer assignment. This establishes the label for the socket. The caller must ensure that when the socket is destroyed, a corresponding put (e.g., aa_put_label) is called to release the reference. The function is idempotent: if the label is already set, it does nothing."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "aa_sk_ctx",
+        "aa_get_label"
+      ],
+      "reason": "Need definition of struct aa_sk_ctx to understand the relationship between socket sk and the label pointer, and need implementation of aa_get_label to confirm the exact refcount field access path from the label object."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No extracted reference-count operations to validate; the function indirectly acquires a reference via aa_get_current_label() and assigns it, but no direct get/put/set calls are present in the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation (aa_get_current_label) always succeeds; failure is impossible here.",
+    "contract_summary": "Set-wrapper that initializes the socket's label reference. It acquires a reference to the current task's label and stores it in the socket security context via an RCU pointer assignment. This establishes the label for the socket. The caller must ensure that when the socket is destroyed, a corresponding put (e.g., aa_put_label) is called to release the reference. The function is idempotent: if the label is already set, it does nothing."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "NF_DROP_REASON",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb_reason",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb_reason",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement (kfree_skb_reason) always succeeds—there is no failure path requiring retry.",
+  "contract_summary": "This function drops an skb by releasing its reference via kfree_skb_reason. After the call, the skb must not be used. The return value is a netfilter verdict combining the error code with NF_STOLEN. The caller should return this value as the hook verdict. This is a put wrapper that consumes the skb reference; no further cleanup on the skb is needed by the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on an skb via kfree_skb_reason; the return value construction (err<<16 | NF_STOLEN) is trivial metadata for netfilter verdicts and does not change the fundamental refcount-release nature.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement (kfree_skb_reason) always succeeds—there is no failure path requiring retry.",
+      "contract_summary": "This function drops an skb by releasing its reference via kfree_skb_reason. After the call, the skb must not be used. The return value is a netfilter verdict combining the error code with NF_STOLEN. The caller should return this value as the hook verdict. This is a put wrapper that consumes the skb reference; no further cleanup on the skb is needed by the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kfree_skb_reason(skb, reason) decrements the refcount on skb->users.refs, which matches the operation on parameter 1 with access path skb.users.refs and type chain sk_buff--refcount_t--atomic_t. Segment count (3) equals type count (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement (kfree_skb_reason) always succeeds—there is no failure path requiring retry.",
+    "contract_summary": "This function drops an skb by releasing its reference via kfree_skb_reason. After the call, the skb must not be used. The return value is a netfilter verdict combining the error code with NF_STOLEN. The caller should return this value as the hook verdict. This is a put wrapper that consumes the skb reference; no further cleanup on the skb is needed by the caller."
+  }
+}

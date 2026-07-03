@@ -1,0 +1,99 @@
+{
+  "function_name": "ath9k_htc_beaconep",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper; retrying would cause a double-free, and the operation never fails in a retryable way.",
+  "contract_summary": "This is a release (put) wrapper that frees the socket buffer (skb). It unconditionally calls dev_kfree_skb_any to decrement the reference count and, if it reaches zero, free the skb. The caller must not use the skb after calling this function. There is no return value or failure indication; the operation always succeeds and is irreversible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function only calls dev_kfree_skb_any on the skb, which is a put that decrements the skb's reference count; no other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper; retrying would cause a double-free, and the operation never fails in a retryable way.",
+      "contract_summary": "This is a release (put) wrapper that frees the socket buffer (skb). It unconditionally calls dev_kfree_skb_any to decrement the reference count and, if it reaches zero, free the skb. The caller must not use the skb after calling this function. There is no return value or failure indication; the operation always succeeds and is irreversible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function ath9k_htc_beaconep calls dev_kfree_skb_any(skb), which is a put operation on skb's reference count (skb->users.refs). The critical variable is skb (parameter index 2), and the access path 'skb.users.refs' correctly traces from the parameter to the refcount field. The type chain 'sk_buff--refcount_t--atomic_t' matches the structure definitions and the segment counts (3 segments, 3 types) are equal. Therefore, the extracted operation is consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper; retrying would cause a double-free, and the operation never fails in a retryable way.",
+    "contract_summary": "This is a release (put) wrapper that frees the socket buffer (skb). It unconditionally calls dev_kfree_skb_any to decrement the reference count and, if it reaches zero, free the skb. The caller must not use the skb after calling this function. There is no return value or failure indication; the operation always succeeds and is irreversible."
+  }
+}

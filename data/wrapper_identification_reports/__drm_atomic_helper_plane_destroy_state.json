@@ -1,0 +1,231 @@
+{
+  "function_name": "__drm_atomic_helper_plane_destroy_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.fb.base.refcount.refcount",
+      "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.fence.refcount.refcount",
+      "drm_plane_state--dma_fence--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.commit.ref.refcount",
+      "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.fb_damage_clips.base.refcount.refcount",
+      "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_framebuffer_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fb.base.refcount.refcount",
+      "member_type_chain": "drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_crtc_commit_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "commit.ref.refcount",
+      "member_type_chain": "drm_crtc_commit--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_framebuffer_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fb.base.refcount.refcount",
+      "member_type_chain": "drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_crtc_commit_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "commit.ref.refcount",
+      "member_type_chain": "drm_crtc_commit--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations always succeed; retrying would cause double-release/use-after-free.",
+  "contract_summary": "This is a destruction helper that releases all reference-counted resources held by a drm_plane_state. It calls drm_framebuffer_put on the framebuffer, dma_fence_put on the fence, drm_crtc_commit_put on the commit, and drm_property_blob_put on the damage clips. After this function, the state's resources are no longer referenced and the caller should free the state itself (typically via kfree). The caller must not use any of the released objects after the call. This function is typically called from an atomic helper destructor or from a driver's destroy callback.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release reference-counted resources (fb, fence, commit, fb_damage_clips) via corresponding put functions. No other business logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations always succeed; retrying would cause double-release/use-after-free.",
+      "contract_summary": "This is a destruction helper that releases all reference-counted resources held by a drm_plane_state. It calls drm_framebuffer_put on the framebuffer, dma_fence_put on the fence, drm_crtc_commit_put on the commit, and drm_property_blob_put on the damage clips. After this function, the state's resources are no longer referenced and the caller should free the state itself (typically via kfree). The caller must not use any of the released objects after the call. This function is typically called from an atomic helper destructor or from a driver's destroy callback."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "state.fb.base.refcount.refcount",
+          "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          1,
+          "state.fence.refcount.refcount",
+          "drm_plane_state--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          1,
+          "state.commit.ref.refcount",
+          "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          1,
+          "state.fb_damage_clips.base.refcount.refcount",
+          "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.fb.base.refcount.refcount",
+          "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.fence.refcount.refcount",
+          "drm_plane_state--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.commit.ref.refcount",
+          "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.fb_damage_clips.base.refcount.refcount",
+          "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "All four put operations are consistent with the code and callee information. Each operation correctly decrements the refcount of the respective object accessed via the state parameter. The access paths start from 'state' (parameter 1) and correctly trace through the struct members to the refcount field, and the type chains match the actual struct type hierarchy. The segment counts (including 'state') equal the number of types in the chains."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.fb.base.refcount.refcount",
+        "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.fence.refcount.refcount",
+        "drm_plane_state--dma_fence--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.commit.ref.refcount",
+        "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.fb_damage_clips.base.refcount.refcount",
+        "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations always succeed; retrying would cause double-release/use-after-free.",
+    "contract_summary": "This is a destruction helper that releases all reference-counted resources held by a drm_plane_state. It calls drm_framebuffer_put on the framebuffer, dma_fence_put on the fence, drm_crtc_commit_put on the commit, and drm_property_blob_put on the damage clips. After this function, the state's resources are no longer referenced and the caller should free the state itself (typically via kfree). The caller must not use any of the released objects after the call. This function is typically called from an atomic helper destructor or from a driver's destroy callback."
+  }
+}

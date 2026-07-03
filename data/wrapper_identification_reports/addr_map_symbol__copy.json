@@ -1,0 +1,143 @@
+{
+  "function_name": "addr_map_symbol__copy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "src.ms.thread.refcnt.refs",
+      "addr_map_symbol--map_symbol--thread--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "src.ms.map.refcnt.refs",
+      "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.thread.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.thread.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount increments are unconditional and always succeed (assuming valid source pointers); retry is irrelevant.",
+  "contract_summary": "This is a get-wrapper that performs a shallow copy of an addr_map_symbol, acquiring a reference to the source's thread and map via map_symbol__copy. The caller receives a new copy that holds its own references, and must eventually release these references (e.g., via a corresponding put function) when the copy is no longer needed. The function does not return errors; the copy is always valid if the source is valid. The scalar fields (addr, al_addr, etc.) are also copied, but the critical ownership transfer is the acquired references.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to copy an addr_map_symbol while incrementing refcounts on thread and map via map_symbol__copy; scalar copies are incidental and necessary for the copy to be useful.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount increments are unconditional and always succeed (assuming valid source pointers); retry is irrelevant.",
+      "contract_summary": "This is a get-wrapper that performs a shallow copy of an addr_map_symbol, acquiring a reference to the source's thread and map via map_symbol__copy. The caller receives a new copy that holds its own references, and must eventually release these references (e.g., via a corresponding put function) when the copy is no longer needed. The function does not return errors; the copy is always valid if the source is valid. The scalar fields (addr, al_addr, etc.) are also copied, but the critical ownership transfer is the acquired references."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.ms.thread.refcnt.refs",
+          "addr_map_symbol--map_symbol--thread--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.ms.map.refcnt.refs",
+          "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.ms.thread.refcnt.refs",
+          "addr_map_symbol--map_symbol--thread--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.ms.map.refcnt.refs",
+          "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The callee map_symbol__copy is a get for its second parameter (src). The access paths start from src (parameter index 2) and trace through ms (map_symbol) to thread.refcnt.refs and map.refcnt.refs respectively. The segment counts (5) match the type chain lengths (5). The types are consistent with the struct definitions. The function itself only calls the callee, so these operations correctly capture the refcount increments."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "src.ms.thread.refcnt.refs",
+        "addr_map_symbol--map_symbol--thread--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "src.ms.map.refcnt.refs",
+        "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount increments are unconditional and always succeed (assuming valid source pointers); retry is irrelevant.",
+    "contract_summary": "This is a get-wrapper that performs a shallow copy of an addr_map_symbol, acquiring a reference to the source's thread and map via map_symbol__copy. The caller receives a new copy that holds its own references, and must eventually release these references (e.g., via a corresponding put function) when the copy is no longer needed. The function does not return errors; the copy is always valid if the source is valid. The scalar fields (addr, al_addr, etc.) are also copied, but the critical ownership transfer is the acquired references."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__ns_ref_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ns.__ns_ref.refs",
+      "ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the namespace object is dying/dead (refcount zero). Retrying will not revive the object. For init ns, the path never fails.",
+  "contract_summary": "Conditional get-wrapper that acquires a reference on a namespace (`struct ns_common`). For the initial (init) namespace, the function always succeeds without actually incrementing any refcount because it is permanently alive. For other namespaces, it calls refcount_inc_not_zero to increment the reference count only if it is non-zero (i.e., the object is still alive). Returns true if the caller now holds a reference that must later be released with a corresponding put (e.g., __ns_ref_put). Returns false if the namespace is dead; the caller must not use the pointer after failure. The caller must check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a namespace object. VFS_WARN_ON_ONCE checks are debugging assertions, not core logic. The only substantive operation is refcount_inc_not_zero (or a no-op for init ns).",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the namespace object is dying/dead (refcount zero). Retrying will not revive the object. For init ns, the path never fails.",
+      "contract_summary": "Conditional get-wrapper that acquires a reference on a namespace (`struct ns_common`). For the initial (init) namespace, the function always succeeds without actually incrementing any refcount because it is permanently alive. For other namespaces, it calls refcount_inc_not_zero to increment the reference count only if it is non-zero (i.e., the object is still alive). Returns true if the caller now holds a reference that must later be released with a corresponding put (e.g., __ns_ref_put). Returns false if the namespace is dead; the caller must not use the pointer after failure. The caller must check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_inc_not_zero call on &ns->__ns_ref correctly acquires a reference on the ns object passed as parameter. The access path ns.__ns_ref.refs and type chain ns_common--refcount_t--atomic_t are consistent with the callee's member path r.refs and the struct definitions. The segment count (3 segments, 3 types) matches. The critical variable is parameter 1 (ns), as the refcount is taken on that object and the function returns success/failure."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ns.__ns_ref.refs",
+        "ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the namespace object is dying/dead (refcount zero). Retrying will not revive the object. For init ns, the path never fails.",
+    "contract_summary": "Conditional get-wrapper that acquires a reference on a namespace (`struct ns_common`). For the initial (init) namespace, the function always succeeds without actually incrementing any refcount because it is permanently alive. For other namespaces, it calls refcount_inc_not_zero to increment the reference count only if it is non-zero (i.e., the object is still alive). Returns true if the caller now holds a reference that must later be released with a corresponding put (e.g., __ns_ref_put). Returns false if the namespace is dead; the caller must not use the pointer after failure. The caller must check the return value."
+  }
+}

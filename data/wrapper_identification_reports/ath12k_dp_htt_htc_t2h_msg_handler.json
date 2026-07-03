@@ -1,0 +1,58 @@
+{
+  "function_name": "ath12k_dp_htt_htc_t2h_msg_handler",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the dev_kfree_skb_any is unconditional and always succeeds; retry is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to handle incoming HTT messages by dispatching to various sub-handlers based on message type. The call to dev_kfree_skb_any (a put) is only the final cleanup step, not the main business logic. The function does not acquire or return a reference-counted object; it consumes the skb.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the dev_kfree_skb_any is unconditional and always succeeds; retry is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the dev_kfree_skb_any is unconditional and always succeeds; retry is not applicable.",
+    "contract_summary": ""
+  }
+}

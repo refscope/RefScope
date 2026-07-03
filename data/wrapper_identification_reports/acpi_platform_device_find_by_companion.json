@@ -1,0 +1,99 @@
+{
+  "function_name": "acpi_platform_device_find_by_companion",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pdev.dev.kobj.kref.refcount",
+      "platform_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device_by_acpi_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device_by_acpi_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "bus_find_device_by_acpi_dev returns NULL when no device matches; retrying is unlikely to succeed unless the device becomes available later, and the function itself gives no indication of transient failure.",
+  "contract_summary": "Get-wrapper that looks up a platform_device by its ACPI companion and returns it with a reference count incremented (via bus_find_device_by_acpi_dev). The caller receives ownership of the reference and must drop it with put_device(dev) when done. If no matching device exists, returns NULL – the caller must check the return value. This represents an acquire operation at the device lifecycle stage. No locks or RCU requirements beyond what bus_find_device_by_acpi_dev imposes (it internally holds a lock).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely delegates to bus_find_device_by_acpi_dev (a get helper) and converts the result to a platform_device. Its only purpose is to acquire a reference on a platform_device matching the ACPI companion and return it to the caller.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "bus_find_device_by_acpi_dev returns NULL when no device matches; retrying is unlikely to succeed unless the device becomes available later, and the function itself gives no indication of transient failure.",
+      "contract_summary": "Get-wrapper that looks up a platform_device by its ACPI companion and returns it with a reference count incremented (via bus_find_device_by_acpi_dev). The caller receives ownership of the reference and must drop it with put_device(dev) when done. If no matching device exists, returns NULL – the caller must check the return value. This represents an acquire operation at the device lifecycle stage. No locks or RCU requirements beyond what bus_find_device_by_acpi_dev imposes (it internally holds a lock)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "platform_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "platform_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "bus_find_device_by_acpi_dev returns a device with incremented refcount (as per callee info), and the function casts it to platform_device via to_platform_device. The returned platform_device's embedded device is the same object, so the refcount operation applies to pdev.dev.kobj.kref.refcount. The access path and type chain are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pdev.dev.kobj.kref.refcount",
+        "platform_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "bus_find_device_by_acpi_dev returns NULL when no device matches; retrying is unlikely to succeed unless the device becomes available later, and the function itself gives no indication of transient failure.",
+    "contract_summary": "Get-wrapper that looks up a platform_device by its ACPI companion and returns it with a reference count incremented (via bus_find_device_by_acpi_dev). The caller receives ownership of the reference and must drop it with put_device(dev) when done. If no matching device exists, returns NULL – the caller must check the return value. This represents an acquire operation at the device lifecycle stage. No locks or RCU requirements beyond what bus_find_device_by_acpi_dev imposes (it internally holds a lock)."
+  }
+}

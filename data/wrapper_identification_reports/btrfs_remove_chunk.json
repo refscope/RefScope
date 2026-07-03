@@ -1,0 +1,58 @@
+{
+  "function_name": "btrfs_remove_chunk",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_chunk_map",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "map.refs.refs",
+      "member_type_chain": "btrfs_chunk_map--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_chunk_map",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "map.refs.refs",
+      "member_type_chain": "btrfs_chunk_map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — refcount operations are not the primary purpose.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is removal of a chunk from the filesystem, involving complex logic such as removing device extents, system chunk reservation, error handling, and transaction management. The get/put of the chunk map refcount is an incidental step, not the core purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — refcount operations are not the primary purpose.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — refcount operations are not the primary purpose.",
+    "contract_summary": ""
+  }
+}

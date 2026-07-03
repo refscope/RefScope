@@ -1,0 +1,99 @@
+{
+  "function_name": "_iommufd_object_undepend",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "obj_depended.users.refs",
+      "iommufd_object--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_dec is unconditional on the non-error path; no failure scenario to retry.",
+  "contract_summary": "Put wrapper that decrements the users refcount on obj_depended, indicating that the dependency relationship from obj_dependent to obj_depended is being removed. Includes a sanity check (WARN_ON) for same pointer or type mismatch. After this call, obj_depended's refcount is decreased; if it reaches zero, the object may be freed. The caller must ensure that obj_depended is no longer accessed after the put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on obj_depended via refcount_dec; minimal validation for sanity.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_dec is unconditional on the non-error path; no failure scenario to retry.",
+      "contract_summary": "Put wrapper that decrements the users refcount on obj_depended, indicating that the dependency relationship from obj_dependent to obj_depended is being removed. Includes a sanity check (WARN_ON) for same pointer or type mismatch. After this call, obj_depended's refcount is decreased; if it reaches zero, the object may be freed. The caller must ensure that obj_depended is no longer accessed after the put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "obj_depended.users.refs",
+          "iommufd_object--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "obj_depended.users.refs",
+          "iommufd_object--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec(&obj_depended->users) acts on parameter obj_depended (index 2). The access path obj_depended.users.refs and type chain iommufd_object--refcount_t--atomic_t correctly trace from the parameter through struct member to the atomic_t inside refcount_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "obj_depended.users.refs",
+        "iommufd_object--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_dec is unconditional on the non-error path; no failure scenario to retry.",
+    "contract_summary": "Put wrapper that decrements the users refcount on obj_depended, indicating that the dependency relationship from obj_dependent to obj_depended is being removed. Includes a sanity check (WARN_ON) for same pointer or type mismatch. After this call, obj_depended's refcount is decreased; if it reaches zero, the object may be freed. The caller must ensure that obj_depended is no longer accessed after the put."
+  }
+}

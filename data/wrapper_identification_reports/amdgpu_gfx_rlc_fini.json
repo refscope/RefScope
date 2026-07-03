@@ -1,0 +1,162 @@
+{
+  "function_name": "amdgpu_gfx_rlc_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.gfx.rlc.save_restore_obj[0].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.gfx.rlc.clear_state_obj[0].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.gfx.rlc.cp_table_obj[0].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final; retrying would lead to double-free. The NULL check prevents calling put on already-freed objects.",
+  "contract_summary": "This function releases the GPU buffer object references for the RLC save_restore, clear_state, and cp_table blocks. It is called during the teardown/cleanup phase of amdgpu_gfx_rlc. Each amdgpu_bo_free_kernel call decrements the buffer's refcount and frees the underlying memory if the refcount reaches zero. After this function returns, the caller must not access the freed buffer objects (adev->gfx.rlc.save_restore_obj, adev->gfx.rlc.clear_state_obj, adev->gfx.rlc.cp_table_obj) or their associated GPU addresses and CPU pointers. The buffer pointers are set to NULL by the callee, preventing use-after-free.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on RLC buffer objects (save_restore, clear_state, cp_table) by calling amdgpu_bo_free_kernel (a put function). No other business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final; retrying would lead to double-free. The NULL check prevents calling put on already-freed objects.",
+      "contract_summary": "This function releases the GPU buffer object references for the RLC save_restore, clear_state, and cp_table blocks. It is called during the teardown/cleanup phase of amdgpu_gfx_rlc. Each amdgpu_bo_free_kernel call decrements the buffer's refcount and frees the underlying memory if the refcount reaches zero. After this function returns, the caller must not access the freed buffer objects (adev->gfx.rlc.save_restore_obj, adev->gfx.rlc.clear_state_obj, adev->gfx.rlc.cp_table_obj) or their associated GPU addresses and CPU pointers. The buffer pointers are set to NULL by the callee, preventing use-after-free."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.rlc.save_restore_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.rlc.clear_state_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.rlc.cp_table_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path in each candidate includes extraneous leading segments (e.g., 'adev.gfx.rlc.') that are not part of the callee's specified path 'bo[0].tbo.base.refcount.refcount' and type chain 'amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t'. Segment count mismatch (8 vs 5) makes the paths inconsistent with callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.rlc.save_restore_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.rlc.clear_state_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.rlc.cp_table_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a high-purity put wrapper: it exclusively calls amdgpu_bo_free_kernel (a put operation) on three buffer objects. Although the candidate paths include the full caller context (adev.gfx.rlc.*), they correctly identify the refcount location and the type chain matches the callee specification. The check stage's rejection due to segment count mismatch is overly strict; the candidates are valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.gfx.rlc.save_restore_obj[0].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.gfx.rlc.clear_state_obj[0].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.gfx.rlc.cp_table_obj[0].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_gfx--amdgpu_rlc--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final; retrying would lead to double-free. The NULL check prevents calling put on already-freed objects.",
+    "contract_summary": "This function releases the GPU buffer object references for the RLC save_restore, clear_state, and cp_table blocks. It is called during the teardown/cleanup phase of amdgpu_gfx_rlc. Each amdgpu_bo_free_kernel call decrements the buffer's refcount and frees the underlying memory if the refcount reaches zero. After this function returns, the caller must not access the freed buffer objects (adev->gfx.rlc.save_restore_obj, adev->gfx.rlc.clear_state_obj, adev->gfx.rlc.cp_table_obj) or their associated GPU addresses and CPU pointers. The buffer pointers are set to NULL by the callee, preventing use-after-free."
+  }
+}

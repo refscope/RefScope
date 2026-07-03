@@ -1,0 +1,99 @@
+{
+  "function_name": "blkcg_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tsk.throttle_disk.part0.__dev.kobj.kref.refcount",
+      "task_struct--gendisk--hd_struct--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_disk",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "disk.part0.__dev.kobj.kref.refcount",
+      "member_type_chain": "gendisk--hd_struct--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_disk",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "disk.part0.__dev.kobj.kref.refcount",
+      "member_type_chain": "gendisk--hd_struct--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is unconditional when pointer is non-NULL; if pointer is NULL, no-op. Retry would either be redundant or cause double-free.",
+  "contract_summary": "This is a put wrapper that releases the kernel's reference on the disk stored in tsk->throttle_disk and clears the pointer to NULL to prevent use-after-free. It is called during task exit (blkcg_exit) to clean up the block I/O throttling disk reference. The caller must ensure that the task struct is valid and that no other concurrent access to throttle_disk occurs. After this function returns, the disk reference is released and the field is NULL, so the caller must not use the disk pointer again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on tsk->throttle_disk via put_disk and clear the pointer to NULL. No other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is unconditional when pointer is non-NULL; if pointer is NULL, no-op. Retry would either be redundant or cause double-free.",
+      "contract_summary": "This is a put wrapper that releases the kernel's reference on the disk stored in tsk->throttle_disk and clears the pointer to NULL to prevent use-after-free. It is called during task exit (blkcg_exit) to clean up the block I/O throttling disk reference. The caller must ensure that the task struct is valid and that no other concurrent access to throttle_disk occurs. After this function returns, the disk reference is released and the field is NULL, so the caller must not use the disk pointer again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.throttle_disk.part0.__dev.kobj.kref.refcount",
+          "task_struct--gendisk--hd_struct--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.throttle_disk.part0.__dev.kobj.kref.refcount",
+          "task_struct--gendisk--hd_struct--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_disk(tsk->throttle_disk) is called, where tsk->throttle_disk is a struct gendisk *. The callee info shows put_disk decrements the refcount at path part0.__dev.kobj.kref.refcount starting from the gendisk parameter. The extracted path starts from parameter 1 (tsk), goes through throttle_disk, then follows the callee's internal path. The segment counts match (7 each) and the type chain is consistent with kernel struct definitions. The operation is a put on the disk object referenced by tsk->throttle_disk."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tsk.throttle_disk.part0.__dev.kobj.kref.refcount",
+        "task_struct--gendisk--hd_struct--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is unconditional when pointer is non-NULL; if pointer is NULL, no-op. Retry would either be redundant or cause double-free.",
+    "contract_summary": "This is a put wrapper that releases the kernel's reference on the disk stored in tsk->throttle_disk and clears the pointer to NULL to prevent use-after-free. It is called during task exit (blkcg_exit) to clean up the block I/O throttling disk reference. The caller must ensure that the task struct is valid and that no other concurrent access to throttle_disk occurs. After this function returns, the disk reference is released and the field is NULL, so the caller must not use the disk pointer again."
+  }
+}

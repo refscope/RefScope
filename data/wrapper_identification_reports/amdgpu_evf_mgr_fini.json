@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_evf_mgr_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "evf_mgr.ev_fence.refcount.refcount",
+      "amdgpu_eviction_fence_mgr--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes and always succeeds; retrying would be meaningless and could cause a double-free.",
+  "contract_summary": "This is a put wrapper that releases a reference on the eviction fence stored in the eviction fence manager. It is called during teardown to decrement the fence's reference count. After this call, the fence pointer in evf_mgr must not be accessed again, as the put may trigger object destruction if the count reaches zero. The caller must ensure evf_mgr is valid and that no further reference (other than the one being released) exists.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call dma_fence_put on a member pointer, which decrements the reference count. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes and always succeeds; retrying would be meaningless and could cause a double-free.",
+      "contract_summary": "This is a put wrapper that releases a reference on the eviction fence stored in the eviction fence manager. It is called during teardown to decrement the fence's reference count. After this call, the fence pointer in evf_mgr must not be accessed again, as the put may trigger object destruction if the count reaches zero. The caller must ensure evf_mgr is valid and that no further reference (other than the one being released) exists."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "evf_mgr.ev_fence.refcount.refcount",
+          "amdgpu_eviction_fence_mgr--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "evf_mgr.ev_fence.refcount.refcount",
+          "amdgpu_eviction_fence_mgr--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "dma_fence_put is called on evf_mgr->ev_fence, which matches the callee's put operation on its parameter 1 (fence). The access path evf_mgr.ev_fence.refcount.refcount correctly traces from the function parameter to the refcount field, and the type chain amdgpu_eviction_fence_mgr--dma_fence--kref--refcount_t is consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "evf_mgr.ev_fence.refcount.refcount",
+        "amdgpu_eviction_fence_mgr--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes and always succeeds; retrying would be meaningless and could cause a double-free.",
+    "contract_summary": "This is a put wrapper that releases a reference on the eviction fence stored in the eviction fence manager. It is called during teardown to decrement the fence's reference count. After this call, the fence pointer in evf_mgr must not be accessed again, as the put may trigger object destruction if the count reaches zero. The caller must ensure evf_mgr is valid and that no further reference (other than the one being released) exists."
+  }
+}

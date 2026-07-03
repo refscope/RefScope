@@ -1,0 +1,74 @@
+{
+  "function_name": "async_xor_offs",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dmaengine_get_unmap_data",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "unmap.kref.refcount.refs",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dmaengine_unmap_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "unmap.kref.refcount",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dmaengine_get_unmap_data",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "unmap.kref.refcount.refs",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dmaengine_unmap_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "unmap.kref.refcount",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount operations are not the primary goal; if the DMA path fails (e.g., unmap allocation fails), the function falls back to synchronous execution, returning NULL. Retrying is not meaningful for refcount purposes.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of async_xor_offs is to perform an XOR operation (async via DMA or sync), not reference-count management. The dmaengine_get_unmap_data and dmaengine_unmap_put calls are incidental to manage the DMA mapping lifecycle, but the function's core logic involves checking alignment, mapping pages, and executing the actual XOR. The refcount operations are subordinate to the main task.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount operations are not the primary goal; if the DMA path fails (e.g., unmap allocation fails), the function falls back to synchronous execution, returning NULL. Retrying is not meaningful for refcount purposes.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount operations are not the primary goal; if the DMA path fails (e.g., unmap allocation fails), the function falls back to synchronous execution, returning NULL. Retrying is not meaningful for refcount purposes.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_transaction_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "btrfs_trans_handle_cachep",
+      "btrfs_trans_handle_cachep.refcount",
+      "kmem_cache--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kmem_cache_destroy is unconditional and should only be called once; calling it again would be a double-free bug, so retry has no meaning.",
+  "contract_summary": "This put wrapper releases the reference on the global slab cache btrfs_trans_handle_cachep used for transaction handles. It must be called exactly once during module shutdown. After this call, the cache is destroyed and must not be accessed. No return value or error handling is needed; the function is a simple release operation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call kmem_cache_destroy, which is a put operation on the global btrfs_trans_handle_cachep slab cache. There is no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kmem_cache_destroy is unconditional and should only be called once; calling it again would be a double-free bug, so retry has no meaning.",
+      "contract_summary": "This put wrapper releases the reference on the global slab cache btrfs_trans_handle_cachep used for transaction handles. It must be called exactly once during module shutdown. After this call, the cache is destroyed and must not be accessed. No return value or error handling is needed; the function is a simple release operation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "btrfs_trans_handle_cachep",
+          "btrfs_trans_handle_cachep.refcount",
+          "kmem_cache--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "btrfs_trans_handle_cachep",
+          "btrfs_trans_handle_cachep.refcount",
+          "kmem_cache--int"
+        ]
+      ],
+      "reason": "The code calls kmem_cache_destroy(btrfs_trans_handle_cachep), which is a put operation on the kmem_cache struct's refcount. The access path starts from the global variable btrfs_trans_handle_cachep, matching the callee's path 's.refcount' where s is parameter 1. The type chain 'kmem_cache--int' is consistent with the callee's first alternative."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "btrfs_trans_handle_cachep",
+        "btrfs_trans_handle_cachep.refcount",
+        "kmem_cache--int"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kmem_cache_destroy is unconditional and should only be called once; calling it again would be a double-free bug, so retry has no meaning.",
+    "contract_summary": "This put wrapper releases the reference on the global slab cache btrfs_trans_handle_cachep used for transaction handles. It must be called exactly once during module shutdown. After this call, the cache is destroyed and must not be accessed. No return value or error handling is needed; the function is a simple release operation."
+  }
+}

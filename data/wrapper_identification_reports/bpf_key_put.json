@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_key_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bkey.key.usage.refs",
+      "bpf_key--key--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper: retrying after a put would cause a double-put and use-after-free; operation is designed to be called once per object.",
+  "contract_summary": "Release wrapper for bpf_key objects. If bkey->has_ref is true, releases the underlying key reference via key_put. Subsequently frees the bpf_key structure. After this call, the caller must not use bkey or the key pointer. This function does not return a value; the caller must trust that it correctly releases ownership of the key reference and the bpf_key memory.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a key (via key_put) if the bpf_key holds one, then free the bpf_key structure. No other significant logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper: retrying after a put would cause a double-put and use-after-free; operation is designed to be called once per object.",
+      "contract_summary": "Release wrapper for bpf_key objects. If bkey->has_ref is true, releases the underlying key reference via key_put. Subsequently frees the bpf_key structure. After this call, the caller must not use bkey or the key pointer. This function does not return a value; the caller must trust that it correctly releases ownership of the key reference and the bpf_key memory."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bkey.key.usage.refs",
+          "bpf_key--key--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bkey.key.usage.refs",
+          "bpf_key--key--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "key_put(bkey->key) is called on bkey->key, which is a struct key. The access path from parameter 1 (bkey) to the refcount field is bkey.key.usage.refs, matching the type chain bpf_key--key--refcount_t--atomic_t. The segment counts are equal (4 each). The operation is conditional on bkey->has_ref, but the refcount variable path is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bkey.key.usage.refs",
+        "bpf_key--key--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper: retrying after a put would cause a double-put and use-after-free; operation is designed to be called once per object.",
+    "contract_summary": "Release wrapper for bpf_key objects. If bkey->has_ref is true, releases the underlying key reference via key_put. Subsequently frees the bpf_key structure. After this call, the caller must not use bkey or the key pointer. This function does not return a value; the caller must trust that it correctly releases ownership of the key reference and the bpf_key memory."
+  }
+}

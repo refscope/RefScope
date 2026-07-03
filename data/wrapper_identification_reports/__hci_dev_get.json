@@ -1,0 +1,99 @@
+{
+  "function_name": "__hci_dev_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hdev.dev.kobj.kref.refcount",
+      "hci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hci_dev_hold",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "d.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hci_dev_hold",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "d.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when no device with the given index exists; the condition is permanent — the caller cannot expect retrying to succeed unless the device is dynamically added, which is not the typical use case.",
+  "contract_summary": "This function acquires a reference on an hci_dev identified by its id. It returns a pointer to the device with an elevated refcount; the caller must release the reference with hci_dev_put when done. Optionally, if srcu_index is non-NULL, the function takes an SRCU read lock and returns its index; the caller must pair this with srcu_read_unlock. The function returns NULL if the index is invalid (<0) or no matching device is found. The caller must check the return value and must not use the device without a valid reference. This is a typical get-by-index wrapper that combines a lookup with a reference acquisition and optional SRCU protection.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an hci_dev by index, acquire a reference via hci_dev_hold, and optionally take an SRCU read lock. The list traversal and locking are necessary infrastructure for the get operation; no other business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when no device with the given index exists; the condition is permanent — the caller cannot expect retrying to succeed unless the device is dynamically added, which is not the typical use case.",
+      "contract_summary": "This function acquires a reference on an hci_dev identified by its id. It returns a pointer to the device with an elevated refcount; the caller must release the reference with hci_dev_put when done. Optionally, if srcu_index is non-NULL, the function takes an SRCU read lock and returns its index; the caller must pair this with srcu_read_unlock. The function returns NULL if the index is invalid (<0) or no matching device is found. The caller must check the return value and must not use the device without a valid reference. This is a typical get-by-index wrapper that combines a lookup with a reference acquisition and optional SRCU protection."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hdev.dev.kobj.kref.refcount",
+          "hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hdev.dev.kobj.kref.refcount",
+          "hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls hci_dev_hold(d) on the found hci_dev and returns the pointer via hdev. The access path from the return variable hdev through dev, kobj, kref to refcount matches the callee's reported path, and the type chain has equal segment count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hdev.dev.kobj.kref.refcount",
+        "hci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when no device with the given index exists; the condition is permanent — the caller cannot expect retrying to succeed unless the device is dynamically added, which is not the typical use case.",
+    "contract_summary": "This function acquires a reference on an hci_dev identified by its id. It returns a pointer to the device with an elevated refcount; the caller must release the reference with hci_dev_put when done. Optionally, if srcu_index is non-NULL, the function takes an SRCU read lock and returns its index; the caller must pair this with srcu_read_unlock. The function returns NULL if the index is invalid (<0) or no matching device is found. The caller must check the return value and must not use the device without a valid reference. This is a typical get-by-index wrapper that combines a lookup with a reference acquisition and optional SRCU protection."
+  }
+}

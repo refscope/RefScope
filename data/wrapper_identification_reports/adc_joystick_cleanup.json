@@ -1,0 +1,143 @@
+{
+  "function_name": "adc_joystick_cleanup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.channels.indio_dev.dev.kobj.kref.refcount",
+      "iio_cb_buffer--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.buffer.ref.refcount",
+      "iio_cb_buffer--iio_buffer--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "iio_channel_release_all_cb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cb_buff.channels.indio_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "iio_cb_buffer--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "iio_channel_release_all_cb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cb_buff.buffer.ref.refcount",
+      "member_type_chain": "iio_cb_buffer--iio_buffer--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "iio_channel_release_all_cb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cb_buff.channels.indio_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "iio_cb_buffer--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "iio_channel_release_all_cb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cb_buff.buffer.ref.refcount",
+      "member_type_chain": "iio_cb_buffer--iio_buffer--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is unconditional and always succeeds or fails permanently; retrying would risk double-release.",
+  "contract_summary": "Release wrapper: calls iio_channel_release_all_cb to release all allocated IIO channels associated with the callback buffer. The caller is obligated to have previously acquired those channels and must not use the data pointer after this cleanup. This function represents the teardown phase of the lifecycle. It is typically used as a devm_add_action_or_reset callback for automatic cleanup on device removal.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls iio_channel_release_all_cb, which is a put function for its argument. No other logic is present; it is a pure release wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is unconditional and always succeeds or fails permanently; retrying would risk double-release.",
+      "contract_summary": "Release wrapper: calls iio_channel_release_all_cb to release all allocated IIO channels associated with the callback buffer. The caller is obligated to have previously acquired those channels and must not use the data pointer after this cleanup. This function represents the teardown phase of the lifecycle. It is typically used as a devm_add_action_or_reset callback for automatic cleanup on device removal."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.channels.indio_dev.dev.kobj.kref.refcount",
+          "iio_cb_buffer--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.buffer.ref.refcount",
+          "iio_cb_buffer--iio_buffer--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.channels.indio_dev.dev.kobj.kref.refcount",
+          "iio_cb_buffer--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.buffer.ref.refcount",
+          "iio_cb_buffer--iio_buffer--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations match the callee information: iio_channel_release_all_cb is a put function for its parameter (data). The access paths and type chains are consistent with the struct definitions (iio_cb_buffer->channels->... and iio_cb_buffer->buffer->...). Segment counts match the type chain lengths."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.channels.indio_dev.dev.kobj.kref.refcount",
+        "iio_cb_buffer--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.buffer.ref.refcount",
+        "iio_cb_buffer--iio_buffer--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is unconditional and always succeeds or fails permanently; retrying would risk double-release.",
+    "contract_summary": "Release wrapper: calls iio_channel_release_all_cb to release all allocated IIO channels associated with the callback buffer. The caller is obligated to have previously acquired those channels and must not use the data pointer after this cleanup. This function represents the teardown phase of the lifecycle. It is typically used as a devm_add_action_or_reset callback for automatic cleanup on device removal."
+  }
+}

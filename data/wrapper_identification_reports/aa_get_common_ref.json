@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_get_common_ref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ref.count.refcount",
+      "aa_common_ref--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get is unconditional and never fails; no failure path exists.",
+  "contract_summary": "This is a simple get wrapper that acquires a reference on an aa_common_ref object by incrementing its kref count. The caller obtains a reference that must later be released with a corresponding put (e.g., kref_put). The operation is unconditional and always succeeds. This function is used to increase the reference count before using the object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function strictly calls kref_get on the count member to increment the reference count. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get is unconditional and never fails; no failure path exists.",
+      "contract_summary": "This is a simple get wrapper that acquires a reference on an aa_common_ref object by incrementing its kref count. The caller obtains a reference that must later be released with a corresponding put (e.g., kref_put). The operation is unconditional and always succeeds. This function is used to increase the reference count before using the object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.count.refcount",
+          "aa_common_ref--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.count.refcount",
+          "aa_common_ref--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&ref->count) increments ref->count.refcount. The access path from parameter 1 (ref) through count to refcount matches the callee's path. Type chain aa_common_ref--kref--refcount_t consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ref.count.refcount",
+        "aa_common_ref--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get is unconditional and never fails; no failure path exists.",
+    "contract_summary": "This is a simple get wrapper that acquires a reference on an aa_common_ref object by incrementing its kref count. The caller obtains a reference that must later be released with a corresponding put (e.g., kref_put). The operation is unconditional and always succeeds. This function is used to increase the reference count before using the object."
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "function_name": "bpf_tracing_link_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tr_link.trampoline.refcnt.refs",
+      "bpf_tracing_link--bpf_trampoline--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tr_link.tgt_prog.aux.refcnt",
+      "bpf_tracing_link--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    },
+    {
+      "callee_function_name": "bpf_trampoline_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tr.refcnt.refs",
+      "member_type_chain": "bpf_trampoline--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    },
+    {
+      "callee_function_name": "bpf_trampoline_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tr.refcnt.refs",
+      "member_type_chain": "bpf_trampoline--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and do not fail; retrying would cause a double-release or use-after-free.",
+  "contract_summary": "Release wrapper for a bpf_tracing_link. Unlinks the program from the trampoline and drops the reference on the trampoline (via bpf_trampoline_put) and, if present, on the target program (via bpf_prog_put). Must be called exactly once when the link is destroyed. After this call, the link object is invalid and must not be reused. The function does not return a value; any failure in unlinking triggers a warning but does not prevent the refcount operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on the trampoline and target program; minimal non-refcount logic (unlink) is part of the release contract.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and do not fail; retrying would cause a double-release or use-after-free.",
+      "contract_summary": "Release wrapper for a bpf_tracing_link. Unlinks the program from the trampoline and drops the reference on the trampoline (via bpf_trampoline_put) and, if present, on the target program (via bpf_prog_put). Must be called exactly once when the link is destroyed. After this call, the link object is invalid and must not be reused. The function does not return a value; any failure in unlinking triggers a warning but does not prevent the refcount operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tr_link.trampoline.refcnt.refs",
+          "bpf_tracing_link--bpf_trampoline--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tr_link.tgt_prog.aux.refcnt",
+          "bpf_tracing_link--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Both operations start from 'tr_link', a local variable derived via container_of, not from the function parameter 'link' (which is the only interface variable). According to the rules, the access path must start from the critical variable at the function interface (the parameter when the operation is on a derived object). Since the path does not begin with the parameter name, it is invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tr_link.trampoline.refcnt.refs",
+          "bpf_tracing_link--bpf_trampoline--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tr_link.tgt_prog.aux.refcnt",
+          "bpf_tracing_link--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The function is a clear release wrapper: it puts the trampoline reference and optionally the tgt_prog reference. tr_link is derived from the parameter 'link' via container_of, a ubiquitous kernel pattern. The check's rejection on path origin is overly strict; the operations correctly identify the refcount members being decremented. The function has no other side effects, so purity is high."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tr_link.trampoline.refcnt.refs",
+        "bpf_tracing_link--bpf_trampoline--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tr_link.tgt_prog.aux.refcnt",
+        "bpf_tracing_link--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and do not fail; retrying would cause a double-release or use-after-free.",
+    "contract_summary": "Release wrapper for a bpf_tracing_link. Unlinks the program from the trampoline and drops the reference on the trampoline (via bpf_trampoline_put) and, if present, on the target program (via bpf_prog_put). Must be called exactly once when the link is destroyed. After this call, the link object is invalid and must not be reused. The function does not return a value; any failure in unlinking triggers a warning but does not prevent the refcount operations."
+  }
+}

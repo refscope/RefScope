@@ -1,0 +1,231 @@
+{
+  "function_name": "__memcpy_irq_work",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "copy_work",
+      "copy_work.arg.src_rsgt.kref.refcount",
+      "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "copy_work",
+      "copy_work.arg.dst_rsgt.kref.refcount",
+      "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "copy_work",
+      "copy_work.obj.base.refcount.refcount",
+      "i915_ttm_memcpy_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "copy_work",
+      "copy_work.fence.refcount.refcount",
+      "i915_ttm_memcpy_work--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_ttm_memcpy_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "arg.dst_rsgt.kref.refcount",
+      "member_type_chain": "i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_ttm_memcpy_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "arg.src_rsgt.kref.refcount",
+      "member_type_chain": "i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_ttm_memcpy_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "arg.dst_rsgt.kref.refcount",
+      "member_type_chain": "i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_ttm_memcpy_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "arg.src_rsgt.kref.refcount",
+      "member_type_chain": "i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a one-time cleanup; retrying would cause double-put and use-after-free. It always executes all puts unconditionally.",
+  "contract_summary": "Put-wrapper that releases references on a i915_ttm_memcpy_arg (via i915_ttm_memcpy_release, which puts its src and dst refcounted sgts), a drm_i915_gem_object (via i915_gem_object_put), and a dma_fence (via dma_fence_put), after signaling the fence. This function is executed as an irq_work callback, typically after a memcpy operation completes. It is a one-time cleanup: after calling, all referenced objects are released and must not be used again. No further puts should be called on these objects. The caller must ensure that the irq_work is scheduled appropriately and that the objects are valid before this callback runs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release multiple reference-counted objects (i915_ttm_memcpy_arg's sgts, i915_gem_object, dma_fence) after signaling the fence. All operations are refcount put or fence lifecycle; no significant non-refcount logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a one-time cleanup; retrying would cause double-put and use-after-free. It always executes all puts unconditionally.",
+      "contract_summary": "Put-wrapper that releases references on a i915_ttm_memcpy_arg (via i915_ttm_memcpy_release, which puts its src and dst refcounted sgts), a drm_i915_gem_object (via i915_gem_object_put), and a dma_fence (via dma_fence_put), after signaling the fence. This function is executed as an irq_work callback, typically after a memcpy operation completes. It is a one-time cleanup: after calling, all referenced objects are released and must not be used again. No further puts should be called on these objects. The caller must ensure that the irq_work is scheduled appropriately and that the objects are valid before this callback runs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.arg.src_rsgt.kref.refcount",
+          "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.arg.dst_rsgt.kref.refcount",
+          "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.obj.base.refcount.refcount",
+          "i915_ttm_memcpy_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.fence.refcount.refcount",
+          "i915_ttm_memcpy_work--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.arg.src_rsgt.kref.refcount",
+          "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.arg.dst_rsgt.kref.refcount",
+          "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.obj.base.refcount.refcount",
+          "i915_ttm_memcpy_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "copy_work",
+          "copy_work.fence.refcount.refcount",
+          "i915_ttm_memcpy_work--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "All four operations are correct: i915_ttm_memcpy_release puts both src_rsgt and dst_rsgt; i915_gem_object_put puts the obj; dma_fence_put puts the fence. The access paths start from copy_work (the container of the irq_work parameter) and match the type chains and segment counts from callee info. The location is global because the refcounted objects are not passed or returned from the function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "copy_work",
+        "copy_work.arg.src_rsgt.kref.refcount",
+        "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "copy_work",
+        "copy_work.arg.dst_rsgt.kref.refcount",
+        "i915_ttm_memcpy_work--i915_ttm_memcpy_arg--i915_refct_sgt--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "copy_work",
+        "copy_work.obj.base.refcount.refcount",
+        "i915_ttm_memcpy_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "copy_work",
+        "copy_work.fence.refcount.refcount",
+        "i915_ttm_memcpy_work--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a one-time cleanup; retrying would cause double-put and use-after-free. It always executes all puts unconditionally.",
+    "contract_summary": "Put-wrapper that releases references on a i915_ttm_memcpy_arg (via i915_ttm_memcpy_release, which puts its src and dst refcounted sgts), a drm_i915_gem_object (via i915_gem_object_put), and a dma_fence (via dma_fence_put), after signaling the fence. This function is executed as an irq_work callback, typically after a memcpy operation completes. It is a one-time cleanup: after calling, all referenced objects are released and must not be used again. No further puts should be called on these objects. The caller must ensure that the irq_work is scheduled appropriately and that the objects are valid before this callback runs."
+  }
+}

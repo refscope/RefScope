@@ -1,0 +1,70 @@
+{
+  "function_name": "__reset_control_bulk_get",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "reset_control_put_internal",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rstc.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "reset_control_put_internal",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rstc.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure may be due to probe deferral (-EPROBE_DEFER); caller should retry after the device is ready.",
+  "contract_summary": "Bulk get wrapper: acquires N reset control references (via __reset_control_get) and stores them in the rstcs array. Each reference increments the underlying refcount. On success, the caller owns all N references and must release each with a corresponding reset_control_put (or use reset_control_bulk_put). On failure (any individual get fails), the function rolls back by calling reset_control_put_internal on any already-acquired controls and returns an error. The caller must check the return value and handle errors appropriately (e.g., retry on -EPROBE_DEFER). The caller must not access the rstc pointers if the function fails.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire multiple reset control references via __reset_control_get and store them in the caller-provided array. The only non-refcount logic is the loop and error rollback.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure may be due to probe deferral (-EPROBE_DEFER); caller should retry after the device is ready.",
+      "contract_summary": "Bulk get wrapper: acquires N reset control references (via __reset_control_get) and stores them in the rstcs array. Each reference increments the underlying refcount. On success, the caller owns all N references and must release each with a corresponding reset_control_put (or use reset_control_bulk_put). On failure (any individual get fails), the function rolls back by calling reset_control_put_internal on any already-acquired controls and returns an error. The caller must check the return value and handle errors appropriately (e.g., retry on -EPROBE_DEFER). The caller must not access the rstc pointers if the function fails."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "__fwnode_reset_control_get"
+      ],
+      "reason": "Need __fwnode_reset_control_get implementation to trace how it increments the refcount on the reset control object, and to determine the member access path from the return value to the refcount field."
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function __reset_control_bulk_get calls __reset_control_get (get operation) and reset_control_put_internal (put operation) on the reset_control objects, but the candidate ResultList is empty. These operations should be extracted, so the list is inconsistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure may be due to probe deferral (-EPROBE_DEFER); caller should retry after the device is ready.",
+    "contract_summary": "Bulk get wrapper: acquires N reset control references (via __reset_control_get) and stores them in the rstcs array. Each reference increments the underlying refcount. On success, the caller owns all N references and must release each with a corresponding reset_control_put (or use reset_control_bulk_put). On failure (any individual get fails), the function rolls back by calling reset_control_put_internal on any already-acquired controls and returns an error. The caller must check the return value and handle errors appropriately (e.g., retry on -EPROBE_DEFER). The caller must not access the rstc pointers if the function fails."
+  }
+}

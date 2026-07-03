@@ -1,0 +1,115 @@
+{
+  "function_name": "auth_domain_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hp.ref.refcount.refs",
+      "auth_domain--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails when the refcount is zero (object is being destroyed). Once zero, the object is gone and cannot be revived, so retrying is pointless.",
+  "contract_summary": "RCU-protected get-wrapper that looks up an auth_domain by name in a hash table and returns it with an elevated reference count. If the domain is not found or is in the process of being destroyed (refcount zero), returns NULL. The caller must check the return value and must call auth_domain_put() to release the reference when done. The RCU lock is only held during the lookup and get operation; after returning, the object can be safely accessed due to the acquired reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an auth_domain by name and conditionally acquire a reference via kref_get_unless_zero. The only non-refcount logic is the hash lookup and string comparison, which are necessary to find the object to reference.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails when the refcount is zero (object is being destroyed). Once zero, the object is gone and cannot be revived, so retrying is pointless.",
+      "contract_summary": "RCU-protected get-wrapper that looks up an auth_domain by name in a hash table and returns it with an elevated reference count. If the domain is not found or is in the process of being destroyed (refcount zero), returns NULL. The caller must check the return value and must call auth_domain_put() to release the reference when done. The RCU lock is only held during the lookup and get operation; after returning, the object can be safely accessed due to the acquired reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hp.ref.refcount.refs",
+          "auth_domain--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hp.ref.refcount.refs",
+          "auth_domain--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero(&hp->ref) on the found auth_domain increments refcount; hp is returned on success. Access path hp.ref.refcount.refs (auth_domain->kref->refcount_t->atomic_t) matches callee info and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hp.ref.refcount.refs",
+        "auth_domain--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails when the refcount is zero (object is being destroyed). Once zero, the object is gone and cannot be revived, so retrying is pointless.",
+    "contract_summary": "RCU-protected get-wrapper that looks up an auth_domain by name in a hash table and returns it with an elevated reference count. If the domain is not found or is in the process of being destroyed (refcount zero), returns NULL. The caller must check the return value and must call auth_domain_put() to release the reference when done. The RCU lock is only held during the lookup and get operation; after returning, the object can be safely accessed due to the acquired reference."
+  }
+}

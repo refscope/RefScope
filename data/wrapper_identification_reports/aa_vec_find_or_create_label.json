@@ -1,0 +1,154 @@
+{
+  "function_name": "aa_vec_find_or_create_label",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "vec_create_and_insert_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return_value.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "vec_create_and_insert_label",
+      "get_or_put": "put",
+      "index": "new",
+      "location": "global",
+      "member_access_path": "new.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "vec_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "vec_create_and_insert_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "vec_create_and_insert_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return_value.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "vec_create_and_insert_label",
+      "get_or_put": "put",
+      "index": "new",
+      "location": "global",
+      "member_access_path": "new.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "vec_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "vec_create_and_insert_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If vec_find returns NULL (label not found), creation is attempted. If creation fails with NULL (ENOMEM), the failure is a memory allocation error; retrying without freeing memory is unlikely to succeed, so caller should not retry via this wrapper.",
+  "contract_summary": "Get-or-create wrapper that either acquires a reference on an existing aa_label (via vec_find, which increments its refcount) or creates a new aa_label (via vec_create_and_insert_label, which initializes the refcount to 1) and returns it with one reference held. The caller assumes ownership of the returned label and must later release it with a corresponding aa_label_put (or similar). On allocation failure during creation, the wrapper returns NULL; the caller must check the return value and handle appropriately. No further retry is provided; the caller should treat a NULL return as an unrecoverable allocation failure in the current context.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to return an aa_label with a reference acquired: either get an existing one via vec_find (which does a get) or create a new one via vec_create_and_insert_label (which does a get on creation). No other meaningful logic beyond the conditional branch and delegation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If vec_find returns NULL (label not found), creation is attempted. If creation fails with NULL (ENOMEM), the failure is a memory allocation error; retrying without freeing memory is unlikely to succeed, so caller should not retry via this wrapper.",
+      "contract_summary": "Get-or-create wrapper that either acquires a reference on an existing aa_label (via vec_find, which increments its refcount) or creates a new aa_label (via vec_create_and_insert_label, which initializes the refcount to 1) and returns it with one reference held. The caller assumes ownership of the returned label and must later release it with a corresponding aa_label_put (or similar). On allocation failure during creation, the wrapper returns NULL; the caller must check the return value and handle appropriately. No further retry is provided; the caller should treat a NULL return as an unrecoverable allocation failure in the current context."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function returns from two different callees (vec_find and vec_create_and_insert_label) with different refcount access paths: vec_find uses 'label.count.refcount' (aa_label--kref--refcount_t) while vec_create_and_insert_label uses 'label.count.count.refcount' (aa_label--aa_count--kref--refcount_t). The candidate operation only covers the latter path, but the function's return value does not always have that path, making the extracted operation inconsistent with the full function behavior."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function aa_vec_find_or_create_label is a get-or-create wrapper for aa_label. Both callees (vec_find and vec_create_and_insert_label) return an aa_label* with an incremented reference count. The path discrepancy between the callees is an internal implementation detail; the candidate 'get' on the return value correctly captures the wrapper's semantics. The function has high purity with no side logic, and the critical variable (the label) is passed to the caller via the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If vec_find returns NULL (label not found), creation is attempted. If creation fails with NULL (ENOMEM), the failure is a memory allocation error; retrying without freeing memory is unlikely to succeed, so caller should not retry via this wrapper.",
+    "contract_summary": "Get-or-create wrapper that either acquires a reference on an existing aa_label (via vec_find, which increments its refcount) or creates a new aa_label (via vec_create_and_insert_label, which initializes the refcount to 1) and returns it with one reference held. The caller assumes ownership of the returned label and must later release it with a corresponding aa_label_put (or similar). On allocation failure during creation, the wrapper returns NULL; the caller must check the return value and handle appropriately. No further retry is provided; the caller should treat a NULL return as an unrecoverable allocation failure in the current context."
+  }
+}

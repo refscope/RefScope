@@ -1,0 +1,90 @@
+{
+  "function_name": "_find_onboard_dev",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_device_by_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_device_by_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; retry analysis is not applicable because the function does not manage the returned object's refcount.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is device lookup (finding onboard_dev via of_node and platform device drvdata). Refcount operations (get/put on intermediate platform device and device_node) are only temporary housekeeping, not the main function.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; retry analysis is not applicable because the function does not manage the returned object's refcount.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; retry analysis is not applicable because the function does not manage the returned object's refcount.",
+    "contract_summary": ""
+  }
+}

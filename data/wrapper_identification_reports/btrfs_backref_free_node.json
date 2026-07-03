@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_backref_free_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "node.root.refs.refs",
+      "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_put_root",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_put_root",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is a put with no failure path; if node is NULL it is a no-op, otherwise it always succeeds and cannot be retried.",
+  "contract_summary": "This function releases the reference held by a backref_node to its associated btrfs_root and frees the node. It must only be called when the node's list and lower list are empty and its eb is NULL. After this call, the node pointer is invalid and must not be used. The root's refcount is decremented, which may trigger its own cleanup if the refcount reaches zero.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to the root via btrfs_put_root and free the backref_node. The only non-refcount logic is assertions and decrementing a counter, which are negligible.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is a put with no failure path; if node is NULL it is a no-op, otherwise it always succeeds and cannot be retried.",
+      "contract_summary": "This function releases the reference held by a backref_node to its associated btrfs_root and frees the node. It must only be called when the node's list and lower list are empty and its eb is NULL. After this call, the node pointer is invalid and must not be used. The root's refcount is decremented, which may trigger its own cleanup if the refcount reaches zero."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "node.root.refs.refs",
+          "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "node.root.refs.refs",
+          "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The access path node.root.refs.refs correctly starts from parameter 2 (node) and matches the callee btrfs_put_root's path root.refs.refs. The type chain and segment count are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "node.root.refs.refs",
+        "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is a put with no failure path; if node is NULL it is a no-op, otherwise it always succeeds and cannot be retried.",
+    "contract_summary": "This function releases the reference held by a backref_node to its associated btrfs_root and frees the node. It must only be called when the node's list and lower list are empty and its eb is NULL. After this call, the node pointer is invalid and must not be used. The root's refcount is decremented, which may trigger its own cleanup if the refcount reaches zero."
+  }
+}

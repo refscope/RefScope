@@ -1,0 +1,90 @@
+{
+  "function_name": "acm_probe",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tty_port_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "port.kref.refcount",
+      "member_type_chain": "tty_port--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "usb_get_intf",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "intf.dev.kobj.kref.refcount",
+      "member_type_chain": "usb_interface--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tty_port_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "port.kref.refcount",
+      "member_type_chain": "tty_port--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "usb_get_intf",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "intf.dev.kobj.kref.refcount",
+      "member_type_chain": "usb_interface--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no retry semantics applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a USB device probe callback that performs extensive initialization: parsing CDC descriptors, allocating the acm structure, setting up URBs, creating device files, and registering a TTY device. The only refcount operation is a single usb_get_intf call, which is a minor incidental step within the broader probe logic. The primary purpose is device initialization, not reference-count management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no retry semantics applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no retry semantics applicable.",
+    "contract_summary": ""
+  }
+}

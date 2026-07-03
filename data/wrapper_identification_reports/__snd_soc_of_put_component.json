@@ -1,0 +1,99 @@
+{
+  "function_name": "__snd_soc_of_put_component",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "component.of_node.kobj.kref.refcount",
+      "snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If of_node is NULL, there is nothing to release; retrying would be redundant and pointless.",
+  "contract_summary": "This function releases a reference to a device_node held in a snd_soc_dai_link_component. It is a put wrapper that decrements the refcount of component->of_node via of_node_put, and then sets the pointer to NULL to prevent dangling references. The caller must have previously acquired a valid reference to the of_node (e.g., via of_node_get or from a device tree lookup). After this call, the caller must not use the component->of_node pointer. This function does not return a value and only acts if the pointer is non-NULL. It is typically used for cleanup in error paths or during release.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function is a conditional put wrapper: it releases a reference to component->of_node via of_node_put and nullifies the pointer. No other business logic exists.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If of_node is NULL, there is nothing to release; retrying would be redundant and pointless.",
+      "contract_summary": "This function releases a reference to a device_node held in a snd_soc_dai_link_component. It is a put wrapper that decrements the refcount of component->of_node via of_node_put, and then sets the pointer to NULL to prevent dangling references. The caller must have previously acquired a valid reference to the of_node (e.g., via of_node_get or from a device tree lookup). After this call, the caller must not use the component->of_node pointer. This function does not return a value and only acts if the pointer is non-NULL. It is typically used for cleanup in error paths or during release."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "component.of_node.kobj.kref.refcount",
+          "snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "component.of_node.kobj.kref.refcount",
+          "snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls of_node_put(component->of_node). The callee info indicates of_node_put accesses node.kobj.kref.refcount. The candidate's access path component.of_node.kobj.kref.refcount correctly traces from parameter 1 (component) through its of_node field, consistent with the callee's internal path. The type chain matches the struct declarations: snd_soc_dai_link_component contains device_node *, which has kobj (kobject), which has kref, containing refcount_t. The segment counts are equal (5 each). Therefore the extraction is supported and consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "component.of_node.kobj.kref.refcount",
+        "snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If of_node is NULL, there is nothing to release; retrying would be redundant and pointless.",
+    "contract_summary": "This function releases a reference to a device_node held in a snd_soc_dai_link_component. It is a put wrapper that decrements the refcount of component->of_node via of_node_put, and then sets the pointer to NULL to prevent dangling references. The caller must have previously acquired a valid reference to the of_node (e.g., via of_node_get or from a device tree lookup). After this call, the caller must not use the component->of_node pointer. This function does not return a value and only acts if the pointer is non-NULL. It is typically used for cleanup in error paths or during release."
+  }
+}

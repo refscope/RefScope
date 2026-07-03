@@ -1,0 +1,99 @@
+{
+  "function_name": "__mlx5_tc_ct_delete_flow",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "attr.ct_attr.ft.refcount.refs",
+      "mlx5_flow_attr--mlx5_ct_attr--mlx5_ct_ft--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mlx5_tc_ct_del_ft_cb",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "ft.refcount.refs",
+      "member_type_chain": "mlx5_ct_ft--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mlx5_tc_ct_del_ft_cb",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "ft.refcount.refs",
+      "member_type_chain": "mlx5_ct_ft--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations should always succeed if refcounts are properly managed; failure indicates a use-after-free or double-free bug, so retry is not meaningful.",
+  "contract_summary": "Put wrapper for deleting a CT flow: decrements refcounts on the associated action miss mapping (via mlx5e_tc_action_miss_mapping_put) and the flow table (via mlx5_tc_ct_del_ft_cb). This function is the release side of the reference-count lifecycle for these objects. It must be called exactly once per flow deletion, after the flow is no longer in use. The caller must ensure that the objects are still alive and that no other concurrent puts are racing. After this function completes, the flow's resources are released and must not be used again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on two refcounted objects (action miss mapping and flow table) via put operations; no other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations should always succeed if refcounts are properly managed; failure indicates a use-after-free or double-free bug, so retry is not meaningful.",
+      "contract_summary": "Put wrapper for deleting a CT flow: decrements refcounts on the associated action miss mapping (via mlx5e_tc_action_miss_mapping_put) and the flow table (via mlx5_tc_ct_del_ft_cb). This function is the release side of the reference-count lifecycle for these objects. It must be called exactly once per flow deletion, after the flow is no longer in use. The caller must ensure that the objects are still alive and that no other concurrent puts are racing. After this function completes, the flow's resources are released and must not be used again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "attr.ct_attr.ft.refcount.refs",
+          "mlx5_flow_attr--mlx5_ct_attr--mlx5_ct_ft--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "attr.ct_attr.ft.refcount.refs",
+          "mlx5_flow_attr--mlx5_ct_attr--mlx5_ct_ft--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The call to mlx5_tc_ct_del_ft_cb passes attr->ct_attr.ft as the second argument. The callee info indicates this is a put on its parameter index 2 with access path ft.refcount.refs. The candidate operation correctly captures this as a put on parameter 2 (attr) of the current function with the chain attr.ct_attr.ft.refcount.refs. The access path segment count (5) matches the type chain length (5), and the types are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "attr.ct_attr.ft.refcount.refs",
+        "mlx5_flow_attr--mlx5_ct_attr--mlx5_ct_ft--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations should always succeed if refcounts are properly managed; failure indicates a use-after-free or double-free bug, so retry is not meaningful.",
+    "contract_summary": "Put wrapper for deleting a CT flow: decrements refcounts on the associated action miss mapping (via mlx5e_tc_action_miss_mapping_put) and the flow table (via mlx5_tc_ct_del_ft_cb). This function is the release side of the reference-count lifecycle for these objects. It must be called exactly once per flow deletion, after the flow is no longer in use. The caller must ensure that the objects are still alive and that no other concurrent puts are racing. After this function completes, the flow's resources are released and must not be used again."
+  }
+}

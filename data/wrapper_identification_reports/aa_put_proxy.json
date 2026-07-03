@@ -1,0 +1,78 @@
+{
+  "function_name": "aa_put_proxy",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put releases a reference; if the refcount was already zero, calling again would cause use-after-free; retry is never appropriate.",
+  "contract_summary": "This is a put wrapper that releases a reference on an aa_proxy object. It safely handles a NULL proxy argument as a no-op. After this call, the caller must not use the proxy object unless it holds another valid reference. It is typically paired with aa_get_proxy (or object allocation) that established the initial reference. This function does not transfer ownership; it releases the caller's own reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the kref reference count of an aa_proxy via kref_put. No other business logic is present (only a NULL guard).",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put releases a reference; if the refcount was already zero, calling again would cause use-after-free; retry is never appropriate.",
+      "contract_summary": "This is a put wrapper that releases a reference on an aa_proxy object. It safely handles a NULL proxy argument as a no-op. After this call, the caller must not use the proxy object unless it holds another valid reference. It is typically paired with aa_get_proxy (or object allocation) that established the initial reference. This function does not transfer ownership; it releases the caller's own reference."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "struct aa_proxy"
+      ],
+      "reason": "Need the definition of struct aa_proxy to determine the type of the intermediate field 'count' that contains the kref, in order to complete the type chain (aa_proxy -> intermediate_type -> kref -> refcount_t). Without it, the member_type_chain cannot be accurately constructed."
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function aa_put_proxy performs a put operation via kref_put(&proxy->count.count, ...), but no reference-count operations were extracted in the candidate list. The extraction is incomplete; a valid put operation on parameter 1 with access path count.count.refcount should be present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put releases a reference; if the refcount was already zero, calling again would cause use-after-free; retry is never appropriate.",
+    "contract_summary": "This is a put wrapper that releases a reference on an aa_proxy object. It safely handles a NULL proxy argument as a no-op. After this call, the caller must not use the proxy object unless it holds another valid reference. It is typically paired with aa_get_proxy (or object allocation) that established the initial reference. This function does not transfer ownership; it releases the caller's own reference."
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "function_name": "apparmor_file_alloc_security",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "begin_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "begin_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation always succeeds (aa_get_label is unconditional); no failure path exists, so retry is never needed.",
+  "contract_summary": "Initializes the file's security context by obtaining a reference to the current task's AppArmor label (via aa_get_label) and storing it in ctx->label. This is a set-wrapper that establishes the initial reference for the file's label lifetime. The function always succeeds (returns 0) and does not transfer ownership to the caller; the stored reference is internal to the file. The caller must ensure that when the file is freed, the corresponding label reference is released (e.g., by apparmor_file_free_security). No error handling needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference (via aa_get_label) to the current task's label and store it in the file context. The only non-refcount operations are spinlock init and rcu_assign_pointer, which are minimal setup. No other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation always succeeds (aa_get_label is unconditional); no failure path exists, so retry is never needed.",
+      "contract_summary": "Initializes the file's security context by obtaining a reference to the current task's AppArmor label (via aa_get_label) and storing it in ctx->label. This is a set-wrapper that establishes the initial reference for the file's label lifetime. The function always succeeds (returns 0) and does not transfer ownership to the caller; the stored reference is internal to the file. The caller must ensure that when the file is freed, the corresponding label reference is released (e.g., by apparmor_file_free_security). No error handling needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "Only the operation corresponding to begin_current_label_crit_section (put on return) has consistent location (return index 0) and path/chain. The other two operations claim return index 0 but correspond to aa_get_label (get on parameter) and end_current_label_crit_section (put on parameter), which have incorrect location (should be parameter index 1) and/or path mismatch."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation always succeeds (aa_get_label is unconditional); no failure path exists, so retry is never needed.",
+    "contract_summary": "Initializes the file's security context by obtaining a reference to the current task's AppArmor label (via aa_get_label) and storing it in ctx->label. This is a set-wrapper that establishes the initial reference for the file's label lifetime. The function always succeeds (returns 0) and does not transfer ownership to the caller; the stored reference is internal to the file. The caller must ensure that when the file is freed, the corresponding label reference is released (e.g., by apparmor_file_free_security). No error handling needed."
+  }
+}

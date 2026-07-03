@@ -1,0 +1,154 @@
+{
+  "function_name": "__pci_get_subsys",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pdev.dev.kobj.kref.refcount",
+      "pci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pci_get_dev_by_id_reverse",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_dev_by_id_reverse",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "from.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_dev_by_id",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "from.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_dev_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pci_get_dev_by_id_reverse",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_dev_by_id_reverse",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "from.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_dev_by_id",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "from.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "pci_get_dev_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) indicates no matching device exists; under the same conditions, retrying will also fail unless a device is hotplugged. Not a transient refcount failure.",
+  "contract_summary": "This is a get-wrapper that returns a PCI device matching the provided vendor, device, subsystem vendor, and subsystem device IDs. The caller receives a pointer to a pci_dev with an incremented reference count if a matching device exists; otherwise NULL is returned. The caller must ensure a corresponding pci_dev_put() call when done with the device. The wrapper supports both forward (starting from a given 'from' device) and reverse search directions. The 'from' parameter is consumed (its reference is released) if non-NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to construct a pci_device_id and call a get-function to obtain a PCI device reference with an incremented refcount. No other business logic exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) indicates no matching device exists; under the same conditions, retrying will also fail unless a device is hotplugged. Not a transient refcount failure.",
+      "contract_summary": "This is a get-wrapper that returns a PCI device matching the provided vendor, device, subsystem vendor, and subsystem device IDs. The caller receives a pointer to a pci_dev with an incremented reference count if a matching device exists; otherwise NULL is returned. The caller must ensure a corresponding pci_dev_put() call when done with the device. The wrapper supports both forward (starting from a given 'from' device) and reverse search directions. The 'from' parameter is consumed (its reference is released) if non-NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "5",
+          "from.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get operation on return index 0 is correct: both callees (pci_get_dev_by_id and pci_get_dev_by_id_reverse) increment the refcount on the returned pci_dev, and the access path pdev.dev.kobj.kref.refcount matches the type chain pci_dev--device--kobject--kref--refcount_t with equal segment counts. The put operation is rejected because the parameter index is wrong: candidate specifies index 5 but the actual parameter 'from' is at index 4; thus the operation is unsupported."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pdev.dev.kobj.kref.refcount",
+        "pci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) indicates no matching device exists; under the same conditions, retrying will also fail unless a device is hotplugged. Not a transient refcount failure.",
+    "contract_summary": "This is a get-wrapper that returns a PCI device matching the provided vendor, device, subsystem vendor, and subsystem device IDs. The caller receives a pointer to a pci_dev with an incremented reference count if a matching device exists; otherwise NULL is returned. The caller must ensure a corresponding pci_dev_put() call when done with the device. The wrapper supports both forward (starting from a given 'from' device) and reverse search directions. The 'from' parameter is consumed (its reference is released) if non-NULL."
+  }
+}

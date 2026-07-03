@@ -1,0 +1,74 @@
+{
+  "function_name": "__thread__resolve_callchain",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.map.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.thread.orig.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.map.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.thread.orig.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is callchain resolution (sampling and unwinding), not reference-count management. The callchain_cursor_reset call is a preparatory step to clear old references, but the function's main logic is building the callchain, not managing refcounts.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

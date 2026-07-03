@@ -1,0 +1,99 @@
+{
+  "function_name": "ath11k_fw_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ab.fw.fw.priv.ref.refcount",
+      "ath11k_base--ath11k_fw--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "As a put wrapper, retrying after a successful release would cause a double-put (use-after-free). The release is unconditional and always valid at the point of call.",
+  "contract_summary": "This is a put wrapper that releases the reference on the firmware object held by ab->fw.fw. After calling this function, the firmware pointer must not be dereferenced and no further release_firmware call should be made on it. It represents the end of the firmware's lifecycle in this context.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function consists solely of a call to release_firmware, which decrements the reference count of the firmware object. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "As a put wrapper, retrying after a successful release would cause a double-put (use-after-free). The release is unconditional and always valid at the point of call.",
+      "contract_summary": "This is a put wrapper that releases the reference on the firmware object held by ab->fw.fw. After calling this function, the firmware pointer must not be dereferenced and no further release_firmware call should be made on it. It represents the end of the firmware's lifecycle in this context."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ab.fw.fw.priv.ref.refcount",
+          "ath11k_base--ath11k_fw--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ab.fw.fw.priv.ref.refcount",
+          "ath11k_base--ath11k_fw--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "release_firmware is a put on its argument, which is the firmware object accessed via ab->fw.fw. The access path ab.fw.fw.priv.ref.refcount and type chain ath11k_base--ath11k_fw--firmware--fw_priv--kref--refcount_t are correct and consistent with the callee information. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ab.fw.fw.priv.ref.refcount",
+        "ath11k_base--ath11k_fw--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "As a put wrapper, retrying after a successful release would cause a double-put (use-after-free). The release is unconditional and always valid at the point of call.",
+    "contract_summary": "This is a put wrapper that releases the reference on the firmware object held by ab->fw.fw. After calling this function, the firmware pointer must not be dereferenced and no further release_firmware call should be made on it. It represents the end of the firmware's lifecycle in this context."
+  }
+}

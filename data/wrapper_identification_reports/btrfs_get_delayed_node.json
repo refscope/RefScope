@@ -1,0 +1,215 @@
+{
+  "function_name": "btrfs_get_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Getting a reference fails only if the node is not present or is being removed; retrying will not change these conditions until the node is created elsewhere, but this function does not synchronize with creation.",
+  "contract_summary": "This is a get-wrapper that looks up the delayed node for an inode and returns it with an additional reference taken. The caller must check the return value (NULL means no node available) and later release the reference via a corresponding put operation. The function handles races with node removal and may set the inode's cached delayed_node pointer. The returned node is valid only until the caller drops its reference; the object's lifetime is managed by the refcount.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a btrfs_delayed_node object via refcount_inc or refcount_inc_not_zero, and return it to the caller. The locking, setting the inode cached pointer, and ref tracker allocation are ancillary to the reference acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Getting a reference fails only if the node is not present or is being removed; retrying will not change these conditions until the node is created elsewhere, but this function does not synchronize with creation.",
+      "contract_summary": "This is a get-wrapper that looks up the delayed node for an inode and returns it with an additional reference taken. The caller must check the return value (NULL means no node available) and later release the reference via a corresponding put operation. The function handles races with node removal and may set the inode's cached delayed_node pointer. The returned node is valid only until the caller drops its reference; the object's lifetime is managed by the refcount."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All four operations correspond to refcount_inc or refcount_inc_not_zero on node->refs. The access path 'node.refs.refs' correctly traces from return value to the atomic_t inside refcount_t, matching the callee type chain. The location is return index 0, as the function returns the node pointer. Segment count (3) equals type chain count (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Getting a reference fails only if the node is not present or is being removed; retrying will not change these conditions until the node is created elsewhere, but this function does not synchronize with creation.",
+    "contract_summary": "This is a get-wrapper that looks up the delayed node for an inode and returns it with an additional reference taken. The caller must check the return value (NULL means no node available) and later release the reference via a corresponding put operation. The function handles races with node removal and may set the inode's cached delayed_node pointer. The returned node is valid only until the caller drops its reference; the object's lifetime is managed by the refcount."
+  }
+}

@@ -1,0 +1,266 @@
+{
+  "function_name": "__mctp_key_done_in",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "key.refs.refs",
+      "mctp_sk_key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "key.sk.sk_refcnt.refs",
+      "mctp_sk_key--sock--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "key.refs.refs",
+      "mctp_sk_key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "key.sk.sk_refcnt.refs",
+      "mctp_sk_key--sock--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "key.reasm_head.users.refs",
+      "mctp_sk_key--sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mctp_key_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.refs.refs",
+      "member_type_chain": "mctp_sk_key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "mctp_dev_release_key",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.mdev.refs.refs",
+      "member_type_chain": "mctp_dev--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "mctp_key_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.sk.sk_refcnt.refs",
+      "member_type_chain": "mctp_sk_key--sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mctp_key_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.refs.refs",
+      "member_type_chain": "mctp_sk_key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "mctp_dev_release_key",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.mdev.refs.refs",
+      "member_type_chain": "mctp_dev--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "mctp_key_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.sk.sk_refcnt.refs",
+      "member_type_chain": "mctp_sk_key--sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path exists; the puts are unconditional (void) and the function only executes once per key teardown.",
+  "contract_summary": "Put wrapper for an MCTP key (struct mctp_sk_key). Releases the key's reassembly skb (kfree_skb), decrements the device reference (mctp_dev_release_key), removes the key from hash lists if not manually allocated, and releases the key's own references via mctp_key_unref (both the socket ref and the key's internal refcount). After this call, the key is invalidated (valid=false, reasm_dead=true) and must not be used. The caller must not access the key after calling this function; the function consumes the provided reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release an mctp_sk_key and its associated resources (reassembly skb, device reference, key reference). The function performs multiple refcount decrements (mctp_key_unref, mctp_dev_release_key, kfree_skb) and state cleanup; while there is conditional logic (e.g., manual_alloc checks), the core operation is reference release.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path exists; the puts are unconditional (void) and the function only executes once per key teardown.",
+      "contract_summary": "Put wrapper for an MCTP key (struct mctp_sk_key). Releases the key's reassembly skb (kfree_skb), decrements the device reference (mctp_dev_release_key), removes the key from hash lists if not manually allocated, and releases the key's own references via mctp_key_unref (both the socket ref and the key's internal refcount). After this call, the key is invalidated (valid=false, reasm_dead=true) and must not be used. The caller must not access the key after calling this function; the function consumes the provided reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.refs.refs",
+          "mctp_sk_key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.sk.sk_refcnt.refs",
+          "mctp_sk_key--sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.refs.refs",
+          "mctp_sk_key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.sk.sk_refcnt.refs",
+          "mctp_sk_key--sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.dev.mdev.refs",
+          "mctp_sk_key--mctp_dev--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.reasm_head.users.refs",
+          "mctp_sk_key--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.refs.refs",
+          "mctp_sk_key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.sk.sk_refcnt.refs",
+          "mctp_sk_key--sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.refs.refs",
+          "mctp_sk_key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.sk.sk_refcnt.refs",
+          "mctp_sk_key--sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "key.reasm_head.users.refs",
+          "mctp_sk_key--sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Validated 5 operations: four from two calls to mctp_key_unref (each puts key.refs.refs and key.sk.sk_refcnt.refs) and one from kfree_skb on key->reasm_head. The mctp_dev_release_key operation (key.dev.mdev.refs) is rejected because its access path does not match the callee's described path 'dev.mdev.refs.refs' (missing one 'refs' segment) and the type chain is inconsistent with the callee's expected types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "key.refs.refs",
+        "mctp_sk_key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "key.sk.sk_refcnt.refs",
+        "mctp_sk_key--sock--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "key.refs.refs",
+        "mctp_sk_key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "key.sk.sk_refcnt.refs",
+        "mctp_sk_key--sock--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "key.reasm_head.users.refs",
+        "mctp_sk_key--sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path exists; the puts are unconditional (void) and the function only executes once per key teardown.",
+    "contract_summary": "Put wrapper for an MCTP key (struct mctp_sk_key). Releases the key's reassembly skb (kfree_skb), decrements the device reference (mctp_dev_release_key), removes the key from hash lists if not manually allocated, and releases the key's own references via mctp_key_unref (both the socket ref and the key's internal refcount). After this call, the key is invalidated (valid=false, reasm_dead=true) and must not be used. The caller must not access the key after calling this function; the function consumes the provided reference."
+  }
+}

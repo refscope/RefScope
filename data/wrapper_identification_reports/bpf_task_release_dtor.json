@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_task_release_dtor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.rcu_users.refs",
+      "task_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_task_struct_rcu_user",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "task.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_task_struct_rcu_user",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "task.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations should never be retried; retrying would mean a double-put leading to use-after-free.",
+  "contract_summary": "This is a release wrapper that decrements the RCU-based users refcount (rcu_users) on a task_struct. The caller must hold a valid reference when calling this function, and after the call, the pointer must not be accessed again. This function is typically used in BPF program dtors to release a task acquired via bpf_task_from_pid or similar. The release is unconditional and does not return a success indication; the caller must ensure the reference exists.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls put_task_struct_rcu_user on its argument, performing only a reference-count decrement with no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations should never be retried; retrying would mean a double-put leading to use-after-free.",
+      "contract_summary": "This is a release wrapper that decrements the RCU-based users refcount (rcu_users) on a task_struct. The caller must hold a valid reference when calling this function, and after the call, the pointer must not be accessed again. This function is typically used in BPF program dtors to release a task acquired via bpf_task_from_pid or similar. The release is unconditional and does not return a success indication; the caller must ensure the reference exists."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "put_task_struct_rcu_user is called on parameter p (void* but actually task_struct*). The access path p.rcu_users.refs matches the callee's member-access path task.rcu_users.refs, and the type chain task_struct--refcount_t--atomic_t is consistent. Segment counts match (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.rcu_users.refs",
+        "task_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations should never be retried; retrying would mean a double-put leading to use-after-free.",
+    "contract_summary": "This is a release wrapper that decrements the RCU-based users refcount (rcu_users) on a task_struct. The caller must hold a valid reference when calling this function, and after the call, the pointer must not be accessed again. This function is typically used in BPF program dtors to release a task acquired via bpf_task_from_pid or similar. The release is unconditional and does not return a success indication; the caller must ensure the reference exists."
+  }
+}

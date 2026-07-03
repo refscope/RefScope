@@ -1,0 +1,159 @@
+{
+  "function_name": "callback_history_open",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "inode.i_private.*.kref.refcount",
+      "inode--void*--drbd_connection--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "inode.i_private.*.kref.refcount",
+      "inode--void*--drbd_connection--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drbd_single_open",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "drbd_single_open",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drbd_single_open",
+      "get_or_put": "put",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drbd_single_open",
+      "get_or_put": "put",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drbd_single_open",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drbd_single_open",
+      "get_or_put": "put",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure is likely due to transient conditions like -ENOMEM, which may be resolved on retry.",
+  "contract_summary": "This is a get-wrapper for proc file open: it acquires a kref reference on the drbd_connection (passed via inode->i_private) by calling drbd_single_open, which internally takes the reference and registers a release callback (drbd_destroy_connection) to drop it when the file is closed. The function returns 0 on success; otherwise a negative error code and no reference is taken. The caller (VFS) does not manually manage the reference; it is automatically released on file close. The open may fail due to memory allocation errors, which are potentially retryable.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to open a seq_file for drbd_connection while incrementing the kref reference count via drbd_single_open; no other significant logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure is likely due to transient conditions like -ENOMEM, which may be resolved on retry.",
+      "contract_summary": "This is a get-wrapper for proc file open: it acquires a kref reference on the drbd_connection (passed via inode->i_private) by calling drbd_single_open, which internally takes the reference and registers a release callback (drbd_destroy_connection) to drop it when the file is closed. The function returns 0 on success; otherwise a negative error code and no reference is taken. The caller (VFS) does not manually manage the reference; it is automatically released on file close. The open may fail due to memory allocation errors, which are potentially retryable."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          1,
+          "inode.i_private.*.kref.refcount",
+          "inode--void*--drbd_connection--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          1,
+          "inode.i_private.*.kref.refcount",
+          "inode--void*--drbd_connection--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "inode.i_private.*.kref.refcount",
+          "inode--void*--drbd_connection--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "inode.i_private.*.kref.refcount",
+          "inode--void*--drbd_connection--kref--refcount_t"
+        ]
+      ],
+      "reason": "drbd_single_open performs both get and put on &connection->kref.refcount. The connection is obtained via inode->i_private, so the access path from parameter 1 (inode) through i_private dereference to kref.refcount is correct. The type chain segments match the path segments."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "inode.i_private.*.kref.refcount",
+        "inode--void*--drbd_connection--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "inode.i_private.*.kref.refcount",
+        "inode--void*--drbd_connection--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure is likely due to transient conditions like -ENOMEM, which may be resolved on retry.",
+    "contract_summary": "This is a get-wrapper for proc file open: it acquires a kref reference on the drbd_connection (passed via inode->i_private) by calling drbd_single_open, which internally takes the reference and registers a release callback (drbd_destroy_connection) to drop it when the file is closed. The function returns 0 on success; otherwise a negative error code and no reference is taken. The caller (VFS) does not manually manage the reference; it is automatically released on file close. The open may fail due to memory allocation errors, which are potentially retryable."
+  }
+}

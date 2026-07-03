@@ -1,0 +1,58 @@
+{
+  "function_name": "__netns_bpf_prog_detach",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a reference-count wrapper; retry on failure would depend on error type (e.g., -EINVAL due to existing links) and is generally not beneficial.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is detaching a BPF program from a net namespace, involving validation (list_empty, pointer comparison), array detach, pointer clearing, and finally a reference put. The bpf_prog_put call is just one step among several, not the main purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a reference-count wrapper; retry on failure would depend on error type (e.g., -EINVAL due to existing links) and is generally not beneficial.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a reference-count wrapper; retry on failure would depend on error type (e.g., -EINVAL due to existing links) and is generally not beneficial.",
+    "contract_summary": ""
+  }
+}

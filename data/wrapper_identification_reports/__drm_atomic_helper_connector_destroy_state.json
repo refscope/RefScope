@@ -1,0 +1,187 @@
+{
+  "function_name": "__drm_atomic_helper_connector_destroy_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.connector.base.refcount.refcount",
+      "drm_connector_state--drm_connector--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.commit.ref.refcount",
+      "drm_connector_state--drm_crtc_commit--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.hdr_output_metadata.base.refcount.refcount",
+      "drm_connector_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_crtc_commit_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "commit.ref.refcount",
+      "member_type_chain": "drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_connector_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "connector.base.refcount.refcount",
+      "member_type_chain": "drm_connector--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_crtc_commit_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "commit.ref.refcount",
+      "member_type_chain": "drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_connector_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "connector.base.refcount.refcount",
+      "member_type_chain": "drm_connector--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function destroys references; if a field is NULL it is a no-op. If a field is non-NULL, the put decrements the refcount. Retrying would cause double-put (use-after-free) on the already released objects, so retry is never appropriate.",
+  "contract_summary": "Releases all reference-counted objects held by a drm_connector_state. This is the cleanup/destroy phase: it decrements refcounts on the connector, the crtc_commit, and the hdr_output_metadata blob, and cleans up the writeback_job if present. After calling this function, the state must not be used for any purposes. The caller must have previously acquired references (e.g., via drm_connector_get, drm_crtc_commit_get, drm_property_blob_get) for each field that is non-NULL. This function is typically called immediately before freeing the state memory or as part of state replacement in atomic commit teardown.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all reference-counted resources held by a drm_connector_state: connector, crtc_commit, hdr_output_metadata blob, and writeback_job cleanup. The function consists almost entirely of conditional put/cleanup calls with no significant additional logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function destroys references; if a field is NULL it is a no-op. If a field is non-NULL, the put decrements the refcount. Retrying would cause double-put (use-after-free) on the already released objects, so retry is never appropriate.",
+      "contract_summary": "Releases all reference-counted objects held by a drm_connector_state. This is the cleanup/destroy phase: it decrements refcounts on the connector, the crtc_commit, and the hdr_output_metadata blob, and cleans up the writeback_job if present. After calling this function, the state must not be used for any purposes. The caller must have previously acquired references (e.g., via drm_connector_get, drm_crtc_commit_get, drm_property_blob_get) for each field that is non-NULL. This function is typically called immediately before freeing the state memory or as part of state replacement in atomic commit teardown."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.connector.base.refcount.refcount",
+          "drm_connector_state--drm_connector--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.commit.ref.refcount",
+          "drm_connector_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.hdr_output_metadata.base.refcount.refcount",
+          "drm_connector_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.connector.base.refcount.refcount",
+          "drm_connector_state--drm_connector--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.commit.ref.refcount",
+          "drm_connector_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.hdr_output_metadata.base.refcount.refcount",
+          "drm_connector_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "All three operations are correctly extracted: they correspond to put calls on state->connector, state->commit, and state->hdr_output_metadata, with access paths and type chains consistent with callee information. The path segment counts match the type chain lengths, and the critical variable is the function parameter (state) with paths tracing correctly to the refcount fields."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.connector.base.refcount.refcount",
+        "drm_connector_state--drm_connector--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.commit.ref.refcount",
+        "drm_connector_state--drm_crtc_commit--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.hdr_output_metadata.base.refcount.refcount",
+        "drm_connector_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function destroys references; if a field is NULL it is a no-op. If a field is non-NULL, the put decrements the refcount. Retrying would cause double-put (use-after-free) on the already released objects, so retry is never appropriate.",
+    "contract_summary": "Releases all reference-counted objects held by a drm_connector_state. This is the cleanup/destroy phase: it decrements refcounts on the connector, the crtc_commit, and the hdr_output_metadata blob, and cleans up the writeback_job if present. After calling this function, the state must not be used for any purposes. The caller must have previously acquired references (e.g., via drm_connector_get, drm_crtc_commit_get, drm_property_blob_get) for each field that is non-NULL. This function is typically called immediately before freeing the state memory or as part of state replacement in atomic commit teardown."
+  }
+}

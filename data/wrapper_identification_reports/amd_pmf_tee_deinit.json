@@ -1,0 +1,143 @@
+{
+  "function_name": "amd_pmf_tee_deinit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw_shm_pool.refcount.refs",
+      "amd_pmf_dev--tee_shm--refcount_struct--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.tee_ctx.refcount.refcount",
+      "amd_pmf_dev--tee_context--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tee_shm_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shm.refcount.refs",
+      "member_type_chain": "tee_shm--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "tee_client_close_context",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcount.refcount",
+      "member_type_chain": "tee_context--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tee_shm_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shm.refcount.refs",
+      "member_type_chain": "tee_shm--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "tee_client_close_context",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcount.refcount",
+      "member_type_chain": "tee_context--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If tee_ctx is NULL, no action needed; otherwise the put operations are unconditional and not retryable because they free already-referenced objects.",
+  "contract_summary": "This is a deinitialization put wrapper that safely releases the TEE context, session, and shared memory pool associated with the amd_pmf_dev. It sets dev->tee_ctx to NULL after freeing to prevent double-free. The caller must not use any TEE objects (dev->tee_ctx, dev->session_id, dev->fw_shm_pool) after calling this function. Typically called during driver tear-down.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release TEE resources (shared memory, session, context) by calling put functions (tee_shm_free, tee_client_close_context, and tee_client_close_session) and NULL out the pointer. No other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If tee_ctx is NULL, no action needed; otherwise the put operations are unconditional and not retryable because they free already-referenced objects.",
+      "contract_summary": "This is a deinitialization put wrapper that safely releases the TEE context, session, and shared memory pool associated with the amd_pmf_dev. It sets dev->tee_ctx to NULL after freeing to prevent double-free. The caller must not use any TEE objects (dev->tee_ctx, dev->session_id, dev->fw_shm_pool) after calling this function. Typically called during driver tear-down."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw_shm_pool.refcount.refs",
+          "amd_pmf_dev--tee_shm--refcount_struct--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.tee_ctx.refcount.refcount",
+          "amd_pmf_dev--tee_context--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw_shm_pool.refcount.refs",
+          "amd_pmf_dev--tee_shm--refcount_struct--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.tee_ctx.refcount.refcount",
+          "amd_pmf_dev--tee_context--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations correctly trace from the function parameter (dev) through pointer fields to the refcount fields that are decremented by the callee put functions (tee_shm_free and tee_client_close_context). The type chains match the callee information and the code structure. The segment counts are consistent (4 segments each, 4 types each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw_shm_pool.refcount.refs",
+        "amd_pmf_dev--tee_shm--refcount_struct--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.tee_ctx.refcount.refcount",
+        "amd_pmf_dev--tee_context--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If tee_ctx is NULL, no action needed; otherwise the put operations are unconditional and not retryable because they free already-referenced objects.",
+    "contract_summary": "This is a deinitialization put wrapper that safely releases the TEE context, session, and shared memory pool associated with the amd_pmf_dev. It sets dev->tee_ctx to NULL after freeing to prevent double-free. The caller must not use any TEE objects (dev->tee_ctx, dev->session_id, dev->fw_shm_pool) after calling this function. Typically called during driver tear-down."
+  }
+}

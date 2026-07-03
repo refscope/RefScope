@@ -1,0 +1,143 @@
+{
+  "function_name": "arndale_audio_remove",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "card.dai_link[].cpus.of_node.kobj.kref.refcount",
+      "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "card.dai_link[].codecs.of_node.kobj.kref.refcount",
+      "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "arndale_put_of_nodes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "card.dai_link[].cpus.of_node.kobj.kref.refcount",
+      "member_type_chain": "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "arndale_put_of_nodes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "card.dai_link[].codecs.of_node.kobj.kref.refcount",
+      "member_type_chain": "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "arndale_put_of_nodes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "card.dai_link[].cpus.of_node.kobj.kref.refcount",
+      "member_type_chain": "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "arndale_put_of_nodes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "card.dai_link[].codecs.of_node.kobj.kref.refcount",
+      "member_type_chain": "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation releases references; failure indicates a double-put bug; retry is not applicable.",
+  "contract_summary": "This function is a put wrapper that releases the of_node references (obtained during probe) for all DAI links in the card's dai_link array. It is called during platform driver removal to undo the reference acquisitions. After this function returns, the card and its device nodes must not be used again, and no further put should be called on them. The operation is unconditional and void; it does not return a status.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call arndale_put_of_nodes, which releases refcounts on device nodes within the card structure. There is no other logic; it is a pure put wrapper for cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation releases references; failure indicates a double-put bug; retry is not applicable.",
+      "contract_summary": "This function is a put wrapper that releases the of_node references (obtained during probe) for all DAI links in the card's dai_link array. It is called during platform driver removal to undo the reference acquisitions. After this function returns, the card and its device nodes must not be used again, and no further put should be called on them. The operation is unconditional and void; it does not return a status."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.dai_link[].cpus.of_node.kobj.kref.refcount",
+          "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.dai_link[].codecs.of_node.kobj.kref.refcount",
+          "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.dai_link[].cpus.of_node.kobj.kref.refcount",
+          "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.dai_link[].codecs.of_node.kobj.kref.refcount",
+          "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls arndale_put_of_nodes(card), which performs put operations on the refcount of card's dai_link cpu and codec of_nodes. The access paths and type chains match the callee info and are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "card.dai_link[].cpus.of_node.kobj.kref.refcount",
+        "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "card.dai_link[].codecs.of_node.kobj.kref.refcount",
+        "snd_soc_card--snd_soc_dai_link--snd_soc_dai_link_component--device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation releases references; failure indicates a double-put bug; retry is not applicable.",
+    "contract_summary": "This function is a put wrapper that releases the of_node references (obtained during probe) for all DAI links in the card's dai_link array. It is called during platform driver removal to undo the reference acquisitions. After this function returns, the card and its device nodes must not be used again, and no further put should be called on them. The operation is unconditional and void; it does not return a status."
+  }
+}

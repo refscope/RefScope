@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_mcast_forw_mcsend",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "consume_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "consume_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always succeeds; the skb reference is always consumed, so no retry is possible or needed.",
+  "contract_summary": "This is a put wrapper that unconditionally consumes the reference on the skb after attempting multicast forwarding via batadv_mcast_forw_packet. On success, the skb is freed via consume_skb; on error, it is freed via kfree_skb. The caller must not use the skb after calling this function, as ownership is transferred and the reference is released. The return value indicates forwarding success, not refcount status.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to consume the skb reference after forwarding attempt, using either consume_skb (success) or kfree_skb (error). The only non-refcount logic is the conditional return value check, which is negligible.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always succeeds; the skb reference is always consumed, so no retry is possible or needed.",
+      "contract_summary": "This is a put wrapper that unconditionally consumes the reference on the skb after attempting multicast forwarding via batadv_mcast_forw_packet. On success, the skb is freed via consume_skb; on error, it is freed via kfree_skb. The caller must not use the skb after calling this function, as ownership is transferred and the reference is released. The return value indicates forwarding success, not refcount status."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both kfree_skb and consume_skb are put operations on the skb parameter (parameter 2). The member-access path 'skb.users.refs' correctly traces from the skb variable to the refcount field, consistent with callee info. The type chain 'sk_buff--refcount_t--atomic_t' matches the struct definitions. The segment counts (3 segments, 3 types) are equal, so the path is complete."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always succeeds; the skb reference is always consumed, so no retry is possible or needed.",
+    "contract_summary": "This is a put wrapper that unconditionally consumes the reference on the skb after attempting multicast forwarding via batadv_mcast_forw_packet. On success, the skb is freed via consume_skb; on error, it is freed via kfree_skb. The caller must not use the skb after calling this function, as ownership is transferred and the reference is released. The return value indicates forwarding success, not refcount status."
+  }
+}

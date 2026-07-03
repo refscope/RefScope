@@ -1,0 +1,58 @@
+{
+  "function_name": "__of_parse_phandle_with_args",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns -ENOENT for empty phandles or -EINVAL for parse errors; retrying without changing the device tree or index would produce the same result.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The primary purpose is to parse phandle arguments and locate the entry matching a given index, with substantial logic including iteration, index tracking, and argument extraction. The reference count management (transfer of node reference to out_args or of_node_put on NULL) is incidental to the parsing workflow.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns -ENOENT for empty phandles or -EINVAL for parse errors; retrying without changing the device tree or index would produce the same result.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns -ENOENT for empty phandles or -EINVAL for parse errors; retrying without changing the device tree or index would produce the same result.",
+    "contract_summary": ""
+  }
+}

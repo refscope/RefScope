@@ -1,0 +1,106 @@
+{
+  "function_name": "_regulator_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "regulator.rdev.dev.kobj.kref.refcount",
+      "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "regulator_dev_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "r.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "regulator_dev_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "r.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure reasons vary: -ENODEV (no regulator), -EPROBE_DEFER (deferred probe), -EPERM/-EBUSY (exclusive conflicts), -ENOMEM (allocation). Retrying a failed call without changing conditions (e.g., resolving dependencies) is unlikely to succeed; the kernel's probe deferral mechanism handles transient errors.",
+  "contract_summary": "This function acquires a regulator reference for a given device. It first validates the request, then looks up the regulator device (incrementing its reference count via the lookup), and finally creates a consumer regulator struct. On success, the caller receives an owned struct regulator pointer that must eventually be released with regulator_put(). The function may fall back to a dummy regulator if full constraints allow, and it resolves the regulator's supply chain. It also increments the module's reference count and creates a device link. The caller must check the return value for errors; typical failure modes include -ENODEV (regulator not found), -EPROBE_DEFER (supply not yet ready), -EPERM (exclusive request on a shared regulator), and -EBUSY (exclusive regulator already in use). The caller should not retry the same call directly; instead, -EPROBE_DEFER is propagated to the driver core for later retry.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to obtain a regulator reference for a device, involving refcount operations (via regulator_dev_lookup and _regulator_get_common) and returning an owned regulator pointer. However, there is significant additional logic: error checking, dummy regulator fallback, supply resolution, module reference counting, and device link creation. These steps are not purely refcount management, so purity is medium.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure reasons vary: -ENODEV (no regulator), -EPROBE_DEFER (deferred probe), -EPERM/-EBUSY (exclusive conflicts), -ENOMEM (allocation). Retrying a failed call without changing conditions (e.g., resolving dependencies) is unlikely to succeed; the kernel's probe deferral mechanism handles transient errors.",
+      "contract_summary": "This function acquires a regulator reference for a given device. It first validates the request, then looks up the regulator device (incrementing its reference count via the lookup), and finally creates a consumer regulator struct. On success, the caller receives an owned struct regulator pointer that must eventually be released with regulator_put(). The function may fall back to a dummy regulator if full constraints allow, and it resolves the regulator's supply chain. It also increments the module's reference count and creates a device link. The caller must check the return value for errors; typical failure modes include -ENODEV (regulator not found), -EPROBE_DEFER (supply not yet ready), -EPERM (exclusive request on a shared regulator), and -EBUSY (exclusive regulator already in use). The caller should not retry the same call directly; instead, -EPROBE_DEFER is propagated to the driver core for later retry."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "regulator.rdev.dev.kobj.kref.refcount",
+          "regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "regulator.rdev.owner.refcnt",
+          "regulator--regulator_dev--module--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "regulator.rdev.dev.kobj.kref.refcount",
+          "regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a struct regulator pointer. Inside, regulator_dev_lookup returns a struct regulator_dev *rdev with a reference count held on rdev->dev->kobj.kref.refcount. The returned regulator structure contains a pointer 'rdev' to that regulator_dev, so the full access path from the return value to the refcount is regulator.rdev.dev.kobj.kref.refcount, matching the type chain. The callee information supports only this path; the second candidate involving 'owner.refcnt' is not mentioned in the callee info and is thus inconsistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "regulator.rdev.dev.kobj.kref.refcount",
+        "regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure reasons vary: -ENODEV (no regulator), -EPROBE_DEFER (deferred probe), -EPERM/-EBUSY (exclusive conflicts), -ENOMEM (allocation). Retrying a failed call without changing conditions (e.g., resolving dependencies) is unlikely to succeed; the kernel's probe deferral mechanism handles transient errors.",
+    "contract_summary": "This function acquires a regulator reference for a given device. It first validates the request, then looks up the regulator device (incrementing its reference count via the lookup), and finally creates a consumer regulator struct. On success, the caller receives an owned struct regulator pointer that must eventually be released with regulator_put(). The function may fall back to a dummy regulator if full constraints allow, and it resolves the regulator's supply chain. It also increments the module's reference count and creates a device link. The caller must check the return value for errors; typical failure modes include -ENODEV (regulator not found), -EPROBE_DEFER (supply not yet ready), -EPERM (exclusive request on a shared regulator), and -EBUSY (exclusive regulator already in use). The caller should not retry the same call directly; instead, -EPROBE_DEFER is propagated to the driver core for later retry."
+  }
+}

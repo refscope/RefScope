@@ -1,0 +1,58 @@
+{
+  "function_name": "btrfs_free_dev_extent",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable – the function is not a refcount wrapper; failure indicates a missing or conflicting device extent, and retry is not defined by refcount semantics.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to search for and delete a btrfs device extent item. It performs no explicit reference count increment/decrement on any object that is passed to or returned from the function. The use of btrfs_release_path is internal resource management, not a refcount operation on a critical variable exposed to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable – the function is not a refcount wrapper; failure indicates a missing or conflicting device extent, and retry is not defined by refcount semantics.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable – the function is not a refcount wrapper; failure indicates a missing or conflicting device extent, and retry is not defined by refcount semantics.",
+    "contract_summary": ""
+  }
+}

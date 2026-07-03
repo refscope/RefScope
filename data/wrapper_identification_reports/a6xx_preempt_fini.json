@@ -1,0 +1,82 @@
+{
+  "function_name": "a6xx_preempt_fini",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "msm_gem_kernel_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "msm_gem_kernel_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "msm_gem_kernel_put is a void function that unconditionally decrements the refcount; it never fails, so retry is not applicable.",
+  "contract_summary": "Cleanup/destructor wrapper: releases all preemption buffer objects previously allocated for each ring. After calling this function, the preempt_bo pointers are invalid and must not be used again. The caller is expected to have already stopped any GPU operations that reference these buffers. This function is typically called during GPU teardown or suspend. There is no error path; the call is unconditional and always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all preemption buffer objects (preempt_bo) via msm_gem_kernel_put, which is a refcount-decrement operation. No other logic exists beyond the loop and put calls.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "msm_gem_kernel_put is a void function that unconditionally decrements the refcount; it never fails, so retry is not applicable.",
+      "contract_summary": "Cleanup/destructor wrapper: releases all preemption buffer objects previously allocated for each ring. After calling this function, the preempt_bo pointers are invalid and must not be used again. The caller is expected to have already stopped any GPU operations that reference these buffers. This function is typically called during GPU teardown or suspend. There is no error path; the call is unconditional and always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "gpu.preempt_bo[i].refcount.refcount",
+          "msm_gpu--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable whose refcount is decremented is not a direct function parameter or return value; it is an element of a structure derived from parameter 'gpu' (a6xx_gpu->preempt_bo[i]). The candidate incorrectly sets location to 'parameter 1' and provides an access path 'gpu.preempt_bo[i]' that does not exist in struct msm_gpu. Additionally, the type chain 'msm_gpu--drm_gem_object' is incorrect because msm_gpu does not contain a drm_gem_object directly. The extraction does not meet the requirement that the access path start from a critical variable at the function interface."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function a6xx_preempt_fini iterates over internal preempt_bo objects and calls msm_gem_kernel_put on each. The refcount decrement is performed on a6xx_gpu->preempt_bo[i], which is not a direct parameter or return value of the function; it is a deeply nested member accessed via multiple casts from parameter 'gpu'. The candidate operation incorrectly starts the access path from 'gpu' (parameter 1) with path 'gpu.preempt_bo[i]', which does not exist in struct msm_gpu, and the type chain 'msm_gpu--drm_gem_object' is invalid. Since the critical variable is not exposed at the function interface, the function does not qualify as a reference-count wrapper/helper with interface semantics. The check stage correctly rejected the candidate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "msm_gem_kernel_put is a void function that unconditionally decrements the refcount; it never fails, so retry is not applicable.",
+    "contract_summary": "Cleanup/destructor wrapper: releases all preemption buffer objects previously allocated for each ring. After calling this function, the preempt_bo pointers are invalid and must not be used again. The caller is expected to have already stopped any GPU operations that reference these buffers. This function is typically called during GPU teardown or suspend. There is no error path; the call is unconditional and always succeeds."
+  }
+}

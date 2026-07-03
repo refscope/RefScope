@@ -1,0 +1,82 @@
+{
+  "function_name": "_opp_kref_release",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_of_clear_opp",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "opp.required_opps[i].kref.refcount",
+      "member_type_chain": "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_of_clear_opp",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "opp.required_opps[i].kref.refcount",
+      "member_type_chain": "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This function is called exactly once when the refcount reaches zero; retrying would cause double-release and use-after-free.",
+  "contract_summary": "This function is the kref release callback for dev_pm_opp. It is invoked when the last reference is dropped via kref_put. It removes the OPP from its table's list, notifies listeners of the removal, clears required-OPP references, removes debug entries, and frees the OPP memory. After this function returns, the OPP object is invalid and must not be accessed by anyone.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the last reference on a dev_pm_opp object, cleaning it up via list removal, notifier, and freeing. Includes necessary but non-trivial cleanup logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This function is called exactly once when the refcount reaches zero; retrying would cause double-release and use-after-free.",
+      "contract_summary": "This function is the kref release callback for dev_pm_opp. It is invoked when the last reference is dropped via kref_put. It removes the OPP from its table's list, notifies listeners of the removal, clears required-OPP references, removes debug entries, and frees the OPP memory. After this function returns, the OPP object is invalid and must not be accessed by anyone."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "opp.required_opps[i].kref.refcount",
+          "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable is incorrectly identified as parameter 1 (kref). The refcount operation on required_opps is performed by the callee _of_clear_opp, not by _opp_kref_release itself. The access path starts from opp, which is not a parameter; moreover, the function is a kref release handler, not a direct put for that refcount. No valid operations remain."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function _opp_kref_release is a kref release handler for the dev_pm_opp object. The extracted candidate (put on opp.required_opps[i].kref.refcount) is performed by the callee _of_clear_opp, not directly by this function. Additionally, the critical variable path starts from opp, which is not a parameter; the function parameter is kref. The function's primary purpose is to release the opp object itself (kfree) and call cleanup helpers, not to directly manage the required_opps refcounts. Therefore, no valid refcount operations on passed critical variables remain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This function is called exactly once when the refcount reaches zero; retrying would cause double-release and use-after-free.",
+    "contract_summary": "This function is the kref release callback for dev_pm_opp. It is invoked when the last reference is dropped via kref_put. It removes the OPP from its table's list, notifies listeners of the removal, clears required-OPP references, removes debug entries, and frees the OPP memory. After this function returns, the OPP object is invalid and must not be accessed by anyone."
+  }
+}

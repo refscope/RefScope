@@ -1,0 +1,99 @@
+{
+  "function_name": "ath10k_htc_control_tx_complete",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kfree_skb is a release operation that always executes and never fails; retry is not applicable.",
+  "contract_summary": "Put wrapper: releases one reference on the sk_buff by calling kfree_skb, which decrements the skb's refcount and frees the buffer if the refcount reaches zero. After this call, the caller must not access the skb. This function represents the release side of the skb lifecycle; it always executes and has no return value to check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's entire body is a single call to kfree_skb, which is a put function that decrements the skb's refcount and frees it when zero. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kfree_skb is a release operation that always executes and never fails; retry is not applicable.",
+      "contract_summary": "Put wrapper: releases one reference on the sk_buff by calling kfree_skb, which decrements the skb's refcount and frees the buffer if the refcount reaches zero. After this call, the caller must not access the skb. This function represents the release side of the skb lifecycle; it always executes and has no return value to check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function ath10k_htc_control_tx_complete calls kfree_skb(skb), which is a put operation on the skb parameter. The access path skb.users.refs correctly starts from parameter 1 (skb) and traces through sk_buff.users (refcount_t) to refcount_t.refs (atomic_t), matching the type chain sk_buff--refcount_t--atomic_t with 3 path segments and 3 types. The direction 'put' is consistent with kfree_skb's effect."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kfree_skb is a release operation that always executes and never fails; retry is not applicable.",
+    "contract_summary": "Put wrapper: releases one reference on the sk_buff by calling kfree_skb, which decrements the skb's refcount and frees the buffer if the refcount reaches zero. After this call, the caller must not access the skb. This function represents the release side of the skb lifecycle; it always executes and has no return value to check."
+  }
+}

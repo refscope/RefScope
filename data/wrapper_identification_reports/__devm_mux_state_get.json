@@ -1,0 +1,106 @@
+{
+  "function_name": "__devm_mux_state_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "mstate.mux.chip.dev.kobj.kref.refcount",
+      "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mux_state_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mstate.mux.chip.dev.kobj.kref.refcount",
+      "member_type_chain": "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mux_state_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mstate.mux.chip.dev.kobj.kref.refcount",
+      "member_type_chain": "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure generally indicates the mux_state could not be obtained (e.g., invalid name, not found, or allocation failure). Retrying without changed conditions would likely fail again; the error is not due to transient refcount contention.",
+  "contract_summary": "Managed get-wrapper: acquires a reference to a mux_state via mux_state_get (incrementing its refcount) and attaches it to the device's devres list. The caller receives a pointer to the mux_state and is responsible for using it. When the device is detached or the devres group is released, an automatically registered release function will call mux_state_put to decrement the refcount. Optional init and exit callbacks can be provided for additional setup/teardown. On failure, the function returns an error pointer or NULL (if optional and not found) and properly releases any partially obtained resources (calling mux_state_put if necessary). The caller must check the return value for errors.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a managed reference to a mux_state via mux_state_get (which increments the refcount) and integrate it with devres for automatic release. The only non-refcount logic is allocation of a devres structure and optional init/exit callbacks, which are minimal.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure generally indicates the mux_state could not be obtained (e.g., invalid name, not found, or allocation failure). Retrying without changed conditions would likely fail again; the error is not due to transient refcount contention.",
+      "contract_summary": "Managed get-wrapper: acquires a reference to a mux_state via mux_state_get (incrementing its refcount) and attaches it to the device's devres list. The caller receives a pointer to the mux_state and is responsible for using it. When the device is detached or the devres group is released, an automatically registered release function will call mux_state_put to decrement the refcount. Optional init and exit callbacks can be provided for additional setup/teardown. On failure, the function returns an error pointer or NULL (if optional and not found) and properly releases any partially obtained resources (calling mux_state_put if necessary). The caller must check the return value for errors."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mstate.mux.chip.dev.kobj.kref.refcount",
+          "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "mstate.mux.chip.dev.kobj.kref.refcount",
+          "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mstate.mux.chip.dev.kobj.kref.refcount",
+          "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get operation is performed on the returned mstate via mux_state_get. The put operation has location 'return' index 0, but the put is on a local variable (mstate) which is not returned on the error path; the function returns an ERR_PTR. Therefore, the put operation's location is incorrect and it is removed."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "mstate.mux.chip.dev.kobj.kref.refcount",
+        "mux_state--mux_control--mux_chip--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure generally indicates the mux_state could not be obtained (e.g., invalid name, not found, or allocation failure). Retrying without changed conditions would likely fail again; the error is not due to transient refcount contention.",
+    "contract_summary": "Managed get-wrapper: acquires a reference to a mux_state via mux_state_get (incrementing its refcount) and attaches it to the device's devres list. The caller receives a pointer to the mux_state and is responsible for using it. When the device is detached or the devres group is released, an automatically registered release function will call mux_state_put to decrement the refcount. Optional init and exit callbacks can be provided for additional setup/teardown. On failure, the function returns an error pointer or NULL (if optional and not found) and properly releases any partially obtained resources (calling mux_state_put if necessary). The caller must check the return value for errors."
+  }
+}

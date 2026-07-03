@@ -1,0 +1,189 @@
+{
+  "function_name": "amd76x_remove_one",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "edac_pci_top_main_kobj",
+      "edac_pci_top_main_kobj.kref.refcount",
+      "kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "edac_pci_sysfs_refcount",
+      "edac_pci_sysfs_refcount",
+      "atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "edac_pci_release_generic_ctl",
+      "get_or_put": "put",
+      "index": "edac_pci_top_main_kobj",
+      "location": "global",
+      "member_access_path": "edac_pci_top_main_kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "edac_mc_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mci.dev.kobj.kref.refcount",
+      "member_type_chain": "mem_ctl_info--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "edac_pci_release_generic_ctl",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pci.kobj.kref.refcount",
+      "member_type_chain": "edac_pci_ctl_info--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "edac_pci_release_generic_ctl",
+      "get_or_put": "put",
+      "index": "edac_pci_sysfs_refcount",
+      "location": "global",
+      "member_access_path": "edac_pci_sysfs_refcount",
+      "member_type_chain": "atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "edac_pci_release_generic_ctl",
+      "get_or_put": "put",
+      "index": "edac_pci_top_main_kobj",
+      "location": "global",
+      "member_access_path": "edac_pci_top_main_kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "edac_mc_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mci.dev.kobj.kref.refcount",
+      "member_type_chain": "mem_ctl_info--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "edac_pci_release_generic_ctl",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pci.kobj.kref.refcount",
+      "member_type_chain": "edac_pci_ctl_info--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "edac_pci_release_generic_ctl",
+      "get_or_put": "put",
+      "index": "edac_pci_sysfs_refcount",
+      "location": "global",
+      "member_access_path": "edac_pci_sysfs_refcount",
+      "member_type_chain": "atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional on success paths; on failure (NULL pointer), retries are not applicable as the object is gone or not present.",
+  "contract_summary": "This function is the PCI remove callback for the amd76x EDAC driver. It releases a previously acquired PCI control structure reference (if global pointer is non-NULL) via a put operation, then deletes and frees a memory controller instance obtained from the EDAC core. The caller (PCI subsystem) must call this exactly once during device removal; after return, the driver's resources are fully released and the device must not be accessed again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release two reference-counted resources (PCI control via edac_pci_release_generic_ctl, MC instance via edac_mc_free) on device removal. No business logic beyond NULL checks and sequencing.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional on success paths; on failure (NULL pointer), retries are not applicable as the object is gone or not present.",
+      "contract_summary": "This function is the PCI remove callback for the amd76x EDAC driver. It releases a previously acquired PCI control structure reference (if global pointer is non-NULL) via a put operation, then deletes and frees a memory controller instance obtained from the EDAC core. The caller (PCI subsystem) must call this exactly once during device removal; after return, the driver's resources are fully released and the device must not be accessed again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "amd76x_pci",
+          "amd76x_pci.kobj.kref.refcount",
+          "edac_pci_ctl_info--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "edac_pci_top_main_kobj",
+          "edac_pci_top_main_kobj.kref.refcount",
+          "kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "edac_pci_sysfs_refcount",
+          "edac_pci_sysfs_refcount",
+          "atomic_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "mci.dev.kobj.kref.refcount",
+          "mem_ctl_info--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "edac_pci_top_main_kobj",
+          "edac_pci_top_main_kobj.kref.refcount",
+          "kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "edac_pci_sysfs_refcount",
+          "edac_pci_sysfs_refcount",
+          "atomic_t"
+        ]
+      ],
+      "reason": "Candidate 1 is invalid because the access path 'amd76x_pci.kobj.kref.refcount' is missing the required 'pci' field (should be 'amd76x_pci.pci.kobj.kref.refcount') based on callee info for edac_pci_ctl_info. Candidate 4 is invalid because the location is 'return' index '0', but the critical variable is the input parameter 'mci' (parameter index 1). Candidates 2 and 3 are consistent: the paths and type chains match the callee information and the actual code (global put operations within edac_pci_release_generic_ctl)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "edac_pci_top_main_kobj",
+        "edac_pci_top_main_kobj.kref.refcount",
+        "kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "edac_pci_sysfs_refcount",
+        "edac_pci_sysfs_refcount",
+        "atomic_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional on success paths; on failure (NULL pointer), retries are not applicable as the object is gone or not present.",
+    "contract_summary": "This function is the PCI remove callback for the amd76x EDAC driver. It releases a previously acquired PCI control structure reference (if global pointer is non-NULL) via a put operation, then deletes and frees a memory controller instance obtained from the EDAC core. The caller (PCI subsystem) must call this exactly once during device removal; after return, the driver's resources are fully released and the device must not be accessed again."
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "function_name": "bfq_exit_icq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bic.bfqq_data.stable_merge_bfqq.ref",
+      "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "bic.bfqq.new_bfqq.ref",
+      "bfq_io_cq--bfq_queue--bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_bfq_exit_icq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bic.bfqq_data[act_idx].stable_merge_bfqq.ref",
+      "member_type_chain": "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+    },
+    {
+      "callee_function_name": "_bfq_exit_icq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bic.bfqq[act_idx].new_bfqq.ref",
+      "member_type_chain": "bfq_io_cq--bfq_queue--bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_bfq_exit_icq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bic.bfqq_data[act_idx].stable_merge_bfqq.ref",
+      "member_type_chain": "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+    },
+    {
+      "callee_function_name": "_bfq_exit_icq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bic.bfqq[act_idx].new_bfqq.ref",
+      "member_type_chain": "bfq_io_cq--bfq_queue--bfq_queue--int"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper that always executes; failure would indicate a double-free bug, not a transient condition.",
+  "contract_summary": "Put wrapper for bfq_io_cq cleanup. Called when an io_cq is being freed (e.g., elevator exit). Releases references on all per-actuator bfq_queue structures tracked in bic's arrays. The caller must not access the bic or associated bfqqs after this call. The spinlock ensures atomicity with the scheduler state; if bfqd is gone, it still iterates over all possible actuators using pre-zeroed fields. This is the final release of the bic's references.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on bfq_queue objects associated with the io_cq via _bfq_exit_icq. The locking and actuator count selection are incidental to safe refcount decrement.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper that always executes; failure would indicate a double-free bug, not a transient condition.",
+      "contract_summary": "Put wrapper for bfq_io_cq cleanup. Called when an io_cq is being freed (e.g., elevator exit). Releases references on all per-actuator bfq_queue structures tracked in bic's arrays. The caller must not access the bic or associated bfqqs after this call. The spinlock ensures atomicity with the scheduler state; if bfqd is gone, it still iterates over all possible actuators using pre-zeroed fields. This is the final release of the bic's references."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq_data.stable_merge_bfqq.ref",
+          "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq.new_bfqq.ref",
+          "bfq_io_cq--bfq_queue--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access paths in the candidate operations start from 'bic', but the function's first parameter is 'icq'. The critical variable at the function interface is 'icq', not 'bic'. The conversion from icq to bic via icq_to_bic is not reflected in the path. Therefore, the paths are inconsistent with the function interface. Additionally, the type chains start with bfq_io_cq instead of the parameter type io_cq. Thus, all operations are invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq_data.stable_merge_bfqq.ref",
+          "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq.new_bfqq.ref",
+          "bfq_io_cq--bfq_queue--bfq_queue--int"
+        ]
+      ],
+      "reason": "The function is a put wrapper: it obtains bic from the input parameter icq via icq_to_bic, then calls the internal _bfq_exit_icq that performs two put operations on refcount fields inside bic. The check's rejection based on the path starting from bic rather than icq is overly strict; bic is the actual refcounted object derived from icq, and the operations correctly describe the effect. The function has high purity—its sole purpose is to decrement these refcounts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bic.bfqq_data.stable_merge_bfqq.ref",
+        "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "bic.bfqq.new_bfqq.ref",
+        "bfq_io_cq--bfq_queue--bfq_queue--int"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper that always executes; failure would indicate a double-free bug, not a transient condition.",
+    "contract_summary": "Put wrapper for bfq_io_cq cleanup. Called when an io_cq is being freed (e.g., elevator exit). Releases references on all per-actuator bfq_queue structures tracked in bic's arrays. The caller must not access the bic or associated bfqqs after this call. The spinlock ensures atomicity with the scheduler state; if bfqd is gone, it still iterates over all possible actuators using pre-zeroed fields. This is the final release of the bic's references."
+  }
+}

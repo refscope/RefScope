@@ -1,0 +1,115 @@
+{
+  "function_name": "btf_get_by_fd",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "btf.refcnt.refs",
+      "btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates invalid fd or missing object; retrying with same fd will not succeed.",
+  "contract_summary": "This function is a get-wrapper that looks up a BTF object by file descriptor (via __btf_get_by_fd) and acquires a reference on it. On success, it returns the BTF object with an incremented refcount; the caller owns this reference and must release it with btf_put when done. On failure, it returns an error pointer; the caller must check the return value and not use the object. The operation is conditional on the fd being valid and the object existing; retrying with the same fd will not change the outcome.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a BTF object by fd and acquire a reference via refcount_inc; minimal logic beyond lookup and reference increment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates invalid fd or missing object; retrying with same fd will not succeed.",
+      "contract_summary": "This function is a get-wrapper that looks up a BTF object by file descriptor (via __btf_get_by_fd) and acquires a reference on it. On success, it returns the BTF object with an incremented refcount; the caller owns this reference and must release it with btf_put when done. On failure, it returns an error pointer; the caller must check the return value and not use the object. The operation is conditional on the fd being valid and the object existing; retrying with the same fd will not change the outcome."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation matches the function: btf is the return value, refcount_inc is called on &btf->refcnt. The access path from return (btf) through .refcnt to .refs is consistent with the callee's expectations. Segment counts match, and the direction is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "btf.refcnt.refs",
+        "btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates invalid fd or missing object; retrying with same fd will not succeed.",
+    "contract_summary": "This function is a get-wrapper that looks up a BTF object by file descriptor (via __btf_get_by_fd) and acquires a reference on it. On success, it returns the BTF object with an incremented refcount; the caller owns this reference and must release it with btf_put when done. On failure, it returns an error pointer; the caller must check the return value and not use the object. The operation is conditional on the fd being valid and the object existing; retrying with the same fd will not change the outcome."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "audit_put_chunk",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "chunk.refs",
+      "audit_chunk--atomic_long_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_chunk",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "chunk.owners[0].owner.tree.count.refs",
+      "member_type_chain": "audit_chunk--audit_chunk_owner--audit_tree--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_chunk",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "chunk.owners[0].owner.tree.count.refs",
+      "member_type_chain": "audit_chunk--audit_chunk_owner--audit_tree--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always succeeds and has no error return; retry is not applicable.",
+  "contract_summary": "audit_put_chunk decrements the reference count of an audit_chunk via atomic_long_dec_and_test. If the count reaches zero, it calls free_chunk to release the chunk and its associated resources, effectively freeing the object. The caller must hold a valid reference on the chunk before calling this function; after the call returns, the caller must not dereference or use the chunk pointer again if there are no other outstanding references. This is a standard put wrapper that unconditionally releases one reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of an audit_chunk and conditionally free it. The only non-refcount logic is the call to free_chunk, which is part of the put contract.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always succeeds and has no error return; retry is not applicable.",
+      "contract_summary": "audit_put_chunk decrements the reference count of an audit_chunk via atomic_long_dec_and_test. If the count reaches zero, it calls free_chunk to release the chunk and its associated resources, effectively freeing the object. The caller must hold a valid reference on the chunk before calling this function; after the call returns, the caller must not dereference or use the chunk pointer again if there are no other outstanding references. This is a standard put wrapper that unconditionally releases one reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "chunk.refs",
+          "audit_chunk--atomic_long_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "chunk.refs",
+          "audit_chunk--atomic_long_t"
+        ]
+      ],
+      "reason": "The function directly decrements chunk->refs via atomic_long_dec_and_test, which is a put operation on parameter chunk. The access path 'chunk.refs' and type chain 'audit_chunk--atomic_long_t' correctly reflect the code. The callee free_chunk's internal path does not affect this direct operation."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "chunk.refs",
+        "audit_chunk--atomic_long_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always succeeds and has no error return; retry is not applicable.",
+    "contract_summary": "audit_put_chunk decrements the reference count of an audit_chunk via atomic_long_dec_and_test. If the count reaches zero, it calls free_chunk to release the chunk and its associated resources, effectively freeing the object. The caller must hold a valid reference on the chunk before calling this function; after the call returns, the caller must not dereference or use the chunk pointer again if there are no other outstanding references. This is a standard put wrapper that unconditionally releases one reference."
+  }
+}

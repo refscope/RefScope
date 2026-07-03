@@ -1,0 +1,99 @@
+{
+  "function_name": "btf_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "btf.refcnt.refs",
+      "btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Passing NULL is a safe no-op; putting a valid object always succeeds (refcount decremented). Retrying would introduce a double-put and is dangerous.",
+  "contract_summary": "Releases one reference on a struct btf. If the reference count drops to zero, the BTF ID is freed and the object is scheduled for RCU-free (btf_free_rcu). Calling btf_put on a NULL pointer is safely ignored. After calling btf_put, the caller must not access the btf object unless they hold another valid reference. There is no return value to check; the caller must rely on their own reference tracking.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement refcount and free the BTF object when refcount reaches zero; minimal additional logic (NULL check and cleanup calls on zero path).",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Passing NULL is a safe no-op; putting a valid object always succeeds (refcount decremented). Retrying would introduce a double-put and is dangerous.",
+      "contract_summary": "Releases one reference on a struct btf. If the reference count drops to zero, the BTF ID is freed and the object is scheduled for RCU-free (btf_free_rcu). Calling btf_put on a NULL pointer is safely ignored. After calling btf_put, the caller must not access the btf object unless they hold another valid reference. There is no return value to check; the caller must rely on their own reference tracking."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "btf.refcnt.refs",
+          "btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "btf.refcnt.refs",
+          "btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_dec_and_test call operates on &btf->refcnt, which corresponds to the access path btf.refcnt.refs starting from parameter btf. The type chain btf--refcount_t--atomic_t correctly traces the struct btf, its field refcnt (refcount_t), and the internal refs field (atomic_t). Segment counts match (3 each), and the operation direction 'put' is consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "btf.refcnt.refs",
+        "btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Passing NULL is a safe no-op; putting a valid object always succeeds (refcount decremented). Retrying would introduce a double-put and is dangerous.",
+    "contract_summary": "Releases one reference on a struct btf. If the reference count drops to zero, the BTF ID is freed and the object is scheduled for RCU-free (btf_free_rcu). Calling btf_put on a NULL pointer is safely ignored. After calling btf_put, the caller must not access the btf object unless they hold another valid reference. There is no return value to check; the caller must rely on their own reference tracking."
+  }
+}

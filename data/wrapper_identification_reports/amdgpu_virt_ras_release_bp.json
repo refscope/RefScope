@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_virt_ras_release_bp",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.virt.virt_eh_data.bps_bo[i].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_virt--amdgpu_virt_ras_err_handler_data--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper that calls amdgpu_bo_free_kernel on each non-NULL BO; failure is not expected and retrying after a failed put would risk use-after-free or double-put.",
+  "contract_summary": "This function releases all buffer objects (BOs) previously reserved in the virt_eh_data->bps_bo array by calling amdgpu_bo_free_kernel on each non-NULL entry. After the function returns, the array entries are set to NULL and last_reserved is decremented to zero, indicating all BOs have been freed. The caller must not access any of the freed BO pointers after this call, as they are no longer valid. This function is part of the error handler cleanup path for SR-IOV virtualized AMD GPUs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release the buffer object references stored in the bps_bo array via amdgpu_bo_free_kernel (a put function). The only additional logic is updating the last_reserved counter and nullifying array entries, which is standard bookkeeping for a release function.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper that calls amdgpu_bo_free_kernel on each non-NULL BO; failure is not expected and retrying after a failed put would risk use-after-free or double-put.",
+      "contract_summary": "This function releases all buffer objects (BOs) previously reserved in the virt_eh_data->bps_bo array by calling amdgpu_bo_free_kernel on each non-NULL entry. After the function returns, the array entries are set to NULL and last_reserved is decremented to zero, indicating all BOs have been freed. The caller must not access any of the freed BO pointers after this call, as they are no longer valid. This function is part of the error handler cleanup path for SR-IOV virtualized AMD GPUs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.virt.virt_eh_data.bps_bo[i].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_virt--amdgpu_virt_ras_err_handler_data--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.virt.virt_eh_data.bps_bo[i].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_virt--amdgpu_virt_ras_err_handler_data--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls amdgpu_bo_free_kernel on bo, which is a put operation. The bo is reached via the parameter adev through the path adev->virt->virt_eh_data->bps_bo[i]. The access path and type chain are consistent with the callee info and the code, and segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.virt.virt_eh_data.bps_bo[i].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_virt--amdgpu_virt_ras_err_handler_data--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper that calls amdgpu_bo_free_kernel on each non-NULL BO; failure is not expected and retrying after a failed put would risk use-after-free or double-put.",
+    "contract_summary": "This function releases all buffer objects (BOs) previously reserved in the virt_eh_data->bps_bo array by calling amdgpu_bo_free_kernel on each non-NULL entry. After the function returns, the array entries are set to NULL and last_reserved is decremented to zero, indicating all BOs have been freed. The caller must not access any of the freed BO pointers after this call, as they are no longer valid. This function is part of the error handler cleanup path for SR-IOV virtualized AMD GPUs."
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "function_name": "btrfs_release_log_ctx_extents",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_put_ordered_extent",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.refs.refs",
+      "member_type_chain": "btrfs_ordered_extent--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_put_ordered_extent",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.refs.refs",
+      "member_type_chain": "btrfs_ordered_extent--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation always succeeds and does not return a status; it simply drains the list, so there is no failure to retry.",
+  "contract_summary": "This function releases all ordered extents stored in ctx->ordered_extents by calling btrfs_put_ordered_extent on each one, after removing them from the list. It must be called with the inode lock held (btrfs_assert_inode_locked). After this call, the ordered_extents list is empty and the caller must not use any of the freed ordered extents. This is a cleanup/release helper typically invoked when tearing down a log context or after processing all pending ordered extents.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references (btrfs_put_ordered_extent) on all ordered extents in the context's list. The only additional logic is list_del_init, which is minimal cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation always succeeds and does not return a status; it simply drains the list, so there is no failure to retry.",
+      "contract_summary": "This function releases all ordered extents stored in ctx->ordered_extents by calling btrfs_put_ordered_extent on each one, after removing them from the list. It must be called with the inode lock held (btrfs_assert_inode_locked). After this call, the ordered_extents list is empty and the caller must not use any of the freed ordered extents. This is a cleanup/release helper typically invoked when tearing down a log context or after processing all pending ordered extents."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": []
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "The candidate ResultList is empty, so there are no extracted operations to validate. The function does contain a put operation (btrfs_put_ordered_extent) on the refcount of ordered, but it was not included in the extraction; the validation passes as no inconsistent operations are present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation always succeeds and does not return a status; it simply drains the list, so there is no failure to retry.",
+    "contract_summary": "This function releases all ordered extents stored in ctx->ordered_extents by calling btrfs_put_ordered_extent on each one, after removing them from the list. It must be called with the inode lock held (btrfs_assert_inode_locked). After this call, the ordered_extents list is empty and the caller must not use any of the freed ordered extents. This is a cleanup/release helper typically invoked when tearing down a log context or after processing all pending ordered extents."
+  }
+}

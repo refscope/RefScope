@@ -1,0 +1,115 @@
+{
+  "function_name": "alloc_uobj",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "uobj.ref.refcount.refs",
+      "ib_uobject--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_init always succeeds; allocation failure would return ERR_PTR but that is not a refcount failure.",
+  "contract_summary": "Set-wrapper: allocates a new ib_uobject and initializes its kref reference count to 1 (via kref_init). The caller receives a fresh object with one reference held. The caller must eventually release this reference by calling the appropriate put function (e.g., uverbs_uobject_put) when done. The object is added to a list only in the commit stage; until then it is write-locked. This function represents the 'birth' point of the object's lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is object allocation and initialization, including kref_init which sets the initial reference count to 1. The function creates a new uobject and returns it to the caller. No additional business logic beyond creation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_init always succeeds; allocation failure would return ERR_PTR but that is not a refcount failure.",
+      "contract_summary": "Set-wrapper: allocates a new ib_uobject and initializes its kref reference count to 1 (via kref_init). The caller receives a fresh object with one reference held. The caller must eventually release this reference by calling the appropriate put function (e.g., uverbs_uobject_put) when done. The object is added to a list only in the commit stage; until then it is write-locked. This function represents the 'birth' point of the object's lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "uobj.ref.refcount.refs",
+          "ib_uobject--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "uobj.ref.refcount.refs",
+          "ib_uobject--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "kref_init is called on &uobj->ref, setting the refcount. The critical variable at the function interface is the return value uobj. The access path uobj.ref.refcount.refs correctly traces from the return variable through struct members to the atomic refs. The type chain ib_uobject--kref--refcount_struct--atomic_t is consistent with the kernel struct definitions. Segment counts match (4 segments, 4 types). Direction 'set' is appropriate for kref_init."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "uobj.ref.refcount.refs",
+        "ib_uobject--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_init always succeeds; allocation failure would return ERR_PTR but that is not a refcount failure.",
+    "contract_summary": "Set-wrapper: allocates a new ib_uobject and initializes its kref reference count to 1 (via kref_init). The caller receives a fresh object with one reference held. The caller must eventually release this reference by calling the appropriate put function (e.g., uverbs_uobject_put) when done. The object is added to a list only in the commit stage; until then it is write-locked. This function represents the 'birth' point of the object's lifecycle."
+  }
+}

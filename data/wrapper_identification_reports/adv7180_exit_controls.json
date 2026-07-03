@@ -1,0 +1,106 @@
+{
+  "function_name": "adv7180_exit_controls",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "0",
+      "state.ctrl_hdl.req_obj.kref.refcount",
+      "adv7180_state--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "v4l2_ctrl_handler_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdl.req_obj.kref.refcount",
+      "member_type_chain": "v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "v4l2_ctrl_handler_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdl.req_obj.kref.refcount",
+      "member_type_chain": "v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "v4l2_ctrl_handler_free is unconditional and always decrements the refcount; retrying would cause a double-free if the refcount reaches zero.",
+  "contract_summary": "Put wrapper that releases the reference on the device's V4L2 control handler (state->ctrl_hdl). After calling this function, the control handler must not be accessed. This function is typically called during driver cleanup (e.g., remove or error path) as part of releasing all acquired references. It does not return a value; the operation always executes.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on the V4L2 control handler via v4l2_ctrl_handler_free, which is a put operation on the handler's internal refcount. No other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "v4l2_ctrl_handler_free is unconditional and always decrements the refcount; retrying would cause a double-free if the refcount reaches zero.",
+      "contract_summary": "Put wrapper that releases the reference on the device's V4L2 control handler (state->ctrl_hdl). After calling this function, the control handler must not be accessed. This function is typically called during driver cleanup (e.g., remove or error path) as part of releasing all acquired references. It does not return a value; the operation always executes."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.ctrl_hdl.req_obj.kref.refcount",
+          "adv7180_state--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate uses parameter index 1, but the caller adv7180_exit_controls passes the critical variable as the first (and only) argument, which should be parameter index 0. Since the indexing is off by one, the operation is not correctly tied to the function interface."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "0",
+          "state.ctrl_hdl.req_obj.kref.refcount",
+          "adv7180_state--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The check rejected the candidate due to parameter index 1 instead of 0, but the critical variable state->ctrl_hdl is passed as the first argument (parameter index 0) to v4l2_ctrl_handler_free. The function is a pure wrapper that performs only the put operation on the control handler's refcount. The candidate was correct except for the off-by-one indexing, which we correct here."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "0",
+        "state.ctrl_hdl.req_obj.kref.refcount",
+        "adv7180_state--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "v4l2_ctrl_handler_free is unconditional and always decrements the refcount; retrying would cause a double-free if the refcount reaches zero.",
+    "contract_summary": "Put wrapper that releases the reference on the device's V4L2 control handler (state->ctrl_hdl). After calling this function, the control handler must not be accessed. This function is typically called during driver cleanup (e.g., remove or error path) as part of releasing all acquired references. It does not return a value; the operation always executes."
+  }
+}

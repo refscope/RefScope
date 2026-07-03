@@ -1,0 +1,106 @@
+{
+  "function_name": "amd_iommu_device_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "devices_kobj.kref.refcount",
+      "iommu_group--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpihid_device_group",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "devices_kobj.kref.refcount",
+      "member_type_chain": "iommu_group--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpihid_device_group",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "devices_kobj.kref.refcount",
+      "member_type_chain": "iommu_group--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The path depends solely on device type, which is fixed; if the callee returns NULL, retrying with the same device will not succeed.",
+  "contract_summary": "This function is a get-wrapper that acquires a reference on an iommu_group for the given device. It delegates to pci_device_group for PCI devices and to acpihid_device_group for ACPI HID devices. The caller receives a reference-counted pointer and must call iommu_group_put to release it when done. If the return value is NULL, the device has no associated IOMMU group, and retrying is pointless since the device type is immutable.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to return an iommu_group for the device, with a reference transferred to the caller. The function only selects between two callees (pci_device_group or acpihid_device_group) based on device type, each of which increments the refcount on the returned group. No other logic is performed.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The path depends solely on device type, which is fixed; if the callee returns NULL, retrying with the same device will not succeed.",
+      "contract_summary": "This function is a get-wrapper that acquires a reference on an iommu_group for the given device. It delegates to pci_device_group for PCI devices and to acpihid_device_group for ACPI HID devices. The caller receives a reference-counted pointer and must call iommu_group_put to release it when done. If the return value is NULL, the device has no associated IOMMU group, and retrying is pointless since the device type is immutable."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "group.devices_kobj.kref.refcount",
+          "iommu_group--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'group.devices_kobj.kref.refcount' is incorrect: the return value is a pointer to struct iommu_group, so the path should start with 'devices_kobj' directly, not 'group'. The added 'group.' segment does not correspond to any field in iommu_group."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "devices_kobj.kref.refcount",
+          "iommu_group--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function amd_iommu_device_group is a wrapper that returns a pointer to struct iommu_group by calling either pci_device_group (for PCI devices) or acpihid_device_group (for ACPI HID devices). The callee acpihid_device_group is a known get-wrapper that returns an iommu_group with an incremented reference count. The critical variable (the returned iommu_group pointer) flows to the caller via the return value. The candidate operation correctly identifies a get operation on the return value, but the path had an erroneous leading 'group.' segment. The correct path starts from the returned pointer: devices_kobj.kref.refcount. The extraction is otherwise correct, and the function has high purity as its sole purpose is to obtain and return the iommu_group."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "devices_kobj.kref.refcount",
+        "iommu_group--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The path depends solely on device type, which is fixed; if the callee returns NULL, retrying with the same device will not succeed.",
+    "contract_summary": "This function is a get-wrapper that acquires a reference on an iommu_group for the given device. It delegates to pci_device_group for PCI devices and to acpihid_device_group for ACPI HID devices. The caller receives a reference-counted pointer and must call iommu_group_put to release it when done. If the return value is NULL, the device has no associated IOMMU group, and retrying is pointless since the device type is immutable."
+  }
+}

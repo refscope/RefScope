@@ -1,0 +1,99 @@
+{
+  "function_name": "airoha_ppe_put_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.priv.eth.dev.kobj.kref.refcount",
+      "airoha_ppe_dev--airoha_ppe--airoha_eth--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operations are unconditional and always succeed; retrying would cause double-release (use-after-free).",
+  "contract_summary": "Releases one reference on the given airoha_ppe_dev's associated device (eth->dev) and releases the module reference on THIS_MODULE. After this call, the caller must not access the device's resources (e.g., the dev pointer) as the reference count has been decremented. The function is the put-side counterpart to a previous get (e.g., from airoha_ppe_get_dev or similar). It is unconditional and does not return any error; the caller should not retry and must ensure the references were previously acquired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the device via put_device and decrement the module usage count via module_put; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operations are unconditional and always succeed; retrying would cause double-release (use-after-free).",
+      "contract_summary": "Releases one reference on the given airoha_ppe_dev's associated device (eth->dev) and releases the module reference on THIS_MODULE. After this call, the caller must not access the device's resources (e.g., the dev pointer) as the reference count has been decremented. The function is the put-side counterpart to a previous get (e.g., from airoha_ppe_get_dev or similar). It is unconditional and does not return any error; the caller should not retry and must ensure the references were previously acquired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.priv.eth.dev.kobj.kref.refcount",
+          "airoha_ppe_dev--airoha_ppe--airoha_eth--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.priv.eth.dev.kobj.kref.refcount",
+          "airoha_ppe_dev--airoha_ppe--airoha_eth--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put_device call operates on eth->dev, which is accessed from parameter dev via dev->priv->eth->dev. The path dev.priv.eth.dev.kobj.kref.refcount correctly traces from the parameter to the refcount field. The type chain matches the struct definitions and the callee's internal path."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.priv.eth.dev.kobj.kref.refcount",
+        "airoha_ppe_dev--airoha_ppe--airoha_eth--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operations are unconditional and always succeed; retrying would cause double-release (use-after-free).",
+    "contract_summary": "Releases one reference on the given airoha_ppe_dev's associated device (eth->dev) and releases the module reference on THIS_MODULE. After this call, the caller must not access the device's resources (e.g., the dev pointer) as the reference count has been decremented. The function is the put-side counterpart to a previous get (e.g., from airoha_ppe_get_dev or similar). It is unconditional and does not return any error; the caller should not retry and must ensure the references were previously acquired."
+  }
+}

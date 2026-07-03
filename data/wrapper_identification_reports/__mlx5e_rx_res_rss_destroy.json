@@ -1,0 +1,99 @@
+{
+  "function_name": "__mlx5e_rx_res_rss_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "0",
+      "res.rss[rss_idx].refcnt.refs",
+      "mlx5e_rx_res--mlx5e_rss--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mlx5e_rss_cleanup",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rss.refcnt.refs",
+      "member_type_chain": "mlx5e_rss--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mlx5e_rss_cleanup",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rss.refcnt.refs",
+      "member_type_chain": "mlx5e_rss--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If mlx5e_rss_cleanup fails, the object's state is unknown; retrying could cause use-after-free or double-free.",
+  "contract_summary": "This function destroys a RSS entry by releasing the reference on the mlx5e_rss object via mlx5e_rss_cleanup (a put operation) and clearing the corresponding slot in res->rss array. The caller must ensure rss_idx is valid and that the entry has not already been destroyed. On success, the slot is NULL and the caller must not access the old rss pointer. On failure, the function returns an error and does not clear the slot; the caller should handle the error and must not assume the object is released. The function does not transfer ownership to the caller but removes it from the container.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on the mlx5e_rss object via mlx5e_rss_cleanup (a put function) and clear the slot in the array. The only other logic is error handling and NULL assignment, which are part of the destroy contract.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If mlx5e_rss_cleanup fails, the object's state is unknown; retrying could cause use-after-free or double-free.",
+      "contract_summary": "This function destroys a RSS entry by releasing the reference on the mlx5e_rss object via mlx5e_rss_cleanup (a put operation) and clearing the corresponding slot in res->rss array. The caller must ensure rss_idx is valid and that the entry has not already been destroyed. On success, the slot is NULL and the caller must not access the old rss pointer. On failure, the function returns an error and does not clear the slot; the caller should handle the error and must not assume the object is released. The function does not transfer ownership to the caller but removes it from the container."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "res.rss[rss_idx].refcnt.refs",
+          "mlx5e_rx_res--mlx5e_rss--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "0",
+          "res.rss[rss_idx].refcnt.refs",
+          "mlx5e_rx_res--mlx5e_rss--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The call to mlx5e_rss_cleanup(rss) decrements the refcount on the rss object. The critical variable is parameter 0 (res) with access path res.rss[rss_idx].refcnt.refs, matching the callee's path and type chain. Location index corrected from 1 to 0 because the object is derived from the first parameter."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "0",
+        "res.rss[rss_idx].refcnt.refs",
+        "mlx5e_rx_res--mlx5e_rss--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If mlx5e_rss_cleanup fails, the object's state is unknown; retrying could cause use-after-free or double-free.",
+    "contract_summary": "This function destroys a RSS entry by releasing the reference on the mlx5e_rss object via mlx5e_rss_cleanup (a put operation) and clearing the corresponding slot in res->rss array. The caller must ensure rss_idx is valid and that the entry has not already been destroyed. On success, the slot is NULL and the caller must not access the old rss pointer. On failure, the function returns an error and does not clear the slot; the caller should handle the error and must not assume the object is released. The function does not transfer ownership to the caller but removes it from the container."
+  }
+}

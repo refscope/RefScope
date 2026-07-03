@@ -1,0 +1,186 @@
+{
+  "function_name": "bpf_prog_load",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.mod.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--module--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    },
+    {
+      "callee_function_name": "free_uid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "up.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_get_by_fd",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.attach_btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_current_user",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "__u.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.mod.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--module--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    },
+    {
+      "callee_function_name": "free_uid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "up.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_get_by_fd",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.attach_btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_current_user",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "__u.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry semantics are inapplicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to handle the BPF_PROG_LOAD syscall: validate attributes, allocate and populate a bpf_prog, run the verifier, assign an ID, and create a file descriptor. The numerous get/put calls (token, btf, dst_prog, user) are incidental resource management steps within the complex load logic, not the core purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry semantics are inapplicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 9,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry semantics are inapplicable.",
+    "contract_summary": ""
+  }
+}

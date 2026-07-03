@@ -1,0 +1,99 @@
+{
+  "function_name": "__prestera_kern_fib_cache_destruct",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "fib_cache.fen4_info.fi.fib_clntref.refs",
+      "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fib_info_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fi.fib_clntref.refs",
+      "member_type_chain": "fib_info--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fib_info_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fi.fib_clntref.refs",
+      "member_type_chain": "fib_info--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable: the function is a destructor, put operations are unconditional when pointers are non-null, and failure is not defined.",
+  "contract_summary": "This destructor releases all references held by a `prestera_kern_fib_cache` object. It iterates over each neighbor cache entry (up to PRESTERA_NHGR_SIZE_MAX), removes the entry from the list, and puts the neighbor cache reference. Then it puts the fib_info reference via `fib_info_put`. After calling this function, the `fib_cache` object's internal references are released; the caller should not access the released objects and is expected to free the `fib_cache` memory if necessary. This function is the cleanup counterpart to the allocation/get operations and is typically called when the fib_cache is deallocated.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all reference-counted objects held by the fib_cache (neighbor cache entries and fib_info). Only operations are list removal and put calls. No other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable: the function is a destructor, put operations are unconditional when pointers are non-null, and failure is not defined.",
+      "contract_summary": "This destructor releases all references held by a `prestera_kern_fib_cache` object. It iterates over each neighbor cache entry (up to PRESTERA_NHGR_SIZE_MAX), removes the entry from the list, and puts the neighbor cache reference. Then it puts the fib_info reference via `fib_info_put`. After calling this function, the `fib_cache` object's internal references are released; the caller should not access the released objects and is expected to free the `fib_cache` memory if necessary. This function is the cleanup counterpart to the allocation/get operations and is typically called when the fib_cache is deallocated."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "fib_cache.fen4_info.fi.fib_clntref.refs",
+          "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "fib_cache.fen4_info.fi.fib_clntref.refs",
+          "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code calls fib_info_put(fib_cache->fen4_info.fi), which decrements the refcount fib_clntref.refs inside fib_info. The access path starting from parameter 2 (fib_cache) correctly traces through fen4_info.fi to the refcount field, and the type chain matches the callee's description. Segment counts match (5 segments, 5 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "fib_cache.fen4_info.fi.fib_clntref.refs",
+        "prestera_kern_fib_cache--fen4_info_struct--fib_info--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable: the function is a destructor, put operations are unconditional when pointers are non-null, and failure is not defined.",
+    "contract_summary": "This destructor releases all references held by a `prestera_kern_fib_cache` object. It iterates over each neighbor cache entry (up to PRESTERA_NHGR_SIZE_MAX), removes the entry from the list, and puts the neighbor cache reference. Then it puts the fib_info reference via `fib_info_put`. After calling this function, the `fib_cache` object's internal references are released; the caller should not access the released objects and is expected to free the `fib_cache` memory if necessary. This function is the cleanup counterpart to the allocation/get operations and is typically called when the fib_cache is deallocated."
+  }
+}

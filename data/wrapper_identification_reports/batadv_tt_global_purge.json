@@ -1,0 +1,58 @@
+{
+  "function_name": "batadv_tt_global_purge",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_tt_global_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_tt_global_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and cannot fail; it is part of a larger cleanup loop, not a retryable get/put wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of batadv_tt_global_purge is to iterate over the global translation table and remove entries that are flagged for purging (via batadv_tt_global_to_purge). The batadv_tt_global_entry_put call is a cleanup step executed after removal, not the central purpose. The function does not expose any reference-counted object to the caller; it modifies internal data structures.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and cannot fail; it is part of a larger cleanup loop, not a retryable get/put wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and cannot fail; it is part of a larger cleanup loop, not a retryable get/put wrapper.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "function_name": "SYSCALL_DEFINE2",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "groups_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "gi.usage.refs",
+      "member_type_chain": "group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_ruleset_from_fd",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ruleset.usage.refs",
+      "member_type_chain": "landlock_ruleset--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "landlock_put_ruleset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ruleset.usage.refs",
+      "member_type_chain": "landlock_ruleset--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "inotify_idr_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "i_mark.fsn_mark.refcnt.refs",
+      "member_type_chain": "inotify_inode_mark--fsnotify_mark--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "get_user_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.ns.__ns_ref",
+      "member_type_chain": "user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "fsnotify_put_mark",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "pidfd_get_task",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "task.usage.refs",
+      "member_type_chain": "task_struct--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "fscontext_create_fd",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fc.log.log.usage.refs",
+      "member_type_chain": "fs_context--log--fc_log--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "inc_ucount",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ucounts.count",
+      "member_type_chain": "ucounts--rcuref"
+    },
+    {
+      "callee_function_name": "put_fs_context",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fc.log.log.usage.refs",
+      "member_type_chain": "fs_context--log--fc_log--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "find_user",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_group_info",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "group_info.usage.refs",
+      "member_type_chain": "group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    },
+    {
+      "callee_function_name": "fscontext_alloc_log",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fc.log.log.usage.refs",
+      "member_type_chain": "fs_context--fs_log--log--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "abort_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "put_nsset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nsset.cred.usage",
+      "member_type_chain": "nsset--cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "free_uid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "up.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_pid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pid.count.refs",
+      "member_type_chain": "pid--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "inc_ucount",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.ns.__ns_ref",
+      "member_type_chain": "user_namespace--ns_common--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "landlock_put_ruleset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ruleset.usage.refs",
+      "member_type_chain": "landlock_ruleset--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_pid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pid.count.refs",
+      "member_type_chain": "pid--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "groups_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "gi.usage.refs",
+      "member_type_chain": "group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "fscontext_alloc_log",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fc.log.log.usage.refs",
+      "member_type_chain": "fs_context--fs_log--log--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "free_uid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "up.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "fsnotify_put_mark",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_group_info",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "group_info.usage.refs",
+      "member_type_chain": "group_info--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — function is not a refcount wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a full system call implementation (swapon) that performs extensive swap-related setup: validation, file opening, header parsing, resource allocation, and state initialization. It contains no dedicated refcount management operations; any refcount interactions are deeply embedded within various callees (e.g., file_open_name) that are part of broader business logic. The primary purpose is not reference-count management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — function is not a refcount wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 8,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — function is not a refcount wrapper.",
+    "contract_summary": ""
+  }
+}

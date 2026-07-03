@@ -1,0 +1,159 @@
+{
+  "function_name": "afs_cache_wb_key",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "parameter",
+      "2",
+      "af.wb.usage.refs",
+      "afs_file--afs_wb_key--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "af.wb.usage.refs",
+      "afs_file--afs_wb_key--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The only failure mode is ENOMEM (allocation failure); retrying immediately is unlikely to succeed and the function does not provide any backoff; the caller may retry later if appropriate, but this is not part of the wrapper's contract.",
+  "contract_summary": "This is a get-or-create wrapper for a writeback key (afs_wb_key) associated with an afs_vnode and an afs_file. On success, it sets af->wb to a pointer with its usage count already incremented (refcount_set to 2 for a new entry, or refcount_inc if an existing entry is reused). The caller obtains a reference that must be released by a corresponding put (e.g., afs_put_wb_key) when the file is done with it. The function handles duplicate keys by finding and reusing the existing entry. On ENOMEM failure, af->wb is not modified and -ENOMEM is returned; the caller must check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is reference-count management: get-or-create a writeback key with an initialized usage count, or increment an existing one. It returns the object via af->wb and includes minimal supporting logic (allocation, list operations, key_get).",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The only failure mode is ENOMEM (allocation failure); retrying immediately is unlikely to succeed and the function does not provide any backoff; the caller may retry later if appropriate, but this is not part of the wrapper's contract.",
+      "contract_summary": "This is a get-or-create wrapper for a writeback key (afs_wb_key) associated with an afs_vnode and an afs_file. On success, it sets af->wb to a pointer with its usage count already incremented (refcount_set to 2 for a new entry, or refcount_inc if an existing entry is reused). The caller obtains a reference that must be released by a corresponding put (e.g., afs_put_wb_key) when the file is done with it. The function handles duplicate keys by finding and reusing the existing entry. On ENOMEM failure, af->wb is not modified and -ENOMEM is returned; the caller must check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "parameter",
+          "2",
+          "af.wb.usage.refs",
+          "afs_file--afs_wb_key--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "af.wb.usage.refs",
+          "afs_file--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "parameter",
+          "2",
+          "af.wb.usage.refs",
+          "afs_file--afs_wb_key--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "af.wb.usage.refs",
+          "afs_file--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both set and get operations correctly trace from parameter 2 (af) through wb to usage.refs. refcount_set sets initial usage to 2 on new wbk, refcount_inc increments usage on existing wbk. The type chain afs_file--afs_wb_key--refcount_t--atomic_t matches the struct definitions and callee's member path r.refs. Access path segment count (4) matches type count (4)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "parameter",
+        "2",
+        "af.wb.usage.refs",
+        "afs_file--afs_wb_key--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "af.wb.usage.refs",
+        "afs_file--afs_wb_key--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The only failure mode is ENOMEM (allocation failure); retrying immediately is unlikely to succeed and the function does not provide any backoff; the caller may retry later if appropriate, but this is not part of the wrapper's contract.",
+    "contract_summary": "This is a get-or-create wrapper for a writeback key (afs_wb_key) associated with an afs_vnode and an afs_file. On success, it sets af->wb to a pointer with its usage count already incremented (refcount_set to 2 for a new entry, or refcount_inc if an existing entry is reused). The caller obtains a reference that must be released by a corresponding put (e.g., afs_put_wb_key) when the file is done with it. The function handles duplicate keys by finding and reusing the existing entry. On ENOMEM failure, af->wb is not modified and -ENOMEM is returned; the caller must check the return value."
+  }
+}

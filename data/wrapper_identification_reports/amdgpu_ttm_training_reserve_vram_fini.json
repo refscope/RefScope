@@ -1,0 +1,106 @@
+{
+  "function_name": "amdgpu_ttm_training_reserve_vram_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "0",
+      "adev.mman.resv_region[AMDGPU_RESV_MEM_TRAIN].bo.tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_mman--amdgpu_vram_resv--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_ttm_unmark_vram_reserved",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "adev.mman.resv_region[id].bo.tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_ttm_unmark_vram_reserved",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "adev.mman.resv_region[id].bo.tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always succeeds; there is no failure path to retry.",
+  "contract_summary": "Put wrapper for the reserved VRAM BO used during memory training. It sets the training context initialization flag to 'not support' and then releases a reference on the reserved BO (by calling amdgpu_ttm_unmark_vram_reserved). The caller must call this exactly once during teardown of the memory training reserve. After this call, the reserved BO is no longer owned and may be freed, so the caller must not use it afterwards.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release a reference on the reserved VRAM BO via amdgpu_ttm_unmark_vram_reserved, with minimal unrelated logic (setting a state flag).",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always succeeds; there is no failure path to retry.",
+      "contract_summary": "Put wrapper for the reserved VRAM BO used during memory training. It sets the training context initialization flag to 'not support' and then releases a reference on the reserved BO (by calling amdgpu_ttm_unmark_vram_reserved). The caller must call this exactly once during teardown of the memory training reserve. After this call, the reserved BO is no longer owned and may be freed, so the caller must not use it afterwards."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.mman.resv_region[AMDGPU_RESV_MEM_TRAIN].bo.tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_mman--amdgpu_vram_resv--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation has parameter index 1, but the callee info indicates that the refcount put is on parameter index 0 (adev). The critical variable is adev, not the second argument AMDGPU_RESV_MEM_TRAIN. Therefore the location is incorrect, and the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "0",
+          "adev.mman.resv_region[AMDGPU_RESV_MEM_TRAIN].bo.tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_mman--amdgpu_vram_resv--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls amdgpu_ttm_unmark_vram_reserved, which is a put function on the adev parameter. The original candidate incorrectly used parameter index 1 (the AMDGPU_RESV_MEM_TRAIN constant), but the refcount operation is actually on the adev parameter (index 0). Since the operation is unambiguously visible from the callee info, the parameter index is corrected. The function has focused refcount semantics (unmark/reserve VRAM) with a minor side-effect (setting init flag), but the primary purpose is the put, so purity is high."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "0",
+        "adev.mman.resv_region[AMDGPU_RESV_MEM_TRAIN].bo.tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_mman--amdgpu_vram_resv--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always succeeds; there is no failure path to retry.",
+    "contract_summary": "Put wrapper for the reserved VRAM BO used during memory training. It sets the training context initialization flag to 'not support' and then releases a reference on the reserved BO (by calling amdgpu_ttm_unmark_vram_reserved). The caller must call this exactly once during teardown of the memory training reserve. After this call, the reserved BO is no longer owned and may be freed, so the caller must not use it afterwards."
+  }
+}

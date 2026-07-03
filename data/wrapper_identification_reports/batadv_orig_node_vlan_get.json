@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_orig_node_vlan_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "vlan.refcount.refcount.refs",
+      "batadv_orig_node_vlan--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means either the vlan does not exist (must be created separately) or its refcount is zero (object dying); neither case is resolved by immediate retry.",
+  "contract_summary": "RCU-protected get-wrapper: searches orig_node->vlan_list for a vlan entry with the specified vid. If found and the kref refcount is still positive (object alive), increments the refcount via kref_get_unless_zero and returns the pointer; otherwise returns NULL. The caller must check the return value and, if non-NULL, is responsible for releasing the reference by calling batadv_orig_node_vlan_put() when done. The caller does not need to hold any lock outside the function; RCU protection is internal. The function does not create a new vlan; it only acquires a reference to an existing one.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on an existing batadv_orig_node_vlan by matching vid and conditionally incrementing its kref; only ancillary logic is the list traversal and RCU locking.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means either the vlan does not exist (must be created separately) or its refcount is zero (object dying); neither case is resolved by immediate retry.",
+      "contract_summary": "RCU-protected get-wrapper: searches orig_node->vlan_list for a vlan entry with the specified vid. If found and the kref refcount is still positive (object alive), increments the refcount via kref_get_unless_zero and returns the pointer; otherwise returns NULL. The caller must check the return value and, if non-NULL, is responsible for releasing the reference by calling batadv_orig_node_vlan_put() when done. The caller does not need to hold any lock outside the function; RCU protection is internal. The function does not create a new vlan; it only acquires a reference to an existing one."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount.refs",
+          "batadv_orig_node_vlan--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount.refs",
+          "batadv_orig_node_vlan--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a pointer to batadv_orig_node_vlan (vlan). It acquires a reference via kref_get_unless_zero on &tmp->refcount, where tmp is assigned to vlan. The access path vlan.refcount.refcount.refs and type chain batadv_orig_node_vlan--kref--refcount_t--atomic_t correctly trace from the return variable to the atomic counter, matching the callee information. Direction 'get' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "vlan.refcount.refcount.refs",
+        "batadv_orig_node_vlan--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means either the vlan does not exist (must be created separately) or its refcount is zero (object dying); neither case is resolved by immediate retry.",
+    "contract_summary": "RCU-protected get-wrapper: searches orig_node->vlan_list for a vlan entry with the specified vid. If found and the kref refcount is still positive (object alive), increments the refcount via kref_get_unless_zero and returns the pointer; otherwise returns NULL. The caller must check the return value and, if non-NULL, is responsible for releasing the reference by calling batadv_orig_node_vlan_put() when done. The caller does not need to hold any lock outside the function; RCU protection is internal. The function does not create a new vlan; it only acquires a reference to an existing one."
+  }
+}

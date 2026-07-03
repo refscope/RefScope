@@ -1,0 +1,99 @@
+{
+  "function_name": "__lapb_devtostruct",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "use.refcnt.refs",
+      "lapb_cb--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "lapb_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lapb.refcnt.refs",
+      "member_type_chain": "lapb_cb--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "lapb_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lapb.refcnt.refs",
+      "member_type_chain": "lapb_cb--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Lookup failure indicates the dev is not currently associated with any lapb_cb; retrying without changes is unlikely to succeed.",
+  "contract_summary": "This function looks up a lapb_cb by net_device in the global lapb_list and acquires a reference on it via lapb_hold. It is a get-wrapper: the caller receives a pointer to the lapb_cb with an elevated refcount, and must call lapb_put when done. If no matching entry is found, NULL is returned. The caller must check the return value. The lookup is performed without locks, so the caller must ensure proper synchronization.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a lapb_cb by net_device and acquire a reference; minimal unrelated logic (list iteration).",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Lookup failure indicates the dev is not currently associated with any lapb_cb; retrying without changes is unlikely to succeed.",
+      "contract_summary": "This function looks up a lapb_cb by net_device in the global lapb_list and acquires a reference on it via lapb_hold. It is a get-wrapper: the caller receives a pointer to the lapb_cb with an elevated refcount, and must call lapb_put when done. If no matching entry is found, NULL is returned. The caller must check the return value. The lookup is performed without locks, so the caller must ensure proper synchronization."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "use.refcnt.refs",
+          "lapb_cb--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "use.refcnt.refs",
+          "lapb_cb--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code calls lapb_hold(use) on the found lapb_cb, which increments its refcount. The function returns use, so the refcount operation is on the return value. The access path use.refcnt.refs and type chain lapb_cb--refcount_t--atomic_t are consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "use.refcnt.refs",
+        "lapb_cb--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Lookup failure indicates the dev is not currently associated with any lapb_cb; retrying without changes is unlikely to succeed.",
+    "contract_summary": "This function looks up a lapb_cb by net_device in the global lapb_list and acquires a reference on it via lapb_hold. It is a get-wrapper: the caller receives a pointer to the lapb_cb with an elevated refcount, and must call lapb_put when done. If no matching entry is found, NULL is returned. The caller must check the return value. The lookup is performed without locks, so the caller must ensure proper synchronization."
+  }
+}

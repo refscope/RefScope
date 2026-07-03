@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_crypto_ctx_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.usage.refs",
+      "bpf_crypto_ctx--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The caller must hold a valid reference before calling; double-free would occur if refcount already zero, so retry is a bug.",
+  "contract_summary": "This is a reference-release (put) function. It decrements the reference count of a bpf_crypto_ctx. If the count reaches zero, it schedules the underlying object for RCU-free via call_rcu. The caller must hold a valid reference before calling this function and must not use the object after the call (unless they have another reference). No additional locking or RCU read-side is required by the caller for this function itself.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count and free the object on last reference; no other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The caller must hold a valid reference before calling; double-free would occur if refcount already zero, so retry is a bug.",
+      "contract_summary": "This is a reference-release (put) function. It decrements the reference count of a bpf_crypto_ctx. If the count reaches zero, it schedules the underlying object for RCU-free via call_rcu. The caller must hold a valid reference before calling this function and must not use the object after the call (unless they have another reference). No additional locking or RCU read-side is required by the caller for this function itself."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.usage.refs",
+          "bpf_crypto_ctx--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.usage.refs",
+          "bpf_crypto_ctx--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&ctx->usage) is a put operation on the parameter ctx. The access path ctx.usage.refs correctly traces from struct bpf_crypto_ctx to its field usage (refcount_t) and then to its internal atomic_t refs. The type chain bpf_crypto_ctx--refcount_t--atomic_t matches the struct definitions. Segment counts (3 segments, 3 types) are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.usage.refs",
+        "bpf_crypto_ctx--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The caller must hold a valid reference before calling; double-free would occur if refcount already zero, so retry is a bug.",
+    "contract_summary": "This is a reference-release (put) function. It decrements the reference count of a bpf_crypto_ctx. If the count reaches zero, it schedules the underlying object for RCU-free via call_rcu. The caller must hold a valid reference before calling this function and must not use the object after the call (unless they have another reference). No additional locking or RCU read-side is required by the caller for this function itself."
+  }
+}

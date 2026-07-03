@@ -1,0 +1,99 @@
+{
+  "function_name": "__fcloop_nport_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "nport.ref.refs",
+      "fcloop_nport--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fcloop_nport_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nport.ref.refs",
+      "member_type_chain": "fcloop_nport--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fcloop_nport_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nport.ref.refs",
+      "member_type_chain": "fcloop_nport--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the function returns NULL, either the matching nport was not found (list unchanged) or the nport's refcount was zero (object being freed). In both cases, retrying the same lookup will not succeed.",
+  "contract_summary": "Lookup-and-get wrapper: searches the global list of fcloop_nports for an entry matching the given node_name and port_name. If a matching entry is found and its refcount is non-zero (i.e., the object is still alive), fcloop_nport_get increments the refcount and the nport is returned to the caller with an acquired reference. If no match is found, or if the matching object is already in the process of being freed (refcount zero), NULL is returned. The caller must check the return value and, if non-NULL, must later call a corresponding put (e.g., fcloop_nport_put) to release the reference. This function does not allocate or create new objects; it only returns existing ones with an extra reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to lookup an nport in a list by identifiers and, if found, acquire a reference via fcloop_nport_get (which increments refcount). The only logic beyond refcount management is the list iteration and field comparison.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the function returns NULL, either the matching nport was not found (list unchanged) or the nport's refcount was zero (object being freed). In both cases, retrying the same lookup will not succeed.",
+      "contract_summary": "Lookup-and-get wrapper: searches the global list of fcloop_nports for an entry matching the given node_name and port_name. If a matching entry is found and its refcount is non-zero (i.e., the object is still alive), fcloop_nport_get increments the refcount and the nport is returned to the caller with an acquired reference. If no match is found, or if the matching object is already in the process of being freed (refcount zero), NULL is returned. The caller must check the return value and, if non-NULL, must later call a corresponding put (e.g., fcloop_nport_put) to release the reference. This function does not allocate or create new objects; it only returns existing ones with an extra reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "nport.ref.refs",
+          "fcloop_nport--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "nport.ref.refs",
+          "fcloop_nport--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "fcloop_nport_get increments refcount on nport, which is returned on success. The access path nport.ref.refs and type chain fcloop_nport--refcount_t--atomic_t are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "nport.ref.refs",
+        "fcloop_nport--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the function returns NULL, either the matching nport was not found (list unchanged) or the nport's refcount was zero (object being freed). In both cases, retrying the same lookup will not succeed.",
+    "contract_summary": "Lookup-and-get wrapper: searches the global list of fcloop_nports for an entry matching the given node_name and port_name. If a matching entry is found and its refcount is non-zero (i.e., the object is still alive), fcloop_nport_get increments the refcount and the nport is returned to the caller with an acquired reference. If no match is found, or if the matching object is already in the process of being freed (refcount zero), NULL is returned. The caller must check the return value and, if non-NULL, must later call a corresponding put (e.g., fcloop_nport_put) to release the reference. This function does not allocate or create new objects; it only returns existing ones with an extra reference."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "SHORT_PROXY_FUNC",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "filp.f_path.dentry.d_fsdata.active_users.refs",
+      "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "filp.f_path.dentry.d_fsdata.active_users.refs",
+      "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "debugfs_file_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "debugfs_file_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "debugfs_file_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "debugfs_file_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "debugfs_file_get fails only when the file is being torn down (refcount zero); retrying will not revive the object.",
+  "contract_summary": "This wrapper ensures a debugfs file's reference count is held for the duration of a file operation. It checks a per-file methods bitmask to allow or deny the operation early. If permitted, it calls debugfs_file_get to take a reference, then invokes the actual file operation (short_fops->name), and finally releases the reference via debugfs_file_put. The reference is acquired and released within the same call; no ownership is transferred to the caller. The caller (typically the VFS) receives only the return value of the underlying operation and must check it for errors. If debugfs_file_get fails, the file is already being destroyed and no further access is possible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire and release a reference on the debugfs file's active_users refcount around a call to the underlying file operation, with a minimal gate check on methods bitmask.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "debugfs_file_get fails only when the file is being torn down (refcount zero); retrying will not revive the object.",
+      "contract_summary": "This wrapper ensures a debugfs file's reference count is held for the duration of a file operation. It checks a per-file methods bitmask to allow or deny the operation early. If permitted, it calls debugfs_file_get to take a reference, then invokes the actual file operation (short_fops->name), and finally releases the reference via debugfs_file_put. The reference is acquired and released within the same call; no ownership is transferred to the caller. The caller (typically the VFS) receives only the return value of the underlying operation and must check it for errors. If debugfs_file_get fails, the file is already being destroyed and no further access is possible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both debugfs_file_get and debugfs_file_put operate on the dentry derived from filp. The access path from parameter 1 (filp) through f_path.dentry to the refcount field is correct and the type chain matches the callee information. Segment counts match (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "filp.f_path.dentry.d_fsdata.active_users.refs",
+        "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "filp.f_path.dentry.d_fsdata.active_users.refs",
+        "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "debugfs_file_get fails only when the file is being torn down (refcount zero); retrying will not revive the object.",
+    "contract_summary": "This wrapper ensures a debugfs file's reference count is held for the duration of a file operation. It checks a per-file methods bitmask to allow or deny the operation early. If permitted, it calls debugfs_file_get to take a reference, then invokes the actual file operation (short_fops->name), and finally releases the reference via debugfs_file_put. The reference is acquired and released within the same call; no ownership is transferred to the caller. The caller (typically the VFS) receives only the return value of the underlying operation and must check it for errors. If debugfs_file_get fails, the file is already being destroyed and no further access is possible."
+  }
+}

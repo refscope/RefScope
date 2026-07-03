@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_put_transaction",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "transaction.use_count.refs",
+      "btrfs_transaction--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "A put always succeeds in decrementing the reference count; once the refcount reaches zero, the object is freed. The caller must not attempt to retry a put on an already-released object.",
+  "contract_summary": "This function releases one reference on a btrfs_transaction. It decrements the use_count and, if the count reaches zero, performs final cleanup (validates lists, processes deleted block groups, and kfrees the transaction). After calling btrfs_put_transaction, the caller must not access the transaction pointer as it may have been freed. This is the release side of the reference-count lifecycle; it must be paired with a prior get (e.g., by btrfs_get_transaction or similar). The caller does not need to check a return value; the put is unconditional and irreversible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the transaction's use_count reference and free the transaction when the last reference is released. The cleanup code (BUG_ON, WARN_ON, list processing) is inherent to the final destruction phase and not separate business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "A put always succeeds in decrementing the reference count; once the refcount reaches zero, the object is freed. The caller must not attempt to retry a put on an already-released object.",
+      "contract_summary": "This function releases one reference on a btrfs_transaction. It decrements the use_count and, if the count reaches zero, performs final cleanup (validates lists, processes deleted block groups, and kfrees the transaction). After calling btrfs_put_transaction, the caller must not access the transaction pointer as it may have been freed. This is the release side of the reference-count lifecycle; it must be paired with a prior get (e.g., by btrfs_get_transaction or similar). The caller does not need to check a return value; the put is unconditional and irreversible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "transaction.use_count.refs",
+          "btrfs_transaction--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "transaction.use_count.refs",
+          "btrfs_transaction--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &transaction->use_count, which decrements and tests the refcount. The access path transaction.use_count.refs and type chain btrfs_transaction--refcount_t--atomic_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "transaction.use_count.refs",
+        "btrfs_transaction--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "A put always succeeds in decrementing the reference count; once the refcount reaches zero, the object is freed. The caller must not attempt to retry a put on an already-released object.",
+    "contract_summary": "This function releases one reference on a btrfs_transaction. It decrements the use_count and, if the count reaches zero, performs final cleanup (validates lists, processes deleted block groups, and kfrees the transaction). After calling btrfs_put_transaction, the caller must not access the transaction pointer as it may have been freed. This is the release side of the reference-count lifecycle; it must be paired with a prior get (e.g., by btrfs_get_transaction or similar). The caller does not need to check a return value; the put is unconditional and irreversible."
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "function_name": "armada_375_timer_init",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_clk_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "clk.core.ref.refcount",
+      "member_type_chain": "clk--clk_core--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_clk_get_by_name",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "clk.core.ref.refcount",
+      "member_type_chain": "clk--clk_core--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_clk_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "clk.core.ref.refcount",
+      "member_type_chain": "clk--clk_core--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_clk_get_by_name",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "clk.core.ref.refcount",
+      "member_type_chain": "clk--clk_core--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the get operations are not the function's main purpose.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is timer initialization, not reference-count management. The clock get operations (of_clk_get_by_name / of_clk_get) are incidental steps to obtain the clock rate and enable the clock, followed by additional setup logic (rate division, flag setting) and a call to a common timer init function.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the get operations are not the function's main purpose.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the get operations are not the function's main purpose.",
+    "contract_summary": ""
+  }
+}

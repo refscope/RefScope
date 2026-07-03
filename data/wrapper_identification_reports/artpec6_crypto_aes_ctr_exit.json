@@ -1,0 +1,99 @@
+{
+  "function_name": "artpec6_crypto_aes_ctr_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.__crt_ctx.fallback.base.base.refcnt.refs",
+      "crypto_skcipher--crypto_tfm--artpec6_cryptotfm_context--crypto_sync_skcipher--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_sync_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.base.refcnt.refs",
+      "member_type_chain": "crypto_sync_skcipher--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_sync_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.base.refcnt.refs",
+      "member_type_chain": "crypto_sync_skcipher--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation (crypto_free_sync_skcipher) is unconditional and should never fail; retrying is meaningless as the object is already freed.",
+  "contract_summary": "This put-wrapper releases the reference on the fallback sync_skcipher and zeroes the context structure. It is called when the cipher transformation is being destroyed. After this function returns, the caller must not use the fallback pointer or the context any further. The operation is unconditional and always succeeds; no error return or retry is needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference-counted fallback sync_skcipher via crypto_free_sync_skcipher, then clear the context struct. The memset is minimal cleanup that does not alter the refcount semantics.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation (crypto_free_sync_skcipher) is unconditional and should never fail; retrying is meaningless as the object is already freed.",
+      "contract_summary": "This put-wrapper releases the reference on the fallback sync_skcipher and zeroes the context structure. It is called when the cipher transformation is being destroyed. After this function returns, the caller must not use the fallback pointer or the context any further. The operation is unconditional and always succeeds; no error return or retry is needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback.base.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--artpec6_cryptotfm_context--crypto_sync_skcipher--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback.base.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--artpec6_cryptotfm_context--crypto_sync_skcipher--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Access path correctly traces from parameter 1 (tfm) through the private context to the fallback's refcount field. The put operation is confirmed by the call to crypto_free_sync_skcipher. Type chain and segment count (8 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.__crt_ctx.fallback.base.base.refcnt.refs",
+        "crypto_skcipher--crypto_tfm--artpec6_cryptotfm_context--crypto_sync_skcipher--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation (crypto_free_sync_skcipher) is unconditional and should never fail; retrying is meaningless as the object is already freed.",
+    "contract_summary": "This put-wrapper releases the reference on the fallback sync_skcipher and zeroes the context structure. It is called when the cipher transformation is being destroyed. After this function returns, the caller must not use the fallback pointer or the context any further. The operation is unconditional and always succeeds; no error return or retry is needed."
+  }
+}

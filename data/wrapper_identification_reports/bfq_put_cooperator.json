@@ -1,0 +1,99 @@
+{
+  "function_name": "bfq_put_cooperator",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bfqq.new_bfqq.ref",
+      "bfq_queue--bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is invoked on each queue in the chain; there is no failure path to retry.",
+  "contract_summary": "This function releases reference-counted bfq_queue objects along a merge chain. It follows the new_bfqq pointers starting from the given bfqq and decrements each queue's reference count via bfq_put_queue. After calling this function, the caller must not use any of the released queues. The function is a put wrapper for a list of queues and does not return any status; the caller should ensure proper locking to protect the refcount operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function iterates over a chain of merged bfq_queue objects and calls bfq_put_queue on each, which is a known refcount decrement. No other logic exists, so its primary purpose is reference-count management (put).",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is invoked on each queue in the chain; there is no failure path to retry.",
+      "contract_summary": "This function releases reference-counted bfq_queue objects along a merge chain. It follows the new_bfqq pointers starting from the given bfqq and decrements each queue's reference count via bfq_put_queue. After calling this function, the caller must not use any of the released queues. The function is a put wrapper for a list of queues and does not return any status; the caller should ensure proper locking to protect the refcount operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqq.new_bfqq.ref",
+          "bfq_queue--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqq.new_bfqq.ref",
+          "bfq_queue--bfq_queue--int"
+        ]
+      ],
+      "reason": "The access path bfqq.new_bfqq.ref correctly traces from the outer parameter bfqq to the ref field of the queue being put via bfq_put_queue, consistent with the callee's description. The type chain bfq_queue--bfq_queue--int matches the struct fields: bfqq is struct bfq_queue, new_bfqq is a pointer to struct bfq_queue, and ref is int. The segment count of 3 matches the 3 types. Direction put matches the callee's put function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bfqq.new_bfqq.ref",
+        "bfq_queue--bfq_queue--int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is invoked on each queue in the chain; there is no failure path to retry.",
+    "contract_summary": "This function releases reference-counted bfq_queue objects along a merge chain. It follows the new_bfqq pointers starting from the given bfqq and decrements each queue's reference count via bfq_put_queue. After calling this function, the caller must not use any of the released queues. The function is a put wrapper for a list of queues and does not return any status; the caller should ensure proper locking to protect the refcount operations."
+  }
+}

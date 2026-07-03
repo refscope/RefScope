@@ -1,0 +1,150 @@
+{
+  "function_name": "__vma_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "work.obj.base.refcount.refcount",
+      "i915_vma_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "work.vma_res.unbind_fence.refcount.refcount",
+      "i915_vma_work--i915_vma_resource--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_vma_resource_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_res.unbind_fence.refcount.refcount",
+      "member_type_chain": "i915_vma_resource--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_vma_resource_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_res.unbind_fence.refcount.refcount",
+      "member_type_chain": "i915_vma_resource--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final; retrying would cause double-release or use-after-free.",
+  "contract_summary": "This function releases resources held by an i915_vma_work: it decrements the refcount on the gem object (if non-NULL) via i915_gem_object_put, decrements the refcount on the vma resource via i915_vma_resource_put, and frees any page table stash via i915_vm_free_pt_stash. After calling this function, the caller must not use the vw->obj or vw->vma_res pointers, as they may have been freed. This is typically called when the associated async DMA fence work completes.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is release of refcounted objects (gem object, vma resource) and freeing of page table stash. The function is a composite release wrapper with two put operations and one memory free.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final; retrying would cause double-release or use-after-free.",
+      "contract_summary": "This function releases resources held by an i915_vma_work: it decrements the refcount on the gem object (if non-NULL) via i915_gem_object_put, decrements the refcount on the vma resource via i915_vma_resource_put, and frees any page table stash via i915_vm_free_pt_stash. After calling this function, the caller must not use the vw->obj or vw->vma_res pointers, as they may have been freed. This is typically called when the associated async DMA fence work completes."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "work.obj.base.refcount.refcount",
+          "i915_vma_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "work.vma_res.unbind_fence.refcount.refcount",
+          "i915_vma_work--i915_vma_resource--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Both candidate operations use access paths starting from 'work' (struct dma_fence_work *) to reach fields 'obj' and 'vma_res', but these fields are members of the containing struct i915_vma_work, not of dma_fence_work. The function obtains vw via container_of, so the actual critical variables passed to the put functions are vw->obj and vw->vma_res. The provided paths 'work.obj...' and 'work.vma_res...' are structurally invalid because 'work' does not have those fields. Thus the extractions do not accurately represent the code. All operations are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "work.obj.base.refcount.refcount",
+          "i915_vma_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "work.vma_res.unbind_fence.refcount.refcount",
+          "i915_vma_work--i915_vma_resource--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a release wrapper that calls i915_gem_object_put and i915_vma_resource_put on fields of the containing i915_vma_work struct, reached via container_of from the work parameter. The candidate operations correctly identify the critical variables and refcount operations; the path representation is a simplification but the underlying semantics are correct. The check stage's rejection based on structural path validity is overruled because the container_of relationship makes the fields reachable from work."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "work.obj.base.refcount.refcount",
+        "i915_vma_work--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "work.vma_res.unbind_fence.refcount.refcount",
+        "i915_vma_work--i915_vma_resource--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final; retrying would cause double-release or use-after-free.",
+    "contract_summary": "This function releases resources held by an i915_vma_work: it decrements the refcount on the gem object (if non-NULL) via i915_gem_object_put, decrements the refcount on the vma resource via i915_vma_resource_put, and frees any page table stash via i915_vm_free_pt_stash. After calling this function, the caller must not use the vw->obj or vw->vma_res pointers, as they may have been freed. This is typically called when the associated async DMA fence work completes."
+  }
+}

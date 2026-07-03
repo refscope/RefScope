@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_hardif_get_active",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure may occur because no active interface is currently available; the caller could retry later after the state changes.",
+  "contract_summary": "This function acquires a reference on an active batman-adv hard interface associated with the given mesh interface. It iterates over the lower network devices under RCU protection, selects the first one with status BATADV_IF_ACTIVE, and increments its refcount via kref_get_unless_zero. Returns a pointer to the hard_iface with an additional reference, or NULL if none is found or the reference could not be acquired (object dying). The caller must release the reference via batadv_hardif_put when done. The lookup is RCU-protected but the returned pointer is safe to use outside RCU due to the acquired reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find an active hard interface and acquire a reference via kref_get_unless_zero. The only non-refcount logic is the iteration and status check, which are minimal and necessary for the lookup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure may occur because no active interface is currently available; the caller could retry later after the state changes.",
+      "contract_summary": "This function acquires a reference on an active batman-adv hard interface associated with the given mesh interface. It iterates over the lower network devices under RCU protection, selects the first one with status BATADV_IF_ACTIVE, and increments its refcount via kref_get_unless_zero. Returns a pointer to the hard_iface with an additional reference, or NULL if none is found or the reference could not be acquired (object dying). The caller must release the reference via batadv_hardif_put when done. The lookup is RCU-protected but the returned pointer is safe to use outside RCU due to the acquired reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation correctly identifies that kref_get_unless_zero is called on hard_iface->refcount when the condition is met, and the object hard_iface is returned. The access path 'hard_iface.refcount.refcount' starts from the return variable, matches the callee's 'kref.refcount' path, and the type chain 'batadv_hard_iface--kref--refcount_t' is consistent. Segment counts are equal (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure may occur because no active interface is currently available; the caller could retry later after the state changes.",
+    "contract_summary": "This function acquires a reference on an active batman-adv hard interface associated with the given mesh interface. It iterates over the lower network devices under RCU protection, selects the first one with status BATADV_IF_ACTIVE, and increments its refcount via kref_get_unless_zero. Returns a pointer to the hard_iface with an additional reference, or NULL if none is found or the reference could not be acquired (object dying). The caller must release the reference via batadv_hardif_put when done. The lookup is RCU-protected but the returned pointer is safe to use outside RCU due to the acquired reference."
+  }
+}

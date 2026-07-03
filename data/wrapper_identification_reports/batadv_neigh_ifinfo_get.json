@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_neigh_ifinfo_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "neigh_ifinfo.refcount.refcount.refs",
+      "batadv_neigh_ifinfo--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either no matching entry exists in the list or the entry's refcount was zero (object dying). Retrying without a change in the list or object state is unlikely to succeed.",
+  "contract_summary": "RCU-protected get-wrapper that finds a batadv_neigh_ifinfo associated with a given outgoing interface in the neighbor's ifinfo_list and acquires a reference via kref_get_unless_zero. The caller receives the referenced ifinfo (or NULL if not found or dying). The caller must check the return value and later release the reference with a corresponding put (e.g., batadv_neigh_ifinfo_put). The function does not modify the list or any other state; it only increments the refcount while under RCU read lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a batadv_neigh_ifinfo by outgoing interface and conditionally acquire a reference (kref_get_unless_zero). The only side logic is the list traversal and comparison, which is inherent to the lookup. This is a classic get-wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either no matching entry exists in the list or the entry's refcount was zero (object dying). Retrying without a change in the list or object state is unlikely to succeed.",
+      "contract_summary": "RCU-protected get-wrapper that finds a batadv_neigh_ifinfo associated with a given outgoing interface in the neighbor's ifinfo_list and acquires a reference via kref_get_unless_zero. The caller receives the referenced ifinfo (or NULL if not found or dying). The caller must check the return value and later release the reference with a corresponding put (e.g., batadv_neigh_ifinfo_put). The function does not modify the list or any other state; it only increments the refcount while under RCU read lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount.refs",
+          "batadv_neigh_ifinfo--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount.refs",
+          "batadv_neigh_ifinfo--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a pointer to a batadv_neigh_ifinfo whose refcount is incremented via kref_get_unless_zero. The access path correctly traces from the return variable through batadv_neigh_ifinfo.refcount (a kref), then through kref.refcount (a refcount_t), then to the atomic_t refs field. The segment count (4) matches the type chain count (4). The callee info confirms that kref_get_unless_zero accesses kref.refcount.refs, which aligns with this path."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "neigh_ifinfo.refcount.refcount.refs",
+        "batadv_neigh_ifinfo--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either no matching entry exists in the list or the entry's refcount was zero (object dying). Retrying without a change in the list or object state is unlikely to succeed.",
+    "contract_summary": "RCU-protected get-wrapper that finds a batadv_neigh_ifinfo associated with a given outgoing interface in the neighbor's ifinfo_list and acquires a reference via kref_get_unless_zero. The caller receives the referenced ifinfo (or NULL if not found or dying). The caller must check the return value and later release the reference with a corresponding put (e.g., batadv_neigh_ifinfo_put). The function does not modify the list or any other state; it only increments the refcount while under RCU read lock."
+  }
+}

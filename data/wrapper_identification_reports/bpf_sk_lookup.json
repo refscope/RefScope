@@ -1,0 +1,82 @@
+{
+  "function_name": "bpf_sk_lookup",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) indicates no matching socket or a kernel-internal inconsistency; retrying cannot fix a non-existent match or a WARN condition.",
+  "contract_summary": "Get-wrapper that looks up a socket identified by the tuple and returns it with an acquired reference. If the lookup returns a request_sock, the function releases the request_sock reference and returns the full socket (listener) without incrementing its reference. The caller must release the returned socket with sock_put (or equivalent) when done. The function returns NULL if no socket is found or if an unreferenced non-RCU socket is encountered (kernel bug).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference-counted socket (by calling bpf_skc_lookup) and return it to the caller; the additional logic to handle request_sock conversion and conditional put is still strictly reference-count management, with no unrelated business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) indicates no matching socket or a kernel-internal inconsistency; retrying cannot fix a non-existent match or a WARN condition.",
+      "contract_summary": "Get-wrapper that looks up a socket identified by the tuple and returns it with an acquired reference. If the lookup returns a request_sock, the function releases the request_sock reference and returns the full socket (listener) without incrementing its reference. The caller must release the returned socket with sock_put (or equivalent) when done. The function returns NULL if no socket is found or if an unreferenced non-RCU socket is encountered (kernel bug)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation indicates a 'put' on the return value, but the function does not decrement the refcount of the returned socket. The only 'put' is via sock_gen_put(sk) on the local variable sk before it may be reassigned, which is not the return value. The return value retains a reference (from bpf_skc_lookup or sk_to_full_sk without additional put). Thus, the extracted operation is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function bpf_sk_lookup returns a socket with a reference obtained from bpf_skc_lookup, but it does not explicitly increment the refcount of the returned socket. The only explicit refcount operation is sock_gen_put(sk) on the local variable sk (the original lookup result) when it is replaced by sk_to_full_sk(sk). This put is not on the returned socket. Therefore, the function does not have explicit refcount operations on the critical variable passed to the caller, and it is not a reference-count wrapper/helper as defined by the analysis."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) indicates no matching socket or a kernel-internal inconsistency; retrying cannot fix a non-existent match or a WARN condition.",
+    "contract_summary": "Get-wrapper that looks up a socket identified by the tuple and returns it with an acquired reference. If the lookup returns a request_sock, the function releases the request_sock reference and returns the full socket (listener) without incrementing its reference. The caller must release the returned socket with sock_put (or equivalent) when done. The function returns NULL if no socket is found or if an unreferenced non-RCU socket is encountered (kernel bug)."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "_bfq_exit_icq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bic.bfqq_data[act_idx].stable_merge_bfqq.ref",
+      "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "bic.bfqq[act_idx].new_bfqq.ref",
+      "bfq_io_cq--bfq_queue--bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_put_stable_ref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    },
+    {
+      "callee_function_name": "bfq_exit_icq_bfqq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bic.bfqq[].new_bfqq.ref",
+      "member_type_chain": "bfq_io_cq--bfq_queue--bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_put_stable_ref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    },
+    {
+      "callee_function_name": "bfq_exit_icq_bfqq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bic.bfqq[].new_bfqq.ref",
+      "member_type_chain": "bfq_io_cq--bfq_queue--bfq_queue--int"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper; retrying after a put would cause a double-put (use-after-free). Retry is neither necessary nor safe.",
+  "contract_summary": "_bfq_exit_icq releases all BFQ queue references held by a given I/O context (bic) across all actuators. For each actuator, it puts the stable merge queue (if non‑NULL) via bfq_put_stable_ref, and then puts both the sync and async BFQ queues via bfq_exit_icq_bfqq. After this function returns, the bic no longer holds any references to these queues, and the caller must not access or use the released bfqq objects. This function is typically called during icq destruction and does not require any return value checking; it is a pure put wrapper that performs no other side effects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release all BFQ queue references (bfqq) associated with an I/O context (bic) for each actuator. The entire function consists of calling put operations (bfq_put_stable_ref and bfq_exit_icq_bfqq) on the stored queue pointers. There is no additional business logic beyond the null check on stable_merge_bfqq.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper; retrying after a put would cause a double-put (use-after-free). Retry is neither necessary nor safe.",
+      "contract_summary": "_bfq_exit_icq releases all BFQ queue references held by a given I/O context (bic) across all actuators. For each actuator, it puts the stable merge queue (if non‑NULL) via bfq_put_stable_ref, and then puts both the sync and async BFQ queues via bfq_exit_icq_bfqq. After this function returns, the bic no longer holds any references to these queues, and the caller must not access or use the released bfqq objects. This function is typically called during icq destruction and does not require any return value checking; it is a pure put wrapper that performs no other side effects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq_data[act_idx].stable_merge_bfqq.ref",
+          "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq[act_idx].new_bfqq.ref",
+          "bfq_io_cq--bfq_queue--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq_data[act_idx].stable_merge_bfqq.ref",
+          "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq[act_idx].new_bfqq.ref",
+          "bfq_io_cq--bfq_queue--bfq_queue--int"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code and callee information. The first operation corresponds to bfq_put_stable_ref called on stable_merge_bfqq; the path from parameter bic through bfqq_data and stable_merge_bfqq matches the callee's put on bfqq.ref. The second operation matches bfq_exit_icq_bfqq which internally puts a reference on bic->bfqq[act_idx]->new_bfqq; the path and type chain align with the callee info. Segment counts match type chain lengths."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bic.bfqq_data[act_idx].stable_merge_bfqq.ref",
+        "bfq_io_cq--bfq_iocq_bfqq_data--bfq_queue--int"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "bic.bfqq[act_idx].new_bfqq.ref",
+        "bfq_io_cq--bfq_queue--bfq_queue--int"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper; retrying after a put would cause a double-put (use-after-free). Retry is neither necessary nor safe.",
+    "contract_summary": "_bfq_exit_icq releases all BFQ queue references held by a given I/O context (bic) across all actuators. For each actuator, it puts the stable merge queue (if non‑NULL) via bfq_put_stable_ref, and then puts both the sync and async BFQ queues via bfq_exit_icq_bfqq. After this function returns, the bic no longer holds any references to these queues, and the caller must not access or use the released bfqq objects. This function is typically called during icq destruction and does not require any return value checking; it is a pure put wrapper that performs no other side effects."
+  }
+}

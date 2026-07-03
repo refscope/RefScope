@@ -1,0 +1,82 @@
+{
+  "function_name": "BPF_STRUCT_OPS_SLEEPABLE",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_cpumask_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cpumask.usage.refs",
+      "member_type_chain": "bpf_cpumask--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_obj_drop",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kptr.refcount.refs",
+      "member_type_chain": "unknown--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_cpumask_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cpumask.usage.refs",
+      "member_type_chain": "bpf_cpumask--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_cpumask_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cpumask.usage.refs",
+      "member_type_chain": "bpf_cpumask--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_cpumask_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cpumask.usage.refs",
+      "member_type_chain": "bpf_cpumask--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is initialization of cgroup context for a BPF scheduler, including creating a DSQ, allocating storage, and setting up a cgv_node. No refcount operations (get/put/set) are performed. The callee info about bpf_cpumask functions is irrelevant; they are not called here.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

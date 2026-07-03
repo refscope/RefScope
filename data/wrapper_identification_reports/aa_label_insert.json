@@ -1,0 +1,159 @@
+{
+  "function_name": "aa_label_insert",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "l.count.refcount",
+      "aa_label--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__label_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__label_insert",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "this.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__label_insert",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__label_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__label_insert",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "this.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__label_insert",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always returns a valid referenced label; no failure path exists, so retry is not applicable.",
+  "contract_summary": "Get-or-create wrapper for aa_labelset. Acquires a reference to a label that matches the given label, either by returning an existing non-stale label from the tree (with increased refcount) or by inserting the given label into the tree and returning a reference to it. The returned label must be released by the caller with aa_put_label when no longer needed. The function handles staleness by replacing dead labels. The caller should not check for NULL return; it always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to get a reference to a label in the set, either by finding an existing one (with refcount increment) or inserting and acquiring a reference. The only additional logic is checking staleness and lock handling, which is minimal.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always returns a valid referenced label; no failure path exists, so retry is not applicable.",
+      "contract_summary": "Get-or-create wrapper for aa_labelset. Acquires a reference to a label that matches the given label, either by returning an existing non-stale label from the tree (with increased refcount) or by inserting the given label into the tree and returning a reference to it. The returned label must be released by the caller with aa_put_label when no longer needed. The function handles staleness by replacing dead labels. The caller should not check for NULL return; it always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "l.count.refcount",
+          "aa_label--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "l.count.refcount",
+          "aa_label--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are supported: the return value gets a refcount via __label_find or __label_insert (path l.count.refcount matches callee's return path), and the input label gets a refcount via __label_insert (path label.count.count.refcount matches callee's parameter path). Type chains have equal segment counts and are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "l.count.refcount",
+        "aa_label--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always returns a valid referenced label; no failure path exists, so retry is not applicable.",
+    "contract_summary": "Get-or-create wrapper for aa_labelset. Acquires a reference to a label that matches the given label, either by returning an existing non-stale label from the tree (with increased refcount) or by inserting the given label into the tree and returning a reference to it. The returned label must be released by the caller with aa_put_label when no longer needed. The function handles staleness by replacing dead labels. The caller should not check for NULL return; it always succeeds."
+  }
+}

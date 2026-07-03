@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_userq_walk_and_drop_fence_drv",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "fence_drv",
+      "fence_drv.refcount.refcount",
+      "amdgpu_userq_fence_driver--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_userq_fence_driver_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence_drv.refcount.refcount",
+      "member_type_chain": "amdgpu_userq_fence_driver--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_userq_fence_driver_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence_drv.refcount.refcount",
+      "member_type_chain": "amdgpu_userq_fence_driver--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and do not have a failure path; retrying after a successful put would cause a double-put (use-after-free).",
+  "contract_summary": "This function is a cleanup helper that releases all references stored in the xarray of amdgpu_userq_fence_driver objects. It iterates over every entry, erases it from the xarray, and drops one reference (kref_put) on each object. After this function returns, the xarray is empty and all associated objects have had their reference count decremented appropriately. The caller must not access the xarray contents afterward; this is typically called during destruction or teardown of the user queue fence driver context.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to iterate through an xarray and release a reference (put) on each fence_drv object. All non-trivial logic is the xarray iteration and the put call, making it a batch put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and do not have a failure path; retrying after a successful put would cause a double-put (use-after-free).",
+      "contract_summary": "This function is a cleanup helper that releases all references stored in the xarray of amdgpu_userq_fence_driver objects. It iterates over every entry, erases it from the xarray, and drops one reference (kref_put) on each object. After this function returns, the xarray is empty and all associated objects have had their reference count decremented appropriately. The caller must not access the xarray contents afterward; this is typically called during destruction or teardown of the user queue fence driver context."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "fence_drv",
+          "fence_drv.refcount.refcount",
+          "amdgpu_userq_fence_driver--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "fence_drv",
+          "fence_drv.refcount.refcount",
+          "amdgpu_userq_fence_driver--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put operation is correctly identified: amdgpu_userq_fence_driver_put(fence_drv) decrements the refcount on fence_drv. The access path fence_drv.refcount.refcount and type chain amdgpu_userq_fence_driver--kref--refcount_t are consistent with the callee information and the code (fence_drv points to a struct amdgpu_userq_fence_driver with a kref member named refcount, which contains a refcount_t named refcount). The location is 'global' because the object is obtained from the xarray and is not a function parameter or return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "fence_drv",
+        "fence_drv.refcount.refcount",
+        "amdgpu_userq_fence_driver--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and do not have a failure path; retrying after a successful put would cause a double-put (use-after-free).",
+    "contract_summary": "This function is a cleanup helper that releases all references stored in the xarray of amdgpu_userq_fence_driver objects. It iterates over every entry, erases it from the xarray, and drops one reference (kref_put) on each object. After this function returns, the xarray is empty and all associated objects have had their reference count decremented appropriately. The caller must not access the xarray contents afterward; this is typically called during destruction or teardown of the user queue fence driver context."
+  }
+}

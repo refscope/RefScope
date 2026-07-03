@@ -1,0 +1,74 @@
+{
+  "function_name": "ad5064_request_vref",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "devm_regulator_bulk_get",
+      "get_or_put": "put",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no refcount operation at the wrapper level to retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to acquire voltage regulators for an AD5064 DAC, either externally or internally. It includes setting supply names, calling devm_regulator_bulk_get or devm_regulator_get_optional, and enabling an internal VREF if no external regulator is provided. The reference-count operations are incidental details of the regulator framework, not the core purpose of the function.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no refcount operation at the wrapper level to retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no refcount operation at the wrapper level to retry.",
+    "contract_summary": ""
+  }
+}

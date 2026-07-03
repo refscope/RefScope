@@ -1,0 +1,99 @@
+{
+  "function_name": "alloc_extent_state_atomic",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "prealloc.refs.refs",
+      "extent_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "alloc_extent_state",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "state.refs.refs",
+      "member_type_chain": "extent_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "alloc_extent_state",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "state.refs.refs",
+      "member_type_chain": "extent_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "GFP_ATOMIC allocation failure is transient but immediate retry rarely succeeds; the caller should propagate the NULL return as an error and eventually retry from a higher level if desired.",
+  "contract_summary": "This wrapper returns an extent_state with its refcount already initialized (set to 1 by alloc_extent_state). It can either reuse a preallocated state (whose refcount must have been previously initialized) or allocate a new one using GFP_ATOMIC. The caller must eventually release the state with a corresponding free function (e.g., free_extent_state) that decrements the refcount and frees the object when it reaches zero. If prealloc is provided, the caller retains ownership of that preallocated object and must still release it after use. If allocation fails, the function returns NULL, and the caller must handle that error gracefully (no object to release). No additional locks or RCU requirements are imposed by this wrapper itself.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain an extent_state with its refcount initialized, either from a preallocated object or by allocating a new one. The only logic is a conditional allocation; the refcount is set inside the callee alloc_extent_state (as per callee info). This is a set-wrapper for the initial reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "GFP_ATOMIC allocation failure is transient but immediate retry rarely succeeds; the caller should propagate the NULL return as an error and eventually retry from a higher level if desired.",
+      "contract_summary": "This wrapper returns an extent_state with its refcount already initialized (set to 1 by alloc_extent_state). It can either reuse a preallocated state (whose refcount must have been previously initialized) or allocate a new one using GFP_ATOMIC. The caller must eventually release the state with a corresponding free function (e.g., free_extent_state) that decrements the refcount and frees the object when it reaches zero. If prealloc is provided, the caller retains ownership of that preallocated object and must still release it after use. If allocation fails, the function returns NULL, and the caller must handle that error gracefully (no object to release). No additional locks or RCU requirements are imposed by this wrapper itself."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "prealloc.refs.refs",
+          "extent_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "prealloc.refs.refs",
+          "extent_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns either the prealloc parameter (if non-NULL) or a newly allocated extent_state via alloc_extent_state(GFP_ATOMIC). The callee sets the refcount on return, and the prealloc also already has its refcount set from prior allocation. Therefore, the returned object's refs.refs is set. The access path 'prealloc.refs.refs' correctly starts from the returned variable (which is the parameter prealloc) and matches the callee's type chain extent_state--refcount_t--atomic_t. Segment counts (3) match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "prealloc.refs.refs",
+        "extent_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "GFP_ATOMIC allocation failure is transient but immediate retry rarely succeeds; the caller should propagate the NULL return as an error and eventually retry from a higher level if desired.",
+    "contract_summary": "This wrapper returns an extent_state with its refcount already initialized (set to 1 by alloc_extent_state). It can either reuse a preallocated state (whose refcount must have been previously initialized) or allocate a new one using GFP_ATOMIC. The caller must eventually release the state with a corresponding free function (e.g., free_extent_state) that decrements the refcount and frees the object when it reaches zero. If prealloc is provided, the caller retains ownership of that preallocated object and must still release it after use. If allocation fails, the function returns NULL, and the caller must handle that error gracefully (no object to release). No additional locks or RCU requirements are imposed by this wrapper itself."
+  }
+}

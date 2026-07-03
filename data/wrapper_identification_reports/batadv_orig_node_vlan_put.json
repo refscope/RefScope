@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_orig_node_vlan_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "orig_vlan.refcount.refcount",
+      "batadv_orig_node_vlan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put releases a reference; calling it again on the same object would be a double-put leading to use-after-free. Retry is invalid.",
+  "contract_summary": "Put wrapper for batadv_orig_node_vlan: decrements the kref reference count and, if the count reaches zero, triggers the release callback to free the object. The caller must not use the orig_vlan pointer after this call unless it holds another valid reference. This function is safe to call with a NULL pointer (no-op).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of this function is to decrement the reference count of a batadv_orig_node_vlan via kref_put, with only a NULL guard for safety. No other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put releases a reference; calling it again on the same object would be a double-put leading to use-after-free. Retry is invalid.",
+      "contract_summary": "Put wrapper for batadv_orig_node_vlan: decrements the kref reference count and, if the count reaches zero, triggers the release callback to free the object. The caller must not use the orig_vlan pointer after this call unless it holds another valid reference. This function is safe to call with a NULL pointer (no-op)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig_vlan.refcount.refcount",
+          "batadv_orig_node_vlan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig_vlan.refcount.refcount",
+          "batadv_orig_node_vlan--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put is called on &orig_vlan->refcount; the access path orig_vlan.refcount.refcount and type chain batadv_orig_node_vlan--kref--refcount_t match the callee info and code. Segment counts (3 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "orig_vlan.refcount.refcount",
+        "batadv_orig_node_vlan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put releases a reference; calling it again on the same object would be a double-put leading to use-after-free. Retry is invalid.",
+    "contract_summary": "Put wrapper for batadv_orig_node_vlan: decrements the kref reference count and, if the count reaches zero, triggers the release callback to free the object. The caller must not use the orig_vlan pointer after this call unless it holds another valid reference. This function is safe to call with a NULL pointer (no-op)."
+  }
+}

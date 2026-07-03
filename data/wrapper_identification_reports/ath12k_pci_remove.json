@@ -1,0 +1,58 @@
+{
+  "function_name": "ath12k_pci_remove",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ath12k_fw_unmap",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ab.fw.fw.priv.ref.refcount",
+      "member_type_chain": "ath12k_base--ath12k_fw--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ath12k_fw_unmap",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ab.fw.fw.priv.ref.refcount",
+      "member_type_chain": "ath12k_base--ath12k_fw--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry semantics do not apply.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is PCI device removal and driver cleanup (power down, cancel work, deinit, free resources). The refcount decrement in ath12k_fw_unmap is only one minor step among many unrelated operations.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry semantics do not apply.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry semantics do not apply.",
+    "contract_summary": ""
+  }
+}

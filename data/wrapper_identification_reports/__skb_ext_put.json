@@ -1,0 +1,123 @@
+{
+  "function_name": "__skb_ext_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ext.refcnt.refs",
+      "skb_ext--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "skb_ext_put_sp",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.xvec[0].refcnt.refs",
+      "member_type_chain": "sec_path--xfrm_state--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "skb_ext_put_mctp",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "flow.key.refs.refs",
+      "member_type_chain": "mctp_flow--mctp_sk_key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "skb_ext_put_mctp",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "flow.key.sk.sk_refcnt.refs",
+      "member_type_chain": "mctp_flow--mctp_sk_key--sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation must not be retried; calling it again would double-free the object (use-after-free).",
+  "contract_summary": "This is a put wrapper that releases a reference on a skb_ext structure. It calls refcount_dec_and_test and, if the last reference is being dropped, frees the object and cleans up any embedded sub-objects (XFRM security path, MCTP flows). After this function returns, the caller must not use the skb_ext pointer. There is no return value; the caller must not call __skb_ext_put again on the same pointer. The function uses an atomic read optimization when the refcount is 1, but the net effect is the same as a standard refcount_dec_and_test + free.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of a skb_ext and free it on last ref. The additional calls (XFRM/MCTP cleanup) are part of the destruction process, still refcount-centric.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation must not be retried; calling it again would double-free the object (use-after-free).",
+      "contract_summary": "This is a put wrapper that releases a reference on a skb_ext structure. It calls refcount_dec_and_test and, if the last reference is being dropped, frees the object and cleans up any embedded sub-objects (XFRM security path, MCTP flows). After this function returns, the caller must not use the skb_ext pointer. There is no return value; the caller must not call __skb_ext_put again on the same pointer. The function uses an atomic read optimization when the refcount is 1, but the net effect is the same as a standard refcount_dec_and_test + free."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ext.refcnt.refs",
+          "skb_ext--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ext.refcnt.refs",
+          "skb_ext--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test on ext->refcnt is a put operation; access path ext.refcnt.refs and type chain skb_ext--refcount_t--atomic_t match code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ext.refcnt.refs",
+        "skb_ext--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation must not be retried; calling it again would double-free the object (use-after-free).",
+    "contract_summary": "This is a put wrapper that releases a reference on a skb_ext structure. It calls refcount_dec_and_test and, if the last reference is being dropped, frees the object and cleans up any embedded sub-objects (XFRM security path, MCTP flows). After this function returns, the caller must not use the skb_ext pointer. There is no return value; the caller must not call __skb_ext_put again on the same pointer. The function uses an atomic read optimization when the refcount is 1, but the net effect is the same as a standard refcount_dec_and_test + free."
+  }
+}

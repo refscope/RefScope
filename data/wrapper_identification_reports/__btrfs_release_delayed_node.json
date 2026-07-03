@@ -1,0 +1,99 @@
+{
+  "function_name": "__btrfs_release_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "delayed_node.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always executes; retrying would cause a double-put and use-after-free.",
+  "contract_summary": "This is a put-wrapper that decrements the reference count of a btrfs_delayed_node. If the refcount reaches zero, the node is removed from the radix tree and freed. Before the decrement, the function handles node queueing/dequeuing based on its count and frees the associated ref tracker. The caller must have a valid reference and must not use the node after calling this function, as it may be freed. All clean-up actions are performed within a single call, making it a comprehensive release helper.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a reference to a delayed_node via refcount_dec_and_test, with additional state management (queue/dequeue and tracker free) that are part of the release contract but not purely refcount operations.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always executes; retrying would cause a double-put and use-after-free.",
+      "contract_summary": "This is a put-wrapper that decrements the reference count of a btrfs_delayed_node. If the refcount reaches zero, the node is removed from the radix tree and freed. Before the decrement, the function handles node queueing/dequeuing based on its count and frees the associated ref tracker. The caller must have a valid reference and must not use the node after calling this function, as it may be freed. All clean-up actions are performed within a single call, making it a comprehensive release helper."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "delayed_node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "delayed_node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_dec_and_test call on &delayed_node->refs is a put operation. The access path starts from parameter 1 (delayed_node) and follows the struct fields: delayed_node->refs (refcount_t) -> .refs (atomic_t). The type chain `btrfs_delayed_node--refcount_t--atomic_t` is consistent with Linux kernel definitions. The segment count (3) matches the type chain count (3). The operation is correctly extracted."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "delayed_node.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always executes; retrying would cause a double-put and use-after-free.",
+    "contract_summary": "This is a put-wrapper that decrements the reference count of a btrfs_delayed_node. If the refcount reaches zero, the node is removed from the radix tree and freed. Before the decrement, the function handles node queueing/dequeuing based on its count and frees the associated ref tracker. The caller must have a valid reference and must not use the node after calling this function, as it may be freed. All clean-up actions are performed within a single call, making it a comprehensive release helper."
+  }
+}

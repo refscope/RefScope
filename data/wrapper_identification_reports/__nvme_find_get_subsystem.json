@@ -1,0 +1,115 @@
+{
+  "function_name": "__nvme_find_get_subsystem",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "subsys.ref.refcount.refs",
+      "nvme_subsystem--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the subsystem was not found or its refcount was already zero (object being destroyed). In either case, retrying immediately without changing the conditions (e.g., waiting for the object to appear) is not guaranteed to succeed and would likely fail again.",
+  "contract_summary": "This is a get-wrapper for nvme_subsystem objects. It searches the global nvme_subsystems list for a subsystem matching the given NQN, while holding nvme_subsystems_lock. If found and the subsystem's refcount is non-zero, it acquires a kref reference via kref_get_unless_zero and returns a pointer to the subsystem. Callers must check the return value for NULL, which indicates either no match, a discovery subsystem (which are explicitly excluded), or a dying object. The caller is responsible for releasing the reference with nvme_put_subsystem when done. The function does not create or allocate the subsystem; it only finds and references an existing one.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an nvme_subsystem by NQN and conditionally acquire a kref reference via kref_get_unless_zero. The only additional logic is a simple string comparison for discovery subsystems and a list traversal, which are minimal and serve only to locate the object before acquiring the reference.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the subsystem was not found or its refcount was already zero (object being destroyed). In either case, retrying immediately without changing the conditions (e.g., waiting for the object to appear) is not guaranteed to succeed and would likely fail again.",
+      "contract_summary": "This is a get-wrapper for nvme_subsystem objects. It searches the global nvme_subsystems list for a subsystem matching the given NQN, while holding nvme_subsystems_lock. If found and the subsystem's refcount is non-zero, it acquires a kref reference via kref_get_unless_zero and returns a pointer to the subsystem. Callers must check the return value for NULL, which indicates either no match, a discovery subsystem (which are explicitly excluded), or a dying object. The caller is responsible for releasing the reference with nvme_put_subsystem when done. The function does not create or allocate the subsystem; it only finds and references an existing one."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "subsys.ref.refcount.refs",
+          "nvme_subsystem--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "subsys.ref.refcount.refs",
+          "nvme_subsystem--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls kref_get_unless_zero(&subsys->ref) on the subsys that is returned. The access path subsys.ref.refcount.refs correctly traces from the return value (subsys) through fields ref (kref), refcount (refcount_t), to refs (atomic_t). The type chain nvme_subsystem--kref--refcount_t--atomic_t matches. There is no other get/put operation. The candidate is consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "subsys.ref.refcount.refs",
+        "nvme_subsystem--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the subsystem was not found or its refcount was already zero (object being destroyed). In either case, retrying immediately without changing the conditions (e.g., waiting for the object to appear) is not guaranteed to succeed and would likely fail again.",
+    "contract_summary": "This is a get-wrapper for nvme_subsystem objects. It searches the global nvme_subsystems list for a subsystem matching the given NQN, while holding nvme_subsystems_lock. If found and the subsystem's refcount is non-zero, it acquires a kref reference via kref_get_unless_zero and returns a pointer to the subsystem. Callers must check the return value for NULL, which indicates either no match, a discovery subsystem (which are explicitly excluded), or a dying object. The caller is responsible for releasing the reference with nvme_put_subsystem when done. The function does not create or allocate the subsystem; it only finds and references an existing one."
+  }
+}

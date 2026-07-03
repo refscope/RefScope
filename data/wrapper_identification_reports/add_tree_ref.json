@@ -1,0 +1,99 @@
+{
+  "function_name": "add_tree_ref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "path.nodes[i].refs.refs",
+      "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the extent item was not found or backref insertion failed; retrying is unlikely to succeed if the extent does not exist or the tree is inconsistent.",
+  "contract_summary": "This function adds a reference to an extent identified by bytenr/num_bytes: it reads the existing reference count, increments it, writes the new count, and inserts a tree block or shared block backref entry. The caller acquires a reference on the extent and must later drop it via a corresponding decrement function (e.g., free tree block or remove backref). The function uses a dummy transaction and expects the extent item to already exist; on failure (search error, allocation failure, insert conflict) it returns an error without undoing any partial changes (the refcount increment is not rolled back on insert failure). Callers must check the return value and handle errors appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the reference count of a Btrfs extent and insert a backref entry, with minimal unrelated logic (path allocation/release, error checking).",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the extent item was not found or backref insertion failed; retrying is unlikely to succeed if the extent does not exist or the tree is inconsistent.",
+      "contract_summary": "This function adds a reference to an extent identified by bytenr/num_bytes: it reads the existing reference count, increments it, writes the new count, and inserts a tree block or shared block backref entry. The caller acquires a reference on the extent and must later drop it via a corresponding decrement function (e.g., free tree block or remove backref). The function uses a dummy transaction and expects the extent item to already exist; on failure (search error, allocation failure, insert conflict) it returns an error without undoing any partial changes (the refcount increment is not rolled back on insert failure). Callers must check the return value and handle errors appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "path.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "path.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The call to btrfs_release_path(path) matches the callee info: parameter index 1 (path), access path path.nodes[i].refs.refs, and type chain btrfs_path--extent_buffer--refcount_t--atomic_t are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "path.nodes[i].refs.refs",
+        "btrfs_path--extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the extent item was not found or backref insertion failed; retrying is unlikely to succeed if the extent does not exist or the tree is inconsistent.",
+    "contract_summary": "This function adds a reference to an extent identified by bytenr/num_bytes: it reads the existing reference count, increments it, writes the new count, and inserts a tree block or shared block backref entry. The caller acquires a reference on the extent and must later drop it via a corresponding decrement function (e.g., free tree block or remove backref). The function uses a dummy transaction and expects the extent item to already exist; on failure (search error, allocation failure, insert conflict) it returns an error without undoing any partial changes (the refcount increment is not rolled back on insert failure). Callers must check the return value and handle errors appropriately."
+  }
+}

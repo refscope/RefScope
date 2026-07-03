@@ -1,0 +1,82 @@
+{
+  "function_name": "armada_gem_object_lookup",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_object_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_object_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) indicates invalid handle; retrying the same handle will not succeed unless the object is later created, which is uncommon in normal usage.",
+  "contract_summary": "This is a get-wrapper that looks up an armada_gem_object by its DRM handle, acquires a reference (via drm_gem_object_lookup), and returns the object pointer. The caller now owns a reference and must release it (e.g., via drm_gem_object_put) when done. If the handle is invalid or the object not found, returns NULL and no reference is taken.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a GEM object by handle and return it with an incremented refcount. The only additional logic is a trivial type cast.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) indicates invalid handle; retrying the same handle will not succeed unless the object is later created, which is uncommon in normal usage.",
+      "contract_summary": "This is a get-wrapper that looks up an armada_gem_object by its DRM handle, acquires a reference (via drm_gem_object_lookup), and returns the object pointer. The caller now owns a reference and must release it (e.g., via drm_gem_object_put) when done. If the handle is invalid or the object not found, returns NULL and no reference is taken."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "obj.refcount.refcount",
+          "armada_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'obj.refcount.refcount' has 3 segments but the type chain 'armada_gem_object--drm_gem_object--kref--refcount_t' has 4 types, requiring an additional field to go from armada_gem_object to the embedded drm_gem_object. The path is inconsistent with the type chain. Additionally, the callee info for drm_gem_object_lookup indicates the refcount path on a drm_gem_object is 'obj.refcount.refcount', but the return type of armada_gem_object_lookup is armada_gem_object, not drm_gem_object. Therefore, the operation is invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function is a reference-count wrapper: it calls drm_gem_object_lookup (a get operation) and returns the contained armada_gem_object. The critical variable (the returned armada_gem_object) is passed to the caller via return value. However, the extracted candidate operation's access path 'obj.refcount.refcount' is inconsistent with the type chain 'armada_gem_object--drm_gem_object--kref--refcount_t' because it omits the field that links armada_gem_object to its embedded drm_gem_object. Therefore, no valid operation can be included."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) indicates invalid handle; retrying the same handle will not succeed unless the object is later created, which is uncommon in normal usage.",
+    "contract_summary": "This is a get-wrapper that looks up an armada_gem_object by its DRM handle, acquires a reference (via drm_gem_object_lookup), and returns the object pointer. The caller now owns a reference and must release it (e.g., via drm_gem_object_put) when done. If the handle is invalid or the object not found, returns NULL and no reference is taken."
+  }
+}

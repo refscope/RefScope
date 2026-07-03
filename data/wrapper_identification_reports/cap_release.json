@@ -1,0 +1,99 @@
+{
+  "function_name": "cap_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "file.private_data.kref.refcount",
+      "file--gb_cap--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_cap",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cap.kref.refcount",
+      "member_type_chain": "gb_cap--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_cap",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cap.kref.refcount",
+      "member_type_chain": "gb_cap--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_cap is a release operation that always succeeds; retrying would cause a double-free use-after-free.",
+  "contract_summary": "cap_release is a release wrapper that decrements the reference count on a gb_cap object (via kref_put semantics). It is typically installed as the .release callback in a file_operations structure and is called when the file descriptor is closed. After this call, the gb_cap object may be freed if its reference count reaches zero, and the caller must not access the object or the file's private data again. The function always succeeds (returns 0).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of cap_release is to call put_cap on the gb_cap object stored in file->private_data, releasing a reference. There is no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_cap is a release operation that always succeeds; retrying would cause a double-free use-after-free.",
+      "contract_summary": "cap_release is a release wrapper that decrements the reference count on a gb_cap object (via kref_put semantics). It is typically installed as the .release callback in a file_operations structure and is called when the file descriptor is closed. After this call, the gb_cap object may be freed if its reference count reaches zero, and the caller must not access the object or the file's private data again. The function always succeeds (returns 0)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "file.private_data.kref.refcount",
+          "file--gb_cap--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "file.private_data.kref.refcount",
+          "file--gb_cap--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_cap(cap) is called where cap is derived from file->private_data, so the operation is a put on the object accessible via parameter 2 (file). The access path file.private_data.kref.refcount and type chain file--gb_cap--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "file.private_data.kref.refcount",
+        "file--gb_cap--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_cap is a release operation that always succeeds; retrying would cause a double-free use-after-free.",
+    "contract_summary": "cap_release is a release wrapper that decrements the reference count on a gb_cap object (via kref_put semantics). It is typically installed as the .release callback in a file_operations structure and is called when the file descriptor is closed. After this call, the gb_cap object may be freed if its reference count reaches zero, and the caller must not access the object or the file's private data again. The function always succeeds (returns 0)."
+  }
+}

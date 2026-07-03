@@ -1,0 +1,130 @@
+{
+  "function_name": "aa_get_newest_label",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "l.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_label_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.count.refcount.refs",
+      "member_type_chain": "aa_label--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.count.count",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.count.count",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure only occurs if input is NULL (returns NULL) or if there is a refcounting error triggering a BUG; both are non-recoverable.",
+  "contract_summary": "This function acquires a reference to the newest (non-stale) label. It is a get-wrapper: it ensures the caller gets a label with an elevated refcount that must be released with aa_put_label. If the input label is stale, it obtains the current replacement from the proxy. The function returns NULL only if the input is NULL. The caller must eventually release the returned label. The function has debugging assertions that may trigger if there is a refcounting error. The get operation is unconditional when input is non-NULL, and the caller is responsible for subsequent put. This is an acquire operation in the label lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the newest (non-stale) label via aa_get_label or aa_get_label_rcu, with only a staleness check and debugging assertions.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure only occurs if input is NULL (returns NULL) or if there is a refcounting error triggering a BUG; both are non-recoverable.",
+      "contract_summary": "This function acquires a reference to the newest (non-stale) label. It is a get-wrapper: it ensures the caller gets a label with an elevated refcount that must be released with aa_put_label. If the input label is stale, it obtains the current replacement from the proxy. The function returns NULL only if the input is NULL. The caller must eventually release the returned label. The function has debugging assertions that may trigger if there is a refcounting error. The get operation is unconditional when input is non-NULL, and the caller is responsible for subsequent put. This is an acquire operation in the label lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "l.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "tmp.count.count",
+          "aa_label--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "l.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first operation corresponds to aa_get_label(l) on the non-stale branch, which increments the refcount of the input parameter l. The access path l.count.count.refcount and type chain aa_label--aa_count--kref--refcount_t match the callee info for aa_get_label and are consistent with the code (l passed as parameter). The second operation for the stale branch uses aa_get_label_rcu, but the candidate path 'tmp.count.count' is inconsistent with the callee's type chain 'aa_label--kref--refcount_t'; the path has two 'count' fields while the type chain suggests only one level after aa_label (kref) and then refcount_t. Therefore the second operation is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "l.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure only occurs if input is NULL (returns NULL) or if there is a refcounting error triggering a BUG; both are non-recoverable.",
+    "contract_summary": "This function acquires a reference to the newest (non-stale) label. It is a get-wrapper: it ensures the caller gets a label with an elevated refcount that must be released with aa_put_label. If the input label is stale, it obtains the current replacement from the proxy. The function returns NULL only if the input is NULL. The caller must eventually release the returned label. The function has debugging assertions that may trigger if there is a refcounting error. The get operation is unconditional when input is non-NULL, and the caller is responsible for subsequent put. This is an acquire operation in the label lifecycle."
+  }
+}

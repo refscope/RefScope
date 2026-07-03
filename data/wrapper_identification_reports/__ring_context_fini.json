@@ -1,0 +1,99 @@
+{
+  "function_name": "__ring_context_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ce.state.obj.base.refcount.refcount",
+      "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_vma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma.obj.base.refcount.refcount",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_vma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma.obj.base.refcount.refcount",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and always succeed if used correctly; retrying on failure would indicate a double-put bug.",
+  "contract_summary": "This is a put wrapper that releases a reference on the i915_vma stored in ce->state. It is typically called during context teardown (fini). The caller must ensure that ce->state is a valid pointer and that this put is part of the final release sequence. After the call, ce->state must not be accessed or further released without acquiring a new reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls i915_vma_put on ce->state, which is a refcount decrement. There is no additional logic beyond this put operation, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and always succeed if used correctly; retrying on failure would indicate a double-put bug.",
+      "contract_summary": "This is a put wrapper that releases a reference on the i915_vma stored in ce->state. It is typically called during context teardown (fini). The caller must ensure that ce->state is a valid pointer and that this put is part of the final release sequence. After the call, ce->state must not be accessed or further released without acquiring a new reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.state.obj.base.refcount.refcount",
+          "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.state.obj.base.refcount.refcount",
+          "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "i915_vma_put(ce->state) performs a put on the refcount of the VMA's underlying object. The access path from parameter ce (index 1) through .state.obj.base.refcount.refcount correctly traces to the refcount field. The type chain is consistent: intel_context->state is i915_vma, which has obj->drm_i915_gem_object with base->drm_gem_object containing kref with refcount_t. Segment counts match (6 each). Direction 'put' matches the callee's semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ce.state.obj.base.refcount.refcount",
+        "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and always succeed if used correctly; retrying on failure would indicate a double-put bug.",
+    "contract_summary": "This is a put wrapper that releases a reference on the i915_vma stored in ce->state. It is typically called during context teardown (fini). The caller must ensure that ce->state is a valid pointer and that this put is part of the final release sequence. After the call, ce->state must not be accessed or further released without acquiring a new reference."
+  }
+}

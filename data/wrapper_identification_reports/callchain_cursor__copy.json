@@ -1,0 +1,157 @@
+{
+  "function_name": "callchain_cursor__copy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dst.first.ms.map.refcnt.refs",
+      "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dst.first.ms.thread.orig.refcnt.refs",
+      "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.map.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.thread.orig.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.map.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "callchain_cursor_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cursor.first.ms.thread.orig.refcnt.refs",
+      "member_type_chain": "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "On failure (e.g., memory allocation failure in callchain_cursor_append), dst may be partially built; retrying would lose the initial state and risk leaks or use-after-free.",
+  "contract_summary": "Copy wrapper that transfers a snapshot of the callchain cursor from src to dst, managing refcounts on embedded map and thread objects. The function first releases any existing references in dst via callchain_cursor_reset, then iterates over src nodes and appends them to dst, taking new references via callchain_cursor_append. On success, dst contains a deep copy of src with proper refcounting; on failure (e.g., memory allocation failure), dst may be partially filled and should not be used without resetting. The caller must check the return value and eventually release dst's references via callchain_cursor_reset or appropriate destructor.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to copy a callchain cursor, which involves releasing old references (reset) and acquiring new references (append) for each node. The copy operation is entirely centered on refcount management of map and thread objects.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "On failure (e.g., memory allocation failure in callchain_cursor_append), dst may be partially built; retrying would lose the initial state and risk leaks or use-after-free.",
+      "contract_summary": "Copy wrapper that transfers a snapshot of the callchain cursor from src to dst, managing refcounts on embedded map and thread objects. The function first releases any existing references in dst via callchain_cursor_reset, then iterates over src nodes and appends them to dst, taking new references via callchain_cursor_append. On success, dst contains a deep copy of src with proper refcounting; on failure (e.g., memory allocation failure), dst may be partially filled and should not be used without resetting. The caller must check the return value and eventually release dst's references via callchain_cursor_reset or appropriate destructor."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.first.ms.map.refcnt.refs",
+          "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.first.ms.thread.orig.refcnt.refs",
+          "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.curr.ms.map.refcnt.refs",
+          "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.curr.ms.thread.orig.refcnt.refs",
+          "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.first.ms.map.refcnt.refs",
+          "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.first.ms.thread.orig.refcnt.refs",
+          "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The two put operations from callchain_cursor_reset on parameter 1 (dst) are validated by the provided callee info and code. The access paths and type chains are consistent: dst.first.ms.map.refcnt.refs (6 segments) matches the type chain (6 types) and dst.first.ms.thread.orig.refcnt.refs (7 segments) matches the type chain (7 types). The two get operations on parameter 2 (src) are not supported by any callee info; the function does not directly acquire references on src's nodes, and no get-wrapper is described in the callee info, so they are rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dst.first.ms.map.refcnt.refs",
+        "callchain_cursor--callchain_cursor_node--map_symbol--map--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dst.first.ms.thread.orig.refcnt.refs",
+        "callchain_cursor--callchain_cursor_node--map_symbol--thread--original_thread--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "On failure (e.g., memory allocation failure in callchain_cursor_append), dst may be partially built; retrying would lose the initial state and risk leaks or use-after-free.",
+    "contract_summary": "Copy wrapper that transfers a snapshot of the callchain cursor from src to dst, managing refcounts on embedded map and thread objects. The function first releases any existing references in dst via callchain_cursor_reset, then iterates over src nodes and appends them to dst, taking new references via callchain_cursor_append. On success, dst contains a deep copy of src with proper refcounting; on failure (e.g., memory allocation failure), dst may be partially filled and should not be used without resetting. The caller must check the return value and eventually release dst's references via callchain_cursor_reset or appropriate destructor."
+  }
+}

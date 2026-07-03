@@ -1,0 +1,115 @@
+{
+  "function_name": "_mlx5_vdpa_get_mr",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "mr.refcount.refs",
+      "mlx5_vdpa_mr--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation always succeeds when mr is non-NULL, so no failure scenario exists; retry is unnecessary.",
+  "contract_summary": "This get-wrapper increments the reference count on a `mlx5_vdpa_mr` object. It is a no-op if `mr` is NULL. The caller must pair each call with a corresponding put (e.g., `_mlx5_vdpa_put_mr`) to release the reference. The function is atomic and does not require any lock or RCU protection. It represents the acquire phase of the reference-count lifecycle for this memory region object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the reference count on a mlx5_vdpa_mr object via refcount_inc; the only additional logic is a NULL guard, which is minimal.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation always succeeds when mr is non-NULL, so no failure scenario exists; retry is unnecessary.",
+      "contract_summary": "This get-wrapper increments the reference count on a `mlx5_vdpa_mr` object. It is a no-op if `mr` is NULL. The caller must pair each call with a corresponding put (e.g., `_mlx5_vdpa_put_mr`) to release the reference. The function is atomic and does not require any lock or RCU protection. It represents the acquire phase of the reference-count lifecycle for this memory region object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "mr.refcount.refs",
+          "mlx5_vdpa_mr--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "mr.refcount.refs",
+          "mlx5_vdpa_mr--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&mr->refcount) is a get operation on parameter 2 (mr). The access path mr.refcount.refs and type chain mlx5_vdpa_mr--refcount_t--atomic_t are consistent with the code and callee information. Segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "mr.refcount.refs",
+        "mlx5_vdpa_mr--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation always succeeds when mr is non-NULL, so no failure scenario exists; retry is unnecessary.",
+    "contract_summary": "This get-wrapper increments the reference count on a `mlx5_vdpa_mr` object. It is a no-op if `mr` is NULL. The caller must pair each call with a corresponding put (e.g., `_mlx5_vdpa_put_mr`) to release the reference. The function is atomic and does not require any lock or RCU protection. It represents the acquire phase of the reference-count lifecycle for this memory region object."
+  }
+}

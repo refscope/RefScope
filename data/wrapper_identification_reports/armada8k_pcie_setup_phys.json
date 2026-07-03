@@ -1,0 +1,74 @@
+{
+  "function_name": "armada8k_pcie_setup_phys",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_of_phy_get_by_index",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "phy.ops.owner.refcnt",
+      "member_type_chain": "phy--phy_ops--module--atomic_t"
+    },
+    {
+      "callee_function_name": "devm_of_phy_get_by_index",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "phy.dev.kobj.kref.refcount",
+      "member_type_chain": "phy--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_of_phy_get_by_index",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "phy.ops.owner.refcnt",
+      "member_type_chain": "phy--phy_ops--module--atomic_t"
+    },
+    {
+      "callee_function_name": "devm_of_phy_get_by_index",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "phy.dev.kobj.kref.refcount",
+      "member_type_chain": "phy--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is PCIe PHY setup and enablement, not reference-count management. It acquires phy handles via devm_of_phy_get_by_index (which does internal refcount gets), but the main logic includes error handling, counting, a warning, and an enable call to armada8k_pcie_enable_phys. The acquired references are stored in the pcie structure, not passed back to the caller, making this a resource acquisition/initialization function rather than a wrapper for the get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

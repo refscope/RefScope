@@ -1,0 +1,175 @@
+{
+  "function_name": "__get_pdev_by_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      2,
+      "from.dev.of_node.kobj.kref.refcount",
+      "platform_device--device--device_node--kobject--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      0,
+      "mdp_pdev.dev.kobj.kref.refcount",
+      "platform_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_device_by_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_compatible_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "np.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_compatible_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "from.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_device_by_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_compatible_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "np.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_compatible_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "from.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the device or node is not present; retrying under the same conditions will not succeed.",
+  "contract_summary": "This is a get-wrapper that returns a platform_device matching a given MDP infrastructure ID with its reference count incremented. The caller must check the return value for NULL; on success, the caller owns a reference and must call platform_device_put (or equivalent) to release it. The function also performs a lookup in the device tree; if the device tree node or platform device is not found, it returns NULL without acquiring any reference. The function handles the intermediate reference to the device node correctly (gets via of_find_compatible_node, then puts via of_node_put after retrieving the platform device).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a platform_device by matching an infrastructure ID. The core logic is a lookup-and-get pattern (of_find_device_by_node increments refcount), with minimal validation and cleanup (of_node_put). The function returns the platform_device with an elevated refcount.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the device or node is not present; retrying under the same conditions will not succeed.",
+      "contract_summary": "This is a get-wrapper that returns a platform_device matching a given MDP infrastructure ID with its reference count incremented. The caller must check the return value for NULL; on success, the caller owns a reference and must call platform_device_put (or equivalent) to release it. The function also performs a lookup in the device tree; if the device tree node or platform device is not found, it returns NULL without acquiring any reference. The function handles the intermediate reference to the device node correctly (gets via of_find_compatible_node, then puts via of_node_put after retrieving the platform device)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          2,
+          "from.dev.of_node.kobj.kref.refcount",
+          "platform_device--device--device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          0,
+          "mdp_pdev.dev.kobj.kref.refcount",
+          "platform_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          2,
+          "from.dev.of_node.kobj.kref.refcount",
+          "platform_device--device--device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          0,
+          "mdp_pdev.dev.kobj.kref.refcount",
+          "platform_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put on parameter 'from' occurs when of_find_compatible_node is called with a non-NULL from, decrementing the refcount of from->dev.of_node. The get on the return value occurs via of_find_device_by_node, incrementing the refcount of the returned platform_device. Access paths and type chains match the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        2,
+        "from.dev.of_node.kobj.kref.refcount",
+        "platform_device--device--device_node--kobject--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        0,
+        "mdp_pdev.dev.kobj.kref.refcount",
+        "platform_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the device or node is not present; retrying under the same conditions will not succeed.",
+    "contract_summary": "This is a get-wrapper that returns a platform_device matching a given MDP infrastructure ID with its reference count incremented. The caller must check the return value for NULL; on success, the caller owns a reference and must call platform_device_put (or equivalent) to release it. The function also performs a lookup in the device tree; if the device tree node or platform device is not found, it returns NULL without acquiring any reference. The function handles the intermediate reference to the device node correctly (gets via of_find_compatible_node, then puts via of_node_put after retrieving the platform device)."
+  }
+}

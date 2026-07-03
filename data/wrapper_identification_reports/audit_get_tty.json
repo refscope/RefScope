@@ -1,0 +1,99 @@
+{
+  "function_name": "audit_get_tty",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tty.kref.refcount",
+      "tty_struct--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tty_kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tty_kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (return NULL) indicates no controlling tty or no signal struct; this is a process property that will not change on retry.",
+  "contract_summary": "Get wrapper: safely acquires a reference to the current process's controlling tty_struct (if any) and returns it to the caller. The caller owns the reference and must call tty_kref_put() to release it when done. The function takes the sighand siglock briefly to protect the read of current->signal->tty, but does not require the caller to hold any lock. If no controlling tty exists (tty pointer NULL), returns NULL; the caller must check the return value before use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to safely acquire a reference to the current process's controlling tty via tty_kref_get and return it; minimal non-refcount logic (spinlock and null check) is just infrastructure for safe reference counting.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (return NULL) indicates no controlling tty or no signal struct; this is a process property that will not change on retry.",
+      "contract_summary": "Get wrapper: safely acquires a reference to the current process's controlling tty_struct (if any) and returns it to the caller. The caller owns the reference and must call tty_kref_put() to release it when done. The function takes the sighand siglock briefly to protect the read of current->signal->tty, but does not require the caller to hold any lock. If no controlling tty exists (tty pointer NULL), returns NULL; the caller must check the return value before use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tty.kref.refcount",
+          "tty_struct--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tty.kref.refcount",
+          "tty_struct--kref--refcount_t"
+        ]
+      ],
+      "reason": "tty_kref_get is called on current->signal->tty, and the result is returned. The returned tty is the critical variable. The access path tty.kref.refcount and type chain tty_struct--kref--refcount_t match the callee's definition and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tty.kref.refcount",
+        "tty_struct--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (return NULL) indicates no controlling tty or no signal struct; this is a process property that will not change on retry.",
+    "contract_summary": "Get wrapper: safely acquires a reference to the current process's controlling tty_struct (if any) and returns it to the caller. The caller owns the reference and must call tty_kref_put() to release it when done. The function takes the sighand siglock briefly to protect the read of current->signal->tty, but does not require the caller to hold any lock. If no controlling tty exists (tty pointer NULL), returns NULL; the caller must check the return value before use."
+  }
+}

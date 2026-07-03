@@ -1,0 +1,507 @@
+{
+  "function_name": "apparmor_socket_socketpair",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "current_label",
+      "current_label.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "socka.sk.sk_security.label.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "global",
+      "current_label",
+      "current_label.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "sockb.sk.sk_security.label.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "global",
+      "current_label",
+      "current_label.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "socka.sk.sk_security.peer_lastupdate.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "sockb.sk.sk_security.peer.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "socka.sk.sk_security.label.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "sockb.sk.sk_security.label.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "socka.sk.sk_security.peer.count.count.refcount",
+      "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "current_label",
+      "current_label.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "begin_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk_ctx.peer_lastupdate.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "peer_ctx.peer.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk_ctx.label.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "peer_ctx.label.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk_ctx.peer.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "begin_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk_ctx.peer_lastupdate.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "peer_ctx.peer.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk_ctx.label.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "peer_ctx.label.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "unix_connect_peers",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk_ctx.peer.count.count.refcount",
+      "member_type_chain": "aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always returns 0 and has no failure path; refcount operations are unconditional once the path condition is met. No retry needed.",
+  "contract_summary": "This function initializes the AppArmor security labels on both sockets of a newly created socket pair. It acquires a reference to the current task's label via begin_current_label_crit_section, then for each socket, if its existing label differs from the current label, it releases the old label and assigns a new reference via aa_get_label. For AF_UNIX sockets, it additionally calls unix_connect_peers to set up the peer cross-reference (which itself manages refcounts on the peer labels). The function ends by releasing the temporary reference via end_current_label_crit_section. After this function, the socket contexts hold their own references to the labels; the sockets' ownership is implicitly tied to the sockets' lifetimes, and the labels are released when the sockets are freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to manage AppArmor label references on two socket contexts during socketpair creation. The function acquires the current label, conditionally replaces existing labels with new references (put old, get new), and handles peer label setup for AF_UNIX sockets. The only non-refcount logic is the family check and call to unix_connect_peers, which itself performs refcount operations on peer labels.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always returns 0 and has no failure path; refcount operations are unconditional once the path condition is met. No retry needed.",
+      "contract_summary": "This function initializes the AppArmor security labels on both sockets of a newly created socket pair. It acquires a reference to the current task's label via begin_current_label_crit_section, then for each socket, if its existing label differs from the current label, it releases the old label and assigns a new reference via aa_get_label. For AF_UNIX sockets, it additionally calls unix_connect_peers to set up the peer cross-reference (which itself manages refcounts on the peer labels). The function ends by releasing the temporary reference via end_current_label_crit_section. After this function, the socket contexts hold their own references to the labels; the sockets' ownership is implicitly tied to the sockets' lifetimes, and the labels are released when the sockets are freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "sockb.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.peer_lastupdate.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "sockb.sk.sk_security.peer.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "sockb.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.peer.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "sockb.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.peer_lastupdate.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "sockb.sk.sk_security.peer.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "sockb.sk.sk_security.label.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "socka.sk.sk_security.peer.count.count.refcount",
+          "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "current_label",
+          "current_label.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "All candidate operations are validated: each corresponds to an explicit refcount change in the function code (begin/end_current_label_crit_section, aa_get_label/aa_put_label on socket labels, and unix_connect_peers internal operations). Access paths and type chains are consistent with callee information, and segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "current_label",
+        "current_label.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "socka.sk.sk_security.label.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "global",
+        "current_label",
+        "current_label.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "sockb.sk.sk_security.label.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "global",
+        "current_label",
+        "current_label.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "socka.sk.sk_security.peer_lastupdate.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "sockb.sk.sk_security.peer.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "socka.sk.sk_security.label.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "sockb.sk.sk_security.label.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "socka.sk.sk_security.peer.count.count.refcount",
+        "socket--sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "current_label",
+        "current_label.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 9,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always returns 0 and has no failure path; refcount operations are unconditional once the path condition is met. No retry needed.",
+    "contract_summary": "This function initializes the AppArmor security labels on both sockets of a newly created socket pair. It acquires a reference to the current task's label via begin_current_label_crit_section, then for each socket, if its existing label differs from the current label, it releases the old label and assigns a new reference via aa_get_label. For AF_UNIX sockets, it additionally calls unix_connect_peers to set up the peer cross-reference (which itself manages refcounts on the peer labels). The function ends by releasing the temporary reference via end_current_label_crit_section. After this function, the socket contexts hold their own references to the labels; the sockets' ownership is implicitly tied to the sockets' lifetimes, and the labels are released when the sockets are freed."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "function_name": "adf_ae_fw_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "accel_dev.fw_loader.uof_fw.priv.ref.refcount",
+      "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "accel_dev.fw_loader.mmp_fw.priv.ref.refcount",
+      "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "release_firmware always succeeds; retrying after success would cause use-after-free. The early return guard only skips if fw_name is NULL.",
+  "contract_summary": "This is a put/teardown wrapper that releases two firmware references (uof_fw and mmp_fw) via release_firmware, and performs related hardware cleanup (qat_uclo_del_obj, qat_hal_deinit). After this function, the firmware loader data is cleared (pointers set to NULL) and must not be used. The caller should call this function exactly once per device during shutdown or error recovery, and must ensure no concurrent access to the firmware objects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primarily releases two firmware references via release_firmware, with additional cleanup (qat_uclo_del_obj, qat_hal_deinit) that are closely tied to the teardown sequence. The refcount release is the key purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "release_firmware always succeeds; retrying after success would cause use-after-free. The early return guard only skips if fw_name is NULL.",
+      "contract_summary": "This is a put/teardown wrapper that releases two firmware references (uof_fw and mmp_fw) via release_firmware, and performs related hardware cleanup (qat_uclo_del_obj, qat_hal_deinit). After this function, the firmware loader data is cleared (pointers set to NULL) and must not be used. The caller should call this function exactly once per device during shutdown or error recovery, and must ensure no concurrent access to the firmware objects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "accel_dev.fw_loader.uof_fw.priv.ref.refcount",
+          "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "accel_dev.fw_loader.mmp_fw.priv.ref.refcount",
+          "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "accel_dev.fw_loader.uof_fw.priv.ref.refcount",
+          "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "accel_dev.fw_loader.mmp_fw.priv.ref.refcount",
+          "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both release_firmware calls are put operations on the firmware objects accessed via accel_dev->fw_loader->uof_fw and accel_dev->fw_loader->mmp_fw. The access paths correctly trace from parameter 1 (accel_dev) through the struct fields, and the type chain segment count matches. The refcount targets are consistent with the callee's put semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "accel_dev.fw_loader.uof_fw.priv.ref.refcount",
+        "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "accel_dev.fw_loader.mmp_fw.priv.ref.refcount",
+        "adf_accel_dev--adf_fw_loader_data--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "release_firmware always succeeds; retrying after success would cause use-after-free. The early return guard only skips if fw_name is NULL.",
+    "contract_summary": "This is a put/teardown wrapper that releases two firmware references (uof_fw and mmp_fw) via release_firmware, and performs related hardware cleanup (qat_uclo_del_obj, qat_hal_deinit). After this function, the firmware loader data is cleared (pointers set to NULL) and must not be used. The caller should call this function exactly once per device during shutdown or error recovery, and must ensure no concurrent access to the firmware objects."
+  }
+}

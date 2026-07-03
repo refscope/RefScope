@@ -1,0 +1,122 @@
+{
+  "function_name": "__uio_register_device",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.info.mem.map.kobj.kref.refcount",
+      "member_type_chain": "uio_device--uio_info--uio_mem--uio_map--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.info.port.portio.kobj.kref.refcount",
+      "member_type_chain": "uio_device--uio_info--uio_port--uio_portio--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.portio_dir.kref.refcount",
+      "member_type_chain": "uio_device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.map_dir.kref.refcount",
+      "member_type_chain": "uio_device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.info.mem.map.kobj.kref.refcount",
+      "member_type_chain": "uio_device--uio_info--uio_mem--uio_map--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.portio_dir.kref.refcount",
+      "member_type_chain": "uio_device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.info.port.portio.kobj.kref.refcount",
+      "member_type_chain": "uio_device--uio_info--uio_port--uio_portio--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uio_dev_del_attributes",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.map_dir.kref.refcount",
+      "member_type_chain": "uio_device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no refcount operation to retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs UIO device registration with extensive setup (validation, allocation, initialization, device_add, attribute creation, IRQ request). The refcount operations (device_initialize and put_device on error) are incidental cleanup steps, not the primary purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no refcount operation to retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no refcount operation to retry.",
+    "contract_summary": ""
+  }
+}

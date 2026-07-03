@@ -1,0 +1,143 @@
+{
+  "function_name": "__ip_mc_dec_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "i",
+      "i.refcnt.refs",
+      "ip_mc_list--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "global",
+      "i",
+      "i.interface.refcnt.refs",
+      "ip_mc_list--in_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ip_ma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "im.refcnt.refs",
+      "member_type_chain": "ip_mc_list--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "ip_ma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "im.interface.refcnt.refs",
+      "member_type_chain": "ip_mc_list--in_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ip_ma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "im.refcnt.refs",
+      "member_type_chain": "ip_mc_list--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "ip_ma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "im.interface.refcnt.refs",
+      "member_type_chain": "ip_mc_list--in_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function does not indicate failure; if the address is not found, it silently returns, which would indicate a caller bug. No retry is meaningful because the operation is a release, not an acquisition.",
+  "contract_summary": "Put wrapper for a multicast group subscription: decrements the internal 'users' counter of the ip_mc_list entry matching the given address. When the counter reaches zero, the entry is removed from the device's multicast list, group membership is dropped (IGMP leave), and the final reference (ip_ma_put) is released, which may free the object. This function is called when a socket or other entity stops listening to the multicast group. The caller must not use the group pointer after calling this function, and must ensure the group exists in the list (otherwise a bug). The function does not return success/failure; it assumes the caller has a valid reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to decrement the usage count (users) of a multicast group identified by address; when the count reaches zero, it triggers cleanup and final refcount put. The function is focused on this lifecycle management with minimal ancillary logic (notifications, hash removal) that are standard parts of the release process.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function does not indicate failure; if the address is not found, it silently returns, which would indicate a caller bug. No retry is meaningful because the operation is a release, not an acquisition.",
+      "contract_summary": "Put wrapper for a multicast group subscription: decrements the internal 'users' counter of the ip_mc_list entry matching the given address. When the counter reaches zero, the entry is removed from the device's multicast list, group membership is dropped (IGMP leave), and the final reference (ip_ma_put) is released, which may free the object. This function is called when a socket or other entity stops listening to the multicast group. The caller must not use the group pointer after calling this function, and must ensure the group exists in the list (otherwise a bug). The function does not return success/failure; it assumes the caller has a valid reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "i",
+          "i.refcnt.refs",
+          "ip_mc_list--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "i",
+          "i.interface.refcnt.refs",
+          "ip_mc_list--in_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "i",
+          "i.refcnt.refs",
+          "ip_mc_list--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "i",
+          "i.interface.refcnt.refs",
+          "ip_mc_list--in_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: ip_ma_put(i) is called on the local variable i (struct ip_mc_list*). The first path i.refcnt.refs matches the callee's im.refcnt.refs with type chain ip_mc_list--refcount_t--atomic_t. The second path i.interface.refcnt.refs matches the callee's im.interface.refcnt.refs with type chain ip_mc_list--in_device--refcount_t--atomic_t. Both access paths and type chains are correct based on the kernel structures (ip_mc_list contains refcnt and interface fields, and in_device contains refcnt). The segment counts match (3 and 4 respectively)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "i",
+        "i.refcnt.refs",
+        "ip_mc_list--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "global",
+        "i",
+        "i.interface.refcnt.refs",
+        "ip_mc_list--in_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function does not indicate failure; if the address is not found, it silently returns, which would indicate a caller bug. No retry is meaningful because the operation is a release, not an acquisition.",
+    "contract_summary": "Put wrapper for a multicast group subscription: decrements the internal 'users' counter of the ip_mc_list entry matching the given address. When the counter reaches zero, the entry is removed from the device's multicast list, group membership is dropped (IGMP leave), and the final reference (ip_ma_put) is released, which may free the object. This function is called when a socket or other entity stops listening to the multicast group. The caller must not use the group pointer after calling this function, and must ensure the group exists in the list (otherwise a bug). The function does not return success/failure; it assumes the caller has a valid reference."
+  }
+}

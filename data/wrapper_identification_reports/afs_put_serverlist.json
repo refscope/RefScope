@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_put_serverlist",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "slist.usage.refs",
+      "afs_server_list--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Once refcount reaches zero, the object is freed; retrying would cause use-after-free.",
+  "contract_summary": "This is a put wrapper that decrements the usage count of an afs_server_list. When the count reaches zero, it unuses each server in the list (via afs_unuse_server) and frees the list structure via kfree_rcu. The caller must not access the slist after calling this function, and must pair each afs_put_serverlist with a corresponding afs_get_serverlist or other reference acquisition. This function does not return a value and always succeeds (if slist is NULL it is a no-op).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to an afs_server_list via refcount decrement, with cleanup on last put; no significant unrelated logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Once refcount reaches zero, the object is freed; retrying would cause use-after-free.",
+      "contract_summary": "This is a put wrapper that decrements the usage count of an afs_server_list. When the count reaches zero, it unuses each server in the list (via afs_unuse_server) and frees the list structure via kfree_rcu. The caller must not access the slist after calling this function, and must pair each afs_put_serverlist with a corresponding afs_get_serverlist or other reference acquisition. This function does not return a value and always succeeds (if slist is NULL it is a no-op)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "slist.usage.refs",
+          "afs_server_list--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "slist.usage.refs",
+          "afs_server_list--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&slist->usage) decrements the usage field of slist. The access path from the parameter slist to the atomic refcount is slist.usage.refs, and the type chain afs_server_list->refcount_t->atomic_t is consistent. The direction is 'put' and the parameter index 2 is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "slist.usage.refs",
+        "afs_server_list--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Once refcount reaches zero, the object is freed; retrying would cause use-after-free.",
+    "contract_summary": "This is a put wrapper that decrements the usage count of an afs_server_list. When the count reaches zero, it unuses each server in the list (via afs_unuse_server) and frees the list structure via kfree_rcu. The caller must not access the slist after calling this function, and must pair each afs_put_serverlist with a corresponding afs_get_serverlist or other reference acquisition. This function does not return a value and always succeeds (if slist is NULL it is a no-op)."
+  }
+}

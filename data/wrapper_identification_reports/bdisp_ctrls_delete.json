@@ -1,0 +1,99 @@
+{
+  "function_name": "bdisp_ctrls_delete",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.ctrl_handler.req_obj.kref.refcount",
+      "bdisp_ctx--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "v4l2_ctrl_handler_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdl.req_obj.kref.refcount",
+      "member_type_chain": "v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "v4l2_ctrl_handler_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdl.req_obj.kref.refcount",
+      "member_type_chain": "v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is a one-time cleanup; if the handler is already freed (flag false), retrying is unnecessary and harmful (double-free risk).",
+  "contract_summary": "This function is a cleanup (put) wrapper that releases the v4l2_ctrl_handler associated with a bdisp_ctx if it was previously initialized (indicated by ctx->ctrls_rdy). After the call, the handler is freed and the flag is cleared; the caller must not use the handler afterward. It is typically called during context destruction or when overriding controls. Errors are not possible; the function is safe to call multiple times as long as ctrls_rdy reflects the actual state.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The only purpose is to conditionally release the v4l2_ctrl_handler via v4l2_ctrl_handler_free, a put function. The flag update is minimal housekeeping.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is a one-time cleanup; if the handler is already freed (flag false), retrying is unnecessary and harmful (double-free risk).",
+      "contract_summary": "This function is a cleanup (put) wrapper that releases the v4l2_ctrl_handler associated with a bdisp_ctx if it was previously initialized (indicated by ctx->ctrls_rdy). After the call, the handler is freed and the flag is cleared; the caller must not use the handler afterward. It is typically called during context destruction or when overriding controls. Errors are not possible; the function is safe to call multiple times as long as ctrls_rdy reflects the actual state."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.ctrl_handler.req_obj.kref.refcount",
+          "bdisp_ctx--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.ctrl_handler.req_obj.kref.refcount",
+          "bdisp_ctx--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "v4l2_ctrl_handler_free is a put function on its argument (ctx->ctrl_handler). The access path from parameter 1 (ctx) through ctrl_handler.req_obj.kref.refcount matches the callee's hdl.req_obj.kref.refcount. The segment counts align (5 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.ctrl_handler.req_obj.kref.refcount",
+        "bdisp_ctx--v4l2_ctrl_handler--media_request_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is a one-time cleanup; if the handler is already freed (flag false), retrying is unnecessary and harmful (double-free risk).",
+    "contract_summary": "This function is a cleanup (put) wrapper that releases the v4l2_ctrl_handler associated with a bdisp_ctx if it was previously initialized (indicated by ctx->ctrls_rdy). After the call, the handler is freed and the flag is cleared; the caller must not use the handler afterward. It is typically called during context destruction or when overriding controls. Errors are not possible; the function is safe to call multiple times as long as ctrls_rdy reflects the actual state."
+  }
+}

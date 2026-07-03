@@ -1,0 +1,99 @@
+{
+  "function_name": "cachefiles_alloc_object",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "object.ref.refs",
+      "cachefiles_object--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation or ondemand init, not the refcount operation itself. Retrying may be possible but is not a required part of the wrapper contract.",
+  "contract_summary": "This function allocates and initializes a new cachefiles_object, setting its reference count to 1 (via refcount_set) and returning it to the caller. It also acquires a reference on the associated fscache_cookie via fscache_get_cookie. The caller takes ownership of the returned object and must later release it with a corresponding cachefiles_put_object (or similar) when done. On failure (memory allocation or ondemand init), NULL is returned and no object is created. The function is a creation wrapper that establishes the initial reference; it does not increment an existing reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to allocate and initialize a new cachefiles_object, including setting its reference count to 1 via refcount_set. The function also performs auxiliary initialization (lock, list, debug_id, cookie reference) and error handling (ondemand init), but the refcount_set is a core part of establishing the object's lifecycle. It is a creation/set wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation or ondemand init, not the refcount operation itself. Retrying may be possible but is not a required part of the wrapper contract.",
+      "contract_summary": "This function allocates and initializes a new cachefiles_object, setting its reference count to 1 (via refcount_set) and returning it to the caller. It also acquires a reference on the associated fscache_cookie via fscache_get_cookie. The caller takes ownership of the returned object and must later release it with a corresponding cachefiles_put_object (or similar) when done. On failure (memory allocation or ondemand init), NULL is returned and no object is created. The function is a creation wrapper that establishes the initial reference; it does not increment an existing reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "object.ref.refs",
+          "cachefiles_object--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "object.ref.refs",
+          "cachefiles_object--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set(&object->ref, 1) initializes the refcount on the allocated object which is returned to caller. The access path object.ref.refs and type chain cachefiles_object--refcount_t--atomic_t are consistent. The critical variable is the return value (object)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "object.ref.refs",
+        "cachefiles_object--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation or ondemand init, not the refcount operation itself. Retrying may be possible but is not a required part of the wrapper contract.",
+    "contract_summary": "This function allocates and initializes a new cachefiles_object, setting its reference count to 1 (via refcount_set) and returning it to the caller. It also acquires a reference on the associated fscache_cookie via fscache_get_cookie. The caller takes ownership of the returned object and must later release it with a corresponding cachefiles_put_object (or similar) when done. On failure (memory allocation or ondemand init), NULL is returned and no object is created. The function is a creation wrapper that establishes the initial reference; it does not increment an existing reference."
+  }
+}

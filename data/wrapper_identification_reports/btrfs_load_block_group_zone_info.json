@@ -1,0 +1,74 @@
+{
+  "function_name": "btrfs_load_block_group_zone_info",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_find_chunk_map",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "map.refs.refs",
+      "member_type_chain": "btrfs_chunk_map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_find_chunk_map",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "map.refs.refs",
+      "member_type_chain": "btrfs_chunk_map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper – retry semantics not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is loading zone information for a block group in a zoned filesystem, involving multiple allocations, loops, error checks, and state updates. The refcount operations (btrfs_find_chunk_map and btrfs_get_block_group) are incidental steps mixed with significant business logic, not the central focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper – retry semantics not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper – retry semantics not applicable.",
+    "contract_summary": ""
+  }
+}

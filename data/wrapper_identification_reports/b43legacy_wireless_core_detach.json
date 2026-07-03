@@ -1,0 +1,231 @@
+{
+  "function_name": "b43legacy_wireless_core_detach",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.ucode.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.pcm.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.initvals_band.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.initvals.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.ucode.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.pcm.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals_band.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.ucode.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.pcm.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals_band.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_release_firmware",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always releases the firmware unconditionally; there is no failure path that could be retried.",
+  "contract_summary": "This function is a put wrapper that releases all firmware references (microcode, PCM, initvals, initvals_band) associated with the wireless device. It is called during device detachment to free the firmware data. The caller must ensure the device is no longer in use and that no other references exist. After this call, the firmware data must not be accessed. The function always releases the references and does not return an error.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of this function is to call b43legacy_release_firmware, which releases multiple firmware references (the put side of the lifecycle). There is no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always releases the firmware unconditionally; there is no failure path that could be retried.",
+      "contract_summary": "This function is a put wrapper that releases all firmware references (microcode, PCM, initvals, initvals_band) associated with the wireless device. It is called during device detachment to free the firmware data. The caller must ensure the device is no longer in use and that no other references exist. After this call, the firmware data must not be accessed. The function always releases the references and does not return an error."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.ucode.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.pcm.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals_band.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.ucode.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.pcm.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals_band.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "All four put operations correspond to the callee b43legacy_release_firmware acting on dev's firmware fields. The access paths and type chains match the callee information and have consistent segment counts (6 segments, 6 types). The critical variable is parameter 1 (dev), which is correct as the callee uses dev as its input."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.ucode.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.pcm.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.initvals_band.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.initvals.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always releases the firmware unconditionally; there is no failure path that could be retried.",
+    "contract_summary": "This function is a put wrapper that releases all firmware references (microcode, PCM, initvals, initvals_band) associated with the wireless device. It is called during device detachment to free the firmware data. The caller must ensure the device is no longer in use and that no other references exist. After this call, the firmware data must not be accessed. The function always releases the references and does not return an error."
+  }
+}

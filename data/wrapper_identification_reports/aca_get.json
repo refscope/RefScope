@@ -1,0 +1,115 @@
+{
+  "function_name": "aca_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "aca.aca_refcnt.refs",
+      "ifacaddr6--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc never fails in normal usage; if it did (e.g., saturation) it's a kernel bug, not a retry scenario.",
+  "contract_summary": "Acquires a reference on the `ifacaddr6` object by incrementing its reference count. The caller must ensure that the object is valid (i.e., refcount is not zero) before calling, and must pair this get with a corresponding put when the reference is no longer needed. This is an unconditional increment; the caller does not need to check return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the refcount of an ifacaddr6 object via refcount_inc, with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc never fails in normal usage; if it did (e.g., saturation) it's a kernel bug, not a retry scenario.",
+      "contract_summary": "Acquires a reference on the `ifacaddr6` object by incrementing its reference count. The caller must ensure that the object is valid (i.e., refcount is not zero) before calling, and must pair this get with a corresponding put when the reference is no longer needed. This is an unconditional increment; the caller does not need to check return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "aca.aca_refcnt.refs",
+          "ifacaddr6--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "aca.aca_refcnt.refs",
+          "ifacaddr6--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_inc is called on &aca->aca_refcnt, which is a get operation on the parameter aca. The access path aca.aca_refcnt.refs and type chain ifacaddr6--refcount_t--atomic_t correctly reflect the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "aca.aca_refcnt.refs",
+        "ifacaddr6--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc never fails in normal usage; if it did (e.g., saturation) it's a kernel bug, not a retry scenario.",
+    "contract_summary": "Acquires a reference on the `ifacaddr6` object by incrementing its reference count. The caller must ensure that the object is valid (i.e., refcount is not zero) before calling, and must pair this get with a corresponding put when the reference is no longer needed. This is an unconditional increment; the caller does not need to check return value."
+  }
+}

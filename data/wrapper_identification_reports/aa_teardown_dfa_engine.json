@@ -1,0 +1,171 @@
+{
+  "function_name": "aa_teardown_dfa_engine",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "stacksplitdfa",
+      "stacksplitdfa.count.refcount",
+      "aa_dfa--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "nulldfa",
+      "nulldfa.count.refcount",
+      "aa_dfa--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "nullpdb",
+      "nullpdb.count.refcount",
+      "aa_policydb--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_dfa",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dfa.count.refcount",
+      "member_type_chain": "aa_dfa--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_pdb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pdb.count.refcount",
+      "member_type_chain": "aa_policydb--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_dfa",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dfa.count.refcount",
+      "member_type_chain": "aa_dfa--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_pdb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pdb.count.refcount",
+      "member_type_chain": "aa_policydb--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are release operations; failure is not expected, and retrying would risk use-after-free or double-put.",
+  "contract_summary": "This is a teardown wrapper that releases the kernel's reference on the global DFA and policy database objects used by the AppArmor DFA engine. After calling this function, the global pointers nullpdb, stacksplitdfa, and nulldfa are set to NULL and must not be accessed. The function is intended to be called exactly once at module cleanup (__init context) and is part of the module's exit/unload sequence. The caller does not need to perform any additional put operations after this call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release references on three global DFA/policy objects via aa_put_dfa and aa_put_pdb, then set the pointers to NULL. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are release operations; failure is not expected, and retrying would risk use-after-free or double-put.",
+      "contract_summary": "This is a teardown wrapper that releases the kernel's reference on the global DFA and policy database objects used by the AppArmor DFA engine. After calling this function, the global pointers nullpdb, stacksplitdfa, and nulldfa are set to NULL and must not be accessed. The function is intended to be called exactly once at module cleanup (__init context) and is part of the module's exit/unload sequence. The caller does not need to perform any additional put operations after this call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "stacksplitdfa",
+          "stacksplitdfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "nulldfa",
+          "nulldfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "nullpdb",
+          "nullpdb.count.refcount",
+          "aa_policydb--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "stacksplitdfa",
+          "stacksplitdfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "nulldfa",
+          "nulldfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "nullpdb",
+          "nullpdb.count.refcount",
+          "aa_policydb--kref--refcount_t"
+        ]
+      ],
+      "reason": "All three operations are consistent with the function code: aa_put_dfa is called on globals stacksplitdfa and nulldfa, and aa_put_pdb on nullpdb. The access paths from the global variables to the refcount fields match the callee's member-access paths, and the type chains are correct (3 segments each, matching 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "stacksplitdfa",
+        "stacksplitdfa.count.refcount",
+        "aa_dfa--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "nulldfa",
+        "nulldfa.count.refcount",
+        "aa_dfa--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "nullpdb",
+        "nullpdb.count.refcount",
+        "aa_policydb--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are release operations; failure is not expected, and retrying would risk use-after-free or double-put.",
+    "contract_summary": "This is a teardown wrapper that releases the kernel's reference on the global DFA and policy database objects used by the AppArmor DFA engine. After calling this function, the global pointers nullpdb, stacksplitdfa, and nulldfa are set to NULL and must not be accessed. The function is intended to be called exactly once at module cleanup (__init context) and is part of the module's exit/unload sequence. The caller does not need to perform any additional put operations after this call."
+  }
+}

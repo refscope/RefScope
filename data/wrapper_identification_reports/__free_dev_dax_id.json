@@ -1,0 +1,58 @@
+{
+  "function_name": "__free_dev_dax_id",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dax_region_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dax_region.kref.refcount",
+      "member_type_chain": "dax_region--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dax_region_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dax_region.kref.refcount",
+      "member_type_chain": "dax_region--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure returns -1 when conditions not met; the put is not attempted, so retry would not change the condition (dyn_id or id < 0).",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to free a dynamically allocated dev_dax ID, which includes an ida_free call, state reset (dev_dax->id = -1), and then a dax_region_put. The refcount put is only one step within broader cleanup logic, not the sole or primary focus. The function also returns the old ID, adding non-refcount logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure returns -1 when conditions not met; the put is not attempted, so retry would not change the condition (dyn_id or id < 0).",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure returns -1 when conditions not met; the put is not attempted, so retry would not change the condition (dyn_id or id < 0).",
+    "contract_summary": ""
+  }
+}

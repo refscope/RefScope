@@ -1,0 +1,99 @@
+{
+  "function_name": "bsg_open",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "inode.i_cdev.container.queue.refs.refs",
+      "inode--cdev--bsg_device--request_queue--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "blk_get_queue",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "q.refs.refs",
+      "member_type_chain": "request_queue--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "blk_get_queue",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "q.refs.refs",
+      "member_type_chain": "request_queue--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the queue's refcount is already zero (queue is being destroyed); retrying cannot revive the queue.",
+  "contract_summary": "Acquires a reference on the request_queue associated with the BSG device during open. On success (returns 0), the caller (VFS) holds a reference that protects the queue from being freed while the file descriptor is open. The caller must later release the reference via the corresponding release path (e.g., bsg_release or blk_put_queue). Failure returns -ENXIO, indicating the queue is already dead; the open must not proceed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function is a single conditional get on the request_queue's refcount via blk_get_queue. No other business logic exists.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the queue's refcount is already zero (queue is being destroyed); retrying cannot revive the queue.",
+      "contract_summary": "Acquires a reference on the request_queue associated with the BSG device during open. On success (returns 0), the caller (VFS) holds a reference that protects the queue from being freed while the file descriptor is open. The caller must later release the reference via the corresponding release path (e.g., bsg_release or blk_put_queue). Failure returns -ENXIO, indicating the queue is already dead; the open must not proceed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "inode.i_cdev.container.queue.refs.refs",
+          "inode--cdev--bsg_device--request_queue--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "inode.i_cdev.container.queue.refs.refs",
+          "inode--cdev--bsg_device--request_queue--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The refcount get operation on the queue is performed via blk_get_queue(to_bsg_device(inode)->queue). The access path from parameter 1 (inode) through i_cdev, container (bsg_device), queue, and then refs.refs correctly represents the full chain to the atomic refcount field. The segment counts (6 each) match, and the type chain is consistent with the callee's type annotation extended from request_queue to inode."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "inode.i_cdev.container.queue.refs.refs",
+        "inode--cdev--bsg_device--request_queue--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the queue's refcount is already zero (queue is being destroyed); retrying cannot revive the queue.",
+    "contract_summary": "Acquires a reference on the request_queue associated with the BSG device during open. On success (returns 0), the caller (VFS) holds a reference that protects the queue from being freed while the file descriptor is open. The caller must later release the reference via the corresponding release path (e.g., bsg_release or blk_put_queue). Failure returns -ENXIO, indicating the queue is already dead; the open must not proceed."
+  }
+}

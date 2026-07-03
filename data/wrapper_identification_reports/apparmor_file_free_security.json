@@ -1,0 +1,99 @@
+{
+  "function_name": "apparmor_file_free_security",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "file.f_security.label.count.count.refcount",
+      "file--aa_file_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation releases a reference; if ctx is NULL there is nothing to release, and retrying would be a no-op.",
+  "contract_summary": "This function releases a reference to an AppArmor label (struct aa_label) stored in the file's security context. It is called when a file is being freed as part of the LSM security blob cleanup. The caller must ensure that the file's security context is not accessed after this call. The operation is conditional on the existence of a file context (ctx); if ctx is NULL, the function is a no-op. This is a release (put) operation: the caller should not use the label pointer after this call, and the label may be freed if its reference count drops to zero.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to a label (aa_put_label) stored in the file's security context, with no other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation releases a reference; if ctx is NULL there is nothing to release, and retrying would be a no-op.",
+      "contract_summary": "This function releases a reference to an AppArmor label (struct aa_label) stored in the file's security context. It is called when a file is being freed as part of the LSM security blob cleanup. The caller must ensure that the file's security context is not accessed after this call. The operation is conditional on the existence of a file context (ctx); if ctx is NULL, the function is a no-op. This is a release (put) operation: the caller should not use the label pointer after this call, and the label may be freed if its reference count drops to zero."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "file.f_security.label.count.count.refcount",
+          "file--aa_file_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "file.f_security.label.count.count.refcount",
+          "file--aa_file_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code calls aa_put_label on ctx->label, where ctx is obtained from file via file_ctx(file). The access path from file (parameter 1) through f_security to label, then through count.count.refcount matches the callee's member-access path and type chain. Segment counts (6 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "file.f_security.label.count.count.refcount",
+        "file--aa_file_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation releases a reference; if ctx is NULL there is nothing to release, and retrying would be a no-op.",
+    "contract_summary": "This function releases a reference to an AppArmor label (struct aa_label) stored in the file's security context. It is called when a file is being freed as part of the LSM security blob cleanup. The caller must ensure that the file's security context is not accessed after this call. The operation is conditional on the existence of a file context (ctx); if ctx is NULL, the function is a no-op. This is a release (put) operation: the caller should not use the label pointer after this call, and the label may be freed if its reference count drops to zero."
+  }
+}

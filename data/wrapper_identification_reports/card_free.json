@@ -1,0 +1,86 @@
+{
+  "function_name": "card_free",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "snd_usb_caiaq_input_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cdev.ep4_in_urb.kref.refcount",
+      "member_type_chain": "snd_usb_caiaqdev--urb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "usb_put_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "usb_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "snd_usb_caiaq_input_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cdev.ep4_in_urb.kref.refcount",
+      "member_type_chain": "snd_usb_caiaqdev--urb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "usb_put_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "usb_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and assumed to always succeed; retrying would indicate a double-free bug.",
+  "contract_summary": "This put-wrapper is called when the snd_card's reference count reaches zero, releasing associated resources. It decrements refcounts on the input and audio URBs and the USB device. After this function returns, the card and its sub-objects must not be accessed. The caller must ensure this function is called exactly once in the card's lifetime. No return value; the operations are always performed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release resources by calling multiple put functions (snd_usb_caiaq_input_free, snd_usb_caiaq_audio_free, usb_put_dev). No other significant logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and assumed to always succeed; retrying would indicate a double-free bug.",
+      "contract_summary": "This put-wrapper is called when the snd_card's reference count reaches zero, releasing associated resources. It decrements refcounts on the input and audio URBs and the USB device. After this function returns, the card and its sub-objects must not be accessed. The caller must ensure this function is called exactly once in the card's lifetime. No return value; the operations are always performed."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "struct snd_usb_caiaqdev"
+      ],
+      "reason": "Need the definition of struct snd_usb_caiaqdev to determine the type of the 'chip' field, which is accessed as cdev->chip.dev in the call to usb_put_dev. Without this, the type chain for the second put operation (from card->private_data.chip.dev.dev.kobj.kref.refcount) cannot be completed."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "The function card_free does not directly perform any reference-count operations; it only calls other functions (snd_usb_caiaq_input_free, snd_usb_caiaq_audio_free, usb_put_dev) which perform puts. The candidate list is empty and consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and assumed to always succeed; retrying would indicate a double-free bug.",
+    "contract_summary": "This put-wrapper is called when the snd_card's reference count reaches zero, releasing associated resources. It decrements refcounts on the input and audio URBs and the USB device. After this function returns, the card and its sub-objects must not be accessed. The caller must ensure this function is called exactly once in the card's lifetime. No return value; the operations are always performed."
+  }
+}

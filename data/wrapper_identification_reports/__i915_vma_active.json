@@ -1,0 +1,142 @@
+{
+  "function_name": "__i915_vma_active",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ref.container.obj.base.refcount",
+      "i915_active--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "ref.container.vm.gt.wakeref.count",
+      "i915_active--i915_vma--i915_address_space--intel_gt--intel_wakeref--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_vma_tryget",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vma.obj.base.refcount.refcount",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_vma_tryget",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vma.obj.base.refcount.refcount.refs",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_vma_tryget",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vma.obj.base.refcount.refcount",
+      "member_type_chain": "i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "i915_vma_tryget fails when the VMA refcount is zero (object is dying/dead); retrying will not revive the object.",
+  "contract_summary": "This is a conditional get-wrapper that acquires a reference on the VMA (via i915_vma_tryget) and, for non-GGTT VMA, also takes an untracked GT power reference. It is called during activation of an i915_active object. On success (return 0), the caller holds a reference to the VMA and possibly a GT wakeref, which must be released later via i915_vma_put and intel_gt_pm_put_untracked. On failure (return -ENOENT), the VMA is already dead and must not be used. The PM reference is intentionally untracked because the function may be called asynchronously.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference on the VMA via i915_vma_tryget and optionally a GT power reference, both part of lifecycle management. The tryget is conditional on non-zero refcount; the PM get is an additional side effect for non-GGTT VMA.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "i915_vma_tryget fails when the VMA refcount is zero (object is dying/dead); retrying will not revive the object.",
+      "contract_summary": "This is a conditional get-wrapper that acquires a reference on the VMA (via i915_vma_tryget) and, for non-GGTT VMA, also takes an untracked GT power reference. It is called during activation of an i915_active object. On success (return 0), the caller holds a reference to the VMA and possibly a GT wakeref, which must be released later via i915_vma_put and intel_gt_pm_put_untracked. On failure (return -ENOENT), the VMA is already dead and must not be used. The PM reference is intentionally untracked because the function may be called asynchronously."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.container.obj.base.refcount",
+          "i915_active--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.container.vm.gt.wakeref.count",
+          "i915_active--i915_vma--i915_address_space--intel_gt--intel_wakeref--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Both candidate operations incorrectly start the access path from parameter 'ref' (struct i915_active *) and assume a direct member traversal 'ref.container' to reach the i915_vma. In reality, the vma is obtained via container_of (active_to_vma()), which is not a standard field access. Additionally, the first operation has a segment count mismatch: path has 5 segments but type chain has 6 types. The refcount operations act on internal objects (vma and its derived fields) that are not directly accessible from the function interface via member paths."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.container.obj.base.refcount",
+          "i915_active--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.container.vm.gt.wakeref.count",
+          "i915_active--i915_vma--i915_address_space--intel_gt--intel_wakeref--atomic_t"
+        ]
+      ],
+      "reason": "The function is a focused refcount helper that performs two conditional get operations: one on the VMA's object refcount via i915_vma_tryget() and one on the GT wakeref via intel_gt_pm_get_untracked(). Both operations are represented with 'ref.container' as an abstraction for container_of, which is acceptable despite not being a direct field access. The first candidate has a minor path segment count mismatch but still captures the intended operation. The function does not return the critical VMA or GT, so passes_critical_variable is false, but its sole purpose is refcount management, justifying high purity wrapper classification."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ref.container.obj.base.refcount",
+        "i915_active--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "ref.container.vm.gt.wakeref.count",
+        "i915_active--i915_vma--i915_address_space--intel_gt--intel_wakeref--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "i915_vma_tryget fails when the VMA refcount is zero (object is dying/dead); retrying will not revive the object.",
+    "contract_summary": "This is a conditional get-wrapper that acquires a reference on the VMA (via i915_vma_tryget) and, for non-GGTT VMA, also takes an untracked GT power reference. It is called during activation of an i915_active object. On success (return 0), the caller holds a reference to the VMA and possibly a GT wakeref, which must be released later via i915_vma_put and intel_gt_pm_put_untracked. On failure (return -ENOENT), the VMA is already dead and must not be used. The PM reference is intentionally untracked because the function may be called asynchronously."
+  }
+}

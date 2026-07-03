@@ -1,0 +1,99 @@
+{
+  "function_name": "__machine__findnew_compat",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dso.refcnt.refs",
+      "dso--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dsos__find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "res.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dsos__find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "res.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when the compat file is missing; retrying without changed conditions is unlikely to succeed.",
+  "contract_summary": "Get-or-create wrapper for a compat vDSO dso object. Returns a dso with an acquired reference (either via dsos__find which increments an existing refcount, or via __machine__addnew_vdso which initializes a new refcount to 1). The caller must call dso__put on the returned dso when done to release the reference. Returns NULL if the compat file is unavailable. The caller must check the return value and handle NULL appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find or create a dso for a compat vDSO and return it with a reference acquired (via dsos__find get or creation set). Minimal logic beyond refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when the compat file is missing; retrying without changed conditions is unlikely to succeed.",
+      "contract_summary": "Get-or-create wrapper for a compat vDSO dso object. Returns a dso with an acquired reference (either via dsos__find which increments an existing refcount, or via __machine__addnew_vdso which initializes a new refcount to 1). The caller must call dso__put on the returned dso when done to release the reference. Returns NULL if the compat file is unavailable. The caller must check the return value and handle NULL appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dso.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dso.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The operation corresponds to dsos__find, which returns a dso with an elevated refcount. The critical variable flowing to the caller is the return value of __machine__findnew_compat. The access path 'dso.refcnt.refs' traces from the returned dso through the local variable to the refcount field, and the type chain matches dso->refcount_struct->atomic_t. Segment counts (3) are equal. The extraction is consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dso.refcnt.refs",
+        "dso--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when the compat file is missing; retrying without changed conditions is unlikely to succeed.",
+    "contract_summary": "Get-or-create wrapper for a compat vDSO dso object. Returns a dso with an acquired reference (either via dsos__find which increments an existing refcount, or via __machine__addnew_vdso which initializes a new refcount to 1). The caller must call dso__put on the returned dso when done to release the reference. Returns NULL if the compat file is unavailable. The caller must check the return value and handle NULL appropriately."
+  }
+}

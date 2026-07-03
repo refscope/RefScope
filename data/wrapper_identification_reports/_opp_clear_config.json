@@ -1,0 +1,52 @@
+{
+  "function_name": "_opp_clear_config",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a cleanup (put) function; calling it again would double-release already freed references, leading to use-after-free. It is designed to be called exactly once per configuration object.",
+  "contract_summary": "This function tears down an OPP configuration by releasing all reference-counted resources (required devices, regulators, supported hardware, regulator helpers, property names, clock names) and the OPP table itself. It is the explicit cleanup counterpart to the configuration setup functions and must be called exactly once to prevent resource leaks. After this function returns, the configuration data structure is freed and must not be accessed again. The caller bears the responsibility of ensuring that this function is invoked exactly once per successfully initialized opp_config_data object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all reference-counted resources (regulators, supported HW, clknames, etc.) that were acquired during configuration setup, and to free the configuration data structure. The entire logic is a sequence of conditional put operations.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a cleanup (put) function; calling it again would double-release already freed references, leading to use-after-free. It is designed to be called exactly once per configuration object.",
+      "contract_summary": "This function tears down an OPP configuration by releasing all reference-counted resources (required devices, regulators, supported hardware, regulator helpers, property names, clock names) and the OPP table itself. It is the explicit cleanup counterpart to the configuration setup functions and must be called exactly once to prevent resource leaks. After this function returns, the configuration data structure is freed and must not be accessed again. The caller bears the responsibility of ensuring that this function is invoked exactly once per successfully initialized opp_config_data object."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "dev_pm_opp_put_opp_table"
+      ],
+      "reason": "Need the implementation of dev_pm_opp_put_opp_table to see how it decrements the reference count on opp_table and to determine the member_access_path to the refcount field."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No reference-count operations were provided in the Candidate ResultList; thus there are no operations to validate. The function code contains only kfree and calls to _opp_put_* functions (which are presumably put operations), but no candidate entries were listed, so the empty list is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 0,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a cleanup (put) function; calling it again would double-release already freed references, leading to use-after-free. It is designed to be called exactly once per configuration object.",
+    "contract_summary": "This function tears down an OPP configuration by releasing all reference-counted resources (required devices, regulators, supported hardware, regulator helpers, property names, clock names) and the OPP table itself. It is the explicit cleanup counterpart to the configuration setup functions and must be called exactly once to prevent resource leaks. After this function returns, the configuration data structure is freed and must not be accessed again. The caller bears the responsibility of ensuring that this function is invoked exactly once per successfully initialized opp_config_data object."
+  }
+}

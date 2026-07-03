@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_map_offload_info_fill_ns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ns.__ns_ref.refs",
+      "ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "maybe_get_net",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.ns.__ns_ref.refs",
+      "member_type_chain": "net--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "maybe_get_net",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.ns.__ns_ref.refs",
+      "member_type_chain": "net--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure due to NULL netdev is permanent (no device); failure of maybe_get_net indicates net is dying, retry pointless.",
+  "contract_summary": "Conditional get-wrapper: returns a pointer to the ns_common of the network namespace associated with the offloaded BPF map's net device. If the net device is present and the namespace is still alive, a reference is acquired via maybe_get_net and the pointer is returned. If the net device is absent or the namespace is dying, returns NULL. The caller must call ns_put() on the returned pointer when no longer needed, and must check the return value. The ifindex field in args->info is also set to the device's ifindex (or zero if no device). The function holds locks temporarily to safely access the offmap, but no lock is held across the return.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the network namespace via maybe_get_net and return it; the ifindex assignment is a minor side effect.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure due to NULL netdev is permanent (no device); failure of maybe_get_net indicates net is dying, retry pointless.",
+      "contract_summary": "Conditional get-wrapper: returns a pointer to the ns_common of the network namespace associated with the offloaded BPF map's net device. If the net device is present and the namespace is still alive, a reference is acquired via maybe_get_net and the pointer is returned. If the net device is absent or the namespace is dying, returns NULL. The caller must call ns_put() on the returned pointer when no longer needed, and must check the return value. The ifindex field in args->info is also set to the device's ifindex (or zero if no device). The function holds locks temporarily to safely access the offmap, but no lock is held across the return."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns ns (struct ns_common *), which points to the net namespace's ns_common inside net. maybe_get_net increments the refcount on net->ns.__ns_ref.refs, and the return value provides access to the same refcount. The access path ns.__ns_ref.refs (3 segments) and type chain ns_common--refcount_t--atomic_t (3 types) are consistent and match the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ns.__ns_ref.refs",
+        "ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure due to NULL netdev is permanent (no device); failure of maybe_get_net indicates net is dying, retry pointless.",
+    "contract_summary": "Conditional get-wrapper: returns a pointer to the ns_common of the network namespace associated with the offloaded BPF map's net device. If the net device is present and the namespace is still alive, a reference is acquired via maybe_get_net and the pointer is returned. If the net device is absent or the namespace is dying, returns NULL. The caller must call ns_put() on the returned pointer when no longer needed, and must check the return value. The ifindex field in args->info is also set to the device's ifindex (or zero if no device). The function holds locks temporarily to safely access the offmap, but no lock is held across the return."
+  }
+}

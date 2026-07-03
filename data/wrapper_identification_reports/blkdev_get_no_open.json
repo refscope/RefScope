@@ -1,0 +1,107 @@
+{
+  "function_name": "blkdev_get_no_open",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bdev.bd_device.kobj.kref.refcount",
+      "block_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_get_unless_zero",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "kobj.kref.refcount.refs",
+      "member_type_chain": "kobject--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kobject_get_unless_zero",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_get_unless_zero",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the block device is not present or its kobject refcount is zero (dying/dead); retrying without changed conditions is unlikely to succeed.",
+  "contract_summary": "Get-wrapper that finds a block device by device number and increments its reference count via kobject_get_unless_zero. Returns NULL if the device does not exist or is in the process of being freed (refcount zero). On success, the caller owns a reference to the block_device and must release it with a corresponding put (e.g., blkdev_put). The autoload path is deprecated and only active under CONFIG_BLOCK_LEGACY_AUTOLOAD. The caller must always check the return value before using the returned pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference on a block_device by device number via kobject_get_unless_zero; the lookup and deprecated autoload logic are supporting steps, not primary business logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the block device is not present or its kobject refcount is zero (dying/dead); retrying without changed conditions is unlikely to succeed.",
+      "contract_summary": "Get-wrapper that finds a block device by device number and increments its reference count via kobject_get_unless_zero. Returns NULL if the device does not exist or is in the process of being freed (refcount zero). On success, the caller owns a reference to the block_device and must release it with a corresponding put (e.g., blkdev_put). The autoload path is deprecated and only active under CONFIG_BLOCK_LEGACY_AUTOLOAD. The caller must always check the return value before using the returned pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bdev.bd_device.kobj.kref.refcount",
+          "block_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bdev.bd_device.kobj.kref.refcount",
+          "block_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "kobject_get_unless_zero is called on &bdev->bd_device.kobj (a get operation on the kref refcount). The critical variable is the return value bdev; the access path and type chain consistently trace from bdev to the refcount field. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bdev.bd_device.kobj.kref.refcount",
+        "block_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the block device is not present or its kobject refcount is zero (dying/dead); retrying without changed conditions is unlikely to succeed.",
+    "contract_summary": "Get-wrapper that finds a block device by device number and increments its reference count via kobject_get_unless_zero. Returns NULL if the device does not exist or is in the process of being freed (refcount zero). On success, the caller owns a reference to the block_device and must release it with a corresponding put (e.g., blkdev_put). The autoload path is deprecated and only active under CONFIG_BLOCK_LEGACY_AUTOLOAD. The caller must always check the return value before using the returned pointer."
+  }
+}

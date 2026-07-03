@@ -1,0 +1,58 @@
+{
+  "function_name": "beacon_watchdog_handler",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "zd_mac_free_cur_beacon",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mac.beacon.cur_beacon.users.refs",
+      "member_type_chain": "zd_mac--zd_beacon--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "zd_mac_free_cur_beacon",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mac.beacon.cur_beacon.users.refs",
+      "member_type_chain": "zd_mac--zd_beacon--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable - the function does not have a primary refcount operation whose failure would warrant a retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of beacon_watchdog_handler is to detect and recover from stalled beacon interrupts in AP mode. It performs multiple operations: checking device state, computing timeouts, disabling/enabling hardware interrupts, fetching a new beacon, freeing the old beacon (via zd_mac_free_cur_beacon), configuring the new beacon, setting beacon interval, and re-arming the watchdog. The refcount put operation on cur_beacon is only an incidental step within this larger recovery logic, not the function's main purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable - the function does not have a primary refcount operation whose failure would warrant a retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable - the function does not have a primary refcount operation whose failure would warrant a retry.",
+    "contract_summary": ""
+  }
+}

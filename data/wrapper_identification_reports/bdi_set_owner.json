@@ -1,0 +1,99 @@
+{
+  "function_name": "bdi_set_owner",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "owner.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get_device operation is unconditional and always succeeds; no failure path exists.",
+  "contract_summary": "This function sets the owner device of a backing_dev_info and takes a reference on that device via get_device. The caller must ensure that when the bdi is destroyed (or when the owner is changed), the reference is released by calling put_device on the owner. The WARN_ON_ONCE indicates this function should be called only once per bdi; calling it again without first clearing the owner would leak the earlier reference and violate the single-owner expectation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to associate an owner device with a backing_dev_info by incrementing the device's reference count via get_device. The warning and pointer assignment are trivial and directly support the reference-count operation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get_device operation is unconditional and always succeeds; no failure path exists.",
+      "contract_summary": "This function sets the owner device of a backing_dev_info and takes a reference on that device via get_device. The caller must ensure that when the bdi is destroyed (or when the owner is changed), the reference is released by calling put_device on the owner. The WARN_ON_ONCE indicates this function should be called only once per bdi; calling it again without first clearing the owner would leak the earlier reference and violate the single-owner expectation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "owner.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "owner.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "get_device(owner) increments the refcount on the device via owner->kobj.kref.refcount. The access path and type chain are consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "owner.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get_device operation is unconditional and always succeeds; no failure path exists.",
+    "contract_summary": "This function sets the owner device of a backing_dev_info and takes a reference on that device via get_device. The caller must ensure that when the bdi is destroyed (or when the owner is changed), the reference is released by calling put_device on the owner. The WARN_ON_ONCE indicates this function should be called only once per bdi; calling it again without first clearing the owner would leak the earlier reference and violate the single-owner expectation."
+  }
+}

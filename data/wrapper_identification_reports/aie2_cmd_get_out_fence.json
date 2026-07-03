@@ -1,0 +1,147 @@
+{
+  "function_name": "aie2_cmd_get_out_fence",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "out_fence.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_syncobj_fence_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_chain_find_seqno",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pfence[0].refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_syncobj_fence_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_chain_find_seqno",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pfence[0].refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the seqno does not exist in the current fence chain; retrying with the same arguments will not change the outcome unless the syncobj's fence chain is externally updated, which is outside this wrapper's control and not part of its contract.",
+  "contract_summary": "This get-wrapper retrieves a specific dma_fence from a syncobj's fence chain, identified by seq number, and returns it to the caller with an additional reference. The caller takes ownership of that reference and must call dma_fence_put() when done with the fence. If the seqno is not found or the syncobj has no fence, the function returns NULL, and the caller must not use the returned pointer. The function correctly balances its internal reference count operations: it gets the syncobj fence, then calls dma_fence_chain_find_seqno (which may consume a reference), gets the contained fence, and finally puts the original fence. On the error path (seqno not found), it puts the original fence and returns NULL without leaking.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a dma_fence from a syncobj's fence chain, based on seqno. The function exclusively performs refcount operations (get/put) to retrieve the correct fence and return it with an elevated refcount. Any non-refcount logic is minimal and directly serves the identification of which fence to reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the seqno does not exist in the current fence chain; retrying with the same arguments will not change the outcome unless the syncobj's fence chain is externally updated, which is outside this wrapper's control and not part of its contract.",
+      "contract_summary": "This get-wrapper retrieves a specific dma_fence from a syncobj's fence chain, identified by seq number, and returns it to the caller with an additional reference. The caller takes ownership of that reference and must call dma_fence_put() when done with the fence. If the seqno is not found or the syncobj has no fence, the function returns NULL, and the caller must not use the returned pointer. The function correctly balances its internal reference count operations: it gets the syncobj fence, then calls dma_fence_chain_find_seqno (which may consume a reference), gets the contained fence, and finally puts the original fence. On the error path (seqno not found), it puts the original fence and returns NULL without leaking."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "out_fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "out_fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function obtains a new reference to the fence via dma_fence_get and returns it. The access path from the return variable out_fence to the refcount field (out_fence.refcount.refcount) matches the callee's type chain dma_fence--kref--refcount_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "out_fence.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the seqno does not exist in the current fence chain; retrying with the same arguments will not change the outcome unless the syncobj's fence chain is externally updated, which is outside this wrapper's control and not part of its contract.",
+    "contract_summary": "This get-wrapper retrieves a specific dma_fence from a syncobj's fence chain, identified by seq number, and returns it to the caller with an additional reference. The caller takes ownership of that reference and must call dma_fence_put() when done with the fence. If the seqno is not found or the syncobj has no fence, the function returns NULL, and the caller must not use the returned pointer. The function correctly balances its internal reference count operations: it gets the syncobj fence, then calls dma_fence_chain_find_seqno (which may consume a reference), gets the contained fence, and finally puts the original fence. On the error path (seqno not found), it puts the original fence and returns NULL without leaking."
+  }
+}

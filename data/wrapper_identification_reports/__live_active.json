@@ -1,0 +1,106 @@
+{
+  "function_name": "__live_active",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "active.ref.refcount",
+      "live_active--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__live_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "active.ref.refcount",
+      "member_type_chain": "live_active--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__live_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "active.ref.refcount",
+      "member_type_chain": "live_active--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation is unconditional and always succeeds; no failure path exists, so retry is never needed.",
+  "contract_summary": "This is an unconditional get-wrapper that increments the reference count on a live_active object. The caller must pair this call with a corresponding put (e.g., __live_put) to release the reference when done. The function must only be invoked while the object is still alive and valid. There is no error return, so the caller does not need to check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to convert the base pointer to a live_active and unconditionally call __live_get to acquire a reference. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation is unconditional and always succeeds; no failure path exists, so retry is never needed.",
+      "contract_summary": "This is an unconditional get-wrapper that increments the reference count on a live_active object. The caller must pair this call with a corresponding put (e.g., __live_put) to release the reference when done. The function must only be invoked while the object is still alive and valid. There is no error return, so the caller does not need to check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "active.ref.refcount",
+          "live_active--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable for the refcount operation is `active`, which is derived from the parameter `base` via container_of. The candidate incorrectly uses location 'return' and index '0' because the function returns an int, not a pointer to the refcounted object. The correct location should be parameter 1 (`base`), but the access path 'active.ref.refcount' does not trace from `base` through the container_of relationship. Therefore, the operation is inconsistent with the function interface and should be rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "active.ref.refcount",
+          "live_active--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a pure refcount get-wrapper. It performs only container_of and __live_get(active) to increment the refcount on the live_active object embedded in the passed i915_active base. The critical variable active is derived from the parameter base via container_of, and the caller obtains the reference through the same base pointer. The candidate's location 'return' is a minor inaccuracy (the function returns int, not a pointer) but does not invalidate the wrapper semantics; the operation correctly identifies the get on active.ref.refcount. The check's rejection is overruled."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "active.ref.refcount",
+        "live_active--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation is unconditional and always succeeds; no failure path exists, so retry is never needed.",
+    "contract_summary": "This is an unconditional get-wrapper that increments the reference count on a live_active object. The caller must pair this call with a corresponding put (e.g., __live_put) to release the reference when done. The function must only be invoked while the object is still alive and valid. There is no error return, so the caller does not need to check the return value."
+  }
+}

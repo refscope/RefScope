@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_cpumask_release_dtor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cpumask.usage.refs",
+      "bpf_cpumask--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_cpumask_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cpumask.usage.refs",
+      "member_type_chain": "bpf_cpumask--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_cpumask_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cpumask.usage.refs",
+      "member_type_chain": "bpf_cpumask--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations decrement the refcount unconditionally; retrying after decrement would be a double-put and is never correct.",
+  "contract_summary": "This is a put wrapper for the bpf_cpumask reference-counted type. It unconditionally decrements the reference count of the cpumask via the underlying bpf_cpumask_release (which touches cpumask->usage.refs). After this call, the caller must not access the cpumask again, as it may have been freed. There is no return value to check; the operation is assumed to be valid. This function is typically used as a destructor callback (e.g., in kfunc release semantics).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a bpf_cpumask via bpf_cpumask_release, with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations decrement the refcount unconditionally; retrying after decrement would be a double-put and is never correct.",
+      "contract_summary": "This is a put wrapper for the bpf_cpumask reference-counted type. It unconditionally decrements the reference count of the cpumask via the underlying bpf_cpumask_release (which touches cpumask->usage.refs). After this call, the caller must not access the cpumask again, as it may have been freed. There is no return value to check; the operation is assumed to be valid. This function is typically used as a destructor callback (e.g., in kfunc release semantics)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cpumask.usage.refs",
+          "bpf_cpumask--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cpumask.usage.refs",
+          "bpf_cpumask--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function directly calls bpf_cpumask_release on its parameter cpumask, which performs a put on cpumask->usage.refs. The access path and type chain match the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cpumask.usage.refs",
+        "bpf_cpumask--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations decrement the refcount unconditionally; retrying after decrement would be a double-put and is never correct.",
+    "contract_summary": "This is a put wrapper for the bpf_cpumask reference-counted type. It unconditionally decrements the reference count of the cpumask via the underlying bpf_cpumask_release (which touches cpumask->usage.refs). After this call, the caller must not access the cpumask again, as it may have been freed. There is no return value to check; the operation is assumed to be valid. This function is typically used as a destructor callback (e.g., in kfunc release semantics)."
+  }
+}

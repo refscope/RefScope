@@ -1,0 +1,74 @@
+{
+  "function_name": "calc_target",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ceph_oloc_copy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dest.pool_ns.kref.refcount",
+      "member_type_chain": "ceph_object_locator--ceph_string--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ceph_oloc_copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.pool_ns.kref.refcount",
+      "member_type_chain": "ceph_object_locator--ceph_string--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ceph_oloc_copy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dest.pool_ns.kref.refcount",
+      "member_type_chain": "ceph_object_locator--ceph_string--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ceph_oloc_copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.pool_ns.kref.refcount",
+      "member_type_chain": "ceph_object_locator--ceph_string--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to compute the target OSD/PG for a Ceph OSD request, involving tiering, PG mapping, split detection, and resend decisions. The only reference-count operation is incidental inside a helper (ceph_oloc_copy) that copies the pool namespace; this is a small part of complex business logic, not the main focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

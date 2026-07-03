@@ -1,0 +1,122 @@
+{
+  "function_name": "amdxdna_sched_job_cleanup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "job.bos[i].refcount.refcount",
+      "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdxdna_arg_bos_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.bos[i].refcount.refcount",
+      "member_type_chain": "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdxdna_arg_bos_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.bos[i].refcount.refcount",
+      "member_type_chain": "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The puts are unconditional and always succeed; failure would indicate a kernel bug (e.g., refcount underflow) and retrying would not help.",
+  "contract_summary": "This is a cleanup function that releases all reference-counted resources associated with a amdxdna_sched_job. It drops the PM suspend reference, puts all argument buffer objects, puts the command BO, and puts the completion fence. After calling this function, the caller must not use any of these resources. The job structure itself may still be allocated, but its held references are released. This function is typically called when a job is completed or cancelled.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all references held by a job: power management, buffer objects, command BO, and fence. The only non-refcount logic is a tracepoint, which is negligible.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The puts are unconditional and always succeed; failure would indicate a kernel bug (e.g., refcount underflow) and retrying would not help.",
+      "contract_summary": "This is a cleanup function that releases all reference-counted resources associated with a amdxdna_sched_job. It drops the PM suspend reference, puts all argument buffer objects, puts the command BO, and puts the completion fence. After calling this function, the caller must not use any of these resources. The job structure itself may still be allocated, but its held references are released. This function is typically called when a job is completed or cancelled."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "job.bos[i].refcount.refcount",
+          "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "job.fence.refcount.refcount",
+          "amdxdna_sched_job--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "job.bos[i].refcount.refcount",
+          "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first operation is consistent: amdxdna_arg_bos_put(job) takes parameter job (struct amdxdna_sched_job *), and the path job.bos[i].refcount.refcount correctly traces from job to bos array elements to drm_gem_object's kref.refcount, matching the type chain. The second operation is incorrect: dma_fence_put(job->fence) takes a dma_fence pointer as parameter, not job. The starting variable should be fence, not job. Hence the path job.fence.refcount.refcount and type chain including amdxdna_sched_job are wrong; the operation is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "job.bos[i].refcount.refcount",
+        "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The puts are unconditional and always succeed; failure would indicate a kernel bug (e.g., refcount underflow) and retrying would not help.",
+    "contract_summary": "This is a cleanup function that releases all reference-counted resources associated with a amdxdna_sched_job. It drops the PM suspend reference, puts all argument buffer objects, puts the command BO, and puts the completion fence. After calling this function, the caller must not use any of these resources. The job structure itself may still be allocated, but its held references are released. This function is typically called when a job is completed or cancelled."
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "function_name": "amdgpu_sync_fence",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "f.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "f.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_sync_add_later",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "f.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_sync_add_later",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "f.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount operations (dma_fence_get) never fail; the only possible failure is -ENOMEM from memory allocation, which is not a refcount operation. Retrying is not relevant for refcount contract.",
+  "contract_summary": "This get-wrapper ensures that a dma_fence is properly referenced and tracked within an amdgpu_sync object. The fence is either already present in the sync (in which case its refcount is incremented) or a new entry is created taking a fresh reference via dma_fence_get. The caller retains its own reference to the fence; the sync object now also holds a reference that will be released during sync cleanup. The function returns 0 on success, or -ENOMEM if memory allocation fails. The caller does not need to check the return value for refcount success, but should handle memory allocation errors if appropriate.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference to a dma_fence and store it in an amdgpu_sync object. It either reuses an existing entry (via amdgpu_sync_add_later which does a get) or allocates a new entry and takes a new reference via dma_fence_get. The allocation and hash insertion are necessary bookkeeping, but the core semantic is refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount operations (dma_fence_get) never fail; the only possible failure is -ENOMEM from memory allocation, which is not a refcount operation. Retrying is not relevant for refcount contract.",
+      "contract_summary": "This get-wrapper ensures that a dma_fence is properly referenced and tracked within an amdgpu_sync object. The fence is either already present in the sync (in which case its refcount is incremented) or a new entry is created taking a fresh reference via dma_fence_get. The caller retains its own reference to the fence; the sync object now also holds a reference that will be released during sync cleanup. The function returns 0 on success, or -ENOMEM if memory allocation fails. The caller does not need to check the return value for refcount success, but should handle memory allocation errors if appropriate."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "f.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "f.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable 'f' is parameter index 2 (second parameter) in amdgpu_sync_fence, but the candidate operations specify location as parameter index 1. Since the location is incorrect, all operations are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "f.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "f.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function amdgpu_sync_fence is a reference-count wrapper that acquires a reference on the dma_fence object passed as parameter 2 (f). Both amdgpu_sync_add_later and dma_fence_get perform get operations on f's refcount. The extract stage incorrectly used parameter index 1; the correct index is 2. The check stage correctly identified the mismatch but rejected based on the wrong index; the underlying operations are valid. The function's primary purpose is to add a fence reference to the sync object, making it a high-purity wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "f.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "f.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount operations (dma_fence_get) never fail; the only possible failure is -ENOMEM from memory allocation, which is not a refcount operation. Retrying is not relevant for refcount contract.",
+    "contract_summary": "This get-wrapper ensures that a dma_fence is properly referenced and tracked within an amdgpu_sync object. The fence is either already present in the sync (in which case its refcount is incremented) or a new entry is created taking a fresh reference via dma_fence_get. The caller retains its own reference to the fence; the sync object now also holds a reference that will be released during sync cleanup. The function returns 0 on success, or -ENOMEM if memory allocation fails. The caller does not need to check the return value for refcount success, but should handle memory allocation errors if appropriate."
+  }
+}

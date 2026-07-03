@@ -1,0 +1,107 @@
+{
+  "function_name": "auth_domain_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hp.ref.refcount",
+      "auth_domain--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure to find an entry (returning NULL) indicates no matching domain exists; retrying will not produce a different result unless another thread inserts the domain between calls, but this function holds a lock only during execution, so retry is not a designed recovery strategy.",
+  "contract_summary": "Get-or-create wrapper: searches the auth_domain hash table for a domain with the given name. If found, increments its reference count (kref_get) and returns the pointer to the caller, who must later release the reference with a matching put. If not found and 'new' is non-NULL, inserts the new domain into the table (without incrementing ref, as the caller already owns the initial reference) and returns it. If not found and 'new' is NULL, returns NULL. The caller must check the return value to determine whether a reference was acquired. The function holds a spinlock during the operation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an auth_domain by name and either acquire a reference (kref_get) on an existing entry or insert and return a new entry. All logic is ancillary to this get-or-create refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure to find an entry (returning NULL) indicates no matching domain exists; retrying will not produce a different result unless another thread inserts the domain between calls, but this function holds a lock only during execution, so retry is not a designed recovery strategy.",
+      "contract_summary": "Get-or-create wrapper: searches the auth_domain hash table for a domain with the given name. If found, increments its reference count (kref_get) and returns the pointer to the caller, who must later release the reference with a matching put. If not found and 'new' is non-NULL, inserts the new domain into the table (without incrementing ref, as the caller already owns the initial reference) and returns it. If not found and 'new' is NULL, returns NULL. The caller must check the return value to determine whether a reference was acquired. The function holds a spinlock during the operation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hp.ref.refcount",
+          "auth_domain--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hp.ref.refcount",
+          "auth_domain--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&hp->ref) increments refcount on hp when found, and hp is returned. The access path hp.ref.refcount and type chain auth_domain--kref--refcount_t match the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hp.ref.refcount",
+        "auth_domain--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure to find an entry (returning NULL) indicates no matching domain exists; retrying will not produce a different result unless another thread inserts the domain between calls, but this function holds a lock only during execution, so retry is not a designed recovery strategy.",
+    "contract_summary": "Get-or-create wrapper: searches the auth_domain hash table for a domain with the given name. If found, increments its reference count (kref_get) and returns the pointer to the caller, who must later release the reference with a matching put. If not found and 'new' is non-NULL, inserts the new domain into the table (without incrementing ref, as the caller already owns the initial reference) and returns it. If not found and 'new' is NULL, returns NULL. The caller must check the return value to determine whether a reference was acquired. The function holds a spinlock during the operation."
+  }
+}

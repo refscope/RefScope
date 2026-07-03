@@ -1,0 +1,215 @@
+{
+  "function_name": "__msm_gem_submit_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "submit",
+      "submit.user_fence.refcount.refcount",
+      "msm_gem_submit--dma_fence--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "submit",
+      "submit.hw_fence.refcount.refcount",
+      "msm_gem_submit--dma_fence--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "submit",
+      "submit.pid.count.refs",
+      "msm_gem_submit--pid--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "global",
+      "submit",
+      "submit.queue.ref.refcount",
+      "msm_gem_submit--msm_gpu_submitqueue--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "msm_submitqueue_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "queue.ref.refcount",
+      "member_type_chain": "msm_gpu_submitqueue--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_pid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pid.count.refs",
+      "member_type_chain": "pid--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "msm_submitqueue_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "queue.ref.refcount",
+      "member_type_chain": "msm_gpu_submitqueue--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_pid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pid.count.refs",
+      "member_type_chain": "pid--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a release function called when refcount is zero; retry would mean double-free/use-after-free.",
+  "contract_summary": "This is the release function for msm_gem_submit objects, called when the last kref reference is dropped via kref_put. It performs complete cleanup: DRM scheduler job cleanup, fence ID removal, dma_fence puts, PID/submitqueue puts, and frees commands and the submit structure itself. After this function returns the object is freed; the caller must not access it further. No retry is possible as the object is already being destroyed. No special locking is required beyond the internal spinlock for IDR access.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is the final destructor for msm_gem_submit when its kref reaches zero, performing all cleanup and freeing the object. This is the canonical put/release wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a release function called when refcount is zero; retry would mean double-free/use-after-free.",
+      "contract_summary": "This is the release function for msm_gem_submit objects, called when the last kref reference is dropped via kref_put. It performs complete cleanup: DRM scheduler job cleanup, fence ID removal, dma_fence puts, PID/submitqueue puts, and frees commands and the submit structure itself. After this function returns the object is freed; the caller must not access it further. No retry is possible as the object is already being destroyed. No special locking is required beyond the internal spinlock for IDR access."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.user_fence.refcount.refcount",
+          "msm_gem_submit--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.hw_fence.refcount.refcount",
+          "msm_gem_submit--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.pid.count.refs",
+          "msm_gem_submit--pid--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.queue.ref.refcount",
+          "msm_gem_submit--msm_gpu_submitqueue--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.user_fence.refcount.refcount",
+          "msm_gem_submit--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.hw_fence.refcount.refcount",
+          "msm_gem_submit--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.pid.count.refs",
+          "msm_gem_submit--pid--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "submit",
+          "submit.queue.ref.refcount",
+          "msm_gem_submit--msm_gpu_submitqueue--kref--refcount_t"
+        ]
+      ],
+      "reason": "All four put operations are present in the function code: dma_fence_put (user_fence and hw_fence conditionally), put_pid, and msm_submitqueue_put. The access paths and type chains match the actual struct definitions and callee information, with correct segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "submit",
+        "submit.user_fence.refcount.refcount",
+        "msm_gem_submit--dma_fence--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "submit",
+        "submit.hw_fence.refcount.refcount",
+        "msm_gem_submit--dma_fence--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "submit",
+        "submit.pid.count.refs",
+        "msm_gem_submit--pid--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "global",
+        "submit",
+        "submit.queue.ref.refcount",
+        "msm_gem_submit--msm_gpu_submitqueue--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a release function called when refcount is zero; retry would mean double-free/use-after-free.",
+    "contract_summary": "This is the release function for msm_gem_submit objects, called when the last kref reference is dropped via kref_put. It performs complete cleanup: DRM scheduler job cleanup, fence ID removal, dma_fence puts, PID/submitqueue puts, and frees commands and the submit structure itself. After this function returns the object is freed; the caller must not access it further. No retry is possible as the object is already being destroyed. No special locking is required beyond the internal spinlock for IDR access."
+  }
+}

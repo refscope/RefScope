@@ -1,0 +1,282 @@
+{
+  "function_name": "a6xx_gmu_remove",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dcache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_dcache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.debug.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_debug--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.icache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_icache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dummy.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_dummy--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.hfi.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_hfi--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.vm.kref.refcount",
+      "member_type_chain": "a6xx_gmu--drm_gpuvm--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.debug.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_debug--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.icache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_icache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.hfi.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_hfi--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.log.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_log--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "qmp_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "qmp.dev.kobj.kref.refcount",
+      "member_type_chain": "qmp--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dcache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_dcache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.log.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_log--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dummy.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_dummy--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dcache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_dcache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.debug.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_debug--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.icache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_icache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dummy.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_dummy--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.hfi.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_hfi--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.vm.kref.refcount",
+      "member_type_chain": "a6xx_gmu--drm_gpuvm--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.debug.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_debug--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.icache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_icache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.hfi.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_hfi--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.log.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_gmu_log--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "qmp_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "qmp.dev.kobj.kref.refcount",
+      "member_type_chain": "qmp--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dcache.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_dcache--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.log.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_log--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "a6xx_gmu_memory_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gmu.dummy.obj.refcount.refcount",
+      "member_type_chain": "a6xx_gmu--a6xx_dummy--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a comprehensive teardown routine for the GMU subsystem, not primarily a reference-count wrapper. It includes numerous non-refcount operations such as pm_runtime_force_suspend, dev_pm_domain_detach, iounmap, free_irq, and conditional cleanup. The refcount decrements (via a6xx_gmu_memory_free, qmp_put, put_device) are just part of broader resource release logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 15,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+    "contract_summary": ""
+  }
+}

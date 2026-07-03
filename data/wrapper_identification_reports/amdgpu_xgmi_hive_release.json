@@ -1,0 +1,82 @@
+{
+  "function_name": "amdgpu_xgmi_hive_release",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_reset_put_reset_domain",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "domain.refcount.refcount",
+      "member_type_chain": "amdgpu_reset_domain--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_reset_put_reset_domain",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "domain.refcount.refcount",
+      "member_type_chain": "amdgpu_reset_domain--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put/release wrapper; retrying would cause a double-put and use-after-free.",
+  "contract_summary": "This is the release callback invoked by the kobject subsystem when the last reference on the hive's kobject is dropped. It decrements the reference count on the hive's reset_domain (via amdgpu_reset_put_reset_domain), which may free the reset_domain if its reference count reaches zero. It then destroys the hive's mutex and frees the hive memory. This function must not be called directly; it is triggered automatically by kobject_put on the hive's kobj. After this function returns, the hive structure is freed and must not be accessed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the hive's resources when its kobject's reference count drops to zero, including decrementing the reference count of the reset_domain via amdgpu_reset_put_reset_domain. The additional cleanup (mutex_destroy, kfree) is standard object destruction, not primary refcount logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put/release wrapper; retrying would cause a double-put and use-after-free.",
+      "contract_summary": "This is the release callback invoked by the kobject subsystem when the last reference on the hive's kobject is dropped. It decrements the reference count on the hive's reset_domain (via amdgpu_reset_put_reset_domain), which may free the reset_domain if its reference count reaches zero. It then destroys the hive's mutex and frees the hive memory. This function must not be called directly; it is triggered automatically by kobject_put on the hive's kobj. After this function returns, the hive structure is freed and must not be accessed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hive.reset_domain.refcount.refcount",
+          "amdgpu_hive_info--amdgpu_reset_domain--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation specifies location 'parameter' index 1 (kobj) but the access path 'hive.reset_domain.refcount.refcount' starts with 'hive', which is not a member of the parameter kobj. The critical variable (reset_domain) is obtained via container_of from kobj, so the access path must include the container_of transformation. Since the path does not start from the interface variable, it is inconsistent. Additionally, the operation does not correspond to any refcount action directly on the function interface."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function is a kobject release callback that internally puts the reset domain and frees the hive structure. The critical variable (reset_domain) is not passed to the caller; it is an internal operation. The candidate operation incorrectly specifies parameter 1 (kobj) while the access path starts from hive (derived via container_of), making it inconsistent with the interface. The function does not wrap a refcount operation for an external caller, so it is not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put/release wrapper; retrying would cause a double-put and use-after-free.",
+    "contract_summary": "This is the release callback invoked by the kobject subsystem when the last reference on the hive's kobject is dropped. It decrements the reference count on the hive's reset_domain (via amdgpu_reset_put_reset_domain), which may free the reset_domain if its reference count reaches zero. It then destroys the hive's mutex and frees the hive memory. This function must not be called directly; it is triggered automatically by kobject_put on the hive's kobj. After this function returns, the hive structure is freed and must not be accessed."
+  }
+}

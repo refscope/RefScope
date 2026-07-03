@@ -1,0 +1,82 @@
+{
+  "function_name": "__tcf_idr_search",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tcf_idr_search",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.tcfa_refcnt.refs",
+      "member_type_chain": "tc_action--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tcf_idr_search",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.tcfa_refcnt.refs",
+      "member_type_chain": "tc_action--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the action does not exist; retrying without creating the action will also fail.",
+  "contract_summary": "Get-wrapper for tc actions by index. Looks up an action in the per-net action table (or via a custom lookup) and returns it with an elevated refcount. On success (return 0), *a points to a referenced action; on error (negative errno), no reference is acquired. The caller must release the reference with a corresponding put (e.g., tcf_action_put) when done.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to find a tc action by index and return it with an elevated refcount; the only variation is whether to use a custom lookup or the standard tcf_idr_search, both of which are get operations.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the action does not exist; retrying without creating the action will also fail.",
+      "contract_summary": "Get-wrapper for tc actions by index. Looks up an action in the per-net action table (or via a custom lookup) and returns it with an elevated refcount. On success (return 0), *a points to a referenced action; on error (negative errno), no reference is acquired. The caller must release the reference with a corresponding put (e.g., tcf_action_put) when done."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.tcfa_refcnt.refs",
+          "tc_action--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate extraction incorrectly identifies the critical variable location as 'return' index 0, but the function returns an int, not a tc_action pointer. The reference-counted object is passed back via output parameter 'a' (parameter index 1). Additionally, the access path 'p.tcfa_refcnt.refs' starts from an undefined variable 'p' which is not a parameter or return value of the function. Therefore, the extraction is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function __tcf_idr_search is a pure wrapper that searches for a tc_action and obtains a reference, returning it via output parameter 'a' (parameter index 1). The critical variable (tc_action) is passed to the caller. However, the extracted candidate incorrectly used 'return' index 0 and an undefined variable 'p'. No correct candidate operations were proposed; thus ResultList is empty."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the action does not exist; retrying without creating the action will also fail.",
+    "contract_summary": "Get-wrapper for tc actions by index. Looks up an action in the per-net action table (or via a custom lookup) and returns it with an elevated refcount. On success (return 0), *a points to a referenced action; on error (negative errno), no reference is acquired. The caller must release the reference with a corresponding put (e.g., tcf_action_put) when done."
+  }
+}

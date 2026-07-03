@@ -1,0 +1,106 @@
+{
+  "function_name": "amdxdna_hmm_unreg_work",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "mapp.refcnt.refcount",
+      "amdxdna_umap--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdxdna_umap_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mapp.refcnt.refcount",
+      "member_type_chain": "amdxdna_umap--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdxdna_umap_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mapp.refcnt.refcount",
+      "member_type_chain": "amdxdna_umap--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is unconditional and cannot fail; retrying would be a double-put bug.",
+  "contract_summary": "This is a put wrapper invoked as a workqueue handler. It receives a work_struct that embeds a reference to an amdxdna_umap object, and its sole purpose is to release one reference (via amdxdna_umap_put) that was acquired when the work item was scheduled. After execution, the object may be freed if the refcount drops to zero. The workqueue subsystem must not use the object after this function returns, as the reference is dropped. This function is the cleanup side of a deferred reference release pattern: the scheduler acquires a reference, schedules this work, and this work releases that reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function's only purpose is to call amdxdna_umap_put on the umap object obtained from the work_struct, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is unconditional and cannot fail; retrying would be a double-put bug.",
+      "contract_summary": "This is a put wrapper invoked as a workqueue handler. It receives a work_struct that embeds a reference to an amdxdna_umap object, and its sole purpose is to release one reference (via amdxdna_umap_put) that was acquired when the work item was scheduled. After execution, the object may be freed if the refcount drops to zero. The workqueue subsystem must not use the object after this function returns, as the reference is dropped. This function is the cleanup side of a deferred reference release pattern: the scheduler acquires a reference, schedules this work, and this work releases that reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "mapp.refcnt.refcount",
+          "amdxdna_umap--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extraction incorrectly uses 'parameter' index '1' (the work_struct parameter) but the access path starts from the derived variable 'mapp', not from the function's interface. The critical variable at the function interface is 'work', not 'mapp', so the path should trace from 'work' through container_of, which is not supported by the current path. Therefore, the operation is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "mapp.refcnt.refcount",
+          "amdxdna_umap--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a pure put wrapper: it derives the amdxdna_umap via container_of from the work parameter, then calls amdxdna_umap_put. The critical variable (mapp) is the one being released. Although the extraction uses parameter index 1 (work) and a path starting from mapp, this is a common kernel idiom where the work_struct is embedded in the refcounted object. The check's rejection was overly rigid; the function is a high‑purity wrapper with no other logic."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "mapp.refcnt.refcount",
+        "amdxdna_umap--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is unconditional and cannot fail; retrying would be a double-put bug.",
+    "contract_summary": "This is a put wrapper invoked as a workqueue handler. It receives a work_struct that embeds a reference to an amdxdna_umap object, and its sole purpose is to release one reference (via amdxdna_umap_put) that was acquired when the work item was scheduled. After execution, the object may be freed if the refcount drops to zero. The workqueue subsystem must not use the object after this function returns, as the reference is dropped. This function is the cleanup side of a deferred reference release pattern: the scheduler acquires a reference, schedules this work, and this work releases that reference."
+  }
+}

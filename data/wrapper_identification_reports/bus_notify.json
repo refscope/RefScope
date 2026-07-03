@@ -1,0 +1,74 @@
+{
+  "function_name": "bus_notify",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "subsys_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "subsys_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to notify bus notifiers (blocking_notifier_call_chain), not to manage reference counts. The get and put operations (bus_to_subsys and subsys_put) are only incidental to safely access the subsys structure.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+    "contract_summary": ""
+  }
+}

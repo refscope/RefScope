@@ -1,0 +1,58 @@
+{
+  "function_name": "__lpfc_nvme_xmt_ls_rsp",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "lpfc_nlp_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ndlp.kref.refcount",
+      "member_type_chain": "lpfc_nodelist--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "lpfc_nlp_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ndlp.kref.refcount",
+      "member_type_chain": "lpfc_nodelist--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; function is not a wrapper. The incidental put on error does not represent a retry scenario.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is transmitting an NVMe LS response (preparing and issuing a WQE), not managing reference counts. The only reference-count operation (lpfc_nlp_put) is a minor error cleanup step, not the main focus.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; function is not a wrapper. The incidental put on error does not represent a retry scenario.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; function is not a wrapper. The incidental put on error does not represent a retry scenario.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__mpi3mr_get_tgtdev_from_tgtpriv",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tgtdev.ref_count.refcount",
+      "mpi3mr_tgt_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If tgtdev is NULL, the target private data does not point to a valid device – retrying without state change will not yield a different result.",
+  "contract_summary": "Get-wrapper that acquires a reference on the target device stored in the target private data, under the protection of the tgtdev_lock. Returns the device pointer with an extra reference or NULL if no device is associated. The caller must release the reference with a corresponding put when done and must hold tgtdev_lock during the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to retrieve a reference-counted target device from a target private data structure and acquire a reference on it via mpi3mr_tgtdev_get. The only additional logic is a lock assertion and a NULL check.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If tgtdev is NULL, the target private data does not point to a valid device – retrying without state change will not yield a different result.",
+      "contract_summary": "Get-wrapper that acquires a reference on the target device stored in the target private data, under the protection of the tgtdev_lock. Returns the device pointer with an extra reference or NULL if no device is associated. The caller must release the reference with a corresponding put when done and must hold tgtdev_lock during the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get operation is on the return value (tgtdev), which is obtained from tgt_priv->tgt_dev and pointer-incremented via mpi3mr_tgtdev_get. The access path tgtdev.ref_count.refcount and type chain mpi3mr_tgt_dev--kref--refcount_t are consistent with the callee information and the actual struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tgtdev.ref_count.refcount",
+        "mpi3mr_tgt_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If tgtdev is NULL, the target private data does not point to a valid device – retrying without state change will not yield a different result.",
+    "contract_summary": "Get-wrapper that acquires a reference on the target device stored in the target private data, under the protection of the tgtdev_lock. Returns the device pointer with an extra reference or NULL if no device is associated. The caller must release the reference with a corresponding put when done and must hold tgtdev_lock during the call."
+  }
+}

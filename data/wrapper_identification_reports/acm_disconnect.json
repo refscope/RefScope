@@ -1,0 +1,74 @@
+{
+  "function_name": "acm_disconnect",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tty_port_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "port.kref.refcount",
+      "member_type_chain": "tty_port--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tty_port_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "port.kref.refcount",
+      "member_type_chain": "tty_port--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is comprehensive cleanup (disconnect) of the ACM USB device, including freeing URBs, buffers, removing sysfs files, and releasing the tty port reference. The put operations (tty_port_put, usb_free_urb) are incidental steps within broader resource release logic, not the function's main goal.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

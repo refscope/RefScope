@@ -1,0 +1,115 @@
+{
+  "function_name": "ac97_of_get_child_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "node.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "for_each_child_of_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "child.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "for_each_child_of_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "child.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "for_each_child_of_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "child.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "for_each_child_of_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "child.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "No matching node exists in the device tree; retrying with the same arguments will not yield a different result unless the device tree is dynamically modified (unlikely in this context).",
+  "contract_summary": "This function acquires a reference on a child device node of the AC97 controller that matches a given index and vendor ID. The caller receives a pointer to a device_node with its reference count incremented; the caller must release this reference via of_node_put() when done. If no matching child is found, NULL is returned and no reference is acquired. The function does not require any locks; it uses the device tree API which internally handles RCU protection. The caller should check for NULL and only call of_node_put on non-NULL returns. This is a get-wrapper: the reference is owned by the caller after successful return.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up and return a reference-counted device node; the only non-refcount logic is building a compatible string and checking properties, which are integral to the lookup. The for_each_child_of_node macro manages the reference counts during iteration, and returning the node transfers an acquired reference to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "No matching node exists in the device tree; retrying with the same arguments will not yield a different result unless the device tree is dynamically modified (unlikely in this context).",
+      "contract_summary": "This function acquires a reference on a child device node of the AC97 controller that matches a given index and vendor ID. The caller receives a pointer to a device_node with its reference count incremented; the caller must release this reference via of_node_put() when done. If no matching child is found, NULL is returned and no reference is acquired. The function does not require any locks; it uses the device tree API which internally handles RCU protection. The caller should check for NULL and only call of_node_put on non-NULL returns. This is a get-wrapper: the reference is owned by the caller after successful return."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a child device node obtained via for_each_child_of_node, which increments the node's refcount (kobject_get). The access path starts from the return value 'node', traverses kobj.kref.refcount, matching the type chain device_node -> kobject -> kref -> refcount_t. Segment counts are equal (4 each). The operation is a 'get' on the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "node.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "No matching node exists in the device tree; retrying with the same arguments will not yield a different result unless the device tree is dynamically modified (unlikely in this context).",
+    "contract_summary": "This function acquires a reference on a child device node of the AC97 controller that matches a given index and vendor ID. The caller receives a pointer to a device_node with its reference count incremented; the caller must release this reference via of_node_put() when done. If no matching child is found, NULL is returned and no reference is acquired. The function does not require any locks; it uses the device tree API which internally handles RCU protection. The caller should check for NULL and only call of_node_put on non-NULL returns. This is a get-wrapper: the reference is owned by the caller after successful return."
+  }
+}

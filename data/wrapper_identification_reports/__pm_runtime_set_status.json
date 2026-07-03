@@ -1,0 +1,58 @@
+{
+  "function_name": "__pm_runtime_set_status",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rpm_put_suppliers",
+      "get_or_put": "put",
+      "index": "link",
+      "location": "global",
+      "member_access_path": "link.rpm_active.refs",
+      "member_type_chain": "device_link--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rpm_put_suppliers",
+      "get_or_put": "put",
+      "index": "link",
+      "location": "global",
+      "member_access_path": "link.rpm_active.refs",
+      "member_type_chain": "device_link--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures such as -EAGAIN or -EBUSY indicate transient or invalid states; immediate retry would likely produce the same result because the underlying conditions (e.g., device already enabled, parent not active) are unchanged.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to set a device's runtime PM status, not reference-count management. While it does call rpm_get_suppliers/rpm_put_suppliers, these are subordinate to the broader status-switching logic that includes parent-child constraints, error handling, disable depth manipulation, and notification. The reference-count operations are only part of a larger state machine.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures such as -EAGAIN or -EBUSY indicate transient or invalid states; immediate retry would likely produce the same result because the underlying conditions (e.g., device already enabled, parent not active) are unchanged.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures such as -EAGAIN or -EBUSY indicate transient or invalid states; immediate retry would likely produce the same result because the underlying conditions (e.g., device already enabled, parent not active) are unchanged.",
+    "contract_summary": ""
+  }
+}

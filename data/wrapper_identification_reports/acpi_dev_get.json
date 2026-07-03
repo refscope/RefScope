@@ -1,0 +1,99 @@
+{
+  "function_name": "acpi_dev_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "adev.dev.kobj.kref.refcount",
+      "acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation never fails on a non-NULL input; the only NULL case is when the input is NULL, which is a no-op and not a failure to retry.",
+  "contract_summary": "acpi_dev_get is a get-wrapper that increments the reference count of an acpi_device's underlying device (via get_device). The function returns a pointer to the same device with an elevated reference, or NULL if the input is NULL. The caller must release this reference by calling acpi_dev_put (or put_device) when done. The wrapper safely handles NULL input, returning NULL without any side effect. No locking or RCU requirements are needed beyond the standard device model rules.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the reference count of a struct acpi_device via get_device on its embedded device. No other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation never fails on a non-NULL input; the only NULL case is when the input is NULL, which is a no-op and not a failure to retry.",
+      "contract_summary": "acpi_dev_get is a get-wrapper that increments the reference count of an acpi_device's underlying device (via get_device). The function returns a pointer to the same device with an elevated reference, or NULL if the input is NULL. The caller must release this reference by calling acpi_dev_put (or put_device) when done. The wrapper safely handles NULL input, returning NULL without any side effect. No locking or RCU requirements are needed beyond the standard device model rules."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get_device operation increments the refcount on &adev->dev, which is the device embedded in adev. The access path adev.dev.kobj.kref.refcount matches the callee's type chain (acpi_device->device->kobject->kref->refcount_t). The critical variable is the input parameter adev, and the returned pointer is the same. The segment count (5) matches the type chain count (5)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "adev.dev.kobj.kref.refcount",
+        "acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation never fails on a non-NULL input; the only NULL case is when the input is NULL, which is a no-op and not a failure to retry.",
+    "contract_summary": "acpi_dev_get is a get-wrapper that increments the reference count of an acpi_device's underlying device (via get_device). The function returns a pointer to the same device with an elevated reference, or NULL if the input is NULL. The caller must release this reference by calling acpi_dev_put (or put_device) when done. The wrapper safely handles NULL input, returning NULL without any side effect. No locking or RCU requirements are needed beyond the standard device model rules."
+  }
+}

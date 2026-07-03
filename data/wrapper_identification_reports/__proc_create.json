@@ -1,0 +1,99 @@
+{
+  "function_name": "__proc_create",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "ent.refcnt.refs",
+      "proc_dir_entry--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount_set operation never fails; failure only occurs on memory allocation, which the caller may retry at its discretion, but the wrapper itself does not indicate retry semantics.",
+  "contract_summary": "This is a creation/set wrapper that allocates a new proc_dir_entry, validates the name, initializes all fields (including mode, nlink, subdir RB tree), and sets the initial reference count to 1. It returns the newly created entry or NULL on failure (allocation or invalid name). The caller receives full ownership of the object and must eventually release it with pde_put() when no longer needed. The function performs necessary validation to prevent invalid entries (reserved names, missing parent directory, etc.). Error paths properly free any partially allocated memory.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to allocate and initialize a proc_dir_entry, setting its refcount to 1 via refcount_set. The function includes significant validation and setup (name checks, path resolution, memory allocation, field assignment), but the refcount initialization is a core part of object creation. This matches the pattern of a set-wrapper (like kref_init).",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount_set operation never fails; failure only occurs on memory allocation, which the caller may retry at its discretion, but the wrapper itself does not indicate retry semantics.",
+      "contract_summary": "This is a creation/set wrapper that allocates a new proc_dir_entry, validates the name, initializes all fields (including mode, nlink, subdir RB tree), and sets the initial reference count to 1. It returns the newly created entry or NULL on failure (allocation or invalid name). The caller receives full ownership of the object and must eventually release it with pde_put() when no longer needed. The function performs necessary validation to prevent invalid entries (reserved names, missing parent directory, etc.). Error paths properly free any partially allocated memory."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "ent.refcnt.refs",
+          "proc_dir_entry--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "ent.refcnt.refs",
+          "proc_dir_entry--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set(&ent->refcnt, 1) is called on the allocated proc_dir_entry, and the object is returned via return ent. The access path ent.refcnt.refs and type chain proc_dir_entry--refcount_t--atomic_t are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "ent.refcnt.refs",
+        "proc_dir_entry--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount_set operation never fails; failure only occurs on memory allocation, which the caller may retry at its discretion, but the wrapper itself does not indicate retry semantics.",
+    "contract_summary": "This is a creation/set wrapper that allocates a new proc_dir_entry, validates the name, initializes all fields (including mode, nlink, subdir RB tree), and sets the initial reference count to 1. It returns the newly created entry or NULL on failure (allocation or invalid name). The caller receives full ownership of the object and must eventually release it with pde_put() when no longer needed. The function performs necessary validation to prevent invalid entries (reserved names, missing parent directory, etc.). Error paths properly free any partially allocated memory."
+  }
+}

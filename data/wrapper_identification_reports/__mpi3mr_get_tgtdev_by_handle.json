@@ -1,0 +1,99 @@
+{
+  "function_name": "__mpi3mr_get_tgtdev_by_handle",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tgtdev.ref_count.refcount",
+      "mpi3mr_tgt_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) means no device with that handle exists; retrying without new information cannot make the device appear. The caller should not retry blindly.",
+  "contract_summary": "This is a get-wrapper that searches the IOC's tgtdev_list for a device matching the given handle. If found, it increments the device's kref reference count via mpi3mr_tgtdev_get and returns the device pointer. The caller receives an owned reference to the device and must call mpi3mr_tgtdev_put when done with it. If no device is found, NULL is returned and no reference is acquired. The caller must check the return value and handle the NULL case appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a target device by handle and acquire a reference (increment refcount) on it via mpi3mr_tgtdev_get. The list traversal and handle comparison are minimal and necessary for identification. The caller obtains a referenced pointer that must be released.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) means no device with that handle exists; retrying without new information cannot make the device appear. The caller should not retry blindly.",
+      "contract_summary": "This is a get-wrapper that searches the IOC's tgtdev_list for a device matching the given handle. If found, it increments the device's kref reference count via mpi3mr_tgtdev_get and returns the device pointer. The caller receives an owned reference to the device and must call mpi3mr_tgtdev_put when done with it. If no device is found, NULL is returned and no reference is acquired. The caller must check the return value and handle the NULL case appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function finds a tgtdev and calls mpi3mr_tgtdev_get(tgtdev) before returning it. The return value is tgtdev, so the critical variable is the return value. The access path 'tgtdev.ref_count.refcount' correctly traces from the returned object to the refcount field. The type chain matches the callee info, and segment counts are equal (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tgtdev.ref_count.refcount",
+        "mpi3mr_tgt_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) means no device with that handle exists; retrying without new information cannot make the device appear. The caller should not retry blindly.",
+    "contract_summary": "This is a get-wrapper that searches the IOC's tgtdev_list for a device matching the given handle. If found, it increments the device's kref reference count via mpi3mr_tgtdev_get and returns the device pointer. The caller receives an owned reference to the device and must call mpi3mr_tgtdev_put when done with it. If no device is found, NULL is returned and no reference is acquired. The caller must check the return value and handle the NULL case appropriately."
+  }
+}

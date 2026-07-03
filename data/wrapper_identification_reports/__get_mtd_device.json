@@ -1,0 +1,107 @@
+{
+  "function_name": "__get_mtd_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "mtd.refcnt.refcount",
+      "mtd_info--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the device or module is unavailable; retrying without change is unlikely to succeed.",
+  "contract_summary": "This function acquires a reference on the given MTD device and all its parent partitions (excluding the master), plus the master's reference if CONFIG_MTD_PARTITIONED_MASTER is enabled. It also increments the module reference count and may call a hardware-specific get operation. The caller must later release each acquired reference by calling __put_mtd_device (or equivalent) when done. The function returns 0 on success; on failure (negative errno), no references are held. The caller must check the return value before using the device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is acquiring references (kref, module, device-specific) on the MTD device and its parent chain; minimal unrelated logic besides error handling.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the device or module is unavailable; retrying without change is unlikely to succeed.",
+      "contract_summary": "This function acquires a reference on the given MTD device and all its parent partitions (excluding the master), plus the master's reference if CONFIG_MTD_PARTITIONED_MASTER is enabled. It also increments the module reference count and may call a hardware-specific get operation. The caller must later release each acquired reference by calling __put_mtd_device (or equivalent) when done. The function returns 0 on success; on failure (negative errno), no references are held. The caller must check the return value before using the device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "mtd.refcnt.refcount",
+          "mtd_info--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "mtd.refcnt.refcount",
+          "mtd_info--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&mtd->refcnt) is called on the input parameter mtd when mtd != master, consistent with the callee's kref_get specification. The access path mtd.refcnt.refcount and type chain mtd_info--kref--refcount_t are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "mtd.refcnt.refcount",
+        "mtd_info--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the device or module is unavailable; retrying without change is unlikely to succeed.",
+    "contract_summary": "This function acquires a reference on the given MTD device and all its parent partitions (excluding the master), plus the master's reference if CONFIG_MTD_PARTITIONED_MASTER is enabled. It also increments the module reference count and may call a hardware-specific get operation. The caller must later release each acquired reference by calling __put_mtd_device (or equivalent) when done. The function returns 0 on success; on failure (negative errno), no references are held. The caller must check the return value before using the device."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_task_work_ctx_tryget",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ctx.refcnt.refs",
+      "bpf_task_work_ctx--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the refcount was zero (object is dead/dying); retrying will not revive it.",
+  "contract_summary": "Conditional get-wrapper that attempts to acquire a reference on a bpf_task_work_ctx by incrementing its refcount only if it is non-zero. Returns true on success, meaning the caller now holds a valid reference and must eventually release it via a corresponding put (e.g., bpf_task_work_ctx_put). If false is returned, the object is already in the process of being freed and must not be used. The caller must always check the return value before using the context.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on a bpf_task_work_ctx via refcount_inc_not_zero, with no other logic present.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the refcount was zero (object is dead/dying); retrying will not revive it.",
+      "contract_summary": "Conditional get-wrapper that attempts to acquire a reference on a bpf_task_work_ctx by incrementing its refcount only if it is non-zero. Returns true on success, meaning the caller now holds a valid reference and must eventually release it via a corresponding put (e.g., bpf_task_work_ctx_put). If false is returned, the object is already in the process of being freed and must not be used. The caller must always check the return value before using the context."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ctx.refcnt.refs",
+          "bpf_task_work_ctx--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ctx.refcnt.refs",
+          "bpf_task_work_ctx--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls refcount_inc_not_zero on &ctx->refcnt, which is a get operation. The critical variable is the parameter ctx, and the access path ctx.refcnt.refs correctly traces from the pointer parameter to the atomic counter. The type chain matches: bpf_task_work_ctx has a field refcnt of type refcount_t, which contains refs of type atomic_t. Segment count is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ctx.refcnt.refs",
+        "bpf_task_work_ctx--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the refcount was zero (object is dead/dying); retrying will not revive it.",
+    "contract_summary": "Conditional get-wrapper that attempts to acquire a reference on a bpf_task_work_ctx by incrementing its refcount only if it is non-zero. Returns true on success, meaning the caller now holds a valid reference and must eventually release it via a corresponding put (e.g., bpf_task_work_ctx_put). If false is returned, the object is already in the process of being freed and must not be used. The caller must always check the return value before using the context."
+  }
+}

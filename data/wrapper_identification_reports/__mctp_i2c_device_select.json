@@ -1,0 +1,143 @@
+{
+  "function_name": "__mctp_i2c_device_select",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "midev.ndev.dev_refcnt.refs",
+      "mctp_i2c_dev--net_device--refcount_struct--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "mcli.sel.ndev.dev_refcnt.refs",
+      "mctp_i2c_client--mctp_i2c_dev--net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operations are unconditional when the pointers are non-NULL and always succeed; there is no failure mode to retry.",
+  "contract_summary": "This function atomically replaces the selected device (mcli->sel) for an MCTP I2C client. It releases the reference on any previously selected device via dev_put on mcli->sel->ndev, and acquires a reference on the new device via dev_hold on midev->ndev. The caller must hold mcli->sel_lock to ensure atomicity. After this call, mcli->sel points to the new device (or NULL if midev is NULL). The caller is responsible for eventually releasing the final reference on the selected device when it is no longer needed (e.g., via a paired put operation when the client is destroyed).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to atomically swap the selected device, releasing the old reference and acquiring a new one via dev_put/dev_hold. No other business logic exists.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operations are unconditional when the pointers are non-NULL and always succeed; there is no failure mode to retry.",
+      "contract_summary": "This function atomically replaces the selected device (mcli->sel) for an MCTP I2C client. It releases the reference on any previously selected device via dev_put on mcli->sel->ndev, and acquires a reference on the new device via dev_hold on midev->ndev. The caller must hold mcli->sel_lock to ensure atomicity. After this call, mcli->sel points to the new device (or NULL if midev is NULL). The caller is responsible for eventually releasing the final reference on the selected device when it is no longer needed (e.g., via a paired put operation when the client is destroyed)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "midev.ndev.dev_refcnt.refs",
+          "mctp_i2c_dev--net_device--refcount_struct--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "mcli.sel.ndev.dev_refcnt.refs",
+          "mctp_i2c_client--mctp_i2c_dev--net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "midev.ndev.dev_refcnt.refs",
+          "mctp_i2c_dev--net_device--refcount_struct--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "mcli.sel.ndev.dev_refcnt.refs",
+          "mctp_i2c_client--mctp_i2c_dev--net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the function code. dev_hold is called on midev->ndev when midev is non-NULL, and the access path midev.ndev.dev_refcnt.refs correctly traces from parameter 2 (midev) to the refcount field with matching segment count (4). dev_put is called on mcli->sel->ndev when mcli->sel is non-NULL, and the path mcli.sel.ndev.dev_refcnt.refs traces from parameter 1 (mcli) with segment count 5, matching the type chain. Directions (get and put) align with the callee semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "midev.ndev.dev_refcnt.refs",
+        "mctp_i2c_dev--net_device--refcount_struct--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "mcli.sel.ndev.dev_refcnt.refs",
+        "mctp_i2c_client--mctp_i2c_dev--net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operations are unconditional when the pointers are non-NULL and always succeed; there is no failure mode to retry.",
+    "contract_summary": "This function atomically replaces the selected device (mcli->sel) for an MCTP I2C client. It releases the reference on any previously selected device via dev_put on mcli->sel->ndev, and acquires a reference on the new device via dev_hold on midev->ndev. The caller must hold mcli->sel_lock to ensure atomicity. After this call, mcli->sel points to the new device (or NULL if midev is NULL). The caller is responsible for eventually releasing the final reference on the selected device when it is no longer needed (e.g., via a paired put operation when the client is destroyed)."
+  }
+}

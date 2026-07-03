@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_put_block_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      1,
+      "cache.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always succeeds; there is no failure mode to retry. If the refcount was already zero, that indicates a use-after-free bug, not a transient condition.",
+  "contract_summary": "This is a put wrapper that releases a reference on a btrfs_block_group. When the reference count reaches zero, the function frees the block_group and its associated resources (free_space_ctl, physical_map). After calling btrfs_put_block_group, the caller must not use the block_group pointer, as it may be freed. No locking or RCU requirements are imposed by this function itself; the caller must ensure proper synchronization to avoid races on the refcount. The function includes debug WARN_ON checks to verify invariants, but these do not alter the put semantics.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the refcount via refcount_dec_and_test, and if it reaches zero, perform object cleanup (kfree, etc.). This is a classic put-wrapper with minimal non-refcount logic limited to final cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always succeeds; there is no failure mode to retry. If the refcount was already zero, that indicates a use-after-free bug, not a transient condition.",
+      "contract_summary": "This is a put wrapper that releases a reference on a btrfs_block_group. When the reference count reaches zero, the function frees the block_group and its associated resources (free_space_ctl, physical_map). After calling btrfs_put_block_group, the caller must not use the block_group pointer, as it may be freed. No locking or RCU requirements are imposed by this function itself; the caller must ensure proper synchronization to avoid races on the refcount. The function includes debug WARN_ON checks to verify invariants, but these do not alter the put semantics."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&cache->refs) is a put operation on parameter 1, path 'cache.refs.refs' correctly traces from cache to the atomic_t inside refcount_t, and type chain matches the struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        1,
+        "cache.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always succeeds; there is no failure mode to retry. If the refcount was already zero, that indicates a use-after-free bug, not a transient condition.",
+    "contract_summary": "This is a put wrapper that releases a reference on a btrfs_block_group. When the reference count reaches zero, the function frees the block_group and its associated resources (free_space_ctl, physical_map). After calling btrfs_put_block_group, the caller must not use the block_group pointer, as it may be freed. No locking or RCU requirements are imposed by this function itself; the caller must ensure proper synchronization to avoid races on the refcount. The function includes debug WARN_ON checks to verify invariants, but these do not alter the put semantics."
+  }
+}

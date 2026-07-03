@@ -1,0 +1,99 @@
+{
+  "function_name": "addrconf_del_dad_work",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ifp.refcnt.refs",
+      "inet6_ifaddr--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__in6_ifa_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ifp.refcnt.refs",
+      "member_type_chain": "inet6_ifaddr--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__in6_ifa_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ifp.refcnt.refs",
+      "member_type_chain": "inet6_ifaddr--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If cancellation fails, the work has already executed or was never pending; retrying will not change the outcome and could cause double-put if the work later runs.",
+  "contract_summary": "Release wrapper: cancels a delayed DAD work item and drops the reference that was held by the pending work. If cancellation succeeds (work was pending), the reference count is decremented via __in6_ifa_put, potentially freeing the ifp. If cancellation fails, no reference is dropped. Caller must ensure the ifp is valid and must not use the ifp after this call if the reference count may reach zero (the ifp could be freed). The caller is responsible for not scheduling the work again without re-acquiring a reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to cancel deferred work and drop the associated reference count; no other business logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If cancellation fails, the work has already executed or was never pending; retrying will not change the outcome and could cause double-put if the work later runs.",
+      "contract_summary": "Release wrapper: cancels a delayed DAD work item and drops the reference that was held by the pending work. If cancellation succeeds (work was pending), the reference count is decremented via __in6_ifa_put, potentially freeing the ifp. If cancellation fails, no reference is dropped. Caller must ensure the ifp is valid and must not use the ifp after this call if the reference count may reach zero (the ifp could be freed). The caller is responsible for not scheduling the work again without re-acquiring a reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ifp.refcnt.refs",
+          "inet6_ifaddr--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ifp.refcnt.refs",
+          "inet6_ifaddr--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code calls __in6_ifa_put(ifp), which decrements ifp->refcnt.refs. The access path starts from parameter ifp, goes through refcnt and refs, matching the callee's type chain (inet6_ifaddr--refcount_t--atomic_t). The segment count between path and chain is consistent (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ifp.refcnt.refs",
+        "inet6_ifaddr--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If cancellation fails, the work has already executed or was never pending; retrying will not change the outcome and could cause double-put if the work later runs.",
+    "contract_summary": "Release wrapper: cancels a delayed DAD work item and drops the reference that was held by the pending work. If cancellation succeeds (work was pending), the reference count is decremented via __in6_ifa_put, potentially freeing the ifp. If cancellation fails, no reference is dropped. Caller must ensure the ifp is valid and must not use the ifp after this call if the reference count may reach zero (the ifp could be freed). The caller is responsible for not scheduling the work again without re-acquiring a reference."
+  }
+}

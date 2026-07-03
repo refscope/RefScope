@@ -1,0 +1,106 @@
+{
+  "function_name": "__forget_cached_acl",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.a_refcount.refs",
+      "posix_acl--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "posix_acl_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "posix_acl_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation never fails; the xchg always succeeds and the release only occurs if a valid ACL was cached—no retry needed.",
+  "contract_summary": "This is a put-wrapper for a cached ACL reference. It atomically swaps the cache entry with the sentinel ACL_NOT_CACHED and releases the old ACL (via posix_acl_release) if it was a valid pointer. The caller must not use the pointer obtained from the cache after this call, as the reference has been released and the cache entry is invalidated. No return value to check. This function is typically used when an inode is being freed or when the cached ACL is to be replaced.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a cached posix_acl reference, swapping it with a sentinel and calling posix_acl_release if the cached pointer was valid. No other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation never fails; the xchg always succeeds and the release only occurs if a valid ACL was cached—no retry needed.",
+      "contract_summary": "This is a put-wrapper for a cached ACL reference. It atomically swaps the cache entry with the sentinel ACL_NOT_CACHED and releases the old ACL (via posix_acl_release) if it was a valid pointer. The caller must not use the pointer obtained from the cache after this call, as the reference has been released and the cache entry is invalidated. No return value to check. This function is typically used when an inode is being freed or when the cached ACL is to be replaced."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.a_refcount.refs",
+          "posix_acl--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'p.a_refcount.refs' is invalid because p is a pointer to pointer (struct posix_acl **), not a direct pointer to struct posix_acl. The refcount operation is on the object obtained by dereferencing p (i.e., *p), but the path does not include the required indirection. The type chain 'posix_acl--refcount_t--atomic_t' also mismatches because the starting type for p is struct posix_acl **, not posix_acl. Hence the extracted operation is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.a_refcount.refs",
+          "posix_acl--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __forget_cached_acl is a clear put wrapper: it atomically replaces the cached ACL pointer with ACL_NOT_CACHED and releases the old one via posix_acl_release. The critical variable is the old ACL obtained from dereferencing parameter p (pointer-to-pointer). The candidate operation correctly identifies the put direction and the refcount member; the path 'p.a_refcount.refs' is technically invalid because p is a double pointer, but the semantic operation (put on the object *p) is unambiguously present. The function has high purity with no unrelated logic."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.a_refcount.refs",
+        "posix_acl--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation never fails; the xchg always succeeds and the release only occurs if a valid ACL was cached—no retry needed.",
+    "contract_summary": "This is a put-wrapper for a cached ACL reference. It atomically swaps the cache entry with the sentinel ACL_NOT_CACHED and releases the old ACL (via posix_acl_release) if it was a valid pointer. The caller must not use the pointer obtained from the cache after this call, as the reference has been released and the cache entry is invalidated. No return value to check. This function is typically used when an inode is being freed or when the cached ACL is to be replaced."
+  }
+}

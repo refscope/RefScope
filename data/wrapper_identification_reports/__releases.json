@@ -1,0 +1,154 @@
+{
+  "function_name": "__releases",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_ahash",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_css_set",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cset.refcount.refs",
+      "member_type_chain": "css_set--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "put_css_set",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cset.refcount.refs",
+      "member_type_chain": "css_set--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "fsnotify_put_mark_wake",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "fsnotify_get_mark_safe",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "wake_q_add",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "task.usage.refs",
+      "member_type_chain": "task_struct--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ipc_rcu_putref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ptr.refcount.refs",
+      "member_type_chain": "kern_ipc_perm--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fsnotify_get_mark_safe",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of this function is to locate, validate, and potentially recycle an XFS inode from the radix tree cache, not merely to manage a reference count. The call to igrab (which increments the VFS inode's refcount) is just one step within extensive state checking, flag manipulation, error handling, and tracing. The function contains significant non-refcount business logic (state validation, recycling, inodegc flush coordination) that dominates its behavior.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

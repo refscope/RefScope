@@ -1,0 +1,162 @@
+{
+  "function_name": "ad9467_iio_backend_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "global",
+      "__me",
+      "node.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "__me",
+      "node.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "__back",
+      "node.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "The function can return -EPROBE_DEFER when the backend is not yet available, which is a retryable error; the caller (probe) should defer and retry later.",
+  "contract_summary": "This function acquires a device-managed reference to an iio_backend and stores it in st->back. It first attempts the standard `devm_iio_backend_get`; if that returns -ENOENT, it falls back to a legacy DT property lookup using `__devm_iio_backend_get_from_fwnode_lookup`. On success, the backend is owned via device resource management and will be automatically released when the device is removed. The caller must check the return value—if an error other than -ENOENT is returned (e.g., -EPROBE_DEFER or -ENODEV), it should be propagated. The legacy path may release temporary device_node references via `of_node_put`. The function does not transfer explicit ownership to the caller; instead, the reference is tied to the device lifetime.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to an iio_backend object, using either the standard devm_iio_backend_get or a legacy DT lookup; both paths focus on obtaining and storing the backend. The only additional logic is minimal DT node handling to support the fallback.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "The function can return -EPROBE_DEFER when the backend is not yet available, which is a retryable error; the caller (probe) should defer and retry later.",
+      "contract_summary": "This function acquires a device-managed reference to an iio_backend and stores it in st->back. It first attempts the standard `devm_iio_backend_get`; if that returns -ENOENT, it falls back to a legacy DT property lookup using `__devm_iio_backend_get_from_fwnode_lookup`. On success, the backend is owned via device resource management and will be automatically released when the device is removed. The caller must check the return value—if an error other than -ENOENT is returned (e.g., -EPROBE_DEFER or -ENODEV), it should be propagated. The legacy path may release temporary device_node references via `of_node_put`. The function does not transfer explicit ownership to the caller; instead, the reference is tied to the device lifetime."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          1,
+          "st.back.owner.refcnt",
+          "ad9467_state--iio_backend--module--atomic_t"
+        ],
+        [
+          "get",
+          "global",
+          "__me",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "__me",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "__back",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "__me",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "__me",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "__back",
+          "node.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get on __me is via of_parse_phandle which increments the refcount; the put on __me is via of_node_put; the put on __back is via of_node_put on the loop variable. All these match the callee info and code. The proposed get on st.back.owner.refcnt is unsupported as no get operation on that path is visible in the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "global",
+        "__me",
+        "node.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "__me",
+        "node.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "__back",
+        "node.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "The function can return -EPROBE_DEFER when the backend is not yet available, which is a retryable error; the caller (probe) should defer and retry later.",
+    "contract_summary": "This function acquires a device-managed reference to an iio_backend and stores it in st->back. It first attempts the standard `devm_iio_backend_get`; if that returns -ENOENT, it falls back to a legacy DT property lookup using `__devm_iio_backend_get_from_fwnode_lookup`. On success, the backend is owned via device resource management and will be automatically released when the device is removed. The caller must check the return value—if an error other than -ENOENT is returned (e.g., -EPROBE_DEFER or -ENODEV), it should be propagated. The legacy path may release temporary device_node references via `of_node_put`. The function does not transfer explicit ownership to the caller; instead, the reference is tied to the device lifetime."
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "function_name": "anon_vma_name_reuse",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "anon_name.kref.refcount",
+      "anon_vma_name--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "anon_vma_name_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "anon_name.kref.refcount.refs",
+      "member_type_chain": "anon_vma_name--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "anon_vma_name_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "anon_name.kref.refcount",
+      "member_type_chain": "anon_vma_name--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "anon_vma_name_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "anon_name.kref.refcount.refs",
+      "member_type_chain": "anon_vma_name--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "anon_vma_name_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "anon_name.kref.refcount",
+      "member_type_chain": "anon_vma_name--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Allocation failure in the copy path; retrying under the same memory pressure would likely also fail.",
+  "contract_summary": "Get-or-create wrapper for anonymous VMA names. Returns a pointer to an anon_vma_name with an acquired reference (either from reusing the input if its refcount is not saturated, or from a freshly allocated copy). The caller must release this reference via anon_vma_name_put when done. On allocation failure, returns NULL; the caller should check and handle this error.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to provide a reference-counted anon_vma_name, either by incrementing refcount on existing object (if not saturated) or by allocating a new one with refcount set. The only non-refcount logic is the condition check and string copy within alloc.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Allocation failure in the copy path; retrying under the same memory pressure would likely also fail.",
+      "contract_summary": "Get-or-create wrapper for anonymous VMA names. Returns a pointer to an anon_vma_name with an acquired reference (either from reusing the input if its refcount is not saturated, or from a freshly allocated copy). The caller must release this reference via anon_vma_name_put when done. On allocation failure, returns NULL; the caller should check and handle this error."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "anon_name.kref.refcount",
+          "anon_vma_name--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "anon_name.kref.refcount.refs",
+          "anon_vma_name--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "anon_name.kref.refcount",
+          "anon_vma_name--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first operation ('get' on parameter 1) is consistent: anon_vma_name_get is called on the input parameter anon_name, and the access path anon_name.kref.refcount correctly traces from the parameter to the refcount field, with matching type chain. The second operation ('set' on return 0) is invalid because the access path starts with 'anon_name', which is the input parameter, not the returned object from anon_vma_name_alloc. The return value is a new struct anon_vma_name, so the path should not begin with the input variable name. Hence the second operation is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "anon_name.kref.refcount",
+        "anon_vma_name--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Allocation failure in the copy path; retrying under the same memory pressure would likely also fail.",
+    "contract_summary": "Get-or-create wrapper for anonymous VMA names. Returns a pointer to an anon_vma_name with an acquired reference (either from reusing the input if its refcount is not saturated, or from a freshly allocated copy). The caller must release this reference via anon_vma_name_put when done. On allocation failure, returns NULL; the caller should check and handle this error."
+  }
+}

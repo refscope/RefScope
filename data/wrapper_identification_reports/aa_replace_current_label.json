@@ -1,0 +1,202 @@
+{
+  "function_name": "aa_replace_current_label",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns error codes like -EBUSY (transient) or -ENOMEM (resource exhaustion) and -ENOMEM may be retried after memory is available, but as a non-wrapper retry semantics are not defined by this function alone.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to replace the current task's security label, which involves multiple refcount operations (get/put on labels and credentials) but also significant business logic: checking conditions, preparing credentials, clearing context, and handling namespace transitions. It is not a dedicated reference-count helper; it is a higher-level operation that uses refcount management as part of its implementation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns error codes like -EBUSY (transient) or -ENOMEM (resource exhaustion) and -ENOMEM may be retried after memory is available, but as a non-wrapper retry semantics are not defined by this function alone.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 10,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns error codes like -EBUSY (transient) or -ENOMEM (resource exhaustion) and -ENOMEM may be retried after memory is available, but as a non-wrapper retry semantics are not defined by this function alone.",
+    "contract_summary": ""
+  }
+}

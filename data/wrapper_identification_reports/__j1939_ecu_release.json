@@ -1,0 +1,99 @@
+{
+  "function_name": "__j1939_ecu_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "priv.kref.refcount",
+      "j1939_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "j1939_priv_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "priv.kref.refcount",
+      "member_type_chain": "j1939_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "j1939_priv_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "priv.kref.refcount",
+      "member_type_chain": "j1939_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a release callback triggered when refcount reaches zero; it is called exactly once, retrying would cause double-free.",
+  "contract_summary": "Release callback for kref-based reference counting on struct j1939_ecu. Called automatically by kref_put when the refcount drops to zero. Removes the ecu from its list, frees the memory, and releases the parent j1939_priv reference. The caller must never use the ecu pointer after this function returns, as the object is freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release the j1939_ecu object when its kref reaches zero: remove from list, free memory, and decrement parent's refcount. All operations are cleanup actions for reference-count management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a release callback triggered when refcount reaches zero; it is called exactly once, retrying would cause double-free.",
+      "contract_summary": "Release callback for kref-based reference counting on struct j1939_ecu. Called automatically by kref_put when the refcount drops to zero. Removes the ecu from its list, frees the memory, and releases the parent j1939_priv reference. The caller must never use the ecu pointer after this function returns, as the object is freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv.kref.refcount",
+          "j1939_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv.kref.refcount",
+          "j1939_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls j1939_priv_put(priv) which decrements the reference count on priv. The access path from parameter 1 (priv) to the refcount field is priv->kref.refcount, matching the callee's path priv.kref.refcount and type chain j1939_priv--kref--refcount_t. Segment counts match (3 segments, 3 types). The direction 'put' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "priv.kref.refcount",
+        "j1939_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a release callback triggered when refcount reaches zero; it is called exactly once, retrying would cause double-free.",
+    "contract_summary": "Release callback for kref-based reference counting on struct j1939_ecu. Called automatically by kref_put when the refcount drops to zero. Removes the ecu from its list, frees the memory, and releases the parent j1939_priv reference. The caller must never use the ecu pointer after this function returns, as the object is freed."
+  }
+}

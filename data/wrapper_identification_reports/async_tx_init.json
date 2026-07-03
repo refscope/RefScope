@@ -1,0 +1,99 @@
+{
+  "function_name": "async_tx_init",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "global",
+      "dmaengine_ref_count",
+      "dmaengine_ref_count",
+      "int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "async_dmaengine_get",
+      "get_or_put": "get",
+      "index": "dmaengine_ref_count",
+      "location": "global",
+      "member_access_path": "dmaengine_ref_count",
+      "member_type_chain": "int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "async_dmaengine_get",
+      "get_or_put": "get",
+      "index": "dmaengine_ref_count",
+      "location": "global",
+      "member_access_path": "dmaengine_ref_count",
+      "member_type_chain": "int"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation is unconditional and always succeeds (simple increment); there is no failure path to retry.",
+  "contract_summary": "This is a module-level get-wrapper that acquires a reference on the async DMA engine subsystem by incrementing the global dmaengine_ref_count. Called at module initialization to guarantee the async DMA subsystem remains available. The caller (module init) must pair this with a corresponding put at module cleanup (likely via async_dmaengine_put). No error handling is needed as the operation always succeeds. The reference is not returned to the caller; it is held globally until explicitly released.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment a global reference count (dmaengine_ref_count) via async_dmaengine_get, with only a trivial printk alongside; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation is unconditional and always succeeds (simple increment); there is no failure path to retry.",
+      "contract_summary": "This is a module-level get-wrapper that acquires a reference on the async DMA engine subsystem by incrementing the global dmaengine_ref_count. Called at module initialization to guarantee the async DMA subsystem remains available. The caller (module init) must pair this with a corresponding put at module cleanup (likely via async_dmaengine_put). No error handling is needed as the operation always succeeds. The reference is not returned to the caller; it is held globally until explicitly released."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "dmaengine_ref_count",
+          "dmaengine_ref_count",
+          "int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "dmaengine_ref_count",
+          "dmaengine_ref_count",
+          "int"
+        ]
+      ],
+      "reason": "The function async_tx_init calls async_dmaengine_get(), which is a get operation on the global dmaengine_ref_count variable. The access path and type chain are consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "global",
+        "dmaengine_ref_count",
+        "dmaengine_ref_count",
+        "int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation is unconditional and always succeeds (simple increment); there is no failure path to retry.",
+    "contract_summary": "This is a module-level get-wrapper that acquires a reference on the async DMA engine subsystem by incrementing the global dmaengine_ref_count. Called at module initialization to guarantee the async DMA subsystem remains available. The caller (module init) must pair this with a corresponding put at module cleanup (likely via async_dmaengine_put). No error handling is needed as the operation always succeeds. The reference is not returned to the caller; it is held globally until explicitly released."
+  }
+}

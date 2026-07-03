@@ -1,0 +1,107 @@
+{
+  "function_name": "blktrans_dev_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.ref.refcount",
+      "mtd_blktrans_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are not retryable; decrementing the refcount is a one-way operation. After a successful put, the object may be freed, and a subsequent put would cause use-after-free.",
+  "contract_summary": "This is a pure put-wrapper that calls kref_put on the embedded kref of an mtd_blktrans_dev. It decrements the reference count and, if it reaches zero, triggers the blktrans_dev_release callback to free the device. After calling blktrans_dev_put, the caller must not access the device or call put again. No special locks or conditions are required; the operation is unconditional and always succeeds. The caller must ensure the reference being released was previously acquired via a corresponding get operation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on an mtd_blktrans_dev via kref_put; the function is a pure put wrapper with no other side effects.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are not retryable; decrementing the refcount is a one-way operation. After a successful put, the object may be freed, and a subsequent put would cause use-after-free.",
+      "contract_summary": "This is a pure put-wrapper that calls kref_put on the embedded kref of an mtd_blktrans_dev. It decrements the reference count and, if it reaches zero, triggers the blktrans_dev_release callback to free the device. After calling blktrans_dev_put, the caller must not access the device or call put again. No special locks or conditions are required; the operation is unconditional and always succeeds. The caller must ensure the reference being released was previously acquired via a corresponding get operation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.ref.refcount",
+          "mtd_blktrans_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.ref.refcount",
+          "mtd_blktrans_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put is called on &dev->ref, which is a put operation on the refcount field. The access path dev.ref.refcount correctly traces from parameter 1 (dev) to the refcount field. The type chain mtd_blktrans_dev--kref--refcount_t is consistent with the struct definitions. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.ref.refcount",
+        "mtd_blktrans_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are not retryable; decrementing the refcount is a one-way operation. After a successful put, the object may be freed, and a subsequent put would cause use-after-free.",
+    "contract_summary": "This is a pure put-wrapper that calls kref_put on the embedded kref of an mtd_blktrans_dev. It decrements the reference count and, if it reaches zero, triggers the blktrans_dev_release callback to free the device. After calling blktrans_dev_put, the caller must not access the device or call put again. No special locks or conditions are required; the operation is unconditional and always succeeds. The caller must ensure the reference being released was previously acquired via a corresponding get operation."
+  }
+}

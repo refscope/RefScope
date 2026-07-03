@@ -1,0 +1,106 @@
+{
+  "function_name": "btrfs_sysfs_remove_space_info",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "space_info.kobj.kref.refcount",
+      "btrfs_space_info--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kobject_put does not fail; no retry needed.",
+  "contract_summary": "Removes sysfs entries and drops references on all kobjects associated with a btrfs_space_info. For each RAID type, if a kobject exists, it is deleted and put. Then the space_info's own kobject is also deleted and put. After this call, the space_info's sysfs representation is gone and the references are released; the caller must not use these kobjects further. The block_group_kobjs array entries are set to NULL to prevent double-free.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to remove sysfs entries and release all kobject references associated with a btrfs_space_info; no other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kobject_put does not fail; no retry needed.",
+      "contract_summary": "Removes sysfs entries and drops references on all kobjects associated with a btrfs_space_info. For each RAID type, if a kobject exists, it is deleted and put. Then the space_info's own kobject is also deleted and put. After this call, the space_info's sysfs representation is gone and the references are released; the caller must not use these kobjects further. The block_group_kobjs array entries are set to NULL to prevent double-free."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "space_info.block_group_kobjs[i].kref.refcount",
+          "btrfs_space_info--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "space_info.kobj.kref.refcount",
+          "btrfs_space_info--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "space_info.kobj.kref.refcount",
+          "btrfs_space_info--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Validation of the two candidate operations: (1) For 'space_info.block_group_kobjs[i].kref.refcount', the access path is inconsistent because 'block_group_kobjs' is an array of pointers to kobject, not direct kobject members. The path should involve a pointer dereference, and the critical variable at the call site is the local pointer 'kobj' (not a parameter). The type chain also misses the pointer indirection. Therefore, this operation is rejected. (2) For 'space_info.kobj.kref.refcount', the path correctly traces from parameter 1 (space_info) through its direct member 'kobj' to the refcount field, and the type chain matches. This operation is consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "space_info.kobj.kref.refcount",
+        "btrfs_space_info--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kobject_put does not fail; no retry needed.",
+    "contract_summary": "Removes sysfs entries and drops references on all kobjects associated with a btrfs_space_info. For each RAID type, if a kobject exists, it is deleted and put. Then the space_info's own kobject is also deleted and put. After this call, the space_info's sysfs representation is gone and the references are released; the caller must not use these kobjects further. The block_group_kobjs array entries are set to NULL to prevent double-free."
+  }
+}

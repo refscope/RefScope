@@ -1,0 +1,150 @@
+{
+  "function_name": "__reset_control_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "kref.rcdev.owner.refcnt",
+      "kref--reset_control_dev--module--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "kref.rcdev.dev.kobj.kref.refcount",
+      "kref--reset_control_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "reset_controller_remove",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rcdev.owner.refcnt",
+      "member_type_chain": "reset_controller_dev--module--atomic_t"
+    },
+    {
+      "callee_function_name": "reset_controller_remove",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rcdev.dev.kobj.kref.refcount",
+      "member_type_chain": "reset_controller_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "reset_controller_remove",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rcdev.owner.refcnt",
+      "member_type_chain": "reset_controller_dev--module--atomic_t"
+    },
+    {
+      "callee_function_name": "reset_controller_remove",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rcdev.dev.kobj.kref.refcount",
+      "member_type_chain": "reset_controller_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put/release callback invoked by kref_put when the refcount drops to zero; it is not retried and failure would indicate a double-free scenario.",
+  "contract_summary": "__reset_control_release is the release callback for the reset_control kref. It is called automatically when the last kref reference is dropped via kref_put. It releases the module and device references on the associated reset controller device (rcdev) through reset_controller_remove, and destroys the internal mutex. After this function returns, the reset_control object is effectively freed and must not be accessed. Callers never call this function directly; they use kref_put on the reset_control's refcnt field.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release references on the reset controller device (module and device refcounts) when the reset_control's kref reaches zero, and to destroy the mutex. It contains minimal unrelated logic (mutex_destroy is part of cleanup).",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put/release callback invoked by kref_put when the refcount drops to zero; it is not retried and failure would indicate a double-free scenario.",
+      "contract_summary": "__reset_control_release is the release callback for the reset_control kref. It is called automatically when the last kref reference is dropped via kref_put. It releases the module and device references on the associated reset controller device (rcdev) through reset_controller_remove, and destroys the internal mutex. After this function returns, the reset_control object is effectively freed and must not be accessed. Callers never call this function directly; they use kref_put on the reset_control's refcnt field."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.rcdev.owner.refcnt",
+          "kref--reset_control_dev--module--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.rcdev.dev.kobj.kref.refcount",
+          "kref--reset_control_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path for both operations starts from rcdev (via 'kref.rcdev...'), but the critical variable for the put operation is parameter 1 (rstc). According to callee info, reset_controller_remove is a put function for its parameter index 1 (rstc). The access path must trace from rstc, not from rcdev. Since the paths do not start from the correct parameter, they are invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.rcdev.owner.refcnt",
+          "kref--reset_control_dev--module--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.rcdev.dev.kobj.kref.refcount",
+          "kref--reset_control_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a kref release callback for struct reset_control. It calls reset_controller_remove, which decrements reference counts on the associated reset_controller_dev's module and device. The access paths correctly start from the single parameter (kref) and traverse through the containing reset_control to rcdev. The check stage incorrectly rejected the paths by assuming they start from rcdev; they actually start from kref. The function is a focused refcount wrapper with high purity."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "kref.rcdev.owner.refcnt",
+        "kref--reset_control_dev--module--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "kref.rcdev.dev.kobj.kref.refcount",
+        "kref--reset_control_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put/release callback invoked by kref_put when the refcount drops to zero; it is not retried and failure would indicate a double-free scenario.",
+    "contract_summary": "__reset_control_release is the release callback for the reset_control kref. It is called automatically when the last kref reference is dropped via kref_put. It releases the module and device references on the associated reset controller device (rcdev) through reset_controller_remove, and destroys the internal mutex. After this function returns, the reset_control object is effectively freed and must not be accessed. Callers never call this function directly; they use kref_put on the reset_control's refcnt field."
+  }
+}

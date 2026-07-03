@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_get_newest_profile",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "profile.label.count.count.refcount",
+      "aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation always succeeds for a valid input; no failure path exists, so retry is not applicable.",
+  "contract_summary": "This wrapper acquires a reference to the newest profile associated with the input profile's label. If the label is stale, it obtains a reference to the replacement label from the proxy, ensuring the returned profile is always up-to-date. The caller receives an owned reference to the profile and must release it via aa_put_profile when done. The function does not fail for valid inputs (non-NULL profile pointer), and the returned profile is guaranteed to be non-NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the newest profile (which may be a replacement if the label is stale). The only operation is a get on the label via aa_get_newest_label and then extracting the profile from the label.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation always succeeds for a valid input; no failure path exists, so retry is not applicable.",
+      "contract_summary": "This wrapper acquires a reference to the newest profile associated with the input profile's label. If the label is stale, it obtains a reference to the replacement label from the proxy, ensuring the returned profile is always up-to-date. The caller receives an owned reference to the profile and must release it via aa_put_profile when done. The function does not fail for valid inputs (non-NULL profile pointer), and the returned profile is guaranteed to be non-NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function aa_get_newest_profile calls aa_get_newest_label on &p->label, which increments the refcount of the label. The returned profile (via labels_profile) contains the label whose refcount was incremented. The access path from the return value (aa_profile) to the refcount field is profile->label->count->count->refcount, matching the chain aa_profile--aa_label--aa_count--kref--refcount_t. The segment count (5) matches the type chain length. The operation is a 'get' on the return value, consistent with callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "profile.label.count.count.refcount",
+        "aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation always succeeds for a valid input; no failure path exists, so retry is not applicable.",
+    "contract_summary": "This wrapper acquires a reference to the newest profile associated with the input profile's label. If the label is stale, it obtains a reference to the replacement label from the proxy, ensuring the returned profile is always up-to-date. The caller receives an owned reference to the profile and must release it via aa_put_profile when done. The function does not fail for valid inputs (non-NULL profile pointer), and the returned profile is guaranteed to be non-NULL."
+  }
+}

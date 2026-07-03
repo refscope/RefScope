@@ -1,0 +1,106 @@
+{
+  "function_name": "_link_required_opps",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "opp.required_opps[index].kref.refcount",
+      "dev_pm_opp--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_find_opp_of_np",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_find_opp_of_np",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the required OPP node is missing or not found in the required table — this is a static device tree issue; retrying under the same conditions will not succeed.",
+  "contract_summary": "This function acquires a reference on a required OPP from the required_table and stores it in opp->required_opps[index]. It is a get wrapper: the caller must later release each stored reference (e.g., when opp is freed) by calling the corresponding put function. The function returns 0 on success and -ENODEV if the required OPP node is absent or not found. The caller must check the return value and propagate the error; retrying is not useful because the device tree is static and the missing OPP will remain missing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference to a required OPP (via _find_opp_of_np, which increments its refcount) and link it into the given opp's required_opps array. Any other logic (parsing the device node, error messages) is minimal and incidental to the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the required OPP node is missing or not found in the required table — this is a static device tree issue; retrying under the same conditions will not succeed.",
+      "contract_summary": "This function acquires a reference on a required OPP from the required_table and stores it in opp->required_opps[index]. It is a get wrapper: the caller must later release each stored reference (e.g., when opp is freed) by calling the corresponding put function. The function returns 0 on success and -ENODEV if the required OPP node is absent or not found. The caller must check the return value and propagate the error; retrying is not useful because the device tree is static and the missing OPP will remain missing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "kref.refcount",
+          "dev_pm_opp--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path 'kref.refcount' has 2 segments but the member_type_chain 'dev_pm_opp--kref--refcount_t' has 3 types, failing the segment count check. The path is missing the root variable/parameter name (e.g., 'return') to match the chain, making the operation inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "opp.required_opps[index].kref.refcount",
+          "dev_pm_opp--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function _link_required_opps obtains a reference to a required dev_pm_opp via _find_opp_of_np and stores it in opp->required_opps[index]. The critical variable (the required opp) is passed to the caller through the parameter 'opp' (parameter 1), as the caller can later read it from the array. The check stage rejected the original candidate because the vehicle was incorrectly set to 'return' (the function returns an int error code) and the member_access_path was missing the root variable. The corrected operation reflects that the get operation applies to the refcount of the required opp, accessible via the opp parameter."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "opp.required_opps[index].kref.refcount",
+        "dev_pm_opp--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the required OPP node is missing or not found in the required table — this is a static device tree issue; retrying under the same conditions will not succeed.",
+    "contract_summary": "This function acquires a reference on a required OPP from the required_table and stores it in opp->required_opps[index]. It is a get wrapper: the caller must later release each stored reference (e.g., when opp is freed) by calling the corresponding put function. The function returns 0 on success and -ENODEV if the required OPP node is absent or not found. The caller must check the return value and propagate the error; retrying is not useful because the device tree is static and the missing OPP will remain missing."
+  }
+}

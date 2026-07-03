@@ -1,0 +1,106 @@
+{
+  "function_name": "amdgpu_display_unpin_work_func",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "work->old_abo",
+      "tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement (amdgpu_bo_unref) is unconditional and always succeeds; retry is not applicable.",
+  "contract_summary": "This is a put wrapper that releases a buffer object (amdgpu_bo) previously pinned as part of a flip operation. It reserves the buffer, unpins it, unreserves, and then drops the buffer reference via amdgpu_bo_unref. The function is called from a workqueue after the flip completes; the caller must provide a valid work struct containing an old_abo reference. After execution, the buffer reference is decremented and the work struct is freed. The caller does not need to check a return value, and must not use the old_abo pointer after this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release (unpin and unref) a previously pinned buffer object after a page flip; the amdgpu_bo_unref call is the final put operation, and the surrounding reservation/unpin logic is minimal scaffold for that release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement (amdgpu_bo_unref) is unconditional and always succeeds; retry is not applicable.",
+      "contract_summary": "This is a put wrapper that releases a buffer object (amdgpu_bo) previously pinned as part of a flip operation. It reserves the buffer, unpins it, unreserves, and then drops the buffer reference via amdgpu_bo_unref. The function is called from a workqueue after the flip completes; the caller must provide a valid work struct containing an old_abo reference. After execution, the buffer reference is decremented and the work struct is freed. The caller does not need to check a return value, and must not use the old_abo pointer after this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "work->old_abo",
+          "tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path has 4 segments ('tbo', 'base', 'refcount', 'refcount'), but the member_type_chain has 5 types ('amdgpu_bo', 'ttm_buffer_object', 'drm_gem_object', 'kref', 'refcount_t'). According to the access path segment count check, these numbers must be equal. The path is incomplete as it does not include the initial variable/pointer dereference. Since the segment counts do not match, the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "work->old_abo",
+          "tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a clear put-wrapper for work->old_abo. The check stage incorrectly rejected the operation due to a path segment count mismatch; the path 'tbo.base.refcount.refcount' is correct relative to the variable 'work->old_abo', and the type chain length (5) minus 1 equals the number of path segments (4). The function performs a focused put operation after unpinning, with no other business logic, so purity is high. The critical variable is consumed internally and not passed out, hence passes_critical_variable is false."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "work->old_abo",
+        "tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement (amdgpu_bo_unref) is unconditional and always succeeds; retry is not applicable.",
+    "contract_summary": "This is a put wrapper that releases a buffer object (amdgpu_bo) previously pinned as part of a flip operation. It reserves the buffer, unpins it, unreserves, and then drops the buffer reference via amdgpu_bo_unref. The function is called from a workqueue after the flip completes; the caller must provide a valid work struct containing an old_abo reference. After execution, the buffer reference is decremented and the work struct is freed. The caller does not need to check a return value, and must not use the old_abo pointer after this function."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "__ns_ref_inc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ns.__ns_ref.refs",
+      "ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function unconditionally succeeds on the non-init path; on the init path it is a no-op. There is no failure mode that would warrant a retry.",
+  "contract_summary": "This is a get-wrapper that increments the reference count on a namespace (ns_common) unless the namespace is an init namespace, which is immortal and does not require refcounting. The caller must already hold a valid reference or ensure the object is alive before calling; after this call, the caller must eventually release the reference using a corresponding put (e.g., __ns_ref_put). The function does not transfer ownership—it merely increases the reference count to keep the object alive during use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the reference count on a namespace (ns_common) via refcount_inc, with a special path for init namespaces that skips refcounting and performs sanity checks. The only non-refcount logic is the init-namespace check and warnings, which are minimal and ancillary.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function unconditionally succeeds on the non-init path; on the init path it is a no-op. There is no failure mode that would warrant a retry.",
+      "contract_summary": "This is a get-wrapper that increments the reference count on a namespace (ns_common) unless the namespace is an init namespace, which is immortal and does not require refcounting. The caller must already hold a valid reference or ensure the object is alive before calling; after this call, the caller must eventually release the reference using a corresponding put (e.g., __ns_ref_put). The function does not transfer ownership—it merely increases the reference count to keep the object alive during use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ns.__ns_ref.refs",
+          "ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation is consistent: refcount_inc is called on &ns->__ns_ref, which increments the refcount of the ns parameter. The access path 'ns.__ns_ref.refs' correctly traces from the parameter ns through struct member __ns_ref to the refs field of refcount_t. The type chain ns_common--refcount_t--atomic_t matches the actual struct definitions. The direction 'get' is correct for refcount_inc. The segment count (3) equals the type count (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ns.__ns_ref.refs",
+        "ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function unconditionally succeeds on the non-init path; on the init path it is a no-op. There is no failure mode that would warrant a retry.",
+    "contract_summary": "This is a get-wrapper that increments the reference count on a namespace (ns_common) unless the namespace is an init namespace, which is immortal and does not require refcounting. The caller must already hold a valid reference or ensure the object is alive before calling; after this call, the caller must eventually release the reference using a corresponding put (e.g., __ns_ref_put). The function does not transfer ownership—it merely increases the reference count to keep the object alive during use."
+  }
+}

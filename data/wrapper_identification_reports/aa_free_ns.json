@@ -1,0 +1,407 @@
+{
+  "function_name": "aa_free_ns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.base.hname.count.refcount.refs",
+      "aa_ns--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.parent.unconfined.label.count.count",
+      "aa_ns--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.unconfined.ns.unconfined.label.count.count",
+      "aa_ns--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.unconfined.label.vec[i].label.count.count",
+      "aa_ns--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.unconfined.base.hname.count.refcount.refs",
+      "aa_ns--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.unconfined.parent.label.count.count",
+      "aa_ns--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.unconfined.label.proxy.count.count",
+      "aa_ns--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ns.unconfined.attach.xmatch.count.refcount",
+      "aa_ns--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_policy_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "policy.hname.count.refcount.refs",
+      "member_type_chain": "aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.proxy.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_policy_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "policy.hname.count.refcount.refs",
+      "member_type_chain": "aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.proxy.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper that frees memory; it is called when the refcount is zero. There is no failure path that a caller could retry on; double-calling would be a use-after-free bug.",
+  "contract_summary": "This function is the final release (destructor) for an aa_ns object. It releases all internal references held by the namespace (parent ns, unconfined profile, policy hname) via corresponding put/destroy functions, then frees the ns memory. It must be called exactly once when the last external reference to the ns is dropped. After this function returns, the ns pointer is invalid and must not be used again. The function handles NULL gracefully (no-op).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all references held by an aa_ns (parent ns, unconfined profile, base policy hname) and free the ns itself. All non-trivial operations are refcount decrements (puts) or memory freeing, making it a classic put-wrapper destructor.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper that frees memory; it is called when the refcount is zero. There is no failure path that a caller could retry on; double-calling would be a use-after-free bug.",
+      "contract_summary": "This function is the final release (destructor) for an aa_ns object. It releases all internal references held by the namespace (parent ns, unconfined profile, policy hname) via corresponding put/destroy functions, then frees the ns memory. It must be called exactly once when the last external reference to the ns is dropped. After this function returns, the ns pointer is invalid and must not be used again. The function handles NULL gracefully (no-op)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.base.hname.count.refcount.refs",
+          "aa_ns--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.parent.unconfined.label.count.count",
+          "aa_ns--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.ns.unconfined.label.count.count",
+          "aa_ns--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.label.vec[i].label.count.count",
+          "aa_ns--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.base.hname.count.refcount.refs",
+          "aa_ns--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.parent.label.count.count",
+          "aa_ns--aa_profile--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.label.proxy.count.count",
+          "aa_ns--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.attach.xmatch.count.refcount",
+          "aa_ns--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.base.hname.count.refcount.refs",
+          "aa_ns--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.parent.unconfined.label.count.count",
+          "aa_ns--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.ns.unconfined.label.count.count",
+          "aa_ns--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.label.vec[i].label.count.count",
+          "aa_ns--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.base.hname.count.refcount.refs",
+          "aa_ns--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.parent.label.count.count",
+          "aa_ns--aa_profile--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.label.proxy.count.count",
+          "aa_ns--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ns.unconfined.attach.xmatch.count.refcount",
+          "aa_ns--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+        ]
+      ],
+      "reason": "All candidate operations are consistent with the function code. Each operation corresponds to a put function called on the parameter 'ns' (the sole parameter of aa_free_ns): aa_policy_destroy(&ns->base) matches the first operation; aa_put_ns(ns->parent) matches the second; aa_free_profile(ns->unconfined) matches the remaining six via its callee-described paths. The access paths and type chains are correctly traced from 'ns' to the respective refcount fields, and the segment counts match the type chain lengths."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.base.hname.count.refcount.refs",
+        "aa_ns--aa_policy--counted_str--kref--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.parent.unconfined.label.count.count",
+        "aa_ns--aa_ns--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.unconfined.ns.unconfined.label.count.count",
+        "aa_ns--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.unconfined.label.vec[i].label.count.count",
+        "aa_ns--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.unconfined.base.hname.count.refcount.refs",
+        "aa_ns--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.unconfined.parent.label.count.count",
+        "aa_ns--aa_profile--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.unconfined.label.proxy.count.count",
+        "aa_ns--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ns.unconfined.attach.xmatch.count.refcount",
+        "aa_ns--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 8,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper that frees memory; it is called when the refcount is zero. There is no failure path that a caller could retry on; double-calling would be a use-after-free bug.",
+    "contract_summary": "This function is the final release (destructor) for an aa_ns object. It releases all internal references held by the namespace (parent ns, unconfined profile, policy hname) via corresponding put/destroy functions, then frees the ns memory. It must be called exactly once when the last external reference to the ns is dropped. After this function returns, the ns pointer is invalid and must not be used again. The function handles NULL gracefully (no-op)."
+  }
+}

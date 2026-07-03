@@ -1,0 +1,115 @@
+{
+  "function_name": "__xfrm_state_locate",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__xfrm_state_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__xfrm_state_lookup_byaddr",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__xfrm_state_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__xfrm_state_lookup_byaddr",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the state was not found (return NULL). The state may be created later, but the wrapper does not guarantee retries will succeed; typical caller should handle error rather than blindly retry.",
+  "contract_summary": "This is a get-wrapper that looks up an existing xfrm_state by either its SPI or its source/destination address, depending on the use_spi parameter. It acquires a reference on the found state (incrementing its refcount) and returns a pointer to the caller. The caller MUST check the return value for NULL, and if non-NULL, MUST later release the reference via a corresponding put (e.g., xfrm_state_put). The function does not create or initialize a new state; it only retrieves an existing one with an additional reference. The decision between SPI and address lookup is determined by a compile-time-like flag, making the path conditional but always executed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an xfrm_state by SPI or address, acquire a reference via the lookup function, and return the state with an incremented refcount. The only auxiliary logic is selecting which lookup to call based on the use_spi flag.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the state was not found (return NULL). The state may be created later, but the wrapper does not guarantee retries will succeed; typical caller should handle error rather than blindly retry.",
+      "contract_summary": "This is a get-wrapper that looks up an existing xfrm_state by either its SPI or its source/destination address, depending on the use_spi parameter. It acquires a reference on the found state (incrementing its refcount) and returns a pointer to the caller. The caller MUST check the return value for NULL, and if non-NULL, MUST later release the reference via a corresponding put (e.g., xfrm_state_put). The function does not create or initialize a new state; it only retrieves an existing one with an additional reference. The decision between SPI and address lookup is determined by a compile-time-like flag, making the path conditional but always executed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a pointer to xfrm_state from __xfrm_state_lookup or __xfrm_state_lookup_byaddr, both of which increment the refcount on the returned object. The access path 'ret.refcnt.refs' correctly traces from the return value to the refcount field, and the type chain 'xfrm_state--refcount_t--atomic_t' is consistent with the struct definitions. Segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the state was not found (return NULL). The state may be created later, but the wrapper does not guarantee retries will succeed; typical caller should handle error rather than blindly retry.",
+    "contract_summary": "This is a get-wrapper that looks up an existing xfrm_state by either its SPI or its source/destination address, depending on the use_spi parameter. It acquires a reference on the found state (incrementing its refcount) and returns a pointer to the caller. The caller MUST check the return value for NULL, and if non-NULL, MUST later release the reference via a corresponding put (e.g., xfrm_state_put). The function does not create or initialize a new state; it only retrieves an existing one with an additional reference. The decision between SPI and address lookup is determined by a compile-time-like flag, making the path conditional but always executed."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_gw_node_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "gw_node.refcount.refcount.refs",
+      "batadv_gw_node--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails when the refcount is zero, meaning the object is dying or dead; retrying will not revive the object.",
+  "contract_summary": "Acquire reference (get) wrapper: looks up a batadv_gw_node from the gateway list by matching orig_node, then attempts to increment its kref via kref_get_unless_zero. Returns the gateway node with an elevated refcount on success, or NULL if the node is not found or its refcount is already zero (object dying). The caller must check the return value and is responsible for releasing the reference with batadv_gw_node_put() when done. The function holds rcu_read_lock during the lookup and release operation; callers do not need to hold locks themselves. If NULL is returned, the caller should not retry the same lookup for the same orig_node because the object is gone.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a batadv_gw_node by orig_node and acquire a reference via kref_get_unless_zero. The list traversal is minimal setup for the refcount operation, and the function returns the object with an incremented refcount for the caller.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails when the refcount is zero, meaning the object is dying or dead; retrying will not revive the object.",
+      "contract_summary": "Acquire reference (get) wrapper: looks up a batadv_gw_node from the gateway list by matching orig_node, then attempts to increment its kref via kref_get_unless_zero. Returns the gateway node with an elevated refcount on success, or NULL if the node is not found or its refcount is already zero (object dying). The caller must check the return value and is responsible for releasing the reference with batadv_gw_node_put() when done. The function holds rcu_read_lock during the lookup and release operation; callers do not need to hold locks themselves. If NULL is returned, the caller should not retry the same lookup for the same orig_node because the object is gone."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "gw_node.refcount.refcount.refs",
+          "batadv_gw_node--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "gw_node.refcount.refcount.refs",
+          "batadv_gw_node--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The get operation via kref_get_unless_zero on gw_node_tmp->refcount, which becomes the return value gw_node, is correctly captured. The access path and type chain match the struct definitions and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "gw_node.refcount.refcount.refs",
+        "batadv_gw_node--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails when the refcount is zero, meaning the object is dying or dead; retrying will not revive the object.",
+    "contract_summary": "Acquire reference (get) wrapper: looks up a batadv_gw_node from the gateway list by matching orig_node, then attempts to increment its kref via kref_get_unless_zero. Returns the gateway node with an elevated refcount on success, or NULL if the node is not found or its refcount is already zero (object dying). The caller must check the return value and is responsible for releasing the reference with batadv_gw_node_put() when done. The function holds rcu_read_lock during the lookup and release operation; callers do not need to hold locks themselves. If NULL is returned, the caller should not retry the same lookup for the same orig_node because the object is gone."
+  }
+}

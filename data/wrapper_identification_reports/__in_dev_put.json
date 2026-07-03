@@ -1,0 +1,99 @@
+{
+  "function_name": "__in_dev_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "idev.refcnt.refs",
+      "in_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_dec always executes and failure (e.g., refcount already zero) indicates a use-after-free bug, not a transient condition; retrying would cause double-put.",
+  "contract_summary": "Releases a reference on an in_device by decrementing its refcount. This is a put wrapper – the caller must hold a valid reference before calling, and must not access the object after this call unless another reference is held. Pairs with in_dev_hold. Underlying refcount_dec is unconditional and void; the caller cannot detect failure via return value. Calling when the refcount is already zero leads to use-after-free (refcount saturation or object already freed).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The macro's sole purpose is to decrement the refcount of an in_device; it only calls refcount_dec with no additional logic or checks.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_dec always executes and failure (e.g., refcount already zero) indicates a use-after-free bug, not a transient condition; retrying would cause double-put.",
+      "contract_summary": "Releases a reference on an in_device by decrementing its refcount. This is a put wrapper – the caller must hold a valid reference before calling, and must not access the object after this call unless another reference is held. Pairs with in_dev_hold. Underlying refcount_dec is unconditional and void; the caller cannot detect failure via return value. Calling when the refcount is already zero leads to use-after-free (refcount saturation or object already freed)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "idev.refcnt.refs",
+          "in_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "idev.refcnt.refs",
+          "in_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec is called on &(idev)->refcnt, which accesses the refcount_t field refcnt of in_device, then the atomic_t refs inside refcount_t. The access path 'idev.refcnt.refs' correctly traces from the parameter idev (index 1) to the atomic_t. The type chain 'in_device--refcount_t--atomic_t' matches the struct definitions and callee info. Segment counts are equal (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "idev.refcnt.refs",
+        "in_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_dec always executes and failure (e.g., refcount already zero) indicates a use-after-free bug, not a transient condition; retrying would cause double-put.",
+    "contract_summary": "Releases a reference on an in_device by decrementing its refcount. This is a put wrapper – the caller must hold a valid reference before calling, and must not access the object after this call unless another reference is held. Pairs with in_dev_hold. Underlying refcount_dec is unconditional and void; the caller cannot detect failure via return value. Calling when the refcount is already zero leads to use-after-free (refcount saturation or object already freed)."
+  }
+}

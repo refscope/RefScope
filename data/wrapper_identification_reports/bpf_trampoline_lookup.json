@@ -1,0 +1,159 @@
+{
+  "function_name": "bpf_trampoline_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tr.refcnt.refs",
+      "bpf_trampoline--refcount_t--atomic_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "tr.refcnt.refs",
+      "bpf_trampoline--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs only on memory allocation failure (kzalloc) or direct_ops_alloc failure; retrying the same key immediately would likely fail again unless memory becomes available.",
+  "contract_summary": "Get-or-create wrapper for struct bpf_trampoline. The caller obtains a pointer to a trampoline with an implicit reference count (refcount increased by one on existing objects, or set to 1 on new ones). The caller must eventually release this reference by calling bpf_trampoline_put. On return, the caller owns that reference; the trampoline is protected from being freed until the reference is released. The function returns NULL on allocation failure, which must be checked by the caller. No locking or RCU is required by the caller; the function internally holds trampoline_mutex during the lookup and creation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to get-or-create a bpf_trampoline object with a held reference count. The logic consists of a hash table lookup; if found, an existing refcount is incremented; if not, a new trampoline is allocated, initialized, and its refcount set to 1. The only non-refcount operations are the necessary bookkeeping (hash insertion, field initialization) to support the get-or-create pattern.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs only on memory allocation failure (kzalloc) or direct_ops_alloc failure; retrying the same key immediately would likely fail again unless memory becomes available.",
+      "contract_summary": "Get-or-create wrapper for struct bpf_trampoline. The caller obtains a pointer to a trampoline with an implicit reference count (refcount increased by one on existing objects, or set to 1 on new ones). The caller must eventually release this reference by calling bpf_trampoline_put. On return, the caller owns that reference; the trampoline is protected from being freed until the reference is released. The function returns NULL on allocation failure, which must be checked by the caller. No locking or RCU is required by the caller; the function internally holds trampoline_mutex during the lookup and creation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tr.refcnt.refs",
+          "bpf_trampoline--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "tr.refcnt.refs",
+          "bpf_trampoline--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tr.refcnt.refs",
+          "bpf_trampoline--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "tr.refcnt.refs",
+          "bpf_trampoline--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both refcount_inc and refcount_set operate on tr->refcnt, which corresponds to the critical variable tr (the return value). The access path tr.refcnt.refs and type chain bpf_trampoline--refcount_t--atomic_t are consistent with the code and callee info. Location return index 0 is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tr.refcnt.refs",
+        "bpf_trampoline--refcount_t--atomic_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "tr.refcnt.refs",
+        "bpf_trampoline--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs only on memory allocation failure (kzalloc) or direct_ops_alloc failure; retrying the same key immediately would likely fail again unless memory becomes available.",
+    "contract_summary": "Get-or-create wrapper for struct bpf_trampoline. The caller obtains a pointer to a trampoline with an implicit reference count (refcount increased by one on existing objects, or set to 1 on new ones). The caller must eventually release this reference by calling bpf_trampoline_put. On return, the caller owns that reference; the trampoline is protected from being freed until the reference is released. The function returns NULL on allocation failure, which must be checked by the caller. No locking or RCU is required by the caller; the function internally holds trampoline_mutex during the lookup and creation."
+  }
+}

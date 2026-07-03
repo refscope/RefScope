@@ -1,0 +1,106 @@
+{
+  "function_name": "__cpool_free_entry",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "e.hash.tfm.base.refcnt.refs",
+      "sigpool_entry--crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_ahash",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_ahash",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement is unconditional and always succeeds. Retrying would be a double-put (use-after-free).",
+  "contract_summary": "Put wrapper that releases the cryptographic hash reference (via crypto_free_ahash), frees the algorithm name string, and zeroes the entire sigpool_entry structure. After this call, the entry must not be accessed or freed again. The caller must ensure that __cpool_free_entry is called exactly once per allocated entry, typically paired with a prior get or initialization that established the reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function exclusively releases a reference on the hash (via crypto_free_ahash, a put function), frees the alg string, and zeroes the entry. No other business logic exists, making it a focused put wrapper with cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement is unconditional and always succeeds. Retrying would be a double-put (use-after-free).",
+      "contract_summary": "Put wrapper that releases the cryptographic hash reference (via crypto_free_ahash), frees the algorithm name string, and zeroes the entire sigpool_entry structure. After this call, the entry must not be accessed or freed again. The caller must ensure that __cpool_free_entry is called exactly once per allocated entry, typically paired with a prior get or initialization that established the reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "e.hash.tfm.base.refcnt.refs",
+          "sigpool_entry--crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path 'e.hash.tfm.base.refcnt.refs' has 6 segments, but the member_type_chain 'sigpool_entry--crypto_ahash--crypto_tfm--refcount_t--atomic_t' has only 5 types. The segment count mismatch indicates an incomplete or inconsistent path. Additionally, the path includes a 'tfm' before 'base', which may not match the actual struct definitions, but the primary rejection is due to the segment count mismatch."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "e.hash.tfm.base.refcnt.refs",
+          "sigpool_entry--crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __cpool_free_entry is a clean destructor for a sigpool_entry, calling crypto_free_ahash (a put function) on the embedded hash. Despite the check's rejection due to a segment count mismatch (6 path segments vs 5 type-chain entries), the function's sole purpose is to release the ahash and associated resources, making it a high-purity put wrapper. The critical variable (the ahash object) is accessible via the parameter 'e', and the extracted operation correctly identifies the put on e->hash."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "e.hash.tfm.base.refcnt.refs",
+        "sigpool_entry--crypto_ahash--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement is unconditional and always succeeds. Retrying would be a double-put (use-after-free).",
+    "contract_summary": "Put wrapper that releases the cryptographic hash reference (via crypto_free_ahash), frees the algorithm name string, and zeroes the entire sigpool_entry structure. After this call, the entry must not be accessed or freed again. The caller must ensure that __cpool_free_entry is called exactly once per allocated entry, typically paired with a prior get or initialization that established the reference."
+  }
+}

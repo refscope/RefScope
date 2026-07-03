@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_meshif_vlan_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "vlan.refcount.refcount",
+      "batadv_meshif_vlan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) means either the object does not exist or its refcount is zero (object being freed). Retrying the same lookup without state changes is pointless; caller should handle absence appropriately and not retry the same unmodified lookup.",
+  "contract_summary": "This function performs an RCU-protected lookup of a batadv_meshif_vlan object by VID and conditionally acquires a reference on it using kref_get_unless_zero. It returns the object with an elevated refcount if found and alive, or NULL otherwise. The caller must check the return value: a non-NULL pointer must later be released via a corresponding put (e.g., batadv_meshif_vlan_put). The RCU read lock is held only during the lookup, not after return, so the caller does not need to hold RCU lock after the call. This is a classic get-by-key wrapper that provides safe access to a shared, reference-counted object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a batadv_meshif_vlan object by VID. The list traversal is minimal lookup logic, and the only significant operation is the conditional kref_get_unless_zero. No other refcount or business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) means either the object does not exist or its refcount is zero (object being freed). Retrying the same lookup without state changes is pointless; caller should handle absence appropriately and not retry the same unmodified lookup.",
+      "contract_summary": "This function performs an RCU-protected lookup of a batadv_meshif_vlan object by VID and conditionally acquires a reference on it using kref_get_unless_zero. It returns the object with an elevated refcount if found and alive, or NULL otherwise. The caller must check the return value: a non-NULL pointer must later be released via a corresponding put (e.g., batadv_meshif_vlan_put). The RCU read lock is held only during the lookup, not after return, so the caller does not need to hold RCU lock after the call. This is a classic get-by-key wrapper that provides safe access to a shared, reference-counted object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on vlan_tmp->refcount, and the acquired reference is returned via vlan. The access path vlan.refcount.refcount correctly traces from the return value through the batadv_meshif_vlan structure to the kref and its refcount_t field. The type chain matches the callee's alternate path (kref.refcount)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "vlan.refcount.refcount",
+        "batadv_meshif_vlan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) means either the object does not exist or its refcount is zero (object being freed). Retrying the same lookup without state changes is pointless; caller should handle absence appropriately and not retry the same unmodified lookup.",
+    "contract_summary": "This function performs an RCU-protected lookup of a batadv_meshif_vlan object by VID and conditionally acquires a reference on it using kref_get_unless_zero. It returns the object with an elevated refcount if found and alive, or NULL otherwise. The caller must check the return value: a non-NULL pointer must later be released via a corresponding put (e.g., batadv_meshif_vlan_put). The RCU read lock is held only during the lookup, not after return, so the caller does not need to hold RCU lock after the call. This is a classic get-by-key wrapper that provides safe access to a shared, reference-counted object."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "aarp_entry_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "a.refcnt.refs",
+      "aarp_entry--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always succeeds; no retry is needed.",
+  "contract_summary": "aarp_entry_get is a trivial get-wrapper that unconditionally increments the reference count of an aarp_entry. It acquires a reference that the caller is responsible for releasing with a corresponding put (e.g., aarp_entry_put). There is no return value to check, and the operation never fails. The caller must ensure that the object is still alive before calling this function, as it does not check for zero refcount.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to increment the refcount of an aarp_entry via refcount_inc, with no other logic or side effects.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always succeeds; no retry is needed.",
+      "contract_summary": "aarp_entry_get is a trivial get-wrapper that unconditionally increments the reference count of an aarp_entry. It acquires a reference that the caller is responsible for releasing with a corresponding put (e.g., aarp_entry_put). There is no return value to check, and the operation never fails. The caller must ensure that the object is still alive before calling this function, as it does not check for zero refcount."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "a.refcnt.refs",
+          "aarp_entry--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "a.refcnt.refs",
+          "aarp_entry--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&a->refcnt) increments the refcount on the object pointed to by parameter a. The access path a.refcnt.refs correctly traces from the parameter through the refcnt field (refcount_t) to the inner refs atomic_t. The type chain aarp_entry--refcount_t--atomic_t matches the struct definitions. The direction 'get' is appropriate for refcount_inc. All segments in path and types match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "a.refcnt.refs",
+        "aarp_entry--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always succeeds; no retry is needed.",
+    "contract_summary": "aarp_entry_get is a trivial get-wrapper that unconditionally increments the reference count of an aarp_entry. It acquires a reference that the caller is responsible for releasing with a corresponding put (e.g., aarp_entry_put). There is no return value to check, and the operation never fails. The caller must ensure that the object is still alive before calling this function, as it does not check for zero refcount."
+  }
+}

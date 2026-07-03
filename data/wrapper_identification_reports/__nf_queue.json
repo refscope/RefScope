@@ -1,0 +1,122 @@
+{
+  "function_name": "__nf_queue",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nf_queue_entry_get_refs",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.state.sk.sk_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--nf_hook_state--sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.physout.dev_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.state.in.dev_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--nf_hook_state--net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.physin.dev_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.skb_dev.dev_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.state.out.dev_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--nf_hook_state--net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.state.sk.sk_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--nf_hook_state--sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_queue_entry_get_refs",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.state.sk.sk_refcnt.refs",
+      "member_type_chain": "nf_queue_entry--nf_hook_state--sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; the function is not a refcount wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to queue an skb for netfilter processing, not just manage references. It performs allocation, route key handling, skb destination force, physdev initialization, and calls the queue handler outfn. The refcount operations (refcount_inc_not_zero on sk and nf_queue_entry_get_refs) are incidental steps within the broader queuing logic. The critical variable (nf_queue_entry) is passed to the queue handler and not directly returned to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; the function is not a refcount wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; the function is not a refcount wrapper.",
+    "contract_summary": ""
+  }
+}

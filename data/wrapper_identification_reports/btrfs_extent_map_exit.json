@@ -1,0 +1,143 @@
+{
+  "function_name": "btrfs_extent_map_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "extent_map_cache",
+      "extent_map_cache.refcount",
+      "kmem_cache--int"
+    ],
+    [
+      "put",
+      "global",
+      "extent_map_cache",
+      "extent_map_cache.kobj.kref.refcount",
+      "kmem_cache--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "After kmem_cache_destroy succeeds, the cache is freed; retrying would cause use-after-free or double-free.",
+  "contract_summary": "This is a put wrapper that destroys the global 'extent_map_cache' slab cache by releasing its underlying reference. It must be called exactly once during the module/subsystem exit path to clean up the cache. After this call, the cache is no longer available and must not be used. No return value to check; the operation always succeeds if the cache exists. There are no locking or RCU requirements because the caller is expected to be in a safe context (e.g., module exit) where no concurrent allocations from this cache are active.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on the global extent_map_cache kmem_cache via kmem_cache_destroy (a put operation). No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "After kmem_cache_destroy succeeds, the cache is freed; retrying would cause use-after-free or double-free.",
+      "contract_summary": "This is a put wrapper that destroys the global 'extent_map_cache' slab cache by releasing its underlying reference. It must be called exactly once during the module/subsystem exit path to clean up the cache. After this call, the cache is no longer available and must not be used. No return value to check; the operation always succeeds if the cache exists. There are no locking or RCU requirements because the caller is expected to be in a safe context (e.g., module exit) where no concurrent allocations from this cache are active."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "extent_map_cache",
+          "extent_map_cache.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "global",
+          "extent_map_cache",
+          "extent_map_cache.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "extent_map_cache",
+          "extent_map_cache.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "global",
+          "extent_map_cache",
+          "extent_map_cache.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the function btrfs_extent_map_exit which calls kmem_cache_destroy(extent_map_cache). The callee information indicates kmem_cache_destroy performs a put on two possible refcount fields of its argument, and the global variable extent_map_cache is correctly identified as the argument. The access paths and type chains match the callee's description and have equal segment/type counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "extent_map_cache",
+        "extent_map_cache.refcount",
+        "kmem_cache--int"
+      ],
+      [
+        "put",
+        "global",
+        "extent_map_cache",
+        "extent_map_cache.kobj.kref.refcount",
+        "kmem_cache--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "After kmem_cache_destroy succeeds, the cache is freed; retrying would cause use-after-free or double-free.",
+    "contract_summary": "This is a put wrapper that destroys the global 'extent_map_cache' slab cache by releasing its underlying reference. It must be called exactly once during the module/subsystem exit path to clean up the cache. After this call, the cache is no longer available and must not be used. No return value to check; the operation always succeeds if the cache exists. There are no locking or RCU requirements because the caller is expected to be in a safe context (e.g., module exit) where no concurrent allocations from this cache are active."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "function_name": "asoc_sdw_rt_amp_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "card.drvdata.amp_dev1.kobj.kref.refcount",
+      "snd_snd_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "card.drvdata.amp_dev2.kobj.kref.refcount",
+      "snd_snd_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device is void and always succeeds; if pointer is NULL the operation is a no-op, no failure to retry.",
+  "contract_summary": "This is a put-wrapper for two amplifier devices (amp_dev1, amp_dev2) stored in the card's private context. It removes any associated software nodes and then drops the device references acquired earlier (e.g., during probe). The function always succeeds and returns 0. After calling this function, the caller must not use the devices again and must not call put_device again on them. The wrapper safely handles NULL pointers (no-op if a device was never initialized).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release device references via put_device (and remove associated software nodes) during cleanup; no other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device is void and always succeeds; if pointer is NULL the operation is a no-op, no failure to retry.",
+      "contract_summary": "This is a put-wrapper for two amplifier devices (amp_dev1, amp_dev2) stored in the card's private context. It removes any associated software nodes and then drops the device references acquired earlier (e.g., during probe). The function always succeeds and returns 0. After calling this function, the caller must not use the devices again and must not call put_device again on them. The wrapper safely handles NULL pointers (no-op if a device was never initialized)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.drvdata.amp_dev1.kobj.kref.refcount",
+          "snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.drvdata.amp_dev2.kobj.kref.refcount",
+          "snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.drvdata.amp_dev1.kobj.kref.refcount",
+          "snd_snd_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.drvdata.amp_dev2.kobj.kref.refcount",
+          "snd_snd_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put_device calls operate on device pointers derived from card->drvdata->amp_dev1/amp_dev2. The access paths start from the first parameter 'card' and correctly trace through drvdata, amp_dev1/amp_dev2, then kobj.kref.refcount. The segment counts match (6 segments vs. 6 types). Both operations are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "card.drvdata.amp_dev1.kobj.kref.refcount",
+        "snd_snd_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "card.drvdata.amp_dev2.kobj.kref.refcount",
+        "snd_snd_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device is void and always succeeds; if pointer is NULL the operation is a no-op, no failure to retry.",
+    "contract_summary": "This is a put-wrapper for two amplifier devices (amp_dev1, amp_dev2) stored in the card's private context. It removes any associated software nodes and then drops the device references acquired earlier (e.g., during probe). The function always succeeds and returns 0. After calling this function, the caller must not use the devices again and must not call put_device again on them. The wrapper safely handles NULL pointers (no-op if a device was never initialized)."
+  }
+}

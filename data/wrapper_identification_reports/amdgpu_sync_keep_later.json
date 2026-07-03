@@ -1,0 +1,143 @@
+{
+  "function_name": "amdgpu_sync_keep_later",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "keep[0].refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "fence.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure possible — refcount operations always succeed; the condition only decides whether to update, not whether the update succeeds.",
+  "contract_summary": "This function manages a single slot (*keep) to hold a reference to the latest fence among a sequence of fence objects. It compares the existing fence in *keep with the new fence parameter; if the new fence is earlier or equal, it does nothing. Otherwise, it releases the old reference via dma_fence_put and stores a newly acquired reference (via dma_fence_get) to the new fence in *keep. After the call, *keep always holds a valid reference. The caller must eventually release the final reference stored in *keep. No return value to check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function's sole purpose is to keep a reference to the later fence by conditionally releasing the old and acquiring a new reference; the comparison is trivial and directly supports the refcount decision.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure possible — refcount operations always succeed; the condition only decides whether to update, not whether the update succeeds.",
+      "contract_summary": "This function manages a single slot (*keep) to hold a reference to the latest fence among a sequence of fence objects. It compares the existing fence in *keep with the new fence parameter; if the new fence is earlier or equal, it does nothing. Otherwise, it releases the old reference via dma_fence_put and stores a newly acquired reference (via dma_fence_get) to the new fence in *keep. After the call, *keep always holds a valid reference. The caller must eventually release the final reference stored in *keep. No return value to check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "keep[0].refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "keep[0].refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are directly invoked in the code: dma_fence_put(*keep) and dma_fence_get(fence). The access paths correctly trace from the function interface (keep[0] for the old fence object, fence for the new fence object) to the refcount field via the type chain dma_fence--kref--refcount_t. Segment counts match. No inconsistencies found."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "keep[0].refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "fence.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure possible — refcount operations always succeed; the condition only decides whether to update, not whether the update succeeds.",
+    "contract_summary": "This function manages a single slot (*keep) to hold a reference to the latest fence among a sequence of fence objects. It compares the existing fence in *keep with the new fence parameter; if the new fence is earlier or equal, it does nothing. Otherwise, it releases the old reference via dma_fence_put and stores a newly acquired reference (via dma_fence_get) to the new fence in *keep. After the call, *keep always holds a valid reference. The caller must eventually release the final reference stored in *keep. No return value to check."
+  }
+}

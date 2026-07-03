@@ -1,0 +1,107 @@
+{
+  "function_name": "__live_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "active.ref.refcount",
+      "live_active--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always succeeds; kref_get cannot fail so retry is not applicable.",
+  "contract_summary": "This is a simple get-wrapper that atomically increments the kref reference counter on a live_active object. The caller must eventually pair this call with a matching kref_put (or live_put) to release the reference. No return value or error handling is required, and the call is safe from any perspective (no locks, no RCU, no failure paths). The acquired reference ensures the object remains alive until the corresponding put is made.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls kref_get on the embedded kref of the live_active structure, performing unconditional reference-count increment with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always succeeds; kref_get cannot fail so retry is not applicable.",
+      "contract_summary": "This is a simple get-wrapper that atomically increments the kref reference counter on a live_active object. The caller must eventually pair this call with a matching kref_put (or live_put) to release the reference. No return value or error handling is required, and the call is safe from any perspective (no locks, no RCU, no failure paths). The acquired reference ensures the object remains alive until the corresponding put is made."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "active.ref.refcount",
+          "live_active--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "active.ref.refcount",
+          "live_active--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&active->ref) increments the refcount on active->ref. The access path active.ref.refcount correctly traces from parameter active to the refcount field. The type chain live_active--kref--refcount_t matches struct definitions. Segment counts are equal (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "active.ref.refcount",
+        "live_active--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always succeeds; kref_get cannot fail so retry is not applicable.",
+    "contract_summary": "This is a simple get-wrapper that atomically increments the kref reference counter on a live_active object. The caller must eventually pair this call with a matching kref_put (or live_put) to release the reference. No return value or error handling is required, and the call is safe from any perspective (no locks, no RCU, no failure paths). The acquired reference ensures the object remains alive until the corresponding put is made."
+  }
+}

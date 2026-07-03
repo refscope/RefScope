@@ -1,0 +1,99 @@
+{
+  "function_name": "auxiliary_device_uninit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "auxdev.dev.kobj.kref.refcount",
+      "auxiliary_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and never fails; retry is not applicable.",
+  "contract_summary": "This is a release (put) wrapper for the auxiliary device. It calls put_device to drop a reference on the underlying struct device, which is the final step before the object can be freed. It also destroys the sysfs lock associated with the device. After this call, the auxiliary device must not be accessed as it may have been freed. This function is typically called from the device release path, and the caller must ensure no other references exist before calling.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a device reference via put_device as part of auxiliary device teardown; the mutex_destroy is necessary cleanup accompanying the put.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and never fails; retry is not applicable.",
+      "contract_summary": "This is a release (put) wrapper for the auxiliary device. It calls put_device to drop a reference on the underlying struct device, which is the final step before the object can be freed. It also destroys the sysfs lock associated with the device. After this call, the auxiliary device must not be accessed as it may have been freed. This function is typically called from the device release path, and the caller must ensure no other references exist before calling."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "auxdev.dev.kobj.kref.refcount",
+          "auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "auxdev.dev.kobj.kref.refcount",
+          "auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_device is called with &auxdev->dev, which accesses auxdev->dev.kobj.kref.refcount. The path and type chain are consistent, and the critical variable is parameter 1 auxdev."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "auxdev.dev.kobj.kref.refcount",
+        "auxiliary_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and never fails; retry is not applicable.",
+    "contract_summary": "This is a release (put) wrapper for the auxiliary device. It calls put_device to drop a reference on the underlying struct device, which is the final step before the object can be freed. It also destroys the sysfs lock associated with the device. After this call, the auxiliary device must not be accessed as it may have been freed. This function is typically called from the device release path, and the caller must ensure no other references exist before calling."
+  }
+}

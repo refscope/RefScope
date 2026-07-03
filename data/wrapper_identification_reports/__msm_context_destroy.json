@@ -1,0 +1,82 @@
+{
+  "function_name": "__msm_context_destroy",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gpuvm_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gpuvm.kref.refcount",
+      "member_type_chain": "drm_gpuvm--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gpuvm_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gpuvm.kref.refcount",
+      "member_type_chain": "drm_gpuvm--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is the destructor called exactly once when the kref reaches zero. Calling it again would mean a double-free or use-after-free; retry is never appropriate.",
+  "contract_summary": "This function is the release callback for kref_put. It is invoked when the last reference to an msm_context is removed. It destroys all DRM scheduler entities, releases the GPU VM via drm_gpuvm_put, frees the comm and cmdline strings, and finally frees the context itself. After this function returns, the msm_context pointer is invalid and must not be accessed. No reference remains, and the caller does not need to take any further action.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to serve as the kref release callback: it destroys the msm_context when the last reference is dropped. Although it performs substantial cleanup (destroying scheduler entities, freeing GPU VM, freeing strings, freeing the context itself), all of this is tied to the end-of-life via reference counting. The function is a put wrapper that finalizes the object.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is the destructor called exactly once when the kref reaches zero. Calling it again would mean a double-free or use-after-free; retry is never appropriate.",
+      "contract_summary": "This function is the release callback for kref_put. It is invoked when the last reference to an msm_context is removed. It destroys all DRM scheduler entities, releases the GPU VM via drm_gpuvm_put, frees the comm and cmdline strings, and finally frees the context itself. After this function returns, the msm_context pointer is invalid and must not be accessed. No reference remains, and the caller does not need to take any further action."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.vm.kref.refcount",
+          "msm_context--drm_gpuvm--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate claims a put operation on parameter 1 with path starting from 'ctx', but parameter 1 is 'kref', not 'ctx'. The refcount being decremented belongs to ctx->vm, which is not directly a function interface variable. Location/index mismatch, so the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function __msm_context_destroy is a destructor/release callback triggered when the kref on the msm_context reaches zero. It performs comprehensive cleanup: destroying scheduler entities, putting the gpuvm reference, freeing strings, and finally freeing the context itself. This is not a thin wrapper around a refcount operation; the primary purpose is resource deallocation, not reference count management. No critical variable is passed to the caller, and the candidate put operation on ctx->vm.kref.refcount is incidental to the overall cleanup. The check stage correctly rejected the candidate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is the destructor called exactly once when the kref reaches zero. Calling it again would mean a double-free or use-after-free; retry is never appropriate.",
+    "contract_summary": "This function is the release callback for kref_put. It is invoked when the last reference to an msm_context is removed. It destroys all DRM scheduler entities, releases the GPU VM via drm_gpuvm_put, frees the comm and cmdline strings, and finally frees the context itself. After this function returns, the msm_context pointer is invalid and must not be accessed. No reference remains, and the caller does not need to take any further action."
+  }
+}

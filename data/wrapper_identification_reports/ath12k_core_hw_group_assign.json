@@ -1,0 +1,58 @@
+{
+  "function_name": "ath12k_core_hw_group_assign",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ath12k_core_free_wsi_info",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ag.wsi_node[i].kobj.kref.refcount",
+      "member_type_chain": "ath12k_hw_group--device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ath12k_core_free_wsi_info",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ag.wsi_node[i].kobj.kref.refcount",
+      "member_type_chain": "ath12k_hw_group--device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — refcount manipulation is not the main function.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is hardware group assignment and device setup (DT lookup, group allocation, WSI info retrieval, device insertion) with significant business logic; refcount management is incidental via a callee on error path only.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — refcount manipulation is not the main function.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — refcount manipulation is not the main function.",
+    "contract_summary": ""
+  }
+}

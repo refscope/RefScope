@@ -1,0 +1,143 @@
+{
+  "function_name": "blktrans_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "disk.private_data.ref.refcount",
+      "gendisk--mtd_blktrans_dev--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "disk.private_data.mtd.refcnt.refcount",
+      "gendisk--mtd_blktrans_dev--mtd_info--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "blktrans_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "mtd_blktrans_dev--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__put_mtd_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mtd.refcnt.refcount",
+      "member_type_chain": "mtd_info--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "blktrans_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "mtd_blktrans_dev--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__put_mtd_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mtd.refcnt.refcount",
+      "member_type_chain": "mtd_info--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement (blktrans_dev_put) is unconditional and always succeeds; the caller cannot retry because the release is a one-time operation.",
+  "contract_summary": "This function implements the release callback for a mtd_blktrans device. It decrements dev->open; on the last close (dev->open == 0) it releases the module owner, the mtd device (via tr->release and __put_mtd_device), and finally calls blktrans_dev_put to drop the final reference on the blktrans_dev. After this function returns, the caller (block layer) must not use the disk or the dev pointer. The function properly pairs with blktrans_open: each open() should be matched by a release() to ensure the open count and kref stay balanced. The blktrans_dev_put call is unconditional, so the developer must ensure that blktrans_dev_put is only called once per reference (no double-put).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the open count and, if it reaches zero, perform final cleanup (module_put, mtd release, mtd refcount put).  The function always ends with a blktrans_dev_put on the dev's kref, which is the core refcount release.  The additional cleanup is tightly coupled to the refcount lifecycle and does not introduce significant unrelated logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement (blktrans_dev_put) is unconditional and always succeeds; the caller cannot retry because the release is a one-time operation.",
+      "contract_summary": "This function implements the release callback for a mtd_blktrans device. It decrements dev->open; on the last close (dev->open == 0) it releases the module owner, the mtd device (via tr->release and __put_mtd_device), and finally calls blktrans_dev_put to drop the final reference on the blktrans_dev. After this function returns, the caller (block layer) must not use the disk or the dev pointer. The function properly pairs with blktrans_open: each open() should be matched by a release() to ensure the open count and kref stay balanced. The blktrans_dev_put call is unconditional, so the developer must ensure that blktrans_dev_put is only called once per reference (no double-put)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "disk.private_data.ref.refcount",
+          "gendisk--mtd_blktrans_dev--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "disk.private_data.mtd.refcnt.refcount",
+          "gendisk--mtd_blktrans_dev--mtd_info--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "disk.private_data.ref.refcount",
+          "gendisk--mtd_blktrans_dev--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "disk.private_data.mtd.refcnt.refcount",
+          "gendisk--mtd_blktrans_dev--mtd_info--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code. blktrans_dev_put is called on dev (disk->private_data) and __put_mtd_device is called on dev->mtd. The access paths correctly trace from parameter disk through private_data to the refcount fields, and type chains match the callee information. Segment counts match between paths and type chains."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "disk.private_data.ref.refcount",
+        "gendisk--mtd_blktrans_dev--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "disk.private_data.mtd.refcnt.refcount",
+        "gendisk--mtd_blktrans_dev--mtd_info--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement (blktrans_dev_put) is unconditional and always succeeds; the caller cannot retry because the release is a one-time operation.",
+    "contract_summary": "This function implements the release callback for a mtd_blktrans device. It decrements dev->open; on the last close (dev->open == 0) it releases the module owner, the mtd device (via tr->release and __put_mtd_device), and finally calls blktrans_dev_put to drop the final reference on the blktrans_dev. After this function returns, the caller (block layer) must not use the disk or the dev pointer. The function properly pairs with blktrans_open: each open() should be matched by a release() to ensure the open count and kref stay balanced. The blktrans_dev_put call is unconditional, so the developer must ensure that blktrans_dev_put is only called once per reference (no double-put)."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bcm4377_hci_free_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.dev.kobj.kref.refcount",
+      "hci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hci_free_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdev.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hci_free_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdev.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and assumed to always succeed on a valid pointer; retry is not applicable.",
+  "contract_summary": "This is a put wrapper that releases a reference on an hci_dev object by calling hci_free_dev, which decrements the embedded kref and may free the object. The caller must not use the device pointer after calling this function, as it indicates ownership is relinquished. No return value to check; the operation is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call hci_free_dev, which is a put function that releases a reference on an hci_dev via its embedded kref. There is no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and assumed to always succeed on a valid pointer; retry is not applicable.",
+      "contract_summary": "This is a put wrapper that releases a reference on an hci_dev object by calling hci_free_dev, which decrements the embedded kref and may free the object. The caller must not use the device pointer after calling this function, as it indicates ownership is relinquished. No return value to check; the operation is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.dev.kobj.kref.refcount",
+          "hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.dev.kobj.kref.refcount",
+          "hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function bcm4377_hci_free_dev calls hci_free_dev with its parameter data, which is a void* but effectively points to struct hci_dev. The callee info indicates hci_free_dev performs a put on its first parameter with access path hdev.dev.kobj.kref.refcount. The candidate's path starts from 'data' and follows the same field chain, matching the type chain hci_dev->device->kobject->kref->refcount_t. The access path segment count (5) matches the type chain count (5). The operation is consistent with the code and callee semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.dev.kobj.kref.refcount",
+        "hci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and assumed to always succeed on a valid pointer; retry is not applicable.",
+    "contract_summary": "This is a put wrapper that releases a reference on an hci_dev object by calling hci_free_dev, which decrements the embedded kref and may free the object. The caller must not use the device pointer after calling this function, as it indicates ownership is relinquished. No return value to check; the operation is unconditional."
+  }
+}

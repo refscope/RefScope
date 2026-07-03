@@ -1,0 +1,131 @@
+{
+  "function_name": "batadv_find_best_neighbor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "best.refcount.refcount.refs",
+      "batadv_neigh_node--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) indicates no suitable neighbor or all candidates dying; retrying immediately is unlikely to succeed without state changes.",
+  "contract_summary": "This function selects and acquires a reference on the best neighbor node from the orig_node's neighbor list using the algorithm-specific comparison. The caller becomes owner of a reference on the returned neighbor node (if non-NULL) and must release it via batadv_neigh_node_put when done. If no suitable neighbor is found (e.g., list empty or all refcounts zero), NULL is returned. The function holds RCU lock internally and properly releases previous best candidate. This is a get-wrapper that transfers ownership.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find the best neighbor and acquire a reference on it via kref_get_unless_zero, cycling through candidates and releasing previous best. The only non-refcount logic is the comparison and iteration, which serve to select the object to return.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) indicates no suitable neighbor or all candidates dying; retrying immediately is unlikely to succeed without state changes.",
+      "contract_summary": "This function selects and acquires a reference on the best neighbor node from the orig_node's neighbor list using the algorithm-specific comparison. The caller becomes owner of a reference on the returned neighbor node (if non-NULL) and must release it via batadv_neigh_node_put when done. If no suitable neighbor is found (e.g., list empty or all refcounts zero), NULL is returned. The function holds RCU lock internally and properly releases previous best candidate. This is a get-wrapper that transfers ownership."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "best.refcount.refcount.refs",
+          "batadv_neigh_node--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "best.refcount.refcount.refs",
+          "batadv_neigh_node--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on the neighbor node that becomes best, and the function returns best with an extra reference. The access path best.refcount.refcount.refs correctly traces from the return value through batadv_neigh_node's refcount (kref) to the inner refcount_t's refs (atomic_t). The type chain and segment count match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "best.refcount.refcount.refs",
+        "batadv_neigh_node--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) indicates no suitable neighbor or all candidates dying; retrying immediately is unlikely to succeed without state changes.",
+    "contract_summary": "This function selects and acquires a reference on the best neighbor node from the orig_node's neighbor list using the algorithm-specific comparison. The caller becomes owner of a reference on the returned neighbor node (if non-NULL) and must release it via batadv_neigh_node_put when done. If no suitable neighbor is found (e.g., list empty or all refcounts zero), NULL is returned. The function holds RCU lock internally and properly releases previous best candidate. This is a get-wrapper that transfers ownership."
+  }
+}

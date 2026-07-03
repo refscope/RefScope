@@ -1,0 +1,106 @@
+{
+  "function_name": "allocate_timestamps_buffers",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "buf.refcount.refcount.refs",
+      "hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hl_mmap_mem_buf_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "buf.refcount.refcount.refs",
+      "member_type_chain": "hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hl_mmap_mem_buf_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "buf.refcount.refcount.refs",
+      "member_type_chain": "hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Allocation failure (ENOMEM) is the only failure mode; the refcount operation never fails because it only occurs on successful allocation. Caller typically propagates the error and does not retry.",
+  "contract_summary": "Set-wrapper: allocates a new timestamp buffer object with an initial reference count of 1. The object is returned to the caller via the output parameter *handle. Caller must eventually release the reference by calling the appropriate put/destroy function (e.g., hl_mmap_mem_buf_put or equivalent). Input validation ensures num_of_elements does not exceed TS_MAX_ELEMENTS_NUM. On error, returns -EINVAL or -ENOMEM; no partial allocation or resource leak occurs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to allocate a new timestamp buffer (hl_mmap_mem_buf) with an initial reference count, set via hl_mmap_mem_buf_alloc. The only unrelated logic is input validation (checking num_of_elements limit). The caller receives a handle representing the object and must later release the reference.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Allocation failure (ENOMEM) is the only failure mode; the refcount operation never fails because it only occurs on successful allocation. Caller typically propagates the error and does not retry.",
+      "contract_summary": "Set-wrapper: allocates a new timestamp buffer object with an initial reference count of 1. The object is returned to the caller via the output parameter *handle. Caller must eventually release the reference by calling the appropriate put/destroy function (e.g., hl_mmap_mem_buf_put or equivalent). Input validation ensures num_of_elements does not exceed TS_MAX_ELEMENTS_NUM. On error, returns -EINVAL or -ENOMEM; no partial allocation or resource leak occurs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "buf.refcount.refcount.refs",
+          "hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function allocate_timestamps_buffers returns an integer (0 or negative), not the allocated buffer. The only interface to the caller is the 'handle' output parameter (u64*). The refcount set operation (from hl_mmap_mem_buf_alloc) acts on the internally allocated 'buf' and is not exposed via the function's return value or any parameter. The candidate incorrectly claims a 'set' operation on 'return' index 0, but the return type is int, not a pointer to hl_mmap_mem_buf. Thus the extraction is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "buf.refcount.refcount.refs",
+          "hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function allocate_timestamps_buffers is a simple wrapper around hl_mmap_mem_buf_alloc, which sets the refcount on the allocated buffer. The critical variable (buf) is passed to the caller via the output parameter *handle (index 2), not via the int return value. This is analogous to the mlx5dr_definer_get example where the critical variable was passed via a parameter and the candidate was accepted. The extraction is correct despite the return type being int, because the object flows to the caller through a parameter."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "buf.refcount.refcount.refs",
+        "hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Allocation failure (ENOMEM) is the only failure mode; the refcount operation never fails because it only occurs on successful allocation. Caller typically propagates the error and does not retry.",
+    "contract_summary": "Set-wrapper: allocates a new timestamp buffer object with an initial reference count of 1. The object is returned to the caller via the output parameter *handle. Caller must eventually release the reference by calling the appropriate put/destroy function (e.g., hl_mmap_mem_buf_put or equivalent). Input validation ensures num_of_elements does not exceed TS_MAX_ELEMENTS_NUM. On error, returns -EINVAL or -ENOMEM; no partial allocation or resource leak occurs."
+  }
+}

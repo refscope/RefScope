@@ -1,0 +1,58 @@
+{
+  "function_name": "calipso_req_setattr",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "txopt_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opt.refcnt.refs",
+      "member_type_chain": "ipv6_txoptions--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "txopt_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opt.refcnt.refs",
+      "member_type_chain": "ipv6_txoptions--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation or option insertion errors, which are not transient from a refcount perspective.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to set/update CALIPSO hop-by-hop options on a request socket, involving option insertion and replacement. The refcount operations (txopt_put) are incidental internal management, not the function's main objective.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation or option insertion errors, which are not transient from a refcount perspective.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation or option insertion errors, which are not transient from a refcount perspective.",
+    "contract_summary": ""
+  }
+}

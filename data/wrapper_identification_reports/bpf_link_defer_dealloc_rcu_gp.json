@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_link_defer_dealloc_rcu_gp",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "link.prog.aux.refcnt",
+      "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_link_dealloc",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "link.prog.aux.refcnt",
+      "member_type_chain": "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_link_dealloc",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "link.prog.aux.refcnt",
+      "member_type_chain": "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable: this is a put operation that always executes successfully and does not require retry.",
+  "contract_summary": "This is an RCU-delayed put wrapper: after an RCU grace period, it releases a reference on the bpf_link by calling bpf_link_dealloc, which decrements the program object's reference count (link->prog->aux->refcnt). The caller must ensure that the bpf_link is no longer in use after scheduling this callback, as the put is irrevocable and final. No ownership is transferred; the function is a pure lifecycle termination step. There is no return value to check, and the operation always succeeds unconditionally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is a trivial RCU callback wrapper that solely calls bpf_link_dealloc, which is a put operation on the bpf_link's program reference count. Its entire purpose is to defer the release to RCU grace period, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable: this is a put operation that always executes successfully and does not require retry.",
+      "contract_summary": "This is an RCU-delayed put wrapper: after an RCU grace period, it releases a reference on the bpf_link by calling bpf_link_dealloc, which decrements the program object's reference count (link->prog->aux->refcnt). The caller must ensure that the bpf_link is no longer in use after scheduling this callback, as the put is irrevocable and final. No ownership is transferred; the function is a pure lifecycle termination step. There is no return value to check, and the operation always succeeds unconditionally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.prog.aux.refcnt",
+          "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.prog.aux.refcnt",
+          "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The function passes the link (parameter 1) to bpf_link_dealloc, which is a put function on link->prog->aux->refcnt. The access path and type chain are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "link.prog.aux.refcnt",
+        "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable: this is a put operation that always executes successfully and does not require retry.",
+    "contract_summary": "This is an RCU-delayed put wrapper: after an RCU grace period, it releases a reference on the bpf_link by calling bpf_link_dealloc, which decrements the program object's reference count (link->prog->aux->refcnt). The caller must ensure that the bpf_link is no longer in use after scheduling this callback, as the put is irrevocable and final. No ownership is transferred; the function is a pure lifecycle termination step. There is no return value to check, and the operation always succeeds unconditionally."
+  }
+}

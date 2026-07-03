@@ -1,0 +1,122 @@
+{
+  "function_name": "__icm_tr_device_connected",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tb_switch_find_by_uuid",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_xdomain_find_by_route",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "xd.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_xdomain--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_switch_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sw.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_switch--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_xdomain_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "xd.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_xdomain--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_switch_find_by_route",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sw.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_switch--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tb_switch_find_by_uuid",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_xdomain_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "xd.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_xdomain--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_xdomain_find_by_route",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "xd.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_xdomain--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_switch_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sw.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_switch--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tb_switch_find_by_route",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sw.dev.kobj.kref.refcount",
+      "member_type_chain": "tb_switch--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — not a refcount wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of this function is processing an ICM device-connected event, including parsing flags, looking up and removing existing switches/XDomains, allocating and initializing a new switch, and adding it to the parent. The refcount operations (tb_switch_find_*, tb_switch_put, tb_xdomain_*) are incidental steps within this broader business logic, not the main purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — not a refcount wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — not a refcount wrapper.",
+    "contract_summary": ""
+  }
+}

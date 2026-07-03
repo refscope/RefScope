@@ -1,0 +1,40 @@
+{
+  "function_name": "amdgpu_vcn_early_init",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no retry semantics applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is firmware loading/assignment for VCN instances, not reference-count management. The function initializes per-instance firmware pointers and uses amdgpu_ucode_request/release as helpers, but the main logic is about sharing or loading firmware, not about acquiring/releasing a reference for the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no retry semantics applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 0,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no retry semantics applicable.",
+    "contract_summary": ""
+  }
+}

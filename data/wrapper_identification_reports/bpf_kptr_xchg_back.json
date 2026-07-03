@@ -1,0 +1,70 @@
+{
+  "function_name": "bpf_kptr_xchg_back",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_obj_drop",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kptr.refcount.refs",
+      "member_type_chain": "unknown--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_obj_drop",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kptr.refcount.refs",
+      "member_type_chain": "unknown--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is a put on the old pointer; if the old pointer is non-NULL, dropping is always safe; retry would imply double-put risk and is not needed.",
+  "contract_summary": "This function replaces the kptr stored in a BPF map value with a new pointer, dropping a reference on the old kptr if one was present. It does not transfer ownership to the caller; rather, the caller transfers ownership of the new pointer to the map and the old pointer's reference is released. Callers must ensure the new pointer already has an appropriately managed reference (typically acquired via bpf_obj_new or similar) and must not use the new pointer after the call unless they retain an additional reference. The function is a safe helper for updating kptr map entries, combining the exchange and the necessary put on the replaced object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "The function's sole purpose is to exchange a kptr in a map value and drop the reference on the old kptr. It consists of only the exchange call and conditional drop, making it a focused reference-count management wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is a put on the old pointer; if the old pointer is non-NULL, dropping is always safe; retry would imply double-put risk and is not needed.",
+      "contract_summary": "This function replaces the kptr stored in a BPF map value with a new pointer, dropping a reference on the old kptr if one was present. It does not transfer ownership to the caller; rather, the caller transfers ownership of the new pointer to the map and the old pointer's reference is released. Callers must ensure the new pointer already has an appropriately managed reference (typically acquired via bpf_obj_new or similar) and must not use the new pointer after the call unless they retain an additional reference. The function is a safe helper for updating kptr map entries, combining the exchange and the necessary put on the replaced object."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "bpf_kptr_xchg"
+      ],
+      "reason": "Need implementation of bpf_kptr_xchg to understand how the returned pointer (ret) relates to the function's parameters and to determine the critical variable at the function interface. Currently, the put operation bpf_obj_drop is called on a local variable, which does not correspond to any parameter or return value of bpf_kptr_xchg_back."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No reference-count operations are directly on the function's interface (parameters or return). The internal put via bpf_obj_drop operates on a local variable, not on any interface variable."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is a put on the old pointer; if the old pointer is non-NULL, dropping is always safe; retry would imply double-put risk and is not needed.",
+    "contract_summary": "This function replaces the kptr stored in a BPF map value with a new pointer, dropping a reference on the old kptr if one was present. It does not transfer ownership to the caller; rather, the caller transfers ownership of the new pointer to the map and the old pointer's reference is released. Callers must ensure the new pointer already has an appropriately managed reference (typically acquired via bpf_obj_new or similar) and must not use the new pointer after the call unless they retain an additional reference. The function is a safe helper for updating kptr map entries, combining the exchange and the necessary put on the replaced object."
+  }
+}

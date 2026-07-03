@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_task_from_pid",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "p.rcu_users.refs",
+      "task_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_task_acquire",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_task_acquire",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the task does not exist in the init_pid_ns at this moment; retrying immediately is pointless as the PID is unlikely to become valid instantly.",
+  "contract_summary": "Get-wrapper that looks up a task_struct by PID in the init_pid_ns and acquires a reference (increments rcu_users) if found. The caller receives a pointer with an elevated refcount and MUST later release it via bpf_task_release or equivalent put function. Returns NULL if no task matches the PID. The RCU read lock is held internally, so the caller does not need additional RCU protection. The return value must be checked before use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a task by PID and acquire a reference (get) on it via bpf_task_acquire. The only additional logic is the RCU lock/unlock and NULL check, which are necessary for safe lookup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the task does not exist in the init_pid_ns at this moment; retrying immediately is pointless as the PID is unlikely to become valid instantly.",
+      "contract_summary": "Get-wrapper that looks up a task_struct by PID in the init_pid_ns and acquires a reference (increments rcu_users) if found. The caller receives a pointer with an elevated refcount and MUST later release it via bpf_task_release or equivalent put function. Returns NULL if no task matches the PID. The RCU read lock is held internally, so the caller does not need additional RCU protection. The return value must be checked before use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "bpf_task_acquire is called on the found task and its result is returned; the access path from return value p to refcount field rcu_users.refs is correct per callee info and code. Path segments (3) match type chain segments (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "p.rcu_users.refs",
+        "task_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the task does not exist in the init_pid_ns at this moment; retrying immediately is pointless as the PID is unlikely to become valid instantly.",
+    "contract_summary": "Get-wrapper that looks up a task_struct by PID in the init_pid_ns and acquires a reference (increments rcu_users) if found. The caller receives a pointer with an elevated refcount and MUST later release it via bpf_task_release or equivalent put function. Returns NULL if no task matches the PID. The RCU read lock is held internally, so the caller does not need additional RCU protection. The return value must be checked before use."
+  }
+}

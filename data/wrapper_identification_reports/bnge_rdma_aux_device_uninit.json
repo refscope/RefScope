@@ -1,0 +1,99 @@
+{
+  "function_name": "bnge_rdma_aux_device_uninit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bd.aux_priv.aux_dev.dev.kobj.kref.refcount",
+      "bnge_dev--bnge_auxr_priv--auxiliary_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "auxiliary_device_uninit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "auxdev.dev.kobj.kref.refcount",
+      "member_type_chain": "auxiliary_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "auxiliary_device_uninit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "auxdev.dev.kobj.kref.refcount",
+      "member_type_chain": "auxiliary_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The uninit operation decrements the refcount; retrying would cause a double-put (use-after-free).",
+  "contract_summary": "This is a put wrapper that releases the auxiliary device's reference count. It should only be called after successful auxiliary device initialization (aux_priv non-NULL). After this call, the auxiliary device must not be used again. The caller's obligation is to ensure that this is the last operation on the device and that no further references exist.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls auxiliary_device_uninit (a put operation) on the auxiliary device, guarded by a null check. There is no other logic; it is purely a release wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The uninit operation decrements the refcount; retrying would cause a double-put (use-after-free).",
+      "contract_summary": "This is a put wrapper that releases the auxiliary device's reference count. It should only be called after successful auxiliary device initialization (aux_priv non-NULL). After this call, the auxiliary device must not be used again. The caller's obligation is to ensure that this is the last operation on the device and that no further references exist."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bd.aux_priv.aux_dev.dev.kobj.kref.refcount",
+          "bnge_dev--bnge_auxr_priv--auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bd.aux_priv.aux_dev.dev.kobj.kref.refcount",
+          "bnge_dev--bnge_auxr_priv--auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The path bd.aux_priv.aux_dev.dev.kobj.kref.refcount correctly traces from the function parameter bd to the refcount field, matching the callee's path starting from auxiliary_device. The type chain is consistent with struct definitions. auxiliary_device_uninit is a put function, and the operation is the only refcount operation in the function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bd.aux_priv.aux_dev.dev.kobj.kref.refcount",
+        "bnge_dev--bnge_auxr_priv--auxiliary_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The uninit operation decrements the refcount; retrying would cause a double-put (use-after-free).",
+    "contract_summary": "This is a put wrapper that releases the auxiliary device's reference count. It should only be called after successful auxiliary device initialization (aux_priv non-NULL). After this call, the auxiliary device must not be used again. The caller's obligation is to ensure that this is the last operation on the device and that no further references exist."
+  }
+}

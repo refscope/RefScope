@@ -1,0 +1,99 @@
+{
+  "function_name": "bm_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "fc.s_fs_info.__ns.ns.__ns_ref.refs",
+      "fs_context--user_namespace--namespace--ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_user_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "user_namespace--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_user_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "user_namespace--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_user_ns unconditionally decrements the refcount and does not return failure; if pointer is NULL it's a no-op. Retry is meaningless.",
+  "contract_summary": "This is a put wrapper that releases a reference on the user_namespace stored in fc->s_fs_info. The function checks if the pointer is non-NULL before calling put_user_ns to avoid a potential double-free. After calling bm_free, the caller must not access fc->s_fs_info as it may have been freed. This function is typically called during filesystem context cleanup (e.g., in a ->free callback). It does not transfer ownership; it reduces the reference count by one.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the user_namespace via put_user_ns; the NULL check is standard safety for put wrappers. No other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_user_ns unconditionally decrements the refcount and does not return failure; if pointer is NULL it's a no-op. Retry is meaningless.",
+      "contract_summary": "This is a put wrapper that releases a reference on the user_namespace stored in fc->s_fs_info. The function checks if the pointer is non-NULL before calling put_user_ns to avoid a potential double-free. After calling bm_free, the caller must not access fc->s_fs_info as it may have been freed. This function is typically called during filesystem context cleanup (e.g., in a ->free callback). It does not transfer ownership; it reduces the reference count by one."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fc.s_fs_info.__ns.ns.__ns_ref.refs",
+          "fs_context--user_namespace--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fc.s_fs_info.__ns.ns.__ns_ref.refs",
+          "fs_context--user_namespace--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation is consistent: bm_free calls put_user_ns on fc->s_fs_info (the critical variable), which is derived from parameter fc. The access path correctly extends the callee's path by prefixing fc.s_fs_info. The type chain matches, and segment counts are equal (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "fc.s_fs_info.__ns.ns.__ns_ref.refs",
+        "fs_context--user_namespace--namespace--ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_user_ns unconditionally decrements the refcount and does not return failure; if pointer is NULL it's a no-op. Retry is meaningless.",
+    "contract_summary": "This is a put wrapper that releases a reference on the user_namespace stored in fc->s_fs_info. The function checks if the pointer is non-NULL before calling put_user_ns to avoid a potential double-free. After calling bm_free, the caller must not access fc->s_fs_info as it may have been freed. This function is typically called during filesystem context cleanup (e.g., in a ->free callback). It does not transfer ownership; it reduces the reference count by one."
+  }
+}

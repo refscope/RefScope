@@ -1,0 +1,58 @@
+{
+  "function_name": "__bfq_bfqd_reset_in_service",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is not a wrapper; the put operation is conditional and retrying would be meaningless in the context of cleanup.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is resetting the in-service state (clearing flags, canceling timer, nullifying pointers, and conditionally releasing a reference). The reference-count operation (bfq_put_queue) is just one part of broader cleanup logic, not the main focus.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is not a wrapper; the put operation is conditional and retrying would be meaningless in the context of cleanup.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is not a wrapper; the put operation is conditional and retrying would be meaningless in the context of cleanup.",
+    "contract_summary": ""
+  }
+}

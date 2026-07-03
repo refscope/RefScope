@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_get_ns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ns.unconfined.label.count.count.refcount",
+      "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If ns is NULL, the function returns NULL; if ns is non-NULL, aa_get_profile always succeeds. No failure condition to retry.",
+  "contract_summary": "Acquires a reference on the namespace `ns` by incrementing the reference count of its `unconfined` profile. Returns the namespace pointer with an additional reference, or NULL if the input is NULL. Caller must pair with a corresponding put (e.g., `aa_put_ns`) to release the reference. The namespace's lifetime is tied to the unconfined profile's refcount. This is a standard get operation for reference-counted objects; no special locking or RCU protection is required beyond the refcount semantics.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference on the namespace by incrementing the refcount of its unconfined profile. It contains only a NULL check and a refcount increment call, with no other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If ns is NULL, the function returns NULL; if ns is non-NULL, aa_get_profile always succeeds. No failure condition to retry.",
+      "contract_summary": "Acquires a reference on the namespace `ns` by incrementing the reference count of its `unconfined` profile. Returns the namespace pointer with an additional reference, or NULL if the input is NULL. Caller must pair with a corresponding put (e.g., `aa_put_ns`) to release the reference. The namespace's lifetime is tied to the unconfined profile's refcount. This is a standard get operation for reference-counted objects; no special locking or RCU protection is required beyond the refcount semantics."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.unconfined.label.count.count.refcount",
+          "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.unconfined.label.count.count.refcount",
+          "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls aa_get_profile(ns->unconfined) when ns is non-NULL, which increments the refcount on the unconfined profile of the namespace. The critical variable is the returned ns pointer (location 'return', index 0). The access path starts from ns, through .unconfined to the profile, then follows the callee's path .label.count.count.refcount. The type chain matches the callee info and segment counts are equal (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ns.unconfined.label.count.count.refcount",
+        "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If ns is NULL, the function returns NULL; if ns is non-NULL, aa_get_profile always succeeds. No failure condition to retry.",
+    "contract_summary": "Acquires a reference on the namespace `ns` by incrementing the reference count of its `unconfined` profile. Returns the namespace pointer with an additional reference, or NULL if the input is NULL. Caller must pair with a corresponding put (e.g., `aa_put_ns`) to release the reference. The namespace's lifetime is tied to the unconfined profile's refcount. This is a standard get operation for reference-counted objects; no special locking or RCU protection is required beyond the refcount semantics."
+  }
+}

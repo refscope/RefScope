@@ -1,0 +1,99 @@
+{
+  "function_name": "__devm_reset_control_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "rstc.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "reset_control_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rstc.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "reset_control_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rstc.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure can be transient (e.g., -EPROBE_DEFER, -ENOMEM); caller should retry the entire operation later.",
+  "contract_summary": "This is a device-managed get wrapper for reset controls. It obtains a reference to a reset control via __reset_control_get and registers a devres release handler to automatically release the reference when the device is detached (or via devm_reset_control_release). If RESET_CONTROL_FLAGS_BIT_DEASSERTED is set, it additionally deasserts the reset line immediately after acquisition. The caller receives a pointer to the reset control structure; the caller must not call reset_control_put directly (the devres handles it). The caller should check for errors using IS_ERR. On failure, the function frees any allocated resources. If the failure is due to a transient condition (e.g., -EPROBE_DEFER, -ENOMEM), the caller should retry later.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a reset control reference (via __reset_control_get) and register automatic release through devres. The only non-refcount logic is devres allocation and optional deassert; it's a managed get-wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure can be transient (e.g., -EPROBE_DEFER, -ENOMEM); caller should retry the entire operation later.",
+      "contract_summary": "This is a device-managed get wrapper for reset controls. It obtains a reference to a reset control via __reset_control_get and registers a devres release handler to automatically release the reference when the device is detached (or via devm_reset_control_release). If RESET_CONTROL_FLAGS_BIT_DEASSERTED is set, it additionally deasserts the reset line immediately after acquisition. The caller receives a pointer to the reset control structure; the caller must not call reset_control_put directly (the devres handles it). The caller should check for errors using IS_ERR. On failure, the function frees any allocated resources. If the failure is due to a transient condition (e.g., -EPROBE_DEFER, -ENOMEM), the caller should retry later."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rstc.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rstc.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls __reset_control_get, which acquires a reference on the returned rstc. The return value is rstc, and the access path rstc.refcnt.refcount and type chain reset_control--kref--refcount_t match the callee information. The segment counts are equal (3 each), confirming the path is complete."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "rstc.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure can be transient (e.g., -EPROBE_DEFER, -ENOMEM); caller should retry the entire operation later.",
+    "contract_summary": "This is a device-managed get wrapper for reset controls. It obtains a reference to a reset control via __reset_control_get and registers a devres release handler to automatically release the reference when the device is detached (or via devm_reset_control_release). If RESET_CONTROL_FLAGS_BIT_DEASSERTED is set, it additionally deasserts the reset line immediately after acquisition. The caller receives a pointer to the reset control structure; the caller must not call reset_control_put directly (the devres handles it). The caller should check for errors using IS_ERR. On failure, the function frees any allocated resources. If the failure is due to a transient condition (e.g., -EPROBE_DEFER, -ENOMEM), the caller should retry later."
+  }
+}

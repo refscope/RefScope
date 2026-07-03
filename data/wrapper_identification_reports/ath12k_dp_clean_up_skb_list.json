@@ -1,0 +1,82 @@
+{
+  "function_name": "ath12k_dp_clean_up_skb_list",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dev_kfree_skb_any is a reference decrement that always succeeds; retrying on failure is not applicable.",
+  "contract_summary": "This is a bulk-release (put) wrapper that consumes all skbs from the given sk_buff_head list by calling dev_kfree_skb_any on each. After this call, the list is empty and the caller must not reference any previously enqueued skbs. The function unconditionally decrements the refcount of each skb; if a skb's refcount reaches zero, it is freed. There is no return value, so the caller does not need to check for success. This function is typically used in error paths or cleanup routines to release a batch of skbs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release (put) a reference on each skb in the list via dev_kfree_skb_any. The dequeue loop is mere iteration to process all skbs; no other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dev_kfree_skb_any is a reference decrement that always succeeds; retrying on failure is not applicable.",
+      "contract_summary": "This is a bulk-release (put) wrapper that consumes all skbs from the given sk_buff_head list by calling dev_kfree_skb_any on each. After this call, the list is empty and the caller must not reference any previously enqueued skbs. The function unconditionally decrements the refcount of each skb; if a skb's refcount reaches zero, it is freed. There is no return value, so the caller does not need to check for success. This function is typically used in error paths or cleanup routines to release a batch of skbs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb_list.next.users.refs",
+          "sk_buff_head--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable for the refcount operation is the skb dequeued by __skb_dequeue, not the parameter skb_list. The candidate incorrectly uses parameter 1 (skb_list) as the starting point, but skb is a local variable and not a function parameter or return value. Additionally, the access path 'skb_list.next.users.refs' misrepresents the actual refcount location. No valid extraction is possible because the refcount operation does not directly involve a function interface variable (parameter or return)."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function performs dev_kfree_skb_any on skbs dequeued from the list, but the refcount operation is on a local variable skb, which is neither a function parameter nor a return value. The critical variable does not flow through the function interface, so this is not a reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dev_kfree_skb_any is a reference decrement that always succeeds; retrying on failure is not applicable.",
+    "contract_summary": "This is a bulk-release (put) wrapper that consumes all skbs from the given sk_buff_head list by calling dev_kfree_skb_any on each. After this call, the list is empty and the caller must not reference any previously enqueued skbs. The function unconditionally decrements the refcount of each skb; if a skb's refcount reaches zero, it is freed. There is no return value, so the caller does not need to check for success. This function is typically used in error paths or cleanup routines to release a batch of skbs."
+  }
+}

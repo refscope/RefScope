@@ -1,0 +1,99 @@
+{
+  "function_name": "__dpll_pin_unregister",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dpll.refcount.refs",
+      "dpll_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dpll_xa_ref_dpll_del",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "dpll.refcount.refs",
+      "member_type_chain": "dpll_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dpll_xa_ref_dpll_del",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "dpll.refcount.refs",
+      "member_type_chain": "dpll_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and assumes the pin is registered; any failure indicates a programming bug (e.g., double unregister) that cannot be fixed by retrying.",
+  "contract_summary": "This function performs the unregister/unreference of a dpll_pin from a dpll_device. It removes the pin's reference from the dpll's pin list and removes the dpll's reference from the pin's dpll list, thereby decrementing the refcount of the dpll_device. If the pin has no more dpll references, it clears the registered mark. This is a put-wrapper: it releases the association between pin and dpll. The caller must ensure the pin is currently registered with the dpll; after calling, the pin should no longer be considered associated with that dpll. There is no return value; the operation is unconditional and irreversible. The caller must not use the pin/dpll references after this call in the context of this association, but the pin object itself is not freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references between a dpll_pin and dpll_device by deleting entries from XArrays and decrementing refcounts (via dpll_xa_ref_dpll_del). The only non-refcount logic is a registration assertion and a conditional mark clear.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and assumes the pin is registered; any failure indicates a programming bug (e.g., double unregister) that cannot be fixed by retrying.",
+      "contract_summary": "This function performs the unregister/unreference of a dpll_pin from a dpll_device. It removes the pin's reference from the dpll's pin list and removes the dpll's reference from the pin's dpll list, thereby decrementing the refcount of the dpll_device. If the pin has no more dpll references, it clears the registered mark. This is a put-wrapper: it releases the association between pin and dpll. The caller must ensure the pin is currently registered with the dpll; after calling, the pin should no longer be considered associated with that dpll. There is no return value; the operation is unconditional and irreversible. The caller must not use the pin/dpll references after this call in the context of this association, but the pin object itself is not freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dpll.refcount.refs",
+          "dpll_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dpll.refcount.refs",
+          "dpll_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dpll_xa_ref_dpll_del is called with dpll as a parameter; the callee information confirms it performs a put (refcount decrement) on the dpll device's refcount.refs field. The access path dpll.refcount.refs and type chain dpll_device--refcount_t--atomic_t are consistent with the code and callee definition."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dpll.refcount.refs",
+        "dpll_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and assumes the pin is registered; any failure indicates a programming bug (e.g., double unregister) that cannot be fixed by retrying.",
+    "contract_summary": "This function performs the unregister/unreference of a dpll_pin from a dpll_device. It removes the pin's reference from the dpll's pin list and removes the dpll's reference from the pin's dpll list, thereby decrementing the refcount of the dpll_device. If the pin has no more dpll references, it clears the registered mark. This is a put-wrapper: it releases the association between pin and dpll. The caller must ensure the pin is currently registered with the dpll; after calling, the pin should no longer be considered associated with that dpll. There is no return value; the operation is unconditional and irreversible. The caller must not use the pin/dpll references after this call in the context of this association, but the pin object itself is not freed."
+  }
+}

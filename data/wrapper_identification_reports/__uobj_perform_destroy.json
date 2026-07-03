@@ -1,0 +1,121 @@
+{
+  "function_name": "__uobj_perform_destroy",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "uobj_put_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uobj_put_destroy",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "uobj_put_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "uobj_put_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "uobj_put_destroy",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    },
+    {
+      "callee_function_name": "uobj_put_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobj.usecnt",
+      "member_type_chain": "ib_uobject--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the object ID does not exist or is already destroyed; retrying with the same ID will not succeed.",
+  "contract_summary": "Destroys a uverbs object identified by `id`. Internally acquires a reference via `__uobj_get_destroy` (which may fail if the object does not exist) and then releases it via `uobj_put_destroy` to complete destruction. The caller must check the return value: 0 on success, negative error on failure. After a successful return, the object is destroyed and must not be accessed. This function does not transfer any reference to the caller; it manages all refcount operations internally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to destroy a uobj by ID: get a reference for destruction, then release it. The entire function is a single refcount-managed destroy sequence with no unrelated logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the object ID does not exist or is already destroyed; retrying with the same ID will not succeed.",
+      "contract_summary": "Destroys a uverbs object identified by `id`. Internally acquires a reference via `__uobj_get_destroy` (which may fail if the object does not exist) and then releases it via `uobj_put_destroy` to complete destruction. The caller must check the return value: 0 on success, negative error on failure. After a successful return, the object is destroyed and must not be accessed. This function does not transfer any reference to the caller; it manages all refcount operations internally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "uobj",
+          "uobj.ref.refcount",
+          "ib_uobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "uobj",
+          "uobj.usecnt",
+          "ib_uobject--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The location 'global' with index 'uobj' is incorrect: 'uobj' is a local variable, not a global. The operations should be referenced relative to the function interface (parameter/return) or the callee's parameter indices. Since the critical variable is not at the function boundary, the provided location/index is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function performs a destroy operation on a local uobj obtained from the id parameter, but the reference-counted object (uobj) does not cross the function boundary as a parameter or return value. Thus, the candidate operations cannot be properly referenced relative to the interface, and the function cannot be classified as a wrapper in this analysis."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the object ID does not exist or is already destroyed; retrying with the same ID will not succeed.",
+    "contract_summary": "Destroys a uverbs object identified by `id`. Internally acquires a reference via `__uobj_get_destroy` (which may fail if the object does not exist) and then releases it via `uobj_put_destroy` to complete destruction. The caller must check the return value: 0 on success, negative error on failure. After a successful return, the object is destroyed and must not be accessed. This function does not transfer any reference to the caller; it manages all refcount operations internally."
+  }
+}

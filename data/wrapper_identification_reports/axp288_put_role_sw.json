@@ -1,0 +1,99 @@
+{
+  "function_name": "axp288_put_role_sw",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.role_sw.dev.kobj.kref.refcount",
+      "axp288_extcon_info--usb_role_switch--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_role_switch_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sw.dev.kobj.kref.refcount",
+      "member_type_chain": "usb_role_switch--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_role_switch_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sw.dev.kobj.kref.refcount",
+      "member_type_chain": "usb_role_switch--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "usb_role_switch_put unconditionally decrements the refcount; a put operation cannot fail (must not be retried). cancel_work_sync is a one-time cleanup step.",
+  "contract_summary": "This is a release wrapper intended for use with device-managed resource (devm) frameworks. It cancels any pending role work and drops a reference on the usb_role_switch object. It is typically called automatically during driver unbind or device removal. The caller (via devm) must not call this function directly after registration; the refcount operation ensures the underlying object is released when all references are gone.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the usb_role_switch reference via usb_role_switch_put and cancel the associated work item. The refcount operation is the core lifecycle action, with minor non-refcount cleanup (cancel_work_sync) that is tightly coupled to resource teardown.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "usb_role_switch_put unconditionally decrements the refcount; a put operation cannot fail (must not be retried). cancel_work_sync is a one-time cleanup step.",
+      "contract_summary": "This is a release wrapper intended for use with device-managed resource (devm) frameworks. It cancels any pending role work and drops a reference on the usb_role_switch object. It is typically called automatically during driver unbind or device removal. The caller (via devm) must not call this function directly after registration; the refcount operation ensures the underlying object is released when all references are gone."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.role_sw.dev.kobj.kref.refcount",
+          "axp288_extcon_info--usb_role_switch--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.role_sw.dev.kobj.kref.refcount",
+          "axp288_extcon_info--usb_role_switch--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls usb_role_switch_put on info->role_sw, with data being the function parameter and role_sw its member. The access path data.role_sw.dev.kobj.kref.refcount traces from the parameter through the struct hierarchy to the refcount field, matching the callee's specification. The type chain axp288_extcon_info--usb_role_switch--device--kobject--kref--refcount_t has 6 types matching the 6 segments in the path, and all field accesses are valid per the structure definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.role_sw.dev.kobj.kref.refcount",
+        "axp288_extcon_info--usb_role_switch--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "usb_role_switch_put unconditionally decrements the refcount; a put operation cannot fail (must not be retried). cancel_work_sync is a one-time cleanup step.",
+    "contract_summary": "This is a release wrapper intended for use with device-managed resource (devm) frameworks. It cancels any pending role work and drops a reference on the usb_role_switch object. It is typically called automatically during driver unbind or device removal. The caller (via devm) must not call this function directly after registration; the refcount operation ensures the underlying object is released when all references are gone."
+  }
+}

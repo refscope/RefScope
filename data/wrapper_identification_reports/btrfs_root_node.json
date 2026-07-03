@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_root_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "eb.refs.refs",
+      "extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": false,
+  "retry_on_failure": true,
+  "retry_reason": "The refcount may be zero due to concurrent COW freeing the root node; retrying after synchronize_rcu() allows the new root node to be published and the get to succeed.",
+  "contract_summary": "This get-wrapper acquires a reference on the btrfs root node's extent buffer (root->node) under RCU protection. It retries if the refcount is zero, ensuring a valid reference is eventually returned. The caller receives a pointer to the extent buffer with an elevated refcount and must later release it via free_extent_buffer(). The function never returns NULL; it guarantees a successful reference acquisition.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the btrfs root node's extent buffer via refcount_inc_not_zero, with RCU protection and retry until success. The function is exclusively focused on refcount management, with no other significant logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": false,
+      "retry_on_failure": true,
+      "retry_reason": "The refcount may be zero due to concurrent COW freeing the root node; retrying after synchronize_rcu() allows the new root node to be published and the get to succeed.",
+      "contract_summary": "This get-wrapper acquires a reference on the btrfs root node's extent buffer (root->node) under RCU protection. It retries if the refcount is zero, ensuring a valid reference is eventually returned. The caller receives a pointer to the extent buffer with an elevated refcount and must later release it via free_extent_buffer(). The function never returns NULL; it guarantees a successful reference acquisition."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns 'eb' (the root node) after incrementing its refcount using refcount_inc_not_zero(&eb->refs). 'eb' is the critical variable passed to the callee and is also the return value. The access path 'eb.refs.refs' correctly traces from 'eb' through the 'refs' field (refcount_t) to the atomic counter, matching the type chain 'extent_buffer--refcount_t--atomic_t'. The segment counts are consistent: 3 segments and 3 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "eb.refs.refs",
+        "extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": false,
+    "retry_on_failure": true,
+    "retry_reason": "The refcount may be zero due to concurrent COW freeing the root node; retrying after synchronize_rcu() allows the new root node to be published and the get to succeed.",
+    "contract_summary": "This get-wrapper acquires a reference on the btrfs root node's extent buffer (root->node) under RCU protection. It retries if the refcount is zero, ensuring a valid reference is eventually returned. The caller receives a pointer to the extent buffer with an elevated refcount and must later release it via free_extent_buffer(). The function never returns NULL; it guarantees a successful reference acquisition."
+  }
+}

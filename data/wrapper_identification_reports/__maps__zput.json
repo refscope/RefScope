@@ -1,0 +1,106 @@
+{
+  "function_name": "__maps__zput",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "(*map).refcnt.refs",
+      "maps--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "maps__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "maps.refcnt.refs",
+      "member_type_chain": "maps--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "maps__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "maps.refcnt.refs",
+      "member_type_chain": "maps--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations release ownership and are not retryable; a double-put or use-after-free would occur if retried.",
+  "contract_summary": "Put-wrapper that decrements the reference count on the maps object pointed to by *map and sets *map to NULL to prevent use-after-free. The caller must ensure *map is non-NULL before calling; after calling, the pointer is invalid and must not be dereferenced. This function is typically used in cleanup or error paths to safely release ownership.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference via maps__put and clear the pointer to NULL, a standard put-and-zero pattern with no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations release ownership and are not retryable; a double-put or use-after-free would occur if retried.",
+      "contract_summary": "Put-wrapper that decrements the reference count on the maps object pointed to by *map and sets *map to NULL to prevent use-after-free. The caller must ensure *map is non-NULL before calling; after calling, the pointer is invalid and must not be dereferenced. This function is typically used in cleanup or error paths to safely release ownership."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "map.refcnt.refs",
+          "maps--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'map.refcnt.refs' is invalid because map is a pointer to pointer (struct maps **) and does not have a refcnt field. The actual critical variable is the struct maps object obtained by dereferencing map, so the access path should start from the dereferenced object, not from 'map'. Therefore the candidate cannot be supported."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "(*map).refcnt.refs",
+          "maps--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a clear put wrapper following the 'zput' pattern: it calls maps__put on the dereferenced maps object and then nullifies the pointer. The candidate operation correctly identified a put on the refcount, but the access path 'map.refcnt.refs' was invalid because map is a double pointer (struct maps **). The actual refcount resides in the struct maps object obtained via *map, so the path is corrected to '(*map).refcnt.refs'. The function has high purity with no unrelated operations."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "(*map).refcnt.refs",
+        "maps--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations release ownership and are not retryable; a double-put or use-after-free would occur if retried.",
+    "contract_summary": "Put-wrapper that decrements the reference count on the maps object pointed to by *map and sets *map to NULL to prevent use-after-free. The caller must ensure *map is non-NULL before calling; after calling, the pointer is invalid and must not be dereferenced. This function is typically used in cleanup or error paths to safely release ownership."
+  }
+}

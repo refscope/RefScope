@@ -1,0 +1,106 @@
+{
+  "function_name": "__live_active_setup",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__live_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "active.ref.refcount",
+      "member_type_chain": "live_active--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "heap_fence_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "h.ref.refcount.refs",
+      "member_type_chain": "heap_fence--heap_fence_ref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "__live_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "active.ref.refcount.refs",
+      "member_type_chain": "live_active--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "heap_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.container.ref.refcount",
+      "member_type_chain": "i915_sw_fence--heap_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__live_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "active.ref.refcount",
+      "member_type_chain": "live_active--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "heap_fence_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "h.ref.refcount.refs",
+      "member_type_chain": "heap_fence--heap_fence_ref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "__live_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "active.ref.refcount.refs",
+      "member_type_chain": "live_active--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "heap_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.container.ref.refcount",
+      "member_type_chain": "i915_sw_fence--heap_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper - retry semantics are not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is test setup: it allocates a live_active object, creates kernel requests for each engine, awaits a submission fence, adds requests to the active tracker, and performs verification checks (retire status, count). The refcount operations (i915_active_acquire/release) are only one step in a larger workflow of request creation, fence synchronization, and validation. The function acts as a complex test helper rather than a focused get/put/set wrapper.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper - retry semantics are not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper - retry semantics are not applicable.",
+    "contract_summary": ""
+  }
+}

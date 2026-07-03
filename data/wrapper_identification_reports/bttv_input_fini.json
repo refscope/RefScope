@@ -1,0 +1,90 @@
+{
+  "function_name": "bttv_input_fini",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "THIS_MODULE",
+      "location": "global",
+      "member_access_path": "THIS_MODULE.refcnt",
+      "member_type_chain": "module--atomic_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.input_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--input_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "THIS_MODULE",
+      "location": "global",
+      "member_access_path": "THIS_MODULE.refcnt",
+      "member_type_chain": "module--atomic_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.input_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--input_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs multiple cleanup steps (unregister, stop, free device, free remote struct, NULL pointer) with the refcount put being just one step in a larger teardown sequence. Its primary purpose is finalization of the bttv input subsystem, not reference-count management.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

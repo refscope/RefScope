@@ -1,0 +1,70 @@
+{
+  "function_name": "__device_link_del",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pm_runtime_drop_link",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "link.rpm_active.refs",
+      "member_type_chain": "device_link--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pm_runtime_drop_link",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "link.rpm_active.refs",
+      "member_type_chain": "device_link--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put callback invoked only when the refcount hits zero; there is no failure path and retry would be a double-put use-after-free.",
+  "contract_summary": "This is the release callback for a device_link's kref. When the last reference is dropped via kref_put, this function is invoked to finalize the link: it drops the runtime PM reference, removes the link from kernel lists, and unregisters the link's device. After this call, the device_link object is freed and must not be accessed. Callers must not call kref_put again on the same kref.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release a device_link when its kref reaches zero; it performs cleanup (drop runtime PM ref, remove from lists, unregister device) directly tied to the reference-count lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put callback invoked only when the refcount hits zero; there is no failure path and retry would be a double-put use-after-free.",
+      "contract_summary": "This is the release callback for a device_link's kref. When the last reference is dropped via kref_put, this function is invoked to finalize the link: it drops the runtime PM reference, removes the link from kernel lists, and unregisters the link's device. After this call, the device_link object is freed and must not be accessed. Callers must not call kref_put again on the same kref."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "struct device_link"
+      ],
+      "reason": "Need the definition of struct device_link to confirm the relationship between parameter kref (struct kref) and the object link, specifically to see that kref is a field of device_link and to trace the path from kref to the rpm_active.refs field."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "The candidate ResultList is empty; no reference-count operations to validate. The function code contains a put operation via pm_runtime_drop_link but it was not extracted, and we do not add new operations."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put callback invoked only when the refcount hits zero; there is no failure path and retry would be a double-put use-after-free.",
+    "contract_summary": "This is the release callback for a device_link's kref. When the last reference is dropped via kref_put, this function is invoked to finalize the link: it drops the runtime PM reference, removes the link from kernel lists, and unregisters the link's device. After this call, the device_link object is freed and must not be accessed. Callers must not call kref_put again on the same kref."
+  }
+}

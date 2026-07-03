@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_lookup_ordered_extent",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "entry.refs.refs",
+      "btrfs_ordered_extent--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure (NULL) means the ordered extent is not currently present; it may be inserted later (e.g., after a concurrent write starts), so the caller can retry when the condition changes.",
+  "contract_summary": "This function looks up a btrfs_ordered_extent by file offset in the inode's ordered tree and acquires a reference on it via refcount_inc. It returns the ordered extent with an incremented refcount, or NULL if not found. The caller MUST check the return value and must call btrfs_put_ordered_extent to drop the reference when done. On a NULL return, the caller may retry later because the ordered extent may become available (e.g., after an ordered write begins). The function holds the ordered_tree_lock only during the lookup, ensuring safe access to the tree.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to look up a btrfs_ordered_extent by file offset and acquire a reference (refcount_inc) on it before returning. The only additional logic is the tree search, range check, and a tracepoint, all of which are directly subordinate to the lookup-and-ref operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure (NULL) means the ordered extent is not currently present; it may be inserted later (e.g., after a concurrent write starts), so the caller can retry when the condition changes.",
+      "contract_summary": "This function looks up a btrfs_ordered_extent by file offset in the inode's ordered tree and acquires a reference on it via refcount_inc. It returns the ordered extent with an incremented refcount, or NULL if not found. The caller MUST check the return value and must call btrfs_put_ordered_extent to drop the reference when done. On a NULL return, the caller may retry later because the ordered extent may become available (e.g., after an ordered write begins). The function holds the ordered_tree_lock only during the lookup, ensuring safe access to the tree."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry.refs.refs",
+          "btrfs_ordered_extent--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry.refs.refs",
+          "btrfs_ordered_extent--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc is called on &entry->refs, where entry is the returned pointer. The access path entry.refs.refs traces from the return value through struct btrfs_ordered_extent field refs (refcount_t) to its inner atomic_t field refs. The type chain btrfs_ordered_extent--refcount_t--atomic_t is consistent with kernel definitions. Both direction (get) and location (return, index 0) are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "entry.refs.refs",
+        "btrfs_ordered_extent--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure (NULL) means the ordered extent is not currently present; it may be inserted later (e.g., after a concurrent write starts), so the caller can retry when the condition changes.",
+    "contract_summary": "This function looks up a btrfs_ordered_extent by file offset in the inode's ordered tree and acquires a reference on it via refcount_inc. It returns the ordered extent with an incremented refcount, or NULL if not found. The caller MUST check the return value and must call btrfs_put_ordered_extent to drop the reference when done. On a NULL return, the caller may retry later because the ordered extent may become available (e.g., after an ordered write begins). The function holds the ordered_tree_lock only during the lookup, ensuring safe access to the tree."
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "function_name": "__llc_lookup_listener",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "rc.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure of refcount_inc_not_zero indicates the socket is being freed or destroyed; retrying on the same object is impossible. The function already retries internally once before returning NULL.",
+  "contract_summary": "This function performs an RCU-protected lookup of a listening socket in a SAP’s hash table and, if found and still alive, acquires a reference via refcount_inc_not_zero. On success, it returns the socket with an elevated refcount that the caller must later release via sock_put. On failure (NULL), no reference is held. The function safely handles SLAB_TYPESAFE_BY_RCU by retrying internally if the refcount increment fails due to concurrent teardown. The caller must not use the returned socket after calling sock_put, and must not assume the socket is still alive after releasing the RCU read lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference (via refcount_inc_not_zero) on a listener socket found via hash lookup. The lookup and match logic is minimal and necessary to locate the object; the core semantics are get-and-return with elevated refcount.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure of refcount_inc_not_zero indicates the socket is being freed or destroyed; retrying on the same object is impossible. The function already retries internally once before returning NULL.",
+      "contract_summary": "This function performs an RCU-protected lookup of a listening socket in a SAP’s hash table and, if found and still alive, acquires a reference via refcount_inc_not_zero. On success, it returns the socket with an elevated refcount that the caller must later release via sock_put. On failure (NULL), no reference is held. The function safely handles SLAB_TYPESAFE_BY_RCU by retrying internally if the refcount increment fails due to concurrent teardown. The caller must not use the returned socket after calling sock_put, and must not assume the socket is still alive after releasing the RCU read lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rc.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "rc.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rc.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The get operation via refcount_inc_not_zero is correctly placed on the return value (rc); the path and type chain match. The put operation occurs internally on a socket that is not returned, so it should not be associated with the return value; thus it is removed."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "rc.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure of refcount_inc_not_zero indicates the socket is being freed or destroyed; retrying on the same object is impossible. The function already retries internally once before returning NULL.",
+    "contract_summary": "This function performs an RCU-protected lookup of a listening socket in a SAP’s hash table and, if found and still alive, acquires a reference via refcount_inc_not_zero. On success, it returns the socket with an elevated refcount that the caller must later release via sock_put. On failure (NULL), no reference is held. The function safely handles SLAB_TYPESAFE_BY_RCU by retrying internally if the refcount increment fails due to concurrent teardown. The caller must not use the returned socket after calling sock_put, and must not assume the socket is still alive after releasing the RCU read lock."
+  }
+}

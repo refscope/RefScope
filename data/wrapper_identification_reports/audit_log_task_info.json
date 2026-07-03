@@ -1,0 +1,74 @@
+{
+  "function_name": "audit_log_task_info",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "audit_get_tty",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "audit_put_tty",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "audit_get_tty",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "audit_put_tty",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — the function is not a reference-count wrapper; the get/put is incidental and not the primary contract.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of audit_log_task_info is to log a comprehensive set of task-related information (PID, UIDs, GIDs, TTY, command, executable path, security context) into an audit buffer. The get/put calls on tty (audit_get_tty / audit_put_tty) are merely a small part of extracting the TTY name, not the central purpose. The function performs extensive formatting and logging, making it a business-logic function rather than a reference-count wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — the function is not a reference-count wrapper; the get/put is incidental and not the primary contract.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — the function is not a reference-count wrapper; the get/put is incidental and not the primary contract.",
+    "contract_summary": ""
+  }
+}

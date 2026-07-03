@@ -1,0 +1,99 @@
+{
+  "function_name": "__threads_table_entry__get_last_match",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "res.refcnt.refs",
+      "thread--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "thread__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "thread__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation (thread__get) only executes when conditions are satisfied; it never fails. When the function returns NULL, it indicates the condition was not met, not a failure of the refcount operation, so retrying the wrapper is not applicable and may be pointless if the state is unchanged.",
+  "contract_summary": "This function conditionally acquires a reference on the `last_match` thread from a `threads_table_entry`. It returns the referenced thread pointer if the cached entry is non-NULL and matches the given tid; otherwise returns NULL. The caller receives a thread with an elevated reference count and must pair this get with a corresponding `thread__put` to release the reference. The function does not transfer ownership of the table entry itself; it only provides a borrowed, referenced pointer for immediate use. The caller must check the return value for NULL before dereferencing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to safely retrieve and acquire a reference on the cached last_match thread, contingent on a non-NULL pointer and matching tid. Only minimal logic (pointer fetch, tid comparison) is added to the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation (thread__get) only executes when conditions are satisfied; it never fails. When the function returns NULL, it indicates the condition was not met, not a failure of the refcount operation, so retrying the wrapper is not applicable and may be pointless if the state is unchanged.",
+      "contract_summary": "This function conditionally acquires a reference on the `last_match` thread from a `threads_table_entry`. It returns the referenced thread pointer if the cached entry is non-NULL and matches the given tid; otherwise returns NULL. The caller receives a thread with an elevated reference count and must pair this get with a corresponding `thread__put` to release the reference. The function does not transfer ownership of the table entry itself; it only provides a borrowed, referenced pointer for immediate use. The caller must check the return value for NULL before dereferencing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "res.refcnt.refs",
+          "thread--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "res.refcnt.refs",
+          "thread--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The extracted operation correctly describes the refcount increment on the returned thread object via thread__get. The critical variable is the return value (res). The access path res.refcnt.refs (3 segments: res, refcnt, refs) matches the type chain thread--refcount_t--atomic_t (3 types). The callee information confirms the path result.refcnt.refs with the same type chain. The operation is consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "res.refcnt.refs",
+        "thread--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation (thread__get) only executes when conditions are satisfied; it never fails. When the function returns NULL, it indicates the condition was not met, not a failure of the refcount operation, so retrying the wrapper is not applicable and may be pointless if the state is unchanged.",
+    "contract_summary": "This function conditionally acquires a reference on the `last_match` thread from a `threads_table_entry`. It returns the referenced thread pointer if the cached entry is non-NULL and matches the given tid; otherwise returns NULL. The caller receives a thread with an elevated reference count and must pair this get with a corresponding `thread__put` to release the reference. The function does not transfer ownership of the table entry itself; it only provides a borrowed, referenced pointer for immediate use. The caller must check the return value for NULL before dereferencing."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_put_link",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "arg.ref.refs",
+      "afs_symlink--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "afs_put_symlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "symlink.ref.refs",
+      "member_type_chain": "afs_symlink--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "afs_put_symlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "symlink.ref.refs",
+      "member_type_chain": "afs_symlink--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "A put operation should never be retried; if the refcount was already zero, retrying would cause a double-put use-after-free.",
+  "contract_summary": "This put wrapper releases a reference on an afs_symlink object. It is the counterpart to a get operation. After calling this function, the caller must not access the passed object again. The function unconditionally decrements the refcount and will free the object if the count reaches zero. There is no return value, and no error handling is needed (the caller ensures the object is valid before calling). This is the typical release pattern for AFS symlink objects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is a trivial one-line wrapper that solely calls afs_put_symlink, which is a refcount decrement operation on an afs_symlink object. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "A put operation should never be retried; if the refcount was already zero, retrying would cause a double-put use-after-free.",
+      "contract_summary": "This put wrapper releases a reference on an afs_symlink object. It is the counterpart to a get operation. After calling this function, the caller must not access the passed object again. The function unconditionally decrements the refcount and will free the object if the count reaches zero. There is no return value, and no error handling is needed (the caller ensures the object is valid before calling). This is the typical release pattern for AFS symlink objects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "arg.ref.refs",
+          "afs_symlink--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "arg.ref.refs",
+          "afs_symlink--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The callee afs_put_symlink performs a put on its parameter's symlink.ref.refs field. In afs_put_link, arg is passed directly to afs_put_symlink, so the operation correctly starts from parameter 1 (arg) with path arg.ref.refs and type chain afs_symlink--refcount_t--atomic_t. Segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "arg.ref.refs",
+        "afs_symlink--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "A put operation should never be retried; if the refcount was already zero, retrying would cause a double-put use-after-free.",
+    "contract_summary": "This put wrapper releases a reference on an afs_symlink object. It is the counterpart to a get operation. After calling this function, the caller must not access the passed object again. The function unconditionally decrements the refcount and will free the object if the count reaches zero. There is no return value, and no error handling is needed (the caller ensures the object is valid before calling). This is the typical release pattern for AFS symlink objects."
+  }
+}

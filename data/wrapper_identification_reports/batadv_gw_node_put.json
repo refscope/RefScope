@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_gw_node_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "gw_node.refcount.refcount",
+      "batadv_gw_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put is unconditional when node is non-NULL; retrying would risk double-put and use-after-free.",
+  "contract_summary": "This is a put-wrapper for batadv_gw_node that releases a reference by calling kref_put. If the reference count reaches zero, the batadv_gw_node_release callback is invoked to free the object. The function safely handles NULL input (no-op). After calling this function, the caller must not access the gw_node object as it may have been freed. This function does not return any value and always succeeds when given a valid pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to batadv_gw_node via kref_put, with a NULL safety check. No other operations.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put is unconditional when node is non-NULL; retrying would risk double-put and use-after-free.",
+      "contract_summary": "This is a put-wrapper for batadv_gw_node that releases a reference by calling kref_put. If the reference count reaches zero, the batadv_gw_node_release callback is invoked to free the object. The function safely handles NULL input (no-op). After calling this function, the caller must not access the gw_node object as it may have been freed. This function does not return any value and always succeeds when given a valid pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "gw_node.refcount.refcount",
+          "batadv_gw_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "gw_node.refcount.refcount",
+          "batadv_gw_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function batadv_gw_node_put calls kref_put on &gw_node->refcount, which matches a put operation on parameter 1. The access path from parameter gw_node through its refcount field (kref) to the inner refcount_t field is correct, and the type chain batadv_gw_node--kref--refcount_t is consistent with struct definitions. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "gw_node.refcount.refcount",
+        "batadv_gw_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put is unconditional when node is non-NULL; retrying would risk double-put and use-after-free.",
+    "contract_summary": "This is a put-wrapper for batadv_gw_node that releases a reference by calling kref_put. If the reference count reaches zero, the batadv_gw_node_release callback is invoked to free the object. The function safely handles NULL input (no-op). After calling this function, the caller must not access the gw_node object as it may have been freed. This function does not return any value and always succeeds when given a valid pointer."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "__vsock_remove_bound",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operations are unconditional and always succeed; no failure path that would trigger a retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to remove a socket from the bound table (list_del_init) and subsequently drop its bound reference (sock_put). The refcount operation is one of two equally important steps, not the sole or primary purpose. The function is a cleanup helper for bound removal, not a reference-count wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operations are unconditional and always succeed; no failure path that would trigger a retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "medium",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operations are unconditional and always succeed; no failure path that would trigger a retry.",
+    "contract_summary": ""
+  }
+}

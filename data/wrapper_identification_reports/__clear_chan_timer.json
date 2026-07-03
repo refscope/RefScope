@@ -1,0 +1,99 @@
+{
+  "function_name": "__clear_chan_timer",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "c.kref.refcount",
+      "l2cap_chan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "l2cap_clear_timer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "chan.kref.refcount",
+      "member_type_chain": "l2cap_chan--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "l2cap_clear_timer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "chan.kref.refcount",
+      "member_type_chain": "l2cap_chan--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations always succeed; retrying would indicate a double-put bug.",
+  "contract_summary": "This macro is a thin wrapper around the internal put function l2cap_clear_timer, which releases a reference on an l2cap_chan (via its embedded kref). It is used to clear the chan_timer and drop the associated reference. The call is unconditional and returns void; the caller must ensure the channel pointer is valid. After the call, the reference count is decremented; if it becomes zero, the channel may be freed. The caller must not access the channel after this if the reference was the last, but the macro does not provide that information directly. This macro is typically used in timer cancellation contexts.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The macro directly calls l2cap_clear_timer, which the callee info identifies as a put function for the channel's kref. No other logic exists in the macro expansion.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations always succeed; retrying would indicate a double-put bug.",
+      "contract_summary": "This macro is a thin wrapper around the internal put function l2cap_clear_timer, which releases a reference on an l2cap_chan (via its embedded kref). It is used to clear the chan_timer and drop the associated reference. The call is unconditional and returns void; the caller must ensure the channel pointer is valid. After the call, the reference count is decremented; if it becomes zero, the channel may be freed. The caller must not access the channel after this if the reference was the last, but the macro does not provide that information directly. This macro is typically used in timer cancellation contexts."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "c.kref.refcount",
+          "l2cap_chan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "c.kref.refcount",
+          "l2cap_chan--kref--refcount_t"
+        ]
+      ],
+      "reason": "The macro __clear_chan_timer calls l2cap_clear_timer(c, ...) and callee info confirms l2cap_clear_timer is a put on its first parameter (c). The access path c.kref.refcount correctly traces from parameter 1 through struct l2cap_chan's kref to refcount_t. Type chain length matches access path segment count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "c.kref.refcount",
+        "l2cap_chan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations always succeed; retrying would indicate a double-put bug.",
+    "contract_summary": "This macro is a thin wrapper around the internal put function l2cap_clear_timer, which releases a reference on an l2cap_chan (via its embedded kref). It is used to clear the chan_timer and drop the associated reference. The call is unconditional and returns void; the caller must ensure the channel pointer is valid. After the call, the reference count is decremented; if it becomes zero, the channel may be freed. The caller must not access the channel after this if the reference was the last, but the macro does not provide that information directly. This macro is typically used in timer cancellation contexts."
+  }
+}

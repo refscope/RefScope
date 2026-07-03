@@ -1,0 +1,99 @@
+{
+  "function_name": "__devm_reset_control_bulk_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "3",
+      "rstcs[0].rstc.refcnt.refcount",
+      "reset_control_bulk_data--reset_control--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "reset_control_bulk_put",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "rstcs[0].rstc.refcnt.refcount",
+      "member_type_chain": "reset_control_bulk_data--reset_control--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "reset_control_bulk_put",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "rstcs[0].rstc.refcnt.refcount",
+      "member_type_chain": "reset_control_bulk_data--reset_control--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure from __reset_control_bulk_get indicates resource exhaustion or an already claimed reset control; retrying is unlikely to succeed without external change. Deassert failure leads to put and free, so retry is not applicable.",
+  "contract_summary": "Managed get-wrapper: acquires one or more reset controls for the given device, optionally deasserting them immediately. The acquired reset controls are registered with devres and will be automatically released (deasserted if needed, then put) when the device is removed or the driver unbinds. Caller must check the return value for errors; on success, the caller owns the reset controls through the devres lifecycle and must not call reset_control_put directly. The rstcs array is filled with references that the caller can use until the device is detached.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire reset control references (via __reset_control_bulk_get) and optionally deassert them, with automatic devres-based cleanup. The deassert logic adds non-trivial but still lifecycle-related logic beyond pure refcount management.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure from __reset_control_bulk_get indicates resource exhaustion or an already claimed reset control; retrying is unlikely to succeed without external change. Deassert failure leads to put and free, so retry is not applicable.",
+      "contract_summary": "Managed get-wrapper: acquires one or more reset controls for the given device, optionally deasserting them immediately. The acquired reset controls are registered with devres and will be automatically released (deasserted if needed, then put) when the device is removed or the driver unbinds. Caller must check the return value for errors; on success, the caller owns the reset controls through the devres lifecycle and must not call reset_control_put directly. The rstcs array is filled with references that the caller can use until the device is detached."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "rstcs[0].rstc.refcnt.refcount",
+          "reset_control_bulk_data--reset_control--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "rstcs[0].rstc.refcnt.refcount",
+          "reset_control_bulk_data--reset_control--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function acquires a reference on each reset control via __reset_control_bulk_get, which operates on the rstcs array passed as parameter 3. The access path from that parameter to the refcount field is consistent with the code structure and the callee's put path. The type chain and segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "3",
+        "rstcs[0].rstc.refcnt.refcount",
+        "reset_control_bulk_data--reset_control--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure from __reset_control_bulk_get indicates resource exhaustion or an already claimed reset control; retrying is unlikely to succeed without external change. Deassert failure leads to put and free, so retry is not applicable.",
+    "contract_summary": "Managed get-wrapper: acquires one or more reset controls for the given device, optionally deasserting them immediately. The acquired reset controls are registered with devres and will be automatically released (deasserted if needed, then put) when the device is removed or the driver unbinds. Caller must check the return value for errors; on success, the caller owns the reset controls through the devres lifecycle and must not call reset_control_put directly. The rstcs array is filled with references that the caller can use until the device is detached."
+  }
+}

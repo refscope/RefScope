@@ -1,0 +1,159 @@
+{
+  "function_name": "__tcf_block_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "block.refcnt.refs",
+      "tcf_block--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "block.refcnt.refs",
+      "tcf_block--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "tcf_block_refcnt_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "block.refcnt.refs",
+      "member_type_chain": "tcf_block--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "tcf_block_refcnt_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "block.refcnt.refs",
+      "member_type_chain": "tcf_block--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures stem from state conditions (block not found, shared block with wrong access method) that are unlikely to change on retry; the caller should handle the error rather than retrying.",
+  "contract_summary": "This function retrieves a tcf_block either by block index (if ifindex is magic) or from a Qdisc class, and acquires a reference on it. On the magic index path, it uses tcf_block_refcnt_get to obtain the block with a reference. On the Qdisc path, it obtains the block from the class ops and increments the refcount with refcount_inc. The caller must release the reference via a corresponding put (e.g., tcf_block_put) when done. Additionally, if the block is shared and accessed without the block index, the function returns an error (-EOPNOTSUPP). The function returns a pointer to the block with an acquired reference, or an ERR_PTR on failure.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The function's primary purpose is to acquire a reference on a tcf_block (via refcount_inc or tcf_block_refcnt_get) and return it. Validation logic (shared-block check) is included but does not overshadow the refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures stem from state conditions (block not found, shared block with wrong access method) that are unlikely to change on retry; the caller should handle the error rather than retrying.",
+      "contract_summary": "This function retrieves a tcf_block either by block index (if ifindex is magic) or from a Qdisc class, and acquires a reference on it. On the magic index path, it uses tcf_block_refcnt_get to obtain the block with a reference. On the Qdisc path, it obtains the block from the class ops and increments the refcount with refcount_inc. The caller must release the reference via a corresponding put (e.g., tcf_block_put) when done. Additionally, if the block is shared and accessed without the block index, the function returns an error (-EOPNOTSUPP). The function returns a pointer to the block with an acquired reference, or an ERR_PTR on failure."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "block.refcnt.refs",
+          "tcf_block--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "block.refcnt.refs",
+          "tcf_block--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "block.refcnt.refs",
+          "tcf_block--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "block.refcnt.refs",
+          "tcf_block--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function takes a reference on the returned block in both branches: via tcf_block_refcnt_get (which returns a referenced block) and via explicit refcount_inc. Both operations correspond to a 'get' on the block's refcount, with access path block.refcnt.refs and type chain tcf_block--refcount_t--atomic_t. The paths and type chains are consistent with the code and callee information, and the segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "block.refcnt.refs",
+        "tcf_block--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "block.refcnt.refs",
+        "tcf_block--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures stem from state conditions (block not found, shared block with wrong access method) that are unlikely to change on retry; the caller should handle the error rather than retrying.",
+    "contract_summary": "This function retrieves a tcf_block either by block index (if ifindex is magic) or from a Qdisc class, and acquires a reference on it. On the magic index path, it uses tcf_block_refcnt_get to obtain the block with a reference. On the Qdisc path, it obtains the block from the class ops and increments the refcount with refcount_inc. The caller must release the reference via a corresponding put (e.g., tcf_block_put) when done. Additionally, if the block is shared and accessed without the block index, the function returns an error (-EOPNOTSUPP). The function returns a pointer to the block with an acquired reference, or an ERR_PTR on failure."
+  }
+}

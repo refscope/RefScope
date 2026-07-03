@@ -1,0 +1,74 @@
+{
+  "function_name": "amdgpu_discovery_fini",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_discovery_sysfs_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.discovery.ip_top.kobj.kref.refcount",
+      "member_type_chain": "amdgpu_device--ip_discovery_top--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_discovery_sysfs_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.discovery.ip_top.die_kset.kobj.kref.refcount",
+      "member_type_chain": "amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_discovery_sysfs_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.discovery.ip_top.kobj.kref.refcount",
+      "member_type_chain": "amdgpu_device--ip_discovery_top--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_discovery_sysfs_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.discovery.ip_top.die_kset.kobj.kref.refcount",
+      "member_type_chain": "amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs a mix of operations: it calls a put helper (amdgpu_discovery_sysfs_fini) to release kobject references, then frees a buffer and sets a pointer to NULL. The primary purpose is comprehensive cleanup (finalization), not solely reference-count management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry is not applicable.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "function_name": "ath10k_ahb_rst_ctrl_init",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "core_cold_rst.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "radio_cold_rst.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "radio_warm_rst.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "radio_srif_rst.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "cpu_init_rst.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_reset_control_get_exclusive",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "res.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_reset_control_get_exclusive",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "res.refcnt.refcount",
+      "member_type_chain": "reset_control--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (e.g., -ENOENT) is typically due to missing device tree entries or hardware configuration, which is not transient; retrying would yield the same error.",
+  "contract_summary": "This function acquires exclusive reset controls (via devm_reset_control_get_exclusive) for various ath10k AHB hardware sub-blocks (core cold, radio cold, radio warm, radio srif, cpu init) and stores them in the driver's private `ar_ahb` structure. Each call obtains a reference to the reset controller; if any acquisition fails, the function returns an error and the caller must handle it (e.g., abort probe). The reset controls are devm-managed, so they are automatically released when the device is removed — the caller must NOT manually release them. The function does not transfer ownership of the critical variables (reset handles) to the caller via a return value; they are accessible through the driver context. Error paths are clean: previously acquired handles remain valid and will be freed by the devm framework on driver unbind.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire exclusive reset controls (reference-counted objects) for multiple hardware blocks and store them in the driver's private structure. The only logic beyond the get calls is error handling.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (e.g., -ENOENT) is typically due to missing device tree entries or hardware configuration, which is not transient; retrying would yield the same error.",
+      "contract_summary": "This function acquires exclusive reset controls (via devm_reset_control_get_exclusive) for various ath10k AHB hardware sub-blocks (core cold, radio cold, radio warm, radio srif, cpu init) and stores them in the driver's private `ar_ahb` structure. Each call obtains a reference to the reset controller; if any acquisition fails, the function returns an error and the caller must handle it (e.g., abort probe). The reset controls are devm-managed, so they are automatically released when the device is removed — the caller must NOT manually release them. The function does not transfer ownership of the critical variables (reset handles) to the caller via a return value; they are accessible through the driver context. Error paths are clean: previously acquired handles remain valid and will be freed by the devm framework on driver unbind."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "core_cold_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "radio_cold_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "radio_warm_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "radio_srif_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "cpu_init_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "core_cold_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "radio_cold_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "radio_warm_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "radio_srif_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "cpu_init_rst.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ]
+      ],
+      "reason": "Each call to devm_reset_control_get_exclusive returns a reset_control pointer with its refcount increased. The returned pointer is stored in the corresponding ar_ahb field and the access path from that field to the refcount (field->refcnt.refcount) matches the callee's internal path (res.refcnt.refcount). The type chain reset_control--kref--refcount_t is consistent for all operations. All candidate operations are correctly extracted."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "core_cold_rst.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "radio_cold_rst.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "radio_warm_rst.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "radio_srif_rst.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "cpu_init_rst.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (e.g., -ENOENT) is typically due to missing device tree entries or hardware configuration, which is not transient; retrying would yield the same error.",
+    "contract_summary": "This function acquires exclusive reset controls (via devm_reset_control_get_exclusive) for various ath10k AHB hardware sub-blocks (core cold, radio cold, radio warm, radio srif, cpu init) and stores them in the driver's private `ar_ahb` structure. Each call obtains a reference to the reset controller; if any acquisition fails, the function returns an error and the caller must handle it (e.g., abort probe). The reset controls are devm-managed, so they are automatically released when the device is removed — the caller must NOT manually release them. The function does not transfer ownership of the critical variables (reset handles) to the caller via a return value; they are accessible through the driver context. Error paths are clean: previously acquired handles remain valid and will be freed by the devm framework on driver unbind."
+  }
+}

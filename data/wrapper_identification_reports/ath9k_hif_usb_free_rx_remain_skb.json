@@ -1,0 +1,99 @@
+{
+  "function_name": "ath9k_hif_usb_free_rx_remain_skb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "hif_dev.remain_skb.users.refs",
+      "hif_device_usb--sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is a no-op when remain_skb is NULL; there is no failure to retry.",
+  "contract_summary": "This is a put wrapper that releases the reference on the remaining RX SKB stored in hif_dev->remain_skb, then sets the pointer to NULL and resets the rx_remain_len field. It also increments the drop statistics counter. The function acquires the rx_lock internally for protection. After calling this function, the caller must not access hif_dev->remain_skb or rely on hif_dev->rx_remain_len without appropriate synchronization. This wrapper is typically invoked during error recovery or cleanup to discard an incomplete SKB.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on the remaining RX SKB (hif_dev->remain_skb) via dev_kfree_skb_any, which is a refcount-decrement operation. The only ancillary logic is resetting associated state (rx_remain_len) and incrementing a drop counter, which are integral to the cleanup.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is a no-op when remain_skb is NULL; there is no failure to retry.",
+      "contract_summary": "This is a put wrapper that releases the reference on the remaining RX SKB stored in hif_dev->remain_skb, then sets the pointer to NULL and resets the rx_remain_len field. It also increments the drop statistics counter. The function acquires the rx_lock internally for protection. After calling this function, the caller must not access hif_dev->remain_skb or rely on hif_dev->rx_remain_len without appropriate synchronization. This wrapper is typically invoked during error recovery or cleanup to discard an incomplete SKB."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hif_dev.remain_skb.users.refs",
+          "hif_device_usb--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hif_dev.remain_skb.users.refs",
+          "hif_device_usb--sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb_any is called on hif_dev->remain_skb, which is a put operation on the skb referenced by that pointer. The access path hif_dev.remain_skb.users.refs correctly traces from the function parameter (hif_dev) through the struct field remain_skb to the refcount field, and the type chain hif_device_usb--sk_buff--refcount_t--atomic_t matches the actual types and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "hif_dev.remain_skb.users.refs",
+        "hif_device_usb--sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is a no-op when remain_skb is NULL; there is no failure to retry.",
+    "contract_summary": "This is a put wrapper that releases the reference on the remaining RX SKB stored in hif_dev->remain_skb, then sets the pointer to NULL and resets the rx_remain_len field. It also increments the drop statistics counter. The function acquires the rx_lock internally for protection. After calling this function, the caller must not access hif_dev->remain_skb or rely on hif_dev->rx_remain_len without appropriate synchronization. This wrapper is typically invoked during error recovery or cleanup to discard an incomplete SKB."
+  }
+}

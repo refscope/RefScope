@@ -1,0 +1,99 @@
+{
+  "function_name": "btf_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "filp.private_data.refcnt.refs",
+      "file--btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation never fails; retrying would cause a double-put (use-after-free risk).",
+  "contract_summary": "Put wrapper for BTF reference: decrements the reference count of the BTF object associated with the file. The caller (VFS) invokes this when the file descriptor is closed. After this call, the private_data pointer must not be used, and the caller must not perform any further operations on the released file.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of the function is to call btf_put on the file's private data, which decrements the BTF object's reference count. No other logic is performed.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation never fails; retrying would cause a double-put (use-after-free risk).",
+      "contract_summary": "Put wrapper for BTF reference: decrements the reference count of the BTF object associated with the file. The caller (VFS) invokes this when the file descriptor is closed. After this call, the private_data pointer must not be used, and the caller must not perform any further operations on the released file."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "filp.private_data.refcnt.refs",
+          "file--btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "filp.private_data.refcnt.refs",
+          "file--btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btf_put is called on filp->private_data, which is the object whose refcount is decremented. The access path from parameter 2 (filp) to the refcount field is filp.private_data.refcnt.refs, matching the callee's path btf.refcnt.refs with type chain file--btf--refcount_t--atomic_t. Segment counts are equal (4 segments and 4 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "filp.private_data.refcnt.refs",
+        "file--btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation never fails; retrying would cause a double-put (use-after-free risk).",
+    "contract_summary": "Put wrapper for BTF reference: decrements the reference count of the BTF object associated with the file. The caller (VFS) invokes this when the file descriptor is closed. After this call, the private_data pointer must not be used, and the caller must not perform any further operations on the released file."
+  }
+}

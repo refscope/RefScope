@@ -1,0 +1,99 @@
+{
+  "function_name": "auto_retire",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ref.ref.refcount",
+      "i915_active--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_active_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "aa.ref.refcount",
+      "member_type_chain": "auto_active--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_active_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "aa.ref.refcount",
+      "member_type_chain": "auto_active--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and always succeed; retry is not applicable.",
+  "contract_summary": "auto_retire is a release wrapper that decrements the reference count of a struct i915_active via i915_active_put. This is typically called as a callback (e.g., in RCU or workqueue contexts) when an active reference is no longer needed. After calling auto_retire, the caller must not access the object, as its reference count may reach zero and trigger freeing. The caller must ensure that the reference count was previously incremented correctly and that no further puts are performed on the same reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of auto_retire is to call i915_active_put(ref), a reference-count decrement. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and always succeed; retry is not applicable.",
+      "contract_summary": "auto_retire is a release wrapper that decrements the reference count of a struct i915_active via i915_active_put. This is typically called as a callback (e.g., in RCU or workqueue contexts) when an active reference is no longer needed. After calling auto_retire, the caller must not access the object, as its reference count may reach zero and trigger freeing. The caller must ensure that the reference count was previously incremented correctly and that no further puts are performed on the same reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.ref.refcount",
+          "i915_active--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.ref.refcount",
+          "i915_active--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function auto_retire directly calls i915_active_put(ref), which is a put operation on parameter ref. The access path 'ref.ref.refcount' correctly traces from the parameter to the refcount field (struct i915_active has a field 'ref' of type kref, which has 'refcount' of type refcount_t). The segment count (3) matches the type chain (3 types). The direction and parameter index align with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ref.ref.refcount",
+        "i915_active--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and always succeed; retry is not applicable.",
+    "contract_summary": "auto_retire is a release wrapper that decrements the reference count of a struct i915_active via i915_active_put. This is typically called as a callback (e.g., in RCU or workqueue contexts) when an active reference is no longer needed. After calling auto_retire, the caller must not access the object, as its reference count may reach zero and trigger freeing. The caller must ensure that the reference count was previously incremented correctly and that no further puts are performed on the same reference."
+  }
+}

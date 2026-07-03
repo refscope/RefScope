@@ -1,0 +1,99 @@
+{
+  "function_name": "buffer_ref_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ref.refcount.refs",
+      "buffer_ref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement is unconditional and always succeeds; if the refcount reaches zero, the object is freed. There is no failure path to retry, and retrying would indicate a double-put (use-after-free).",
+  "contract_summary": "This is a put wrapper for a buffer_ref object. It atomically decrements the reference count via refcount_dec_and_test. When the last reference is released (refcount reaches zero), it frees the associated page via ring_buffer_free_read_page and then frees the buffer_ref struct itself. The caller must hold a valid reference before calling this function and must not access the buffer_ref after the call. This function does not return any indication of success; it is assumed that the caller has correctly paired get/put calls. No special locking is required beyond atomicity of the refcount operation, but the page-freeing action may have its own locking requirements that the caller must ensure are met (e.g., appropriate context for freeing the page).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the refcount on a buffer_ref and free associated resources (page and ref struct) when the refcount reaches zero. The only additional logic is the cleanup actions that are an integral part of the release contract.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement is unconditional and always succeeds; if the refcount reaches zero, the object is freed. There is no failure path to retry, and retrying would indicate a double-put (use-after-free).",
+      "contract_summary": "This is a put wrapper for a buffer_ref object. It atomically decrements the reference count via refcount_dec_and_test. When the last reference is released (refcount reaches zero), it frees the associated page via ring_buffer_free_read_page and then frees the buffer_ref struct itself. The caller must hold a valid reference before calling this function and must not access the buffer_ref after the call. This function does not return any indication of success; it is assumed that the caller has correctly paired get/put calls. No special locking is required beyond atomicity of the refcount operation, but the page-freeing action may have its own locking requirements that the caller must ensure are met (e.g., appropriate context for freeing the page)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.refcount.refs",
+          "buffer_ref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.refcount.refs",
+          "buffer_ref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &ref->refcount, which decrements the refcount of the buffer_ref object passed as first parameter. The access path from parameter ref goes through refcount field to refs (atomic_t), matching the callee's path r.refs. The type chain buffer_ref--refcount_t--atomic_t is consistent with the struct definitions: buffer_ref has a refcount field of type refcount_t, which contains refs (atomic_t). Segment count matches path segments."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ref.refcount.refs",
+        "buffer_ref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement is unconditional and always succeeds; if the refcount reaches zero, the object is freed. There is no failure path to retry, and retrying would indicate a double-put (use-after-free).",
+    "contract_summary": "This is a put wrapper for a buffer_ref object. It atomically decrements the reference count via refcount_dec_and_test. When the last reference is released (refcount reaches zero), it frees the associated page via ring_buffer_free_read_page and then frees the buffer_ref struct itself. The caller must hold a valid reference before calling this function and must not access the buffer_ref after the call. This function does not return any indication of success; it is assumed that the caller has correctly paired get/put calls. No special locking is required beyond atomicity of the refcount operation, but the page-freeing action may have its own locking requirements that the caller must ensure are met (e.g., appropriate context for freeing the page)."
+  }
+}

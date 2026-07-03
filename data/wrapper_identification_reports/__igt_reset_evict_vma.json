@@ -1,0 +1,122 @@
+{
+  "function_name": "__igt_reset_evict_vma",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_request_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "get_task_struct",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "i915_request_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_request_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "get_task_struct",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "i915_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_request_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to test reset eviction scenario; refcount calls are for cleanup of test objects, not the main purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

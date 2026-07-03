@@ -1,0 +1,82 @@
+{
+  "function_name": "__intel_context_retire",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "intel_context_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "intel_context_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always succeeds if the reference count is valid; there is no failure path to retry.",
+  "contract_summary": "This is a put wrapper invoked by the i915_active retire callback to release a reference on an intel_context. It performs necessary cleanup (post_unpin, flag setting) before decrementing the reference count. The caller (i915_active framework) guarantees that this callback is called exactly once per active reference and that the context remains valid until this function returns. After this call, the caller must not access the context, as its reference count may have reached zero and the object could be freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to the intel_context via intel_context_put after performing retire-related bookkeeping (tracing, flag set, post_unpin). The put operation is the core action, and the additional steps are minimal and directly tied to the lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always succeeds if the reference count is valid; there is no failure path to retry.",
+      "contract_summary": "This is a put wrapper invoked by the i915_active retire callback to release a reference on an intel_context. It performs necessary cleanup (post_unpin, flag setting) before decrementing the reference count. The caller (i915_active framework) guarantees that this callback is called exactly once per active reference and that the context remains valid until this function returns. After this call, the caller must not access the context, as its reference count may have reached zero and the object could be freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "ce.ref.refcount",
+          "intel_context--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation specifies location 'return' with index '0', but the function returns void. The critical variable 'ce' is a local variable derived from the parameter 'active' via container_of, not a return value. The refcount put is performed on 'ce', which should be represented as a parameter of the callee function, not as a return of this function. Therefore, the location is incorrect, and the candidate is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "Function __intel_context_retire is not a reference-count wrapper; it performs multiple operations (tracing, setting flag, post_unpin, put) and does not pass the critical variable (ce) out of the function. The put operation is internal, and the candidate location 'return' is invalid for this void function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always succeeds if the reference count is valid; there is no failure path to retry.",
+    "contract_summary": "This is a put wrapper invoked by the i915_active retire callback to release a reference on an intel_context. It performs necessary cleanup (post_unpin, flag setting) before decrementing the reference count. The caller (i915_active framework) guarantees that this callback is called exactly once per active reference and that the context remains valid until this function returns. After this call, the caller must not access the context, as its reference count may have reached zero and the object could be freed."
+  }
+}

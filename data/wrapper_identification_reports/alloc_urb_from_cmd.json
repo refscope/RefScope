@@ -1,0 +1,58 @@
+{
+  "function_name": "alloc_urb_from_cmd",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the refcount operation is embedded in broader allocation logic; failure due to ENOMEM could be retried but the refcount operation itself never fails.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The primary purpose is allocation and initialization of a URB (including copying headers, allocating transfer buffers, setting direction). The refcount operation (usb_alloc_urb) is just one step in the allocation process; the function contains significant non-refcount logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the refcount operation is embedded in broader allocation logic; failure due to ENOMEM could be retried but the refcount operation itself never fails.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the refcount operation is embedded in broader allocation logic; failure due to ENOMEM could be retried but the refcount operation itself never fails.",
+    "contract_summary": ""
+  }
+}

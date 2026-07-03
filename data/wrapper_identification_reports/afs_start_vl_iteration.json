@@ -1,0 +1,58 @@
+{
+  "function_name": "afs_start_vl_iteration",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "afs_get_vlserverlist",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vllist.ref.refs",
+      "member_type_chain": "afs_vlserver_list--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "afs_get_vlserverlist",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vllist.ref.refs",
+      "member_type_chain": "afs_vlserver_list--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the function's main goal is cursor initialization for iteration; retry semantics are embedded in the cursor usage, not in this function alone.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs DNS lookup management, cell status checks, error handling, and cursor initialization in addition to acquiring a reference to the VL server list. The refcount increment is one step within broader business logic, not the primary purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the function's main goal is cursor initialization for iteration; retry semantics are embedded in the cursor usage, not in this function alone.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the function's main goal is cursor initialization for iteration; retry semantics are embedded in the cursor usage, not in this function alone.",
+    "contract_summary": ""
+  }
+}

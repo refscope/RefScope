@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_get_global_root",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_grab_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_grab_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) indicates the requested root does not exist in this filesystem instance; its existence is determined at mount time and does not change during normal operation, so retrying will not help.",
+  "contract_summary": "Acquire (get) a reference to a global btrfs_root identified by objectid. The caller must check the return value: if non-NULL, the caller owns a reference and must release it with btrfs_put_root() when done. If NULL, the requested root is not available (e.g., not initialized). The function does not create roots; it only increments the refcount of an existing root. The mapping from objectid to root pointer is static per filesystem instance. No locks or RCU are required beyond what btrfs_grab_root internally uses.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to map an objectid to a global btrfs_root and acquire a reference via btrfs_grab_root. The switch statement is just a lookup; the only significant operation is the refcount increment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) indicates the requested root does not exist in this filesystem instance; its existence is determined at mount time and does not change during normal operation, so retrying will not help.",
+      "contract_summary": "Acquire (get) a reference to a global btrfs_root identified by objectid. The caller must check the return value: if non-NULL, the caller owns a reference and must release it with btrfs_put_root() when done. If NULL, the requested root is not available (e.g., not initialized). The function does not create roots; it only increments the refcount of an existing root. The mapping from objectid to root pointer is static per filesystem instance. No locks or RCU are required beyond what btrfs_grab_root internally uses."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btrfs_grab_root is a get function that increments the refcount on the returned btrfs_root. The return value is the critical variable. The access path 'root.refs.refs' and type chain 'btrfs_root--refcount_t--atomic_t' are consistent with callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) indicates the requested root does not exist in this filesystem instance; its existence is determined at mount time and does not change during normal operation, so retrying will not help.",
+    "contract_summary": "Acquire (get) a reference to a global btrfs_root identified by objectid. The caller must check the return value: if non-NULL, the caller owns a reference and must release it with btrfs_put_root() when done. If NULL, the requested root is not available (e.g., not initialized). The function does not create roots; it only increments the refcount of an existing root. The mapping from objectid to root pointer is static per filesystem instance. No locks or RCU are required beyond what btrfs_grab_root internally uses."
+  }
+}

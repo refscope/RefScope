@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_first_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If the list is empty (node is NULL), no reference is taken; the caller may retry later when new delayed nodes are added.",
+  "contract_summary": "Acquire a reference on the first delayed node in the fs_info's delayed_root list. The function locks the delayed_root lock, retrieves the head of the list (if any), increments the node's refcount, and optionally initializes a reference tracker for debugging. Returns the node with an elevated reference count, or NULL if the list is empty. The caller is responsible for releasing the reference (via btrfs_put_delayed_node) when done. Because the list can be empty transiently, the caller may retry the call later. The returned node must be treated as an owned reference, and the caller must not use the pointer after releasing the reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain the first delayed node from the list and increment its reference count. The only extra logic is zero-initialization of a tracker, which is part of reference accounting. The function returns the node with an acquired reference, and the caller must release it.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If the list is empty (node is NULL), no reference is taken; the caller may retry later when new delayed nodes are added.",
+      "contract_summary": "Acquire a reference on the first delayed node in the fs_info's delayed_root list. The function locks the delayed_root lock, retrieves the head of the list (if any), increments the node's refcount, and optionally initializes a reference tracker for debugging. Returns the node with an elevated reference count, or NULL if the list is empty. The caller is responsible for releasing the reference (via btrfs_put_delayed_node) when done. Because the list can be empty transiently, the caller may retry the call later. The returned node must be treated as an owned reference, and the caller must not use the pointer after releasing the reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc is called on &node->refs when a delayed node is found; node is returned. The path node.refs.refs starts from the returned node, accessing the refcount_struct field refs then the atomic_t refs. Type chain and segment count are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If the list is empty (node is NULL), no reference is taken; the caller may retry later when new delayed nodes are added.",
+    "contract_summary": "Acquire a reference on the first delayed node in the fs_info's delayed_root list. The function locks the delayed_root lock, retrieves the head of the list (if any), increments the node's refcount, and optionally initializes a reference tracker for debugging. Returns the node with an elevated reference count, or NULL if the list is empty. The caller is responsible for releasing the reference (via btrfs_put_delayed_node) when done. Because the list can be empty transiently, the caller may retry the call later. The returned node must be treated as an owned reference, and the caller must not use the pointer after releasing the reference."
+  }
+}

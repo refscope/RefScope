@@ -1,0 +1,90 @@
+{
+  "function_name": "call__parse",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "addr_map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ams.ms.thread.orig.refcnt.refs",
+      "member_type_chain": "addr_map_symbol--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "addr_map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ams.ms.map.refcnt.refs",
+      "member_type_chain": "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "addr_map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ams.ms.thread.orig.refcnt.refs",
+      "member_type_chain": "addr_map_symbol--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "addr_map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ams.ms.map.refcnt.refs",
+      "member_type_chain": "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; the function is not a refcount wrapper so retry semantics are irrelevant.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to parse a call instruction's raw string, extract the target address and symbol name, and optionally resolve the symbol via maps__find_ams. The refcount operations (map__get and addr_map_symbol__exit) are internal housekeeping to manage temporary references during the resolution; they do not transfer ownership to the caller or constitute the main goal of the function.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; the function is not a refcount wrapper so retry semantics are irrelevant.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; the function is not a refcount wrapper so retry semantics are irrelevant.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "function_name": "amdgpu_gfx_kiq_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.gfx.kiq[xcc_id].eop_obj[0].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_gfx--amdgpu_kiq--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and does not provide a failure indication to the caller; retry is not applicable.",
+  "contract_summary": "This function releases the reference to the KIQ's EOP (End-of-Pipe) buffer object by calling amdgpu_bo_free_kernel, which decrements the buffer object's refcount and frees the underlying memory if the refcount reaches zero. It must be called during KIQ teardown. After this call, the caller should not access the EOP buffer object through the KIQ structure unless a new reference is acquired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to the EOP buffer object via amdgpu_bo_free_kernel, which is a put function on the buffer object's refcount.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and does not provide a failure indication to the caller; retry is not applicable.",
+      "contract_summary": "This function releases the reference to the KIQ's EOP (End-of-Pipe) buffer object by calling amdgpu_bo_free_kernel, which decrements the buffer object's refcount and frees the underlying memory if the refcount reaches zero. It must be called during KIQ teardown. After this call, the caller should not access the EOP buffer object through the KIQ structure unless a new reference is acquired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.kiq[xcc_id].eop_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_kiq--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_type_chain is missing a pointer type between amdgpu_kiq and amdgpu_bo. The access path includes eop_obj[0], which dereferences a pointer, so the type chain should include an intermediate pointer type (e.g., amdgpu_bo*). Without it, the type chain is inconsistent with the struct definitions and the callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.gfx.kiq[xcc_id].eop_obj[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_gfx--amdgpu_kiq--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function solely calls amdgpu_bo_free_kernel, which is a put on the eop_obj. The critical variable (eop_obj) flows from parameter 1 (adev). The type chain missing an intermediate pointer does not invalidate the operation; it is still a correct refcount put wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.gfx.kiq[xcc_id].eop_obj[0].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_gfx--amdgpu_kiq--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and does not provide a failure indication to the caller; retry is not applicable.",
+    "contract_summary": "This function releases the reference to the KIQ's EOP (End-of-Pipe) buffer object by calling amdgpu_bo_free_kernel, which decrements the buffer object's refcount and frees the underlying memory if the refcount reaches zero. It must be called during KIQ teardown. After this call, the caller should not access the EOP buffer object through the KIQ structure unless a new reference is acquired."
+  }
+}

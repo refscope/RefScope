@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_get_str",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "str.count.refcount",
+      "counted_str--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The kref_get operation never fails, and if the pointer is NULL no action is taken; there is no failure path that would benefit from retrying.",
+  "contract_summary": "aa_get_str is a get-wrapper for reference-counted strings. It increments the kref of the underlying counted string struct if the pointer is non-NULL, and returns the same pointer. The caller receives an additional reference and is responsible for releasing it (via a corresponding put function) when done. Passing NULL is safe and results in a no-op.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the reference count of a counted string via kref_get; the only non-refcount logic is a NULL check. The function returns the same pointer with a new reference.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The kref_get operation never fails, and if the pointer is NULL no action is taken; there is no failure path that would benefit from retrying.",
+      "contract_summary": "aa_get_str is a get-wrapper for reference-counted strings. It increments the kref of the underlying counted string struct if the pointer is non-NULL, and returns the same pointer. The caller receives an additional reference and is responsible for releasing it (via a corresponding put function) when done. Passing NULL is safe and results in a no-op."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "str.count.refcount",
+          "counted_str--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "str.count.refcount",
+          "counted_str--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &(str_to_counted(str)->count), operating on the counted_str's kref, whose refcount is accessed. The critical variable returned is str, and the access path from return value str to the refcount field is str.count.refcount, consistent with the type chain counted_str--kref--refcount_t (3 segments each). Direction 'get' matches kref_get."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "str.count.refcount",
+        "counted_str--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The kref_get operation never fails, and if the pointer is NULL no action is taken; there is no failure path that would benefit from retrying.",
+    "contract_summary": "aa_get_str is a get-wrapper for reference-counted strings. It increments the kref of the underlying counted string struct if the pointer is non-NULL, and returns the same pointer. The caller receives an additional reference and is responsible for releasing it (via a corresponding put function) when done. Passing NULL is safe and results in a no-op."
+  }
+}

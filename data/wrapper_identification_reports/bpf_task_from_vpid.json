@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_task_from_vpid",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "p.rcu_users.refs",
+      "task_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_task_acquire",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_task_acquire",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.rcu_users.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the task is not found for the given vpid, it means the task does not exist or has already exited; retrying will not bring it back.",
+  "contract_summary": "This get-wrapper looks up a task_struct by its vpid under RCU protection and, if found, acquires a reference on it via bpf_task_acquire (which increments the rcu_users refcount). The caller receives ownership of this reference and must release it with a corresponding bpf_task_release. If no task is found (NULL is returned), no reference is taken. The function is safe to call without holding the RCU read lock externally (it manages its own critical section). Callers must check the return value for NULL before dereferencing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to look up a task_struct by PID and acquire an additional reference on it via bpf_task_acquire, then return the refcounted pointer. The only non-refcount logic is the RCU lock/unlock and the PID lookup, which are necessary boilerplate.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the task is not found for the given vpid, it means the task does not exist or has already exited; retrying will not bring it back.",
+      "contract_summary": "This get-wrapper looks up a task_struct by its vpid under RCU protection and, if found, acquires a reference on it via bpf_task_acquire (which increments the rcu_users refcount). The caller receives ownership of this reference and must release it with a corresponding bpf_task_release. If no task is found (NULL is returned), no reference is taken. The function is safe to call without holding the RCU read lock externally (it manages its own critical section). Callers must check the return value for NULL before dereferencing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "bpf_task_acquire is a get operation on the return value p (task_struct*). The access path p.rcu_users.refs correctly traces from the return variable to the atomic_t refcount field via rcu_users (refcount_t). Type chain task_struct--refcount_t--atomic_t has 3 types matching 3 segments in the path. Consolidated with the code: if p is non-NULL, it is acquired and returned; the operation is valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "p.rcu_users.refs",
+        "task_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the task is not found for the given vpid, it means the task does not exist or has already exited; retrying will not bring it back.",
+    "contract_summary": "This get-wrapper looks up a task_struct by its vpid under RCU protection and, if found, acquires a reference on it via bpf_task_acquire (which increments the rcu_users refcount). The caller receives ownership of this reference and must release it with a corresponding bpf_task_release. If no task is found (NULL is returned), no reference is taken. The function is safe to call without holding the RCU read lock externally (it manages its own critical section). Callers must check the return value for NULL before dereferencing."
+  }
+}

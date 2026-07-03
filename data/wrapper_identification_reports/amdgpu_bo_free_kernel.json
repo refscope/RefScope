@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_bo_free_kernel",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bo[0].tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is final; once the reference is dropped the object is freed and cannot be retried.",
+  "contract_summary": "This function is a put wrapper for releasing an amdgpu_bo from kernel space. It first attempts to reserve the BO, then unmaps (if a CPU address was provided) and unpins it. Regardless of reservation success, it always calls amdgpu_bo_unref, which decrements the reference count and sets the caller's BO pointer to NULL. After this call, the BO must not be used again; the caller's gpu_addr and cpu_addr pointers are also zeroed. The function provides a safe one-stop cleanup for kernel-mode BO users.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a kernel buffer object (amdgpu_bo) by unpinning, unmapping, and then dropping the final reference via amdgpu_bo_unref. The extra steps (reserve, unpin, unmap) are necessary part of the release but not pure refcount management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is final; once the reference is dropped the object is freed and cannot be retried.",
+      "contract_summary": "This function is a put wrapper for releasing an amdgpu_bo from kernel space. It first attempts to reserve the BO, then unmaps (if a CPU address was provided) and unpins it. Regardless of reservation success, it always calls amdgpu_bo_unref, which decrements the reference count and sets the caller's BO pointer to NULL. After this call, the BO must not be used again; the caller's gpu_addr and cpu_addr pointers are also zeroed. The function provides a safe one-stop cleanup for kernel-mode BO users."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo[0].tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo[0].tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code calls amdgpu_bo_unref(bo), which is a put on the first parameter. The access path bo[0].tbo.base.refcount.refcount correctly traces from the parameter bo (dereferenced to the amdgpu_bo) through tbo (ttm_buffer_object), base (drm_gem_object), refcount (kref), to refcount (refcount_t). The segment count (5) matches the type chain length (5). The direction 'put' is consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bo[0].tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is final; once the reference is dropped the object is freed and cannot be retried.",
+    "contract_summary": "This function is a put wrapper for releasing an amdgpu_bo from kernel space. It first attempts to reserve the BO, then unmaps (if a CPU address was provided) and unpins it. Regardless of reservation success, it always calls amdgpu_bo_unref, which decrements the reference count and sets the caller's BO pointer to NULL. After this call, the BO must not be used again; the caller's gpu_addr and cpu_addr pointers are also zeroed. The function provides a safe one-stop cleanup for kernel-mode BO users."
+  }
+}

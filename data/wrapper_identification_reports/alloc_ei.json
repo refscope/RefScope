@@ -1,0 +1,99 @@
+{
+  "function_name": "alloc_ei",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "result.kref.refcount.refs",
+      "eventfs_inode--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "init_ei",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ei.kref.refcount.refs",
+      "member_type_chain": "eventfs_inode--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "init_ei",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ei.kref.refcount.refs",
+      "member_type_chain": "eventfs_inode--kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation or init failure (e.g., ENOMEM); retrying may succeed if pressure subsides, but the caller is not expected to retry this allocation from a reference-count perspective.",
+  "contract_summary": "This is a creation/set wrapper that allocates and initializes an eventfs_inode object, setting its kref refcount to 1 (the initial reference). The function returns a pointer to the new object on success, or NULL on failure (e.g., memory allocation failure). The caller receives ownership of the single reference and must eventually call the corresponding put function (e.g., eventfs_inode_put) to release the object. The initialization also sets the name field. There is no additional locking or RCU requirement; the caller gets a fully initialized object with a reference count of 1.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate and initialize an eventfs_inode object, including setting its kref refcount to 1 (the initial reference). The only non-refcount logic is the allocation and name initialization, which are intrinsic to object creation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation or init failure (e.g., ENOMEM); retrying may succeed if pressure subsides, but the caller is not expected to retry this allocation from a reference-count perspective.",
+      "contract_summary": "This is a creation/set wrapper that allocates and initializes an eventfs_inode object, setting its kref refcount to 1 (the initial reference). The function returns a pointer to the new object on success, or NULL on failure (e.g., memory allocation failure). The caller receives ownership of the single reference and must eventually call the corresponding put function (e.g., eventfs_inode_put) to release the object. The initialization also sets the name field. There is no additional locking or RCU requirement; the caller gets a fully initialized object with a reference count of 1."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "result.kref.refcount.refs",
+          "eventfs_inode--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "result.kref.refcount.refs",
+          "eventfs_inode--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The init_ei function is a set function that initializes the refcount at ei.kref.refcount.refs. The alloc_ei function returns the same pointer (ei) as result on success, so the critical variable is the return value. The access path 'result.kref.refcount.refs' matches the callee's path 'ei.kref.refcount.refs' (both 4 segments) and the type chain is consistent (eventfs_inode -> kref -> refcount_t -> atomic_t)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "result.kref.refcount.refs",
+        "eventfs_inode--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation or init failure (e.g., ENOMEM); retrying may succeed if pressure subsides, but the caller is not expected to retry this allocation from a reference-count perspective.",
+    "contract_summary": "This is a creation/set wrapper that allocates and initializes an eventfs_inode object, setting its kref refcount to 1 (the initial reference). The function returns a pointer to the new object on success, or NULL on failure (e.g., memory allocation failure). The caller receives ownership of the single reference and must eventually call the corresponding put function (e.g., eventfs_inode_put) to release the object. The initialization also sets the name field. There is no additional locking or RCU requirement; the caller gets a fully initialized object with a reference count of 1."
+  }
+}

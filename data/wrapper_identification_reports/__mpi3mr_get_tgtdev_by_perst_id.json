@@ -1,0 +1,99 @@
+{
+  "function_name": "__mpi3mr_get_tgtdev_by_perst_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tgtdev.ref_count.refcount",
+      "mpi3mr_tgt_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation is only performed when the device is found; failure means the device is not present, which may be a permanent condition (e.g., device removed). Retry is not part of the wrapper's semantics; caller should handle absence separately.",
+  "contract_summary": "This is a get-wrapper that looks up a target device by persistent ID in the driver's tgtdev_list while holding tgtdev_lock, increments its refcount via mpi3mr_tgtdev_get, and returns the device pointer. The caller must check for NULL (device not found) and must later call the corresponding put function to release the reference. The lock is required to protect the list and the device refcount. This function is a standard 'find and get' pattern for reference-counted objects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a target device by persistent ID and acquire a reference (refcount increment) on it. The only non-refcount logic is list iteration and comparison. The function returns the referenced object to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation is only performed when the device is found; failure means the device is not present, which may be a permanent condition (e.g., device removed). Retry is not part of the wrapper's semantics; caller should handle absence separately.",
+      "contract_summary": "This is a get-wrapper that looks up a target device by persistent ID in the driver's tgtdev_list while holding tgtdev_lock, increments its refcount via mpi3mr_tgtdev_get, and returns the device pointer. The caller must check for NULL (device not found) and must later call the corresponding put function to release the reference. The lock is required to protect the list and the device refcount. This function is a standard 'find and get' pattern for reference-counted objects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function acquires a lock, finds tgtdev, calls mpi3mr_tgtdev_get(tgtdev) (which increments the refcount), and returns tgtdev. The critical variable flowing out is the return value tgtdev. The access path tgtdev.ref_count.refcount matches the callee's description (s.ref_count.refcount) and the type chain mpi3mr_tgt_dev--kref--refcount_t is consistent. Segment counts are equal (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tgtdev.ref_count.refcount",
+        "mpi3mr_tgt_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation is only performed when the device is found; failure means the device is not present, which may be a permanent condition (e.g., device removed). Retry is not part of the wrapper's semantics; caller should handle absence separately.",
+    "contract_summary": "This is a get-wrapper that looks up a target device by persistent ID in the driver's tgtdev_list while holding tgtdev_lock, increments its refcount via mpi3mr_tgtdev_get, and returns the device pointer. The caller must check for NULL (device not found) and must later call the corresponding put function to release the reference. The lock is required to protect the list and the device refcount. This function is a standard 'find and get' pattern for reference-counted objects."
+  }
+}

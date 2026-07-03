@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_tvlv_container_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tvlv.refcount.refcount",
+      "batadv_tvlv_container--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the container is not present, it will not become present without explicit creation; retrying the same get will continue to fail.",
+  "contract_summary": "Get-wrapper that searches the container_list for a TVLV container matching type and version. If found, increments the container's reference count via kref_get and returns a pointer to it. The caller must check the return value: if non-NULL, the caller owns the reference and must call batadv_tvlv_container_put when done. If NULL, the container does not exist and no reference is acquired. The caller is expected to hold bat_priv->tvlv.container_list_lock (lockdep verified). The function does not create containers; it only retrieves existing ones with an additional reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a TVLV container by type/version and acquire a reference via kref_get; the list traversal and matching is minimal overhead.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the container is not present, it will not become present without explicit creation; retrying the same get will continue to fail.",
+      "contract_summary": "Get-wrapper that searches the container_list for a TVLV container matching type and version. If found, increments the container's reference count via kref_get and returns a pointer to it. The caller must check the return value: if non-NULL, the caller owns the reference and must call batadv_tvlv_container_put when done. If NULL, the container does not exist and no reference is acquired. The caller is expected to hold bat_priv->tvlv.container_list_lock (lockdep verified). The function does not create containers; it only retrieves existing ones with an additional reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tvlv.refcount.refcount",
+          "batadv_tvlv_container--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tvlv.refcount.refcount",
+          "batadv_tvlv_container--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&tvlv_tmp->refcount) increments the refcount on the found container, which is then set as tvlv and returned. The access path tvlv.refcount.refcount correctly starts from the returned container pointer, accesses the kref member, then the refcount_t inside. Type chain batadv_tvlv_container--kref--refcount_t matches the struct hierarchy. Direction is 'get' and location is return index 0."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tvlv.refcount.refcount",
+        "batadv_tvlv_container--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the container is not present, it will not become present without explicit creation; retrying the same get will continue to fail.",
+    "contract_summary": "Get-wrapper that searches the container_list for a TVLV container matching type and version. If found, increments the container's reference count via kref_get and returns a pointer to it. The caller must check the return value: if non-NULL, the caller owns the reference and must call batadv_tvlv_container_put when done. If NULL, the container does not exist and no reference is acquired. The caller is expected to hold bat_priv->tvlv.container_list_lock (lockdep verified). The function does not create containers; it only retrieves existing ones with an additional reference."
+  }
+}

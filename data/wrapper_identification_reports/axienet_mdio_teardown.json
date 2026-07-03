@@ -1,0 +1,99 @@
+{
+  "function_name": "axienet_mdio_teardown",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "lp.mii_bus.dev.kobj.kref.refcount",
+      "axienet_local--mii_bus--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "mdiobus_free is a put that always executes and cannot be retried; attempting to call it again would cause a double-put on a freed object.",
+  "contract_summary": "Put wrapper for axienet MDIO bus teardown: unregisters the MDIO bus from the system, releases the bus reference via mdiobus_free, and sets the bus pointer to NULL. After this call, the caller must not dereference lp->mii_bus. The function represents the final release step in the mii_bus lifecycle; no further operations on the bus are permitted.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is teardown of the mii_bus via unregister and release of the reference (mdiobus_free). The function's sole role is to manage the lifecycle of the bus, culminating in a put operation that frees the object.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "mdiobus_free is a put that always executes and cannot be retried; attempting to call it again would cause a double-put on a freed object.",
+      "contract_summary": "Put wrapper for axienet MDIO bus teardown: unregisters the MDIO bus from the system, releases the bus reference via mdiobus_free, and sets the bus pointer to NULL. After this call, the caller must not dereference lp->mii_bus. The function represents the final release step in the mii_bus lifecycle; no further operations on the bus are permitted."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "lp.mii_bus.dev.kobj.kref.refcount",
+          "axienet_local--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "lp.mii_bus.dev.kobj.kref.refcount",
+          "axienet_local--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The access path 'lp.mii_bus.dev.kobj.kref.refcount' correctly traces from parameter 1 (struct axienet_local *lp) through its mii_bus field to the refcount field. The type chain matches the struct hierarchy: axienet_local has mii_bus -> mii_bus has dev -> device has kobj -> kobject has kref -> kref has refcount_t. The segment counts (6) are equal. The put operation by mdiobus_free operates on this path, consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "lp.mii_bus.dev.kobj.kref.refcount",
+        "axienet_local--mii_bus--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "mdiobus_free is a put that always executes and cannot be retried; attempting to call it again would cause a double-put on a freed object.",
+    "contract_summary": "Put wrapper for axienet MDIO bus teardown: unregisters the MDIO bus from the system, releases the bus reference via mdiobus_free, and sets the bus pointer to NULL. After this call, the caller must not dereference lp->mii_bus. The function represents the final release step in the mii_bus lifecycle; no further operations on the bus are permitted."
+  }
+}

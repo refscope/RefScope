@@ -1,0 +1,107 @@
+{
+  "function_name": "bfqg_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "bfqg.ref.refs",
+      "bfq_group--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc never fails; retry is not applicable.",
+  "contract_summary": "This is a get-wrapper that acquires a reference on the given bfq_group by incrementing its refcount via refcount_inc. The caller must already have a valid pointer to the bfq_group. After calling bfqg_get, the caller owns a reference that must be released with a corresponding bfqg_put (or equivalent) when the reference is no longer needed. The operation is unconditional and always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function consists solely of a refcount_inc call on the bfqg->ref member, with no other logic. Its sole purpose is reference-count acquisition.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc never fails; retry is not applicable.",
+      "contract_summary": "This is a get-wrapper that acquires a reference on the given bfq_group by incrementing its refcount via refcount_inc. The caller must already have a valid pointer to the bfq_group. After calling bfqg_get, the caller owns a reference that must be released with a corresponding bfqg_put (or equivalent) when the reference is no longer needed. The operation is unconditional and always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_inc on &bfqg->ref directly increments the ref count on parameter bfqg. The access path bfqg.ref.refs correctly traces from parameter 1 through the ref field (refcount_struct) to the refs atomic_t member. The type chain matches the callee's r.refs path. Segment counts are equal (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "bfqg.ref.refs",
+        "bfq_group--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc never fails; retry is not applicable.",
+    "contract_summary": "This is a get-wrapper that acquires a reference on the given bfq_group by incrementing its refcount via refcount_inc. The caller must already have a valid pointer to the bfq_group. After calling bfqg_get, the caller owns a reference that must be released with a corresponding bfqg_put (or equivalent) when the reference is no longer needed. The operation is unconditional and always succeeds."
+  }
+}

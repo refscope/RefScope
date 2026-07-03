@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_netlink_get_hardif_from_info",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_netlink_get_hardif_from_ifindex",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_netlink_get_hardif_from_ifindex",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates missing attribute or invalid ifindex; retrying with the same netlink info will not change the outcome.",
+  "contract_summary": "This wrapper acquires a reference-counted batadv_hard_iface pointer by extracting a hard interface index from a netlink message and delegating to the internal get function. The caller receives a pointer with an elevated refcount and must release it via batadv_hardif_put when done. The function returns an ERR_PTR on error (missing attribute or invalid ifindex). The operation is conditional on the attribute being present; no retry logic is needed as the input is static.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference-counted batadv_hard_iface by extracting an ifindex from netlink attributes and calling the dedicated get function, with minimal validation logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates missing attribute or invalid ifindex; retrying with the same netlink info will not change the outcome.",
+      "contract_summary": "This wrapper acquires a reference-counted batadv_hard_iface pointer by extracting a hard interface index from a netlink message and delegating to the internal get function. The caller receives a pointer with an elevated refcount and must release it via batadv_hardif_put when done. The function returns an ERR_PTR on error (missing attribute or invalid ifindex). The operation is conditional on the attribute being present; no retry logic is needed as the input is static."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function directly returns the result of batadv_netlink_get_hardif_from_ifindex, which is a get function that increments the refcount on the returned hard_iface object. The access path from the return value (hard_iface pointer) to the refcount field is correctly given as hard_iface.refcount.refcount with type chain batadv_hard_iface--kref--refcount_t, consistent with callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates missing attribute or invalid ifindex; retrying with the same netlink info will not change the outcome.",
+    "contract_summary": "This wrapper acquires a reference-counted batadv_hard_iface pointer by extracting a hard interface index from a netlink message and delegating to the internal get function. The caller receives a pointer with an elevated refcount and must release it via batadv_hardif_put when done. The function returns an ERR_PTR on error (missing attribute or invalid ifindex). The operation is conditional on the attribute being present; no retry logic is needed as the input is static."
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "function_name": "aa_get_current_ns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ns.unconfined.label.count.count.refcount",
+      "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__begin_current_label_crit_section",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__begin_current_label_crit_section",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation always succeeds; there is no failure path.",
+  "contract_summary": "Acquires a reference on the current namespace (struct aa_ns) by first taking a reference on the current label via a critical section, extracting the namespace, and then taking a reference on it. The caller receives a pointer to the namespace with an incremented reference count and must later release it by calling aa_put_ns(). This is a standard get-wrapper for the current namespace.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to obtain a reference-counted pointer to the current namespace (struct aa_ns) by temporarily acquiring and releasing a reference on the current label; the only non-refcount logic is extracting the namespace from the label via labels_ns(), which is trivial.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation always succeeds; there is no failure path.",
+      "contract_summary": "Acquires a reference on the current namespace (struct aa_ns) by first taking a reference on the current label via a critical section, extracting the namespace, and then taking a reference on it. The caller receives a pointer to the namespace with an incremented reference count and must later release it by calling aa_put_ns(). This is a standard get-wrapper for the current namespace."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.unconfined.label.count.count.refcount",
+          "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.unconfined.label.count.count.refcount",
+          "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation correctly describes the refcount increment on the returned ns object via aa_get_ns. The access path from ns (return value) through unconfined, label, count fields matches the callee information and the code. The type chain is consistent with the structure definitions. The segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ns.unconfined.label.count.count.refcount",
+        "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation always succeeds; there is no failure path.",
+    "contract_summary": "Acquires a reference on the current namespace (struct aa_ns) by first taking a reference on the current label via a critical section, extracting the namespace, and then taking a reference on it. The caller receives a pointer to the namespace with an incremented reference count and must later release it by calling aa_put_ns(). This is a standard get-wrapper for the current namespace."
+  }
+}

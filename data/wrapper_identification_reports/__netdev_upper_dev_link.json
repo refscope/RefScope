@@ -1,0 +1,90 @@
+{
+  "function_name": "__netdev_upper_dev_link",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__netdev_adjacent_dev_unlink_neighbour",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__netdev_adjacent_dev_link_neighbour",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "upper_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__netdev_adjacent_dev_unlink_neighbour",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "upper_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__netdev_adjacent_dev_unlink_neighbour",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__netdev_adjacent_dev_link_neighbour",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "upper_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__netdev_adjacent_dev_unlink_neighbour",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "upper_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs extensive validation, notification, and topology update logic beyond simple refcount management. The refcount operations are encapsulated within the callee link/unlink functions, but the primary purpose is to establish an upper-device relationship, not to manage a reference count.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

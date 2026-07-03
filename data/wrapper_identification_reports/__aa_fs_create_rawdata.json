@@ -1,0 +1,58 @@
+{
+  "function_name": "__aa_fs_create_rawdata",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper -- retry analysis is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of __aa_fs_create_rawdata is to create filesystem entries (directories and files) for a rawdata object, not to manage reference counts. The only refcount operation (aa_get_ns) is incidental to the broader filesystem creation logic. The function returns 0 on success or an error, and does not primarily acquire/release a reference to pass to the caller.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper -- retry analysis is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper -- retry analysis is not applicable.",
+    "contract_summary": ""
+  }
+}

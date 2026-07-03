@@ -1,0 +1,107 @@
+{
+  "function_name": "amdgpu_userq_fence_driver_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "fence_drv.refcount.refcount",
+      "amdgpu_userq_fence_driver--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put is a release operation that always succeeds (or crashes if the pointer is NULL); it does not fail transiently. Retrying would cause a double-put bug.",
+  "contract_summary": "This put wrapper releases a reference on an amdgpu_userq_fence_driver object. It decrements the reference count via kref_put, and when the count reaches zero, it calls the provided destroy callback (amdgpu_userq_fence_driver_destroy). After this call, the caller must not use the object any further. This function unconditionally releases a reference; it does not return any error. It is the counterpart to a get operation (e.g., amdgpu_userq_fence_driver_get). The caller must ensure that they do not double-put the same reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls kref_put on the refcount field of the input structure, with no other logic. Its only purpose is reference-count release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put is a release operation that always succeeds (or crashes if the pointer is NULL); it does not fail transiently. Retrying would cause a double-put bug.",
+      "contract_summary": "This put wrapper releases a reference on an amdgpu_userq_fence_driver object. It decrements the reference count via kref_put, and when the count reaches zero, it calls the provided destroy callback (amdgpu_userq_fence_driver_destroy). After this call, the caller must not use the object any further. This function unconditionally releases a reference; it does not return any error. It is the counterpart to a get operation (e.g., amdgpu_userq_fence_driver_get). The caller must ensure that they do not double-put the same reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fence_drv.refcount.refcount",
+          "amdgpu_userq_fence_driver--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fence_drv.refcount.refcount",
+          "amdgpu_userq_fence_driver--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls kref_put on fence_drv->refcount, which is a struct kref. The callee info confirms that kref_put operates on the refcount field of the kref. The access path and type chain correctly trace from the parameter fence_drv through the refcount field to the underlying refcount_t. Direction put is appropriate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "fence_drv.refcount.refcount",
+        "amdgpu_userq_fence_driver--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put is a release operation that always succeeds (or crashes if the pointer is NULL); it does not fail transiently. Retrying would cause a double-put bug.",
+    "contract_summary": "This put wrapper releases a reference on an amdgpu_userq_fence_driver object. It decrements the reference count via kref_put, and when the count reaches zero, it calls the provided destroy callback (amdgpu_userq_fence_driver_destroy). After this call, the caller must not use the object any further. This function unconditionally releases a reference; it does not return any error. It is the counterpart to a get operation (e.g., amdgpu_userq_fence_driver_get). The caller must ensure that they do not double-put the same reference."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "bpf_iter_kmem_cache_next",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "next.refcount",
+      "kmem_cache--int"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "it.pos.refcount",
+      "bpf_iter_kmem_cache_kern--kmem_cache--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (return NULL) indicates end of iteration or boot cache; retry would not change the list state.",
+  "contract_summary": "This is the 'next' function for a BPF iterator over kmem_cache objects. It releases the reference on the previous entry (either decrementing refcount or calling kmem_cache_destroy if refcount reaches 1) and acquires a reference on the next entry by incrementing its refcount. The caller receives a pointer to a referenced kmem_cache, but the iterator itself manages the lifecycle; the caller must not manually put the returned object. When the iterator returns NULL, all references are released. The caller must initialize and finalize the iterator properly (e.g., via bpf_iter_kmem_cache_new/end). This function is intended for use in BPF programs iterating slab caches.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to manage reference counts during iteration: release old entry, acquire new entry. Minimal unrelated logic (list traversal, sentinel check) is directly tied to refcount lifecycle.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (return NULL) indicates end of iteration or boot cache; retry would not change the list state.",
+      "contract_summary": "This is the 'next' function for a BPF iterator over kmem_cache objects. It releases the reference on the previous entry (either decrementing refcount or calling kmem_cache_destroy if refcount reaches 1) and acquires a reference on the next entry by incrementing its refcount. The caller receives a pointer to a referenced kmem_cache, but the iterator itself manages the lifecycle; the caller must not manually put the returned object. When the iterator returns NULL, all references are released. The caller must initialize and finalize the iterator properly (e.g., via bpf_iter_kmem_cache_new/end). This function is intended for use in BPF programs iterating slab caches."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "it.pos.refcount",
+          "bpf_iter_kmem_cache_kern--kmem_cache--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "it.pos.refcount",
+          "bpf_iter_kmem_cache_kern--kmem_cache--int"
+        ]
+      ],
+      "reason": "The get operation on next->refcount is performed when next is not NULL and refcount>0, and next is returned. The put operation decrements prev->refcount (or destroys via kmem_cache_destroy when refcount==1), where prev is from it->pos. Both access paths and type chains match the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "next.refcount",
+        "kmem_cache--int"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "it.pos.refcount",
+        "bpf_iter_kmem_cache_kern--kmem_cache--int"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (return NULL) indicates end of iteration or boot cache; retry would not change the list state.",
+    "contract_summary": "This is the 'next' function for a BPF iterator over kmem_cache objects. It releases the reference on the previous entry (either decrementing refcount or calling kmem_cache_destroy if refcount reaches 1) and acquires a reference on the next entry by incrementing its refcount. The caller receives a pointer to a referenced kmem_cache, but the iterator itself manages the lifecycle; the caller must not manually put the returned object. When the iterator returns NULL, all references are released. The caller must initialize and finalize the iterator properly (e.g., via bpf_iter_kmem_cache_new/end). This function is intended for use in BPF programs iterating slab caches."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "ax88172a_remove_mdio",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.driver_priv.mdio.dev.kobj.kref.refcount",
+      "usbnet--ax88172a_private--mii_bus--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "mdiobus_free decrements the refcount unconditionally; once called the object may be freed. Retrying would cause a use-after-free or double-free.",
+  "contract_summary": "This is a put-wrapper that releases the reference held on the MII bus (priv->mdio). It must be called only after the bus has been unregistered (mdiobus_unregister) and when no further access to the bus is needed. After this call, the caller must not use the priv->mdio pointer. The function is unconditional and does not need return value checking; it properly cleans up the bus lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of ax88172a_remove_mdio is to unregister and free the MII bus, where mdiobus_free performs a put (refcount decrement) on the bus. Logging is trivial and does not detract from the refcount-release semantics.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "mdiobus_free decrements the refcount unconditionally; once called the object may be freed. Retrying would cause a use-after-free or double-free.",
+      "contract_summary": "This is a put-wrapper that releases the reference held on the MII bus (priv->mdio). It must be called only after the bus has been unregistered (mdiobus_unregister) and when no further access to the bus is needed. After this call, the caller must not use the priv->mdio pointer. The function is unconditional and does not need return value checking; it properly cleans up the bus lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.driver_priv.mdio.dev.kobj.kref.refcount",
+          "usbnet--ax88172a_private--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.driver_priv.mdio.dev.kobj.kref.refcount",
+          "usbnet--ax88172a_private--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls mdiobus_free on priv->mdio, which is a put operation. The access path from parameter 1 (dev) via driver_priv, mdio, dev, kobj, kref, refcount matches the callee's path bus.dev.kobj.kref.refcount. The type chain is consistent with the struct definitions. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.driver_priv.mdio.dev.kobj.kref.refcount",
+        "usbnet--ax88172a_private--mii_bus--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "mdiobus_free decrements the refcount unconditionally; once called the object may be freed. Retrying would cause a use-after-free or double-free.",
+    "contract_summary": "This is a put-wrapper that releases the reference held on the MII bus (priv->mdio). It must be called only after the bus has been unregistered (mdiobus_unregister) and when no further access to the bus is needed. After this call, the caller must not use the priv->mdio pointer. The function is unconditional and does not need return value checking; it properly cleans up the bus lifecycle."
+  }
+}

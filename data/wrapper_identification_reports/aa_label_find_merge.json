@@ -1,0 +1,187 @@
+{
+  "function_name": "aa_label_find_merge",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "a.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "b.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.refcount",
+      "aa_label--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__label_find_merge",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "this.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__label_find_merge",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "this.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no merge label exists, the lookup returns NULL; retrying without changing the input labels would also yield NULL, so retry is pointless.",
+  "contract_summary": "Get-wrapper: finds the merged label of two input labels (handling stale labels by automatically obtaining the newest versions) and returns it with an acquired reference. The caller takes ownership of the reference and must release it via aa_put_label() when done. If no merged label exists, returns NULL; the caller must check the return value. The function temporarily acquires references on newest versions of stale inputs but releases them before returning. The returned label's refcount has been incremented exactly once by __label_find_merge.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a merged aa_label and return it with an acquired reference. All logic (handling stale labels, acquiring references, releasing temporaries) is refcount management. The function delegates to __label_find_merge (a get function) and returns the label directly.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no merge label exists, the lookup returns NULL; retrying without changing the input labels would also yield NULL, so retry is pointless.",
+      "contract_summary": "Get-wrapper: finds the merged label of two input labels (handling stale labels by automatically obtaining the newest versions) and returns it with an acquired reference. The caller takes ownership of the reference and must release it via aa_put_label() when done. If no merged label exists, returns NULL; the caller must check the return value. The function temporarily acquires references on newest versions of stale inputs but releases them before returning. The returned label's refcount has been incremented exactly once by __label_find_merge."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "a.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "b.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.refcount",
+          "aa_label--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "a.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "b.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.refcount",
+          "aa_label--kref--refcount_t"
+        ]
+      ],
+      "reason": "All three operations correspond to callee calls in the code: aa_get_newest_label on parameters a and b (conditional), and __label_find_merge on the return value. Access paths and type chains match callee info, and segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "a.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "b.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.refcount",
+        "aa_label--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no merge label exists, the lookup returns NULL; retrying without changing the input labels would also yield NULL, so retry is pointless.",
+    "contract_summary": "Get-wrapper: finds the merged label of two input labels (handling stale labels by automatically obtaining the newest versions) and returns it with an acquired reference. The caller takes ownership of the reference and must release it via aa_put_label() when done. If no merged label exists, returns NULL; the caller must check the return value. The function temporarily acquires references on newest versions of stale inputs but releases them before returning. The returned label's refcount has been incremented exactly once by __label_find_merge."
+  }
+}

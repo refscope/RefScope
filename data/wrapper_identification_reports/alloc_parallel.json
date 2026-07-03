@@ -1,0 +1,115 @@
+{
+  "function_name": "alloc_parallel",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "rv.refcnt.refcount.refs",
+      "parallel_io--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount operation (kref_init) never fails; function failure is due to memory allocation, which may be retried but retry is not related to refcount semantics.",
+  "contract_summary": "Set-wrapper that allocates a struct parallel_io and initializes its reference count to 1 via kref_init. The function transfers ownership of the newly created object to the caller via the return value; the caller must eventually call kref_put to release the reference. If allocation fails, NULL is returned — the caller must check for NULL. There are no locking or RCU requirements. The function does not acquire an existing reference; it establishes the initial one, making this the 'birth' point of the object's lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is allocation and kref initialization (set-wrapper). Only minimal non-refcount logic: assigning data pointer.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount operation (kref_init) never fails; function failure is due to memory allocation, which may be retried but retry is not related to refcount semantics.",
+      "contract_summary": "Set-wrapper that allocates a struct parallel_io and initializes its reference count to 1 via kref_init. The function transfers ownership of the newly created object to the caller via the return value; the caller must eventually call kref_put to release the reference. If allocation fails, NULL is returned — the caller must check for NULL. There are no locking or RCU requirements. The function does not acquire an existing reference; it establishes the initial one, making this the 'birth' point of the object's lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "rv.refcnt.refcount.refs",
+          "parallel_io--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "rv.refcnt.refcount.refs",
+          "parallel_io--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "kref_init sets the refcount to 1 on the newly allocated object (returned via rv). The access path rv.refcnt.refcount.refs and type chain parallel_io--kref--refcount_struct--atomic_t are correctly traced from the return variable."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "rv.refcnt.refcount.refs",
+        "parallel_io--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount operation (kref_init) never fails; function failure is due to memory allocation, which may be retried but retry is not related to refcount semantics.",
+    "contract_summary": "Set-wrapper that allocates a struct parallel_io and initializes its reference count to 1 via kref_init. The function transfers ownership of the newly created object to the caller via the return value; the caller must eventually call kref_put to release the reference. If allocation fails, NULL is returned — the caller must check for NULL. There are no locking or RCU requirements. The function does not acquire an existing reference; it establishes the initial one, making this the 'birth' point of the object's lifecycle."
+  }
+}

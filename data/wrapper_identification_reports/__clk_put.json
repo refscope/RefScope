@@ -1,0 +1,107 @@
+{
+  "function_name": "__clk_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "clk.core.ref.refcount",
+      "clk--clk_core--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put unconditionally decrements the refcount; if the refcount was already zero a double-free would occur, making retry unsafe.",
+  "contract_summary": "Releases a clock consumer reference pointed to by clk. Before decrementing the core's kref, it verifies exclusive_count is zero (correcting if not), unlinks the consumer from the core, and resets any rate boundaries to defaults. After kref_put, it drops the module owner reference and frees the clk structure. The caller must not use clk after this call; the clock core object may be freed if its refcount reaches zero. This function must be called in a context where clk_prepare_lock is not already held (it takes the lock internally).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a clock reference via kref_put, with prerequisite cleanup steps (unlink, rate range clear, module_put) that are tightly coupled to the release lifecycle. The function is a canonical put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put unconditionally decrements the refcount; if the refcount was already zero a double-free would occur, making retry unsafe.",
+      "contract_summary": "Releases a clock consumer reference pointed to by clk. Before decrementing the core's kref, it verifies exclusive_count is zero (correcting if not), unlinks the consumer from the core, and resets any rate boundaries to defaults. After kref_put, it drops the module owner reference and frees the clk structure. The caller must not use clk after this call; the clock core object may be freed if its refcount reaches zero. This function must be called in a context where clk_prepare_lock is not already held (it takes the lock internally)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "clk.core.ref.refcount",
+          "clk--clk_core--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "clk.core.ref.refcount",
+          "clk--clk_core--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put is called on &clk->core->ref, which decrements the refcount. The critical variable is clk (parameter 1). The access path clk.core.ref.refcount correctly traces from the parameter through core and ref to the refcount field. The type chain clk--clk_core--kref--refcount_t matches the struct definitions. Segment counts (4 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "clk.core.ref.refcount",
+        "clk--clk_core--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put unconditionally decrements the refcount; if the refcount was already zero a double-free would occur, making retry unsafe.",
+    "contract_summary": "Releases a clock consumer reference pointed to by clk. Before decrementing the core's kref, it verifies exclusive_count is zero (correcting if not), unlinks the consumer from the core, and resets any rate boundaries to defaults. After kref_put, it drops the module owner reference and frees the clk structure. The caller must not use clk after this call; the clock core object may be freed if its refcount reaches zero. This function must be called in a context where clk_prepare_lock is not already held (it takes the lock internally)."
+  }
+}

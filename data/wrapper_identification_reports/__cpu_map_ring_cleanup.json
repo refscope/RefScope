@@ -1,0 +1,71 @@
+{
+  "function_name": "__cpu_map_ring_cleanup",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Unconditional put operations have no failure path; retry is not applicable.",
+  "contract_summary": "This function drains a ptr_ring during cleanup, releasing all references to its entries. Each entry is either an skb (freed via kfree_skb) or an xdp_frame (freed via xdp_return_frame). The function is idempotent and will consume all entries, warning if any were present (indicating a prior bug). After calling this function, the ring will be empty but not freed; callers should ensure the ring is no longer in use before calling this function. No reference is returned to the caller; the function solely performs release operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release references to skbs and xdp frames stored in the ring, draining it. The only logic is freeing objects; no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Unconditional put operations have no failure path; retry is not applicable.",
+      "contract_summary": "This function drains a ptr_ring during cleanup, releasing all references to its entries. Each entry is either an skb (freed via kfree_skb) or an xdp_frame (freed via xdp_return_frame). The function is idempotent and will consume all entries, warning if any were present (indicating a prior bug). After calling this function, the ring will be empty but not freed; callers should ensure the ring is no longer in use before calling this function. No reference is returned to the caller; the function solely performs release operations."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "put_page",
+        "page_pool_put_netmem"
+      ],
+      "reason": "For the xdp_frame path in __cpu_map_ring_cleanup, xdp_return_frame calls __xdp_return which in turn calls put_page or page_pool_put_full_netmem. To trace the complete member_access_path and type_chain from the function's interface to the refcount field, we need to see how these callees manipulate the refcount (e.g., which field on which struct). Currently, only kfree_skb's callee info is provided, so we lack the refcount details for the xdp_frame path."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "The Candidate ResultList is empty. No reference-count operations were extracted for validation. The code contains kfree_skb (a put operation) and xdp_return_frame, but these are not included in the candidate list, so there is no inconsistency to report."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Unconditional put operations have no failure path; retry is not applicable.",
+    "contract_summary": "This function drains a ptr_ring during cleanup, releasing all references to its entries. Each entry is either an skb (freed via kfree_skb) or an xdp_frame (freed via xdp_return_frame). The function is idempotent and will consume all entries, warning if any were present (indicating a prior bug). After calling this function, the ring will be empty but not freed; callers should ensure the ring is no longer in use before calling this function. No reference is returned to the caller; the function solely performs release operations."
+  }
+}

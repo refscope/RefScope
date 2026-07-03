@@ -1,0 +1,102 @@
+{
+  "function_name": "__proc_set_tty",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tty_kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tty_kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_pid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pid.count.refs",
+      "member_type_chain": "pid--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tty_kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "tty_kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tty.kref.refcount",
+      "member_type_chain": "tty_struct--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "put_pid",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pid.count.refs",
+      "member_type_chain": "pid--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "All refcount operations are unconditional and always succeed; the conditional tty_kref_put is a safety check that does not fail. No retry is needed.",
+  "contract_summary": "Internal helper that sets the controlling TTY for the current process. It acquires a reference on the new TTY (tty_kref_get) and new session/pgrp PIDs (get_pid), and releases references on the old TTY (tty_kref_put if non-NULL), old session/pgrp PIDs (put_pid), and the old tty_old_pgrp (put_pid). After this call, current->signal->tty holds a valid kref reference, and the caller must not manually tty_kref_put the old TTY. The function is meant to be called while holding appropriate locks (e.g., tty->ctrl.lock) and ensures proper ownership transfer without leaking references.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is entirely reference-count management: it replaces the current process's controlling tty, session, and pgrp by dropping old references (put_pid, tty_kref_put) and acquiring new ones (get_pid, tty_kref_get). No non-refcount business logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "All refcount operations are unconditional and always succeed; the conditional tty_kref_put is a safety check that does not fail. No retry is needed.",
+      "contract_summary": "Internal helper that sets the controlling TTY for the current process. It acquires a reference on the new TTY (tty_kref_get) and new session/pgrp PIDs (get_pid), and releases references on the old TTY (tty_kref_put if non-NULL), old session/pgrp PIDs (put_pid), and the old tty_old_pgrp (put_pid). After this call, current->signal->tty holds a valid kref reference, and the caller must not manually tty_kref_put the old TTY. The function is meant to be called while holding appropriate locks (e.g., tty->ctrl.lock) and ensures proper ownership transfer without leaking references."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "get_pid"
+      ],
+      "reason": "Need the implementation of get_pid to determine its internal refcount operation (it is used to increment the refcount of a struct pid, but the provided callee info does not include it; the given implementation in Additional Callee Implementations is a different function). The actual kernel get_pid increments pid->count.refs, but we need its implementation to confirm the access path and type chain."
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate ResultList is empty, but the function __proc_set_tty contains multiple refcount operations that involve function parameters (e.g., put_pid on tty->ctrl.session and tty->ctrl.pgrp, tty_kref_get on tty) and other variables. The extraction fails to capture any of these operations, making the candidate list inconsistent with the actual code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "All refcount operations are unconditional and always succeed; the conditional tty_kref_put is a safety check that does not fail. No retry is needed.",
+    "contract_summary": "Internal helper that sets the controlling TTY for the current process. It acquires a reference on the new TTY (tty_kref_get) and new session/pgrp PIDs (get_pid), and releases references on the old TTY (tty_kref_put if non-NULL), old session/pgrp PIDs (put_pid), and the old tty_old_pgrp (put_pid). After this call, current->signal->tty holds a valid kref reference, and the caller must not manually tty_kref_put the old TTY. The function is meant to be called while holding appropriate locks (e.g., tty->ctrl.lock) and ensures proper ownership transfer without leaking references."
+  }
+}

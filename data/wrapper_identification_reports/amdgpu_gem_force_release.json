@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_gem_force_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "gobj",
+      "gobj.refcount.refcount",
+      "drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operations are unconditional and always decrement the refcount; they cannot fail. The IDR destroy is also unconditional. No retry mechanism is relevant.",
+  "contract_summary": "This function forcefully releases all GEM objects held by any remaining user-space file descriptors on an amdgpu device during shutdown. It iterates over each DRM file and calls drm_gem_object_put() on every GEM object, then destroys the object IDR. This is a final cleanup operation: after calling it, the device state is invalid for further use. The caller must ensure no concurrent access to the file list or GEM objects, and no further operations on the device should occur. This function is not part of the normal get/put lifecycle; it is a destructive teardown that should only be called when the device is being removed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release (put) all GEM objects associated with still-active user-space clients during device teardown. The only significant logic beyond refcount operations is emitting warnings and destroying the IDR, which are directly related to the forced cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operations are unconditional and always decrement the refcount; they cannot fail. The IDR destroy is also unconditional. No retry mechanism is relevant.",
+      "contract_summary": "This function forcefully releases all GEM objects held by any remaining user-space file descriptors on an amdgpu device during shutdown. It iterates over each DRM file and calls drm_gem_object_put() on every GEM object, then destroys the object IDR. This is a final cleanup operation: after calling it, the device state is invalid for further use. The caller must ensure no concurrent access to the file list or GEM objects, and no further operations on the device should occur. This function is not part of the normal get/put lifecycle; it is a destructive teardown that should only be called when the device is being removed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "gobj",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "gobj",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation correctly identifies drm_gem_object_put(gobj) as a put on gobj.refcount.refcount, with type chain drm_gem_object--kref--refcount_t, matching the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "gobj",
+        "gobj.refcount.refcount",
+        "drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operations are unconditional and always decrement the refcount; they cannot fail. The IDR destroy is also unconditional. No retry mechanism is relevant.",
+    "contract_summary": "This function forcefully releases all GEM objects held by any remaining user-space file descriptors on an amdgpu device during shutdown. It iterates over each DRM file and calls drm_gem_object_put() on every GEM object, then destroys the object IDR. This is a final cleanup operation: after calling it, the device state is invalid for further use. The caller must ensure no concurrent access to the file list or GEM objects, and no further operations on the device should occur. This function is not part of the normal get/put lifecycle; it is a destructive teardown that should only be called when the device is being removed."
+  }
+}

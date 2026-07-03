@@ -1,0 +1,99 @@
+{
+  "function_name": "__del_holder",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "task.usage.refs",
+      "task_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If put_task_struct fails, it indicates a double-put or refcount underflow; retrying would cause use-after-free.",
+  "contract_summary": "Put wrapper that releases the reference on a task_struct that was held as a holder in a block_lock. After this call, the task's reference count is decremented, and the holder slot is cleared. This function is an unconditional release: it must be called exactly once per acquired holder. The caller must ensure the task pointer is valid and must not access the task after this call without taking a new reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a task_struct held in a block_lock holder slot, by calling put_task_struct after clearing the holder.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If put_task_struct fails, it indicates a double-put or refcount underflow; retrying would cause use-after-free.",
+      "contract_summary": "Put wrapper that releases the reference on a task_struct that was held as a holder in a block_lock. After this call, the task's reference count is decremented, and the holder slot is cleared. This function is an unconditional release: it must be called exactly once per acquired holder. The caller must ensure the task pointer is valid and must not access the task after this call without taking a new reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "task.usage.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "task.usage.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "put_task_struct is called on the 'task' parameter, which decrements task->usage.refs. The access path from parameter index 2 and member chain task_struct->refcount_t->atomic_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "task.usage.refs",
+        "task_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If put_task_struct fails, it indicates a double-put or refcount underflow; retrying would cause use-after-free.",
+    "contract_summary": "Put wrapper that releases the reference on a task_struct that was held as a holder in a block_lock. After this call, the task's reference count is decremented, and the holder slot is cleared. This function is an unconditional release: it must be called exactly once per acquired holder. The caller must ensure the task pointer is valid and must not access the task after this call without taking a new reference."
+  }
+}

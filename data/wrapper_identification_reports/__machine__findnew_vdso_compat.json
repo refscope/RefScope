@@ -1,0 +1,99 @@
+{
+  "function_name": "__machine__findnew_vdso_compat",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "4",
+      "*dso.refcnt.refs",
+      "dso--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__machine__findnew_compat",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dso.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__machine__findnew_compat",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dso.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure to obtain a DSO occurs when dso_type is not 32BIT or X32BIT, which is determined by the thread's architecture and will not change. Retrying would yield the same result.",
+  "contract_summary": "This function acquires a reference to a compat vdso DSO (32-bit or x32-bit) for the given thread's architecture. It selects the appropriate vdso_info member (vdso32 or vdsox32) based on dso_type, then delegates to __machine__findnew_compat which performs a get-or-create and increments the refcount. The caller receives the DSO via the output parameter *dso and must release it with a corresponding put (e.g., dso__put) when done. The function returns 1 if a DSO was successfully obtained, 0 if the thread's architecture is 64-bit or unknown, or if the required compat type is not compiled in. Callers must check the return value before using *dso.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a compat vdso DSO by calling __machine__findnew_compat, which performs a get-or-create with refcount increment. The only additional logic is type selection and compile-time filtering, which is minimal.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure to obtain a DSO occurs when dso_type is not 32BIT or X32BIT, which is determined by the thread's architecture and will not change. Retrying would yield the same result.",
+      "contract_summary": "This function acquires a reference to a compat vdso DSO (32-bit or x32-bit) for the given thread's architecture. It selects the appropriate vdso_info member (vdso32 or vdsox32) based on dso_type, then delegates to __machine__findnew_compat which performs a get-or-create and increments the refcount. The caller receives the DSO via the output parameter *dso and must release it with a corresponding put (e.g., dso__put) when done. The function returns 1 if a DSO was successfully obtained, 0 if the thread's architecture is 64-bit or unknown, or if the required compat type is not compiled in. Callers must check the return value before using *dso."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "4",
+          "*dso.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "4",
+          "*dso.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function assigns the return value of __machine__findnew_compat (a dso get function) to *dso. The access path *dso.refcnt.refs correctly traces from parameter 4 (double pointer) through dereference to refcount field, matching the callee's dso.refcnt.refs path and dso--refcount_struct--atomic_t type chain. Segment count matches (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "4",
+        "*dso.refcnt.refs",
+        "dso--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure to obtain a DSO occurs when dso_type is not 32BIT or X32BIT, which is determined by the thread's architecture and will not change. Retrying would yield the same result.",
+    "contract_summary": "This function acquires a reference to a compat vdso DSO (32-bit or x32-bit) for the given thread's architecture. It selects the appropriate vdso_info member (vdso32 or vdsox32) based on dso_type, then delegates to __machine__findnew_compat which performs a get-or-create and increments the refcount. The caller receives the DSO via the output parameter *dso and must release it with a corresponding put (e.g., dso__put) when done. The function returns 1 if a DSO was successfully obtained, 0 if the thread's architecture is 64-bit or unknown, or if the required compat type is not compiled in. Callers must check the return value before using *dso."
+  }
+}

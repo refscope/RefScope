@@ -1,0 +1,82 @@
+{
+  "function_name": "brcmf_sdio_free_glom",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "brcmu_pkt_buf_free_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "brcmu_pkt_buf_free_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always succeeds; no failure path exists, so retry is not applicable.",
+  "contract_summary": "Put-wrapper that releases all skbs in the glom queue by calling brcmu_pkt_buf_free_skb on each, which decrements the skb's refcount. The caller must ensure the bus structure is valid and that no concurrent access to the glom queue occurs. After the call, the glom queue is empty and all skbs are freed; the caller must not access those skbs. This function is a cleanup operation and does not return any reference to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to free all skbs in the glom queue by calling brcmu_pkt_buf_free_skb (a refcount put function) on each skb. The function performs no other significant logic beyond queue iteration and unlinking.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always succeeds; no failure path exists, so retry is not applicable.",
+      "contract_summary": "Put-wrapper that releases all skbs in the glom queue by calling brcmu_pkt_buf_free_skb on each, which decrements the skb's refcount. The caller must ensure the bus structure is valid and that no concurrent access to the glom queue occurs. After the call, the glom queue is empty and all skbs are freed; the caller must not access those skbs. This function is a cleanup operation and does not return any reference to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bus.glom.next.users.refs",
+          "brcmf_sdio--sk_buff_head--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The refcount operation (put) is performed on `cur`, which is obtained from `bus->glom` via iteration, not directly on the function parameter `bus`. The candidate incorrectly treats parameter 1 (bus) as the critical variable, but the access path should start from the actual skb being freed. Since the critical variable is not a function interface entity (parameter or return), the operation cannot be represented as a parameter-based access path."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function brcmf_sdio_free_glom iterates over skbs in bus->glom and frees each one via brcmu_pkt_buf_free_skb (a put operation on the skb). However, the skb objects are obtained from the list and are not direct parameters or return values of the function. The candidate's access path starting from parameter 'bus' does not represent a parameter-based reference-count operation on a critical variable. The function is a cleanup routine, not a focused refcount wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always succeeds; no failure path exists, so retry is not applicable.",
+    "contract_summary": "Put-wrapper that releases all skbs in the glom queue by calling brcmu_pkt_buf_free_skb on each, which decrements the skb's refcount. The caller must ensure the bus structure is valid and that no concurrent access to the glom queue occurs. After the call, the glom queue is empty and all skbs are freed; the caller must not access those skbs. This function is a cleanup operation and does not return any reference to the caller."
+  }
+}

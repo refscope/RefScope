@@ -1,0 +1,186 @@
+{
+  "function_name": "batadv_tt_local_add",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_tt_local_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tt_local_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_meshif_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_global_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_get_by_index",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_global_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_local_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_local_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_get_by_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_get_by_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount.refs",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_meshif_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_get_by_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs extensive business logic: lookup, creation, flag management, roaming handling, event sending, etc. Refcount operations (kref_init, kref_get, batadv_hardif_get_by_netdev, batadv_meshif_vlan_get) are incidental steps within a broader operation of adding a local TT entry. The primary purpose is not reference-count management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

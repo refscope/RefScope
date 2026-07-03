@@ -1,0 +1,126 @@
+{
+  "function_name": "__pwm_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "pwm.chip.dev.kobj.kref.refcount",
+      "pwm_device--pwm_chip--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "pwm.chip.owner.refcnt",
+      "pwm_device--pwm_chip--module--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the early return path (double free warning) is taken, the device is already released; retrying would lead to a double-put and potential use-after-free. If the function proceeds normally, it always succeeds.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the device reference (put_device) and module reference (module_put) acquired during pwm request, along with clearing the requested flag and calling the chip's free op. The only non-refcount logic is the label clearing and condition checks, which are minimal and ancillary to the release contract.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the early return path (double free warning) is taken, the device is already released; retrying would lead to a double-put and potential use-after-free. If the function proceeds normally, it always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "pwm.chip.dev.kobj.kref.refcount",
+          "pwm_device--pwm_chip--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "pwm.chip.owner.refcnt",
+          "pwm_device--pwm_chip--module--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "pwm.chip.dev.kobj.kref.refcount",
+          "pwm_device--pwm_chip--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "pwm.chip.owner.refcnt",
+          "pwm_device--pwm_chip--module--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: put_device(&chip->dev) corresponds to path pwm.chip.dev.kobj.kref.refcount and type chain; module_put(chip->owner) corresponds to path pwm.chip.owner.refcnt and type chain. The access paths correctly start from the parameter (pwm) and traverse to the refcount fields, with matching segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "pwm.chip.dev.kobj.kref.refcount",
+        "pwm_device--pwm_chip--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "pwm.chip.owner.refcnt",
+        "pwm_device--pwm_chip--module--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the early return path (double free warning) is taken, the device is already released; retrying would lead to a double-put and potential use-after-free. If the function proceeds normally, it always succeeds.",
+    "contract_summary": ""
+  }
+}

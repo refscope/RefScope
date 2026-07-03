@@ -1,0 +1,127 @@
+{
+  "function_name": "batadv_tvlv_container_remove",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tvlv.refcount.refcount",
+      "batadv_tvlv_container--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tvlv.refcount.refcount",
+      "batadv_tvlv_container--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_tvlv_container_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tvlv.refcount.refcount",
+      "member_type_chain": "batadv_tvlv_container--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_tvlv_container_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tvlv.refcount.refcount",
+      "member_type_chain": "batadv_tvlv_container--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path; the function is a put wrapper that executes unconditionally if tvlv is non-NULL.",
+  "contract_summary": "This function removes a TVLV container from the internal list and releases two references: one for the list and one presumably held by the caller. After this call, the container's refcount is decremented twice, and if no other references exist, the container will be freed. The caller must hold the container_list_lock and must not use the tvlv pointer after calling this function. This function represents the release stage of the container's lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to remove a TVLV container from the list and release its two references via batadv_tvlv_container_put. The hlist_del is a necessary precursor for the puts, but the core operation is refcount decrement.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path; the function is a put wrapper that executes unconditionally if tvlv is non-NULL.",
+      "contract_summary": "This function removes a TVLV container from the internal list and releases two references: one for the list and one presumably held by the caller. After this call, the container's refcount is decremented twice, and if no other references exist, the container will be freed. The caller must hold the container_list_lock and must not use the tvlv pointer after calling this function. This function represents the release stage of the container's lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv.refcount.refcount",
+          "batadv_tvlv_container--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv.refcount.refcount",
+          "batadv_tvlv_container--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv.refcount.refcount",
+          "batadv_tvlv_container--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv.refcount.refcount",
+          "batadv_tvlv_container--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both batadv_tvlv_container_put calls operate on parameter tvlv (index 1), which matches the callee's put operation on the same parameter. The access path tvlv.refcount.refcount and type chain batadv_tvlv_container--kref--refcount_t are consistent with the struct definitions (tvlv is a batadv_tvlv_container with a kref field named refcount containing a refcount_t). The two put calls are intended to decrement and free the container after removal from the list. There are no contradictions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tvlv.refcount.refcount",
+        "batadv_tvlv_container--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tvlv.refcount.refcount",
+        "batadv_tvlv_container--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path; the function is a put wrapper that executes unconditionally if tvlv is non-NULL.",
+    "contract_summary": "This function removes a TVLV container from the internal list and releases two references: one for the list and one presumably held by the caller. After this call, the container's refcount is decremented twice, and if no other references exist, the container will be freed. The caller must hold the container_list_lock and must not use the tvlv pointer after calling this function. This function represents the release stage of the container's lifecycle."
+  }
+}

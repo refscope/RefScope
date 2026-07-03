@@ -1,0 +1,58 @@
+{
+  "function_name": "__v9fs_lookup_revalidate",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "p9_fid_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fid.count.refs",
+      "member_type_chain": "p9_fid--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "p9_fid_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fid.count.refs",
+      "member_type_chain": "p9_fid--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no refcount operation to retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is dentry revalidation (checking if inode is still valid in 9P filesystem). The function contains significant logic: RCU check, inode validation, fid lookup, attribute refresh via VFS calls, and error handling. The refcount operations (v9fs_fid_lookup and p9_fid_put) are internal plumbing to manage the fid lifetime and not the function's main goal. No reference-counted object is returned or exposed to the caller.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no refcount operation to retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no refcount operation to retry.",
+    "contract_summary": ""
+  }
+}

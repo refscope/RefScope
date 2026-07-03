@@ -1,0 +1,115 @@
+{
+  "function_name": "bpf_kfunc_call_test_acquire",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "global",
+      "prog_test_struct",
+      "prog_test_struct.cnt.refs",
+      "prog_test_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc always succeeds; there is no failure case to retry.",
+  "contract_summary": "This is an acquire (get) wrapper that unconditionally increments the reference count of the global structure `prog_test_struct` via `refcount_inc`. It returns a pointer to that structure, giving the caller a new reference. The caller must later release this reference by calling a corresponding put function (e.g., `bpf_kfunc_call_test_release`). The operation always succeeds and the returned pointer is always valid; there is no error path and no need to check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a global object by incrementing its refcount and returning the object; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc always succeeds; there is no failure case to retry.",
+      "contract_summary": "This is an acquire (get) wrapper that unconditionally increments the reference count of the global structure `prog_test_struct` via `refcount_inc`. It returns a pointer to that structure, giving the caller a new reference. The caller must later release this reference by calling a corresponding put function (e.g., `bpf_kfunc_call_test_release`). The operation always succeeds and the returned pointer is always valid; there is no error path and no need to check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "prog_test_struct",
+          "prog_test_struct.cnt.refs",
+          "prog_test_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "prog_test_struct",
+          "prog_test_struct.cnt.refs",
+          "prog_test_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&prog_test_struct.cnt) is called on the global variable prog_test_struct. The returned pointer is &prog_test_struct, so the global is the acquired object. Access path prog_test_struct.cnt.refs correctly traces through cnt (refcount_t) to refs (atomic_t). Type chain segments match access path segments."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "global",
+        "prog_test_struct",
+        "prog_test_struct.cnt.refs",
+        "prog_test_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc always succeeds; there is no failure case to retry.",
+    "contract_summary": "This is an acquire (get) wrapper that unconditionally increments the reference count of the global structure `prog_test_struct` via `refcount_inc`. It returns a pointer to that structure, giving the caller a new reference. The caller must later release this reference by calling a corresponding put function (e.g., `bpf_kfunc_call_test_release`). The operation always succeeds and the returned pointer is always valid; there is no error path and no need to check the return value."
+  }
+}

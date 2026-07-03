@@ -1,0 +1,122 @@
+{
+  "function_name": "__find_bmc_prod_dev_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "bmc.usecount.refcount.refs",
+      "bmc_device--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs either because no device matches the IDs (path condition not met) or because the device's refcount was zero (object dying). In either case, retrying the same query will not change the outcome.",
+  "contract_summary": "This function is a device finder callback that looks up a BMC device matching a given product ID and device ID. Upon finding a match, it atomically increments the device's kref (usecount) only if the device is still alive (refcount > 0). Returns 1 if a reference was taken, 0 otherwise. The caller (typically device_find_child) receives the device pointer with an additional reference if successful; the caller must later decrement the reference with a corresponding put (e.g., put_device) when done. This ensures that the device won't be freed while in use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to find a BMC device matching product/device IDs and acquire a reference via kref_get_unless_zero. The only non-refcount logic is the type check and ID comparison, which are necessary for the lookup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs either because no device matches the IDs (path condition not met) or because the device's refcount was zero (object dying). In either case, retrying the same query will not change the outcome.",
+      "contract_summary": "This function is a device finder callback that looks up a BMC device matching a given product ID and device ID. Upon finding a match, it atomically increments the device's kref (usecount) only if the device is still alive (refcount > 0). Returns 1 if a reference was taken, 0 otherwise. The caller (typically device_find_child) receives the device pointer with an additional reference if successful; the caller must later decrement the reference with a corresponding put (e.g., put_device) when done. This ensures that the device won't be freed while in use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bmc.usecount.refcount.refs",
+          "bmc_device--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation incorrectly specifies location 'return' index '0' because __find_bmc_prod_dev_id returns an integer (int rv) not a bmc_device pointer. The refcount is incremented on bmc->usecount, where bmc is derived from the input parameter 'dev' (parameter 1). Therefore, the critical variable for the refcount operation is not the return value, so the operation is invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bmc.usecount.refcount.refs",
+          "bmc_device--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a match callback for bus_find_device that conditionally increments the refcount on a bmc device. The critical variable (the bmc device) is derived from input parameter 1 (dev). Although the function returns an int, the caller uses the device parameter to return the found device. The extraction correctly identified the path bmc.usecount.refcount but incorrectly specified 'return' as location; we correct it to 'parameter' index 1, as the refcount increment is on an object that flows out through the input device parameter."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "bmc.usecount.refcount.refs",
+        "bmc_device--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs either because no device matches the IDs (path condition not met) or because the device's refcount was zero (object dying). In either case, retrying the same query will not change the outcome.",
+    "contract_summary": "This function is a device finder callback that looks up a BMC device matching a given product ID and device ID. Upon finding a match, it atomically increments the device's kref (usecount) only if the device is still alive (refcount > 0). Returns 1 if a reference was taken, 0 otherwise. The caller (typically device_find_child) receives the device pointer with an additional reference if successful; the caller must later decrement the reference with a corresponding put (e.g., put_device) when done. This ensures that the device won't be freed while in use."
+  }
+}

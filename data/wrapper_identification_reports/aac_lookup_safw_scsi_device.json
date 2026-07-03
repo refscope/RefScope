@@ -1,0 +1,99 @@
+{
+  "function_name": "aac_lookup_safw_scsi_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "sdev.sdev_gendev.kobj.kref.refcount",
+      "scsi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "scsi_device_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "scsi_device_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the device is not present; while the device could appear later, the wrapper itself does not provide a retry mechanism and callers typically handle NULL directly.",
+  "contract_summary": "This is a get-wrapper that looks up a SCSI device by bus, target, and lun=0, performing bus number translation for non-container channels. On success, it returns a pointer to the scsi_device with an incremented reference count; the caller must later release this reference with scsi_device_put. On failure (device not found), it returns NULL. The function is intended to be a safe way to obtain a reference to a device, abstracting away the bus mapping.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a SCSI device and acquire a reference via scsi_device_lookup; the bus translation is trivial and does not detract from its core refcount management role.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the device is not present; while the device could appear later, the wrapper itself does not provide a retry mechanism and callers typically handle NULL directly.",
+      "contract_summary": "This is a get-wrapper that looks up a SCSI device by bus, target, and lun=0, performing bus number translation for non-container channels. On success, it returns a pointer to the scsi_device with an incremented reference count; the caller must later release this reference with scsi_device_put. On failure (device not found), it returns NULL. The function is intended to be a safe way to obtain a reference to a device, abstracting away the bus mapping."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sdev.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sdev.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function aac_lookup_safw_scsi_device returns the result of scsi_device_lookup directly, which is a struct scsi_device pointer whose reference count is incremented by the callee. The access path sdev.sdev_gendev.kobj.kref.refcount correctly traces from the returned struct scsi_device (via the sdev field) to the refcount_t field, and the type chain scsi_device--device--kobject--kref--refcount_t matches all intermediate struct types. The segment counts (5 each) are equal, and the direction 'get' is correct for the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "sdev.sdev_gendev.kobj.kref.refcount",
+        "scsi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the device is not present; while the device could appear later, the wrapper itself does not provide a retry mechanism and callers typically handle NULL directly.",
+    "contract_summary": "This is a get-wrapper that looks up a SCSI device by bus, target, and lun=0, performing bus number translation for non-container channels. On success, it returns a pointer to the scsi_device with an incremented reference count; the caller must later release this reference with scsi_device_put. On failure (device not found), it returns NULL. The function is intended to be a safe way to obtain a reference to a device, abstracting away the bus mapping."
+  }
+}

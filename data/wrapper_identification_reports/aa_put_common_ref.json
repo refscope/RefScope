@@ -1,0 +1,115 @@
+{
+  "function_name": "aa_put_common_ref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ref.count.refcount",
+      "aa_common_ref--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_i_loaddata",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "data.count.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_i_loaddata",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "data.count.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the pointer is NULL, the operation is a no-op; retrying will not change this. If non-NULL, the put succeeds and the object must not be used again, so retrying would cause a double-release (use-after-free).",
+  "contract_summary": "This function releases one reference on a reference-counted object identified by a common ref header. It must be called when the caller is done using the underlying object (rawdata, proxy, or namespace). After this call, the caller must not access the object again. The function handles NULL gracefully by doing nothing. It selects the correct put function based on the stored reftype.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement a reference count on a struct aa_common_ref, dispatching to the type-specific put function based on the reftype field. It contains no other logic beyond the NULL check and the switch.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the pointer is NULL, the operation is a no-op; retrying will not change this. If non-NULL, the put succeeds and the object must not be used again, so retrying would cause a double-release (use-after-free).",
+      "contract_summary": "This function releases one reference on a reference-counted object identified by a common ref header. It must be called when the caller is done using the underlying object (rawdata, proxy, or namespace). After this call, the caller must not access the object again. The function handles NULL gracefully by doing nothing. It selects the correct put function based on the stored reftype."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.count.refcount",
+          "aa_common_ref--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.count.refcount",
+          "aa_common_ref--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function aa_put_common_ref decrements the reference count via callees based on ref->reftype. The critical variable is parameter 1 (ref) which points to struct aa_common_ref. The access path ref.count.refcount traces from ref to the refcount_t field through the kref member count. The type chain aa_common_ref--kref--refcount_t is consistent and has correct segment counts (3 each). The put operation on this field is supported by the callee put functions which ultimately decrement the same refcount."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ref.count.refcount",
+        "aa_common_ref--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the pointer is NULL, the operation is a no-op; retrying will not change this. If non-NULL, the put succeeds and the object must not be used again, so retrying would cause a double-release (use-after-free).",
+    "contract_summary": "This function releases one reference on a reference-counted object identified by a common ref header. It must be called when the caller is done using the underlying object (rawdata, proxy, or namespace). After this call, the caller must not access the object again. The function handles NULL gracefully by doing nothing. It selects the correct put function based on the stored reftype."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_prog_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "filp.private_data.aux.refcnt",
+      "file--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+  "contract_summary": "This is the release callback for a BPF program file descriptor; it unconditionally decrements the reference count of the associated bpf_prog via bpf_prog_put. The caller (VFS) must not use the file or prog after this call. No further put should be called on the prog. This represents the release lifecycle stage of an acquired reference from open.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call bpf_prog_put on the bpf_prog obtained from the file's private data, which decrements the reference count. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+      "contract_summary": "This is the release callback for a BPF program file descriptor; it unconditionally decrements the reference count of the associated bpf_prog via bpf_prog_put. The caller (VFS) must not use the file or prog after this call. No further put should be called on the prog. This represents the release lifecycle stage of an acquired reference from open."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "filp.private_data.aux.refcnt",
+          "file--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "filp.private_data.aux.refcnt",
+          "file--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "bpf_prog_release extracts prog from filp->private_data and calls bpf_prog_put, which decrements prog->aux.refcnt. The access path from parameter 2 (filp) via private_data to aux.refcnt is consistent with the code and callee information. The type chain matches the structure nesting: file → bpf_prog (via private_data) → bpf_prog_aux → atomic64_t. The number of segments in the path (4) equals the number of types in the chain (4)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "filp.private_data.aux.refcnt",
+        "file--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+    "contract_summary": "This is the release callback for a BPF program file descriptor; it unconditionally decrements the reference count of the associated bpf_prog via bpf_prog_put. The caller (VFS) must not use the file or prog after this call. No further put should be called on the prog. This represents the release lifecycle stage of an acquired reference from open."
+  }
+}

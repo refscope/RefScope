@@ -1,0 +1,99 @@
+{
+  "function_name": "__begin_cred_crit_section",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Function always returns a valid label; no failure path. Get operation only triggers on stale path, which always succeeds. No retry needed.",
+  "contract_summary": "Conditional get wrapper: returns a reference to a non-stale aa_label. If the current label is stale, a new reference is acquired via aa_get_newest_label, the returned label is the newest instance, and *needput is set to true — the caller must later drop this reference via aa_put_label. If not stale, the existing label is returned without incrementing its refcount, *needput is false, and the caller must not release the returned label. The function never fails, but the caller MUST check *needput to determine whether it owns a reference and must therefore call aa_put_label.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to provide a non-stale label reference, conditionally acquiring a new reference via aa_get_newest_label when stale. The only logic is staleness check, bool assignment, and get on stale path — pure refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Function always returns a valid label; no failure path. Get operation only triggers on stale path, which always succeeds. No retry needed.",
+      "contract_summary": "Conditional get wrapper: returns a reference to a non-stale aa_label. If the current label is stale, a new reference is acquired via aa_get_newest_label, the returned label is the newest instance, and *needput is set to true — the caller must later drop this reference via aa_put_label. If not stale, the existing label is returned without incrementing its refcount, *needput is false, and the caller must not release the returned label. The function never fails, but the caller MUST check *needput to determine whether it owns a reference and must therefore call aa_put_label."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The 'get' operation is correctly attributed to the return value when aa_get_newest_label is called. The access path from the return variable (label) to the refcount field matches the callee's type chain, and segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Function always returns a valid label; no failure path. Get operation only triggers on stale path, which always succeeds. No retry needed.",
+    "contract_summary": "Conditional get wrapper: returns a reference to a non-stale aa_label. If the current label is stale, a new reference is acquired via aa_get_newest_label, the returned label is the newest instance, and *needput is set to true — the caller must later drop this reference via aa_put_label. If not stale, the existing label is returned without incrementing its refcount, *needput is false, and the caller must not release the returned label. The function never fails, but the caller MUST check *needput to determine whether it owns a reference and must therefore call aa_put_label."
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "function_name": "batadv_bla_get_backbone_gw",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "entry.refcount.refcount",
+      "batadv_bla_backbone_gw--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_backbone_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "backbone_gw_tmp.refcount.refcount",
+      "member_type_chain": "batadv_bla_backbone_gw--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_backbone_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "backbone_gw_tmp.refcount.refcount",
+      "member_type_chain": "batadv_bla_backbone_gw--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Allocation or hash insertion may fail under memory pressure; retrying after memory relief may succeed.",
+  "contract_summary": "Get-or-create wrapper for a backbone gateway entry. Returns a pointer to a batadv_bla_backbone_gw with an elevated reference count. The function first attempts to find an existing entry via batadv_backbone_hash_find, which already acquires a reference for the caller. If not found, it allocates a new entry, initializes its reference count (kref_init), acquires an additional reference for the caller (kref_get), and inserts it into the hash (the hash holds a reference). Side effects for new entries include removing any global TT entry for the originator/VLAN and, if own_backbone is set, sending a loop detection announcement and transitioning to unsynced state. The caller must release the reference via batadv_bla_backbone_gw_put (or equivalent) when the entry is no longer needed. Returns NULL on memory or hash insertion failure; the caller should check the return value and may retry on transient failures.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to get-or-create a backbone gateway entry with an elevated reference count for the caller; includes significant initialization and side effects for new entries (TT deletion, announce sending) but the refcount management is central.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Allocation or hash insertion may fail under memory pressure; retrying after memory relief may succeed.",
+      "contract_summary": "Get-or-create wrapper for a backbone gateway entry. Returns a pointer to a batadv_bla_backbone_gw with an elevated reference count. The function first attempts to find an existing entry via batadv_backbone_hash_find, which already acquires a reference for the caller. If not found, it allocates a new entry, initializes its reference count (kref_init), acquires an additional reference for the caller (kref_get), and inserts it into the hash (the hash holds a reference). Side effects for new entries include removing any global TT entry for the originator/VLAN and, if own_backbone is set, sending a loop detection announcement and transitioning to unsynced state. The caller must release the reference via batadv_bla_backbone_gw_put (or equivalent) when the entry is no longer needed. Returns NULL on memory or hash insertion failure; the caller should check the return value and may retry on transient failures."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry.refcount.refcount",
+          "batadv_bla_backbone_gw--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry.refcount.refcount",
+          "batadv_bla_backbone_gw--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a batadv_bla_backbone_gw pointer with an elevated refcount, either from batadv_backbone_hash_find (get) or from the newly created entry (kref_init + kref_get). The access path entry.refcount.refcount correctly traces from the return variable through the struct's refcount (kref) to the inner refcount_t field. The type chain matches the fields: batadv_bla_backbone_gw -> kref -> refcount_t. Segment count matches (3 segments vs 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "entry.refcount.refcount",
+        "batadv_bla_backbone_gw--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Allocation or hash insertion may fail under memory pressure; retrying after memory relief may succeed.",
+    "contract_summary": "Get-or-create wrapper for a backbone gateway entry. Returns a pointer to a batadv_bla_backbone_gw with an elevated reference count. The function first attempts to find an existing entry via batadv_backbone_hash_find, which already acquires a reference for the caller. If not found, it allocates a new entry, initializes its reference count (kref_init), acquires an additional reference for the caller (kref_get), and inserts it into the hash (the hash holds a reference). Side effects for new entries include removing any global TT entry for the originator/VLAN and, if own_backbone is set, sending a loop detection announcement and transitioning to unsynced state. The caller must release the reference via batadv_bla_backbone_gw_put (or equivalent) when the entry is no longer needed. Returns NULL on memory or hash insertion failure; the caller should check the return value and may retry on transient failures."
+  }
+}

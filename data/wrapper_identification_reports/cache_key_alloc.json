@@ -1,0 +1,99 @@
+{
+  "function_name": "cache_key_alloc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "key.ref.refcount.refs",
+      "pcache_cache_key--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "cache_key_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.ref.refcount.refs",
+      "member_type_chain": "pcache_cache_key--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "cache_key_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.ref.refcount.refs",
+      "member_type_chain": "pcache_cache_key--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation (refcount_set to 1) never fails. The function can fail only at allocation (mempool_alloc returns NULL). This is not a refcount operation failure; retrying allocation may succeed but is not related to refcount lifecycle.",
+  "contract_summary": "Allocates and initializes a new cache key with a reference count of 1. The caller receives a pointer to a freshly initialized object and becomes the sole owner of that reference. The caller must eventually release the reference by calling the corresponding put function (e.g., cache_key_put) when the object is no longer needed. If allocation fails, returns NULL — the caller must handle this failure gracefully.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Function allocates a new pcache_cache_key from a mempool, zeros it, then initializes its refcount via cache_key_init (set to 1). The refcount set is the key lifecycle operation, but allocation and zeroing are non-refcount logic. However, the primary purpose is to produce a new reference-counted object, making it a set-wrapper (creation side of lifecycle).",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation (refcount_set to 1) never fails. The function can fail only at allocation (mempool_alloc returns NULL). This is not a refcount operation failure; retrying allocation may succeed but is not related to refcount lifecycle.",
+      "contract_summary": "Allocates and initializes a new cache key with a reference count of 1. The caller receives a pointer to a freshly initialized object and becomes the sole owner of that reference. The caller must eventually release the reference by calling the corresponding put function (e.g., cache_key_put) when the object is no longer needed. If allocation fails, returns NULL — the caller must handle this failure gracefully."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "key.ref.refcount.refs",
+          "pcache_cache_key--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "key.ref.refcount.refs",
+          "pcache_cache_key--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The cache_key_init callee sets the refcount on the key object (parameter index 1) via path key.ref.refcount.refs. The key object is returned, so the operation is correctly attributed to the return value with the given access path and type chain. Segment counts match (4 segments, 4 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "key.ref.refcount.refs",
+        "pcache_cache_key--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation (refcount_set to 1) never fails. The function can fail only at allocation (mempool_alloc returns NULL). This is not a refcount operation failure; retrying allocation may succeed but is not related to refcount lifecycle.",
+    "contract_summary": "Allocates and initializes a new cache key with a reference count of 1. The caller receives a pointer to a freshly initialized object and becomes the sole owner of that reference. The caller must eventually release the reference by calling the corresponding put function (e.g., cache_key_put) when the object is no longer needed. If allocation fails, returns NULL — the caller must handle this failure gracefully."
+  }
+}

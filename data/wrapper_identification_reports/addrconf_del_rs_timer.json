@@ -1,0 +1,99 @@
+{
+  "function_name": "addrconf_del_rs_timer",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "idev.refcnt.refs",
+      "inet6_dev--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__in6_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.refcnt.refs",
+      "member_type_chain": "inet6_dev--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__in6_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "idev.refcnt.refs",
+      "member_type_chain": "inet6_dev--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If timer_delete returns 0, the timer was not pending, so no reference was released; retrying will not change this outcome.",
+  "contract_summary": "Releases the reference on the inet6_dev that was held by the router solicitation timer. This is a put wrapper: the reference is only decremented if the timer was actually pending and successfully canceled. After this call, the timer is guaranteed to be inactive, and the caller must not rely on the object being alive unless they hold another reference. No return value indicates success or failure; the caller can check by comparing idev->rs_timer state if needed, but typically the function is used internally when the device is being torn down.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to cancel the RS timer and conditionally release the reference held by the timer. The only logic besides the timer deletion check is the put operation, making it a pure put wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If timer_delete returns 0, the timer was not pending, so no reference was released; retrying will not change this outcome.",
+      "contract_summary": "Releases the reference on the inet6_dev that was held by the router solicitation timer. This is a put wrapper: the reference is only decremented if the timer was actually pending and successfully canceled. After this call, the timer is guaranteed to be inactive, and the caller must not rely on the object being alive unless they hold another reference. No return value indicates success or failure; the caller can check by comparing idev->rs_timer state if needed, but typically the function is used internally when the device is being torn down."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "idev.refcnt.refs",
+          "inet6_dev--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "idev.refcnt.refs",
+          "inet6_dev--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls __in6_dev_put(idev) which is a put operation on the parameter idev. The access path idev.refcnt.refs and type chain (inet6_dev--refcount_t--atomic_t) match the callee info and are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "idev.refcnt.refs",
+        "inet6_dev--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If timer_delete returns 0, the timer was not pending, so no reference was released; retrying will not change this outcome.",
+    "contract_summary": "Releases the reference on the inet6_dev that was held by the router solicitation timer. This is a put wrapper: the reference is only decremented if the timer was actually pending and successfully canceled. After this call, the timer is guaranteed to be inactive, and the caller must not rely on the object being alive unless they hold another reference. No return value indicates success or failure; the caller can check by comparing idev->rs_timer state if needed, but typically the function is used internally when the device is being torn down."
+  }
+}

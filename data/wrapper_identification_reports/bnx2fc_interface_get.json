@@ -1,0 +1,107 @@
+{
+  "function_name": "bnx2fc_interface_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "interface.kref.refcount",
+      "bnx2fc_interface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get is unconditional and always succeeds; no retry needed.",
+  "contract_summary": "This is a get wrapper that increments the kref reference count of a bnx2fc_interface object. After calling this function, the caller must ensure a corresponding call to kref_put (typically via a put wrapper like bnx2fc_interface_put) is made when the reference is no longer needed. The function does not transfer ownership of the pointer; rather, it acquires an additional reference that the caller must release. It is unconditional and cannot fail.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The only purpose of this function is to call kref_get on the kref member of the bnx2fc_interface structure. There is no additional logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get is unconditional and always succeeds; no retry needed.",
+      "contract_summary": "This is a get wrapper that increments the kref reference count of a bnx2fc_interface object. After calling this function, the caller must ensure a corresponding call to kref_put (typically via a put wrapper like bnx2fc_interface_put) is made when the reference is no longer needed. The function does not transfer ownership of the pointer; rather, it acquires an additional reference that the caller must release. It is unconditional and cannot fail."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "interface.kref.refcount",
+          "bnx2fc_interface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "interface.kref.refcount",
+          "bnx2fc_interface--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&interface->kref) correctly increments the refcount via interface->kref.refcount. The access path interface.kref.refcount and type chain bnx2fc_interface--kref--refcount_t match the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "interface.kref.refcount",
+        "bnx2fc_interface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get is unconditional and always succeeds; no retry needed.",
+    "contract_summary": "This is a get wrapper that increments the kref reference count of a bnx2fc_interface object. After calling this function, the caller must ensure a corresponding call to kref_put (typically via a put wrapper like bnx2fc_interface_put) is made when the reference is no longer needed. The function does not transfer ownership of the pointer; rather, it acquires an additional reference that the caller must release. It is unconditional and cannot fail."
+  }
+}

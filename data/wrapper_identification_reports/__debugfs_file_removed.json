@@ -1,0 +1,99 @@
+{
+  "function_name": "__debugfs_file_removed",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      1,
+      "dentry.d_fsdata.active_users.refs",
+      "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always succeeds; if not the last reference, the function blocks until all references are released, so no retry is needed.",
+  "contract_summary": "Put wrapper for a debugfs file's active user count. Releases one reference (via refcount_dec_and_test) and, if not the final reference, waits for all active users to finish (including triggering per-user cancellation callbacks). The caller must have previously acquired a reference via debugfs_file_get(). After this function returns, the file is fully removed and must not be accessed. The function is terminal and does not return ownership of any object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the active_users refcount and wait for all outstanding references to drain, including invoking cancellation callbacks. The cancellation loop is tightly coupled to the refcount draining, so there is no extraneous business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always succeeds; if not the last reference, the function blocks until all references are released, so no retry is needed.",
+      "contract_summary": "Put wrapper for a debugfs file's active user count. Releases one reference (via refcount_dec_and_test) and, if not the final reference, waits for all active users to finish (including triggering per-user cancellation callbacks). The caller must have previously acquired a reference via debugfs_file_get(). After this function returns, the file is fully removed and must not be accessed. The function is terminal and does not return ownership of any object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "dentry.d_fsdata.active_users.refs",
+          "dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "dentry.d_fsdata.active_users.refs",
+          "dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &fsd->active_users, where fsd is obtained via dentry->d_fsdata. The access path dentry.d_fsdata.active_users.refs correctly traces the struct members down to the atomic_t field, and the type chain dentry--debugfs_fsdata--refcount_t--atomic_t matches the actual struct hierarchy. The operation is a put because refcount_dec_and_test decrements the counter."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        1,
+        "dentry.d_fsdata.active_users.refs",
+        "dentry--debugfs_fsdata--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always succeeds; if not the last reference, the function blocks until all references are released, so no retry is needed.",
+    "contract_summary": "Put wrapper for a debugfs file's active user count. Releases one reference (via refcount_dec_and_test) and, if not the final reference, waits for all active users to finish (including triggering per-user cancellation callbacks). The caller must have previously acquired a reference via debugfs_file_get(). After this function returns, the file is fully removed and must not be accessed. The function is terminal and does not return ownership of any object."
+  }
+}

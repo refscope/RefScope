@@ -1,0 +1,106 @@
+{
+  "function_name": "__inet_csk_reqsk_queue_drop",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "req.rsk_refcnt.refs",
+      "request_sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "reqsk_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.rsk_refcnt.refs",
+      "member_type_chain": "request_sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "reqsk_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.rsk_refcnt.refs",
+      "member_type_chain": "request_sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount operations always succeed; no failure to retry. If unlink or timer delete fails, the puts are skipped accordingly.",
+  "contract_summary": "This is a put wrapper that releases references on a request_sock when removing it from the accept queue. It conditionally calls reqsk_put depending on whether the request was successfully unlinked from the hash and whether its timer was deleted. After the function returns, if unlinked is true, the request_sock may have been freed and must not be used further. The caller must hold appropriate synchronization (e.g., the socket lock) and must not use the request_sock after a successful drop. The return value indicates whether the request was removed from the queue, which may guide the caller in releasing associated resources.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to drop a request_sock by decrementing its refcount(s) as part of removal from the accept queue. The refcount puts are essential; queue unlinking and timer deletion are closely coupled cleanup steps.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount operations always succeed; no failure to retry. If unlink or timer delete fails, the puts are skipped accordingly.",
+      "contract_summary": "This is a put wrapper that releases references on a request_sock when removing it from the accept queue. It conditionally calls reqsk_put depending on whether the request was successfully unlinked from the hash and whether its timer was deleted. After the function returns, if unlinked is true, the request_sock may have been freed and must not be used further. The caller must hold appropriate synchronization (e.g., the socket lock) and must not use the request_sock after a successful drop. The return value indicates whether the request was removed from the queue, which may guide the caller in releasing associated resources."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "req.rsk_refcnt.refs",
+          "request_sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate incorrectly identifies the critical variable location as parameter index 1 (sk), but the refcount operations (reqsk_put(req)) take parameter index 2 (req). This location mismatch makes the extraction invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "req.rsk_refcnt.refs",
+          "request_sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Function __inet_csk_reqsk_queue_drop is a refcount put wrapper: it decrements the reference count of 'req' (parameter 2) via reqsk_put. The candidate's parameter index was wrong (1 instead of 2); corrected to reflect the actual refcount operation on req. The function only performs refcount-related actions (unlink, timer delete, put) and does not mix other business logic, so purity is high."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "req.rsk_refcnt.refs",
+        "request_sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount operations always succeed; no failure to retry. If unlink or timer delete fails, the puts are skipped accordingly.",
+    "contract_summary": "This is a put wrapper that releases references on a request_sock when removing it from the accept queue. It conditionally calls reqsk_put depending on whether the request was successfully unlinked from the hash and whether its timer was deleted. After the function returns, if unlinked is true, the request_sock may have been freed and must not be used further. The caller must hold appropriate synchronization (e.g., the socket lock) and must not use the request_sock after a successful drop. The return value indicates whether the request was removed from the queue, which may guide the caller in releasing associated resources."
+  }
+}

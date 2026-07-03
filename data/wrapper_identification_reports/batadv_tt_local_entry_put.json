@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_tt_local_entry_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tt_local_entry.common.refcount.refcount",
+      "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Putting a reference is a final operation; retrying would be a double-put (use-after-free).",
+  "contract_summary": "Put wrapper that decrements the refcount of a batadv_tt_local_entry via kref_put. The entry is passed as a pointer; if NULL, the function is a no-op. After calling, the caller must not use the entry. If the refcount reaches zero, the entry is freed via batadv_tt_local_entry_release. No return value or error handling is needed; the caller should not retry on failure (failure indicates invalid state or double-free).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to a batadv_tt_local_entry via kref_put; NULL check is minimal and does not add business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Putting a reference is a final operation; retrying would be a double-put (use-after-free).",
+      "contract_summary": "Put wrapper that decrements the refcount of a batadv_tt_local_entry via kref_put. The entry is passed as a pointer; if NULL, the function is a no-op. After calling, the caller must not use the entry. If the refcount reaches zero, the entry is freed via batadv_tt_local_entry_release. No return value or error handling is needed; the caller should not retry on failure (failure indicates invalid state or double-free)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tt_local_entry.common.refcount.refcount",
+          "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tt_local_entry.common.refcount.refcount",
+          "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls kref_put on &tt_local_entry->common.refcount, which is a put operation on the parameter object. The access path from parameter 1 (tt_local_entry) through common, refcount (kref), and refcount (refcount_t) is correct. The type chain matches the structure hierarchy, and segment counts are equal (4 each). Callee info confirms kref_put as a put function on its first argument."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tt_local_entry.common.refcount.refcount",
+        "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Putting a reference is a final operation; retrying would be a double-put (use-after-free).",
+    "contract_summary": "Put wrapper that decrements the refcount of a batadv_tt_local_entry via kref_put. The entry is passed as a pointer; if NULL, the function is a no-op. After calling, the caller must not use the entry. If the refcount reaches zero, the entry is freed via batadv_tt_local_entry_release. No return value or error handling is needed; the caller should not retry on failure (failure indicates invalid state or double-free)."
+  }
+}

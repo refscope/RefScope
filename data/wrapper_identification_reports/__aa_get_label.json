@@ -1,0 +1,115 @@
+{
+  "function_name": "__aa_get_label",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "l.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails when the refcount is zero (object being destroyed); retrying cannot revive the object.",
+  "contract_summary": "Conditional get-wrapper: attempts to acquire a reference on an aa_label only if its kref refcount is non-zero (i.e., the object is still alive). Returns the label pointer on success, NULL if the label is dying/dead or if the input pointer is NULL. On success, the caller gains a reference and must later release it with a corresponding put (e.g., aa_put_label). On NULL return, the caller must not use the label. This function does not require any locks, but the caller must ensure the label pointer is valid (or NULL) and that the refcount is managed correctly throughout the object's lifetime.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on an aa_label via kref_get_unless_zero; the only additional logic is a NULL check on the input pointer, which is negligible.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails when the refcount is zero (object being destroyed); retrying cannot revive the object.",
+      "contract_summary": "Conditional get-wrapper: attempts to acquire a reference on an aa_label only if its kref refcount is non-zero (i.e., the object is still alive). Returns the label pointer on success, NULL if the label is dying/dead or if the input pointer is NULL. On success, the caller gains a reference and must later release it with a corresponding put (e.g., aa_put_label). On NULL return, the caller must not use the label. This function does not require any locks, but the caller must ensure the label pointer is valid (or NULL) and that the refcount is managed correctly throughout the object's lifetime."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "l.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "l.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on &l->count.count, which increments the refcount. The return value l is passed to the caller. The access path l.count.count.refcount correctly traces from the return variable l to the refcount_t field via aa_label->aa_label_count->kref->refcount_t, matching the callee's path kref.refcount and type chain kref--refcount_t. The segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "l.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails when the refcount is zero (object being destroyed); retrying cannot revive the object.",
+    "contract_summary": "Conditional get-wrapper: attempts to acquire a reference on an aa_label only if its kref refcount is non-zero (i.e., the object is still alive). Returns the label pointer on success, NULL if the label is dying/dead or if the input pointer is NULL. On success, the caller gains a reference and must later release it with a corresponding put (e.g., aa_put_label). On NULL return, the caller must not use the label. This function does not require any locks, but the caller must ensure the label pointer is valid (or NULL) and that the refcount is managed correctly throughout the object's lifetime."
+  }
+}

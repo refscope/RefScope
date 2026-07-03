@@ -1,0 +1,113 @@
+{
+  "function_name": "af_alg_release_parent",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sk.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Atomic decrements always succeed; sock_put is a release operation with no retry semantics.",
+  "contract_summary": "This is a put wrapper that releases a child socket's reference to its parent AF_ALG socket. It decrements the parent's nokey_refcnt if a keyless reference was held, and always decrements the parent's main refcnt. When the main refcnt reaches zero, it drops the final reference via sock_put, potentially freeing the parent socket. After calling this function, the child socket must no longer be used to access the parent, and the caller is responsible for any further cleanup of the child itself.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the parent socket's refcnt (and optionally nokey_refcnt) and call sock_put when refcnt reaches zero. No significant non-refcount logic exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Atomic decrements always succeed; sock_put is a release operation with no retry semantics.",
+      "contract_summary": "This is a put wrapper that releases a child socket's reference to its parent AF_ALG socket. It decrements the parent's nokey_refcnt if a keyless reference was held, and always decrements the parent's main refcnt. When the main refcnt reaches zero, it drops the final reference via sock_put, potentially freeing the parent socket. After calling this function, the child socket must no longer be used to access the parent, and the caller is responsible for any further cleanup of the child itself."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.nokey_refcnt",
+          "sock--alg_sock--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.refcnt",
+          "sock--alg_sock--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Only the third operation correctly captures the sock_put(sk) call: it decrements sk->sk_refcnt (a refcount_t) via the path sk.sk_refcnt.refs with type chain sock--refcount_t--atomic_t. The first two operations have incorrect access paths (nokey_refcnt and refcnt are fields of alg_sock, not direct sock members) and segment count mismatches, so they are invalid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sk.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Atomic decrements always succeed; sock_put is a release operation with no retry semantics.",
+    "contract_summary": "This is a put wrapper that releases a child socket's reference to its parent AF_ALG socket. It decrements the parent's nokey_refcnt if a keyless reference was held, and always decrements the parent's main refcnt. When the main refcnt reaches zero, it drops the final reference via sock_put, potentially freeing the parent socket. After calling this function, the child socket must no longer be used to access the parent, and the caller is responsible for any further cleanup of the child itself."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "function_name": "aa_clear_task_ctx_trans",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.previous.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.onexec.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations release references; failure indicates a bug (underflow) which is unrecoverable. Retry would be dangerous (double-free).",
+  "contract_summary": "Release wrapper: releases the references held by a task context on its 'previous' and 'onexec' labels via aa_put_label. After this function, the context fields are reset (NULL and token=0). This function is typically called when clearing transition state, e.g., during context finalization or when transitioning to a different execution state. The caller must not use the released labels after this call, nor call aa_put_label on them again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references to two labels (previous, onexec) via aa_put_label and clear the context fields. No other significant logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations release references; failure indicates a bug (underflow) which is unrecoverable. Retry would be dangerous (double-free).",
+      "contract_summary": "Release wrapper: releases the references held by a task context on its 'previous' and 'onexec' labels via aa_put_label. After this function, the context fields are reset (NULL and token=0). This function is typically called when clearing transition state, e.g., during context finalization or when transitioning to a different execution state. The caller must not use the released labels after this call, nor call aa_put_label on them again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls aa_put_label on ctx->previous and ctx->onexec, which decrement the refcounts of those labels. The access paths traced from parameter ctx through the struct fields match the callee's internal path (l.count.count.refcount). The type chains are consistent with the structure definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.previous.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.onexec.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations release references; failure indicates a bug (underflow) which is unrecoverable. Retry would be dangerous (double-free).",
+    "contract_summary": "Release wrapper: releases the references held by a task context on its 'previous' and 'onexec' labels via aa_put_label. After this function, the context fields are reset (NULL and token=0). This function is typically called when clearing transition state, e.g., during context finalization or when transitioning to a different execution state. The caller must not use the released labels after this call, nor call aa_put_label on them again."
+  }
+}

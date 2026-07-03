@@ -1,0 +1,186 @@
+{
+  "function_name": "aa_restore_previous_label",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.group_info.usage.refs",
+      "member_type_chain": "cred--group_info--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user.__count.refs",
+      "member_type_chain": "cred--user_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.usage",
+      "member_type_chain": "cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.user_ns.ns.__ns_ref",
+      "member_type_chain": "cred--user_namespace--ns_common--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "prepare_creds",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.ucounts.count",
+      "member_type_chain": "cred--ucounts--rcuref"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the get/put operations are part of a larger semantic action, not a standalone refcount operation.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is restoring a previous security label from the task context; it performs token validation, credential allocation, label switching, and transaction clearing. Reference-count operations (aa_put_label, aa_get_newest_label) are incidental steps within a broader state-change operation, not the main goal.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the get/put operations are part of a larger semantic action, not a standalone refcount operation.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 9,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the get/put operations are part of a larger semantic action, not a standalone refcount operation.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "function_name": "capture_vma_snapshot",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "vma_res.hold_count.refs",
+      "i915_vma_resource--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_vma_resource_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_res.hold_count.refs",
+      "member_type_chain": "i915_vma_resource--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "i915_vma_resource_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_res.unbind_fence.refcount.refcount",
+      "member_type_chain": "i915_vma_resource--dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_vma_resource_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vma_res.hold_count.refs",
+      "member_type_chain": "i915_vma_resource--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (allocation failure or hold failure) indicates either memory pressure or the resource is dying; retrying is unlikely to succeed under the same conditions.",
+  "contract_summary": "This function creates a capture node that holds two references (one via i915_vma_resource_hold, one via i915_vma_resource_get) on the given VMA resource. On success, the returned capture node is linked into a chain (via next), and the caller owns the entire chain. The caller must eventually release all references by calling the appropriate put functions (e.g., i915_vma_resource_put) on each node. If the hold fails or allocation fails, the function returns the original chain head unchanged; the caller should treat this as a non-fatal capture skip. The capture node stores a copy of the name string for debugging.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to capture a VMA resource by allocating a capture node and acquiring two references (hold and get) on the resource. The allocation and string copy are minimal bookkeeping around the refcount operations.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (allocation failure or hold failure) indicates either memory pressure or the resource is dying; retrying is unlikely to succeed under the same conditions.",
+      "contract_summary": "This function creates a capture node that holds two references (one via i915_vma_resource_hold, one via i915_vma_resource_get) on the given VMA resource. On success, the returned capture node is linked into a chain (via next), and the caller owns the entire chain. The caller must eventually release all references by calling the appropriate put functions (e.g., i915_vma_resource_put) on each node. If the hold fails or allocation fails, the function returns the original chain head unchanged; the caller should treat this as a non-fatal capture skip. The capture node stores a copy of the name string for debugging."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "vma_res.hold_count.refs",
+          "i915_vma_resource--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "vma_res.unbind_fence.refcount.refcount.refs",
+          "i915_vma_resource--dma_fence--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "vma_res.hold_count.refs",
+          "i915_vma_resource--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The first operation is supported: i915_vma_resource_hold(vma_res) matches the callee info for hold_count.refs. The second operation lacks callee information for i915_vma_resource_get, so it is removed."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "vma_res.hold_count.refs",
+        "i915_vma_resource--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (allocation failure or hold failure) indicates either memory pressure or the resource is dying; retrying is unlikely to succeed under the same conditions.",
+    "contract_summary": "This function creates a capture node that holds two references (one via i915_vma_resource_hold, one via i915_vma_resource_get) on the given VMA resource. On success, the returned capture node is linked into a chain (via next), and the caller owns the entire chain. The caller must eventually release all references by calling the appropriate put functions (e.g., i915_vma_resource_put) on each node. If the hold fails or allocation fails, the function returns the original chain head unchanged; the caller should treat this as a non-fatal capture skip. The capture node stores a copy of the name string for debugging."
+  }
+}

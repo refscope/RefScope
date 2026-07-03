@@ -1,0 +1,82 @@
+{
+  "function_name": "batadv_gw_node_release",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a release callback triggered only when refcount reaches zero; retrying would lead to double-free.",
+  "contract_summary": "Put/release wrapper: called when the reference count of a batadv_gw_node drops to zero. Releases the reference to the associated orig_node via batadv_orig_node_put and frees the gw_node member using kfree_rcu. This function is the standard release callback for kref_put; callers must not use the gw_node after the associated kref_put call. The orig_node's refcount is decremented as part of cleanup.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a batadv_gw_node by decrementing its orig_node's refcount and freeing memory via kfree_rcu; minimal unrelated logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a release callback triggered only when refcount reaches zero; retrying would lead to double-free.",
+      "contract_summary": "Put/release wrapper: called when the reference count of a batadv_gw_node drops to zero. Releases the reference to the associated orig_node via batadv_orig_node_put and frees the gw_node member using kfree_rcu. This function is the standard release callback for kref_put; callers must not use the gw_node after the associated kref_put call. The orig_node's refcount is decremented as part of cleanup."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.orig_node.refcount.refcount",
+          "batadv_gw_node--batadv_orig_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation claims a put on parameter 1 (ref) with access path 'ref.orig_node.refcount.refcount'. However, parameter 1 is a struct kref pointer, not a struct batadv_gw_node, and does not have a direct 'orig_node' field. The actual put is performed on gw_node->orig_node (obtained via container_of). The access path starting from 'ref' cannot be 'ref.orig_node...' without accounting for the container_of conversion, and the type chain begins with 'batadv_gw_node' while parameter 1 is a 'struct kref'. Therefore, the extracted operation is inconsistent with the code and is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function is a classic kref release callback for batadv_gw_node, performing cleanup (put on orig_node and kfree_rcu) when the reference count reaches zero. The critical variable (batadv_gw_node) is derived from the kref parameter via container_of. The sole candidate operation was rejected because its access path starting from 'ref' incorrectly assumed a direct 'orig_node' field instead of going through container_of. No valid operations from the candidate list remain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a release callback triggered only when refcount reaches zero; retrying would lead to double-free.",
+    "contract_summary": "Put/release wrapper: called when the reference count of a batadv_gw_node drops to zero. Releases the reference to the associated orig_node via batadv_orig_node_put and frees the gw_node member using kfree_rcu. This function is the standard release callback for kref_put; callers must not use the gw_node after the associated kref_put call. The orig_node's refcount is decremented as part of cleanup."
+  }
+}

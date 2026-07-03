@@ -1,0 +1,155 @@
+{
+  "function_name": "aa_dup_task_ctx",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "new.nnp.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "new.previous.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "new.onexec.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation always succeeds (no failure path), so retry is irrelevant.",
+  "contract_summary": "Duplicates a task context from old to new, acquiring a reference on each of the three label pointers (nnp, previous, onexec) via aa_get_label. The caller receives a new context with elevated reference counts for those labels. The caller must later call aa_put_label on each field to release the references when the context is no longer needed. This is a 'get' operation for multiple labels at once, ensuring proper reference-counting during context duplication.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to duplicate a task context while acquiring references (aa_get_label) on each label field (nnp, previous, onexec). No significant non-refcount logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation always succeeds (no failure path), so retry is irrelevant.",
+      "contract_summary": "Duplicates a task context from old to new, acquiring a reference on each of the three label pointers (nnp, previous, onexec) via aa_get_label. The caller receives a new context with elevated reference counts for those labels. The caller must later call aa_put_label on each field to release the references when the context is no longer needed. This is a 'get' operation for multiple labels at once, ensuring proper reference-counting during context duplication."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "new.nnp.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "new.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "new.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "new.nnp.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "new.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "new.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "All three aa_get_label calls operate on fields of parameter 1 (new->nnp, new->previous, new->onexec). The access paths and type chains are consistent with the callee info: each field is a pointer to aa_label, and aa_get_label increments the refcount via l->count.count.refcount. The path segments and type chain counts match, and the direction is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "new.nnp.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "new.previous.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "new.onexec.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation always succeeds (no failure path), so retry is irrelevant.",
+    "contract_summary": "Duplicates a task context from old to new, acquiring a reference on each of the three label pointers (nnp, previous, onexec) via aa_get_label. The caller receives a new context with elevated reference counts for those labels. The caller must later call aa_put_label on each field to release the references when the context is no longer needed. This is a 'get' operation for multiple labels at once, ensuring proper reference-counting during context duplication."
+  }
+}

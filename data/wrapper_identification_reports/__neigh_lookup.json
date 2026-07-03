@@ -1,0 +1,99 @@
+{
+  "function_name": "__neigh_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "n.refcnt.refs",
+      "neighbour--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "neigh_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "n.refcnt.refs",
+      "member_type_chain": "neighbour--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "neigh_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "n.refcnt.refs",
+      "member_type_chain": "neighbour--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either no existing entry (and creation not requested) or an allocation error; retrying without changed conditions is unlikely to succeed.",
+  "contract_summary": "This is a get-or-create wrapper for neighbour entries. It first attempts to look up an existing neighbour via neigh_lookup, which acquires a reference if found. If not found and creat is true, it creates a new neighbour via neigh_create, which initializes a reference (set to 1). The returned neighbour pointer always carries an elevated reference count that the caller must eventually release with a corresponding put (e.g., neigh_release). On failure (lookup fails and creat is false, or creation fails), NULL is returned and no reference is transferred. The caller must check the return value and handle NULL appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a neighbour with an elevated reference count via lookup (get) or creation (set); minimal extra logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either no existing entry (and creation not requested) or an allocation error; retrying without changed conditions is unlikely to succeed.",
+      "contract_summary": "This is a get-or-create wrapper for neighbour entries. It first attempts to look up an existing neighbour via neigh_lookup, which acquires a reference if found. If not found and creat is true, it creates a new neighbour via neigh_create, which initializes a reference (set to 1). The returned neighbour pointer always carries an elevated reference count that the caller must eventually release with a corresponding put (e.g., neigh_release). On failure (lookup fails and creat is false, or creation fails), NULL is returned and no reference is transferred. The caller must check the return value and handle NULL appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a neighbour pointer from neigh_lookup (get) or neigh_create (set). The access path n.refcnt.refs correctly traces from the returned variable to the refcount field, and the type chain neighbour--refcount_t--atomic_t matches the callee info and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "n.refcnt.refs",
+        "neighbour--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either no existing entry (and creation not requested) or an allocation error; retrying without changed conditions is unlikely to succeed.",
+    "contract_summary": "This is a get-or-create wrapper for neighbour entries. It first attempts to look up an existing neighbour via neigh_lookup, which acquires a reference if found. If not found and creat is true, it creates a new neighbour via neigh_create, which initializes a reference (set to 1). The returned neighbour pointer always carries an elevated reference count that the caller must eventually release with a corresponding put (e.g., neigh_release). On failure (lookup fails and creat is false, or creation fails), NULL is returned and no reference is transferred. The caller must check the return value and handle NULL appropriately."
+  }
+}

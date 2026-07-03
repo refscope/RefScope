@@ -1,0 +1,82 @@
+{
+  "function_name": "blkcg_css_online",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "blkcg_pin_online",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blkcg_css.container_css.online_pin.refs",
+      "member_type_chain": "cgroup_subsys_state--blkcg--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "blkcg_pin_online",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blkcg_css.container_css.online_pin.refs",
+      "member_type_chain": "cgroup_subsys_state--blkcg--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation either succeeds unconditionally when parent exists (refcount increment cannot fail) or is skipped when parent is NULL, so retry is irrelevant.",
+  "contract_summary": "This is a get-wrapper that acquires an online-pin reference on the parent blkcg's css (via blkcg_pin_online). It prevents the parent from going offline while the child blkcg is online. The function returns void and always succeeds when called with a non-NULL parent. The pin is released later in blkcg_css_offline by calling blkcp_unpin_online. The caller does not need to check the return value; the obligation to undo the pin lies in the corresponding offline callback.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call blkcg_pin_online on the parent blkcg's css, which increments an online_pin refcount. This is a targeted refcount operation with no other logic; the only conditional is checking if a parent exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation either succeeds unconditionally when parent exists (refcount increment cannot fail) or is skipped when parent is NULL, so retry is irrelevant.",
+      "contract_summary": "This is a get-wrapper that acquires an online-pin reference on the parent blkcg's css (via blkcg_pin_online). It prevents the parent from going offline while the child blkcg is online. The function returns void and always succeeds when called with a non-NULL parent. The pin is released later in blkcg_css_offline by calling blkcp_unpin_online. The caller does not need to check the return value; the obligation to undo the pin lies in the corresponding offline callback."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "parent",
+          "parent.online_pin.refs",
+          "blkcg--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation uses location 'global' with index 'parent', which is not a valid function interface (parameter or return). The critical variable must be the parameter or return value at the function boundary. 'parent' is a local variable derived from the parameter, and the refcount operation is performed on the parent's css, not on the input parameter itself. Therefore, the operation cannot be traced from the function interface as required."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function blkcg_css_online increments a reference count on the parent css via blkcg_pin_online, but the parent css is derived from the input parameter and is not passed as a parameter or return value of this function. The critical variable (parent's online_pin refs) is not part of the function interface, so the operation cannot be traced from the boundary. This is an internal lifecycle helper, not a reference-count wrapper that transfers ownership or provides a reference to the caller."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation either succeeds unconditionally when parent exists (refcount increment cannot fail) or is skipped when parent is NULL, so retry is irrelevant.",
+    "contract_summary": "This is a get-wrapper that acquires an online-pin reference on the parent blkcg's css (via blkcg_pin_online). It prevents the parent from going offline while the child blkcg is online. The function returns void and always succeeds when called with a non-NULL parent. The pin is released later in blkcg_css_offline by calling blkcp_unpin_online. The caller does not need to check the return value; the obligation to undo the pin lies in the corresponding offline callback."
+  }
+}

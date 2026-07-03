@@ -1,0 +1,99 @@
+{
+  "function_name": "acpi_dev_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.dev.kobj.kref.refcount",
+      "acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device is a release operation; if the refcount reaches zero the object is freed, so retrying would cause a use-after-free.",
+  "contract_summary": "This is a put wrapper that releases a reference on an ACPI device. It does nothing if the pointer is NULL. After calling acpi_dev_put, the caller must not access the device object anymore. This function is the decrement counterpart to acpi_dev_get and should be used to drop references obtained through that or similar get operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the reference count of an ACPI device by calling put_device on its embedded struct device, with only a null check as additional logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device is a release operation; if the refcount reaches zero the object is freed, so retrying would cause a use-after-free.",
+      "contract_summary": "This is a put wrapper that releases a reference on an ACPI device. It does nothing if the pointer is NULL. After calling acpi_dev_put, the caller must not access the device object anymore. This function is the decrement counterpart to acpi_dev_get and should be used to drop references obtained through that or similar get operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_device is called on &adev->dev, which corresponds to the parameter adev. The access path adev.dev.kobj.kref.refcount correctly traces from the parameter through the embedded dev and further to the refcount. The type chain acpi_device--device--kobject--kref--refcount_t matches the struct definitions. The segment counts are equal (5 each). The operation direction 'put' is consistent with put_device being a put function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.dev.kobj.kref.refcount",
+        "acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device is a release operation; if the refcount reaches zero the object is freed, so retrying would cause a use-after-free.",
+    "contract_summary": "This is a put wrapper that releases a reference on an ACPI device. It does nothing if the pointer is NULL. After calling acpi_dev_put, the caller must not access the device object anymore. This function is the decrement counterpart to acpi_dev_get and should be used to drop references obtained through that or similar get operations."
+  }
+}

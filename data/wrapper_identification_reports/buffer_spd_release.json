@@ -1,0 +1,99 @@
+{
+  "function_name": "buffer_spd_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "spd.partial[i].private.refcount.refs",
+      "splice_pipe_desc--partial_page--buffer_ref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "buffer_ref_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ref.refcount.refs",
+      "member_type_chain": "buffer_ref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "buffer_ref_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ref.refcount.refs",
+      "member_type_chain": "buffer_ref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes and should only be called when a valid reference is held; retrying after failure would indicate a use-after-free condition.",
+  "contract_summary": "Releases a buffer_ref reference stored in a splice_pipe_desc partial entry. It calls buffer_ref_release to decrement the reference count, and then clears the private pointer to prevent reuse. The caller must have previously acquired a valid buffer_ref reference (e.g., via buffer_ref_get) and stored it in spd->partial[i].private. After this function returns, the buffer_ref is no longer valid and must not be accessed. This is typically used when cleaning up splice pipe entries.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a buffer_ref reference (put operation) stored in a splice_pipe_desc partial entry. The only logic is calling buffer_ref_release (a put function) and resetting the pointer to NULL.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes and should only be called when a valid reference is held; retrying after failure would indicate a use-after-free condition.",
+      "contract_summary": "Releases a buffer_ref reference stored in a splice_pipe_desc partial entry. It calls buffer_ref_release to decrement the reference count, and then clears the private pointer to prevent reuse. The caller must have previously acquired a valid buffer_ref reference (e.g., via buffer_ref_get) and stored it in spd->partial[i].private. After this function returns, the buffer_ref is no longer valid and must not be accessed. This is typically used when cleaning up splice pipe entries."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "spd.partial[i].private.refcount.refs",
+          "splice_pipe_desc--partial_page--buffer_ref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "spd.partial[i].private.refcount.refs",
+          "splice_pipe_desc--partial_page--buffer_ref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "buffer_spd_release calls buffer_ref_release(ref) on the buffer_ref stored in spd->partial[i].private, which decrements its refcount. The access path starts from spd parameter, follows partial[i].private to the buffer_ref, then refcount.refs. The type chain and segment count (5 each) are consistent with the callee info and kernel structures."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "spd.partial[i].private.refcount.refs",
+        "splice_pipe_desc--partial_page--buffer_ref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes and should only be called when a valid reference is held; retrying after failure would indicate a use-after-free condition.",
+    "contract_summary": "Releases a buffer_ref reference stored in a splice_pipe_desc partial entry. It calls buffer_ref_release to decrement the reference count, and then clears the private pointer to prevent reuse. The caller must have previously acquired a valid buffer_ref reference (e.g., via buffer_ref_get) and stored it in spd->partial[i].private. After this function returns, the buffer_ref is no longer valid and must not be accessed. This is typically used when cleaning up splice pipe entries."
+  }
+}

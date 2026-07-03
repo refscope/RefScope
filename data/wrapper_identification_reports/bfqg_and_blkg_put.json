@@ -1,0 +1,106 @@
+{
+  "function_name": "bfqg_and_blkg_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bfqg.ref.refs",
+      "bfq_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfqg_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqg.ref.refs",
+      "member_type_chain": "bfq_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfqg_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqg.ref.refs",
+      "member_type_chain": "bfq_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure mode; after this put the object may be freed and must not be used again — retrying would cause a double-free.",
+  "contract_summary": "Release wrapper that decrements the reference count of both a blkg (via blkg_put) and its associated bfq_group (via bfqg_put). This pairs with a prior bfqg_and_blkg_get call. After calling this function, both the blkg and bfqg pointers must be considered potentially freed and must not be dereferenced. The caller must ensure that no other concurrent use of these objects exists, and that any necessary locks (e.g., queue lock, RCU read lock) are held if the put might trigger a free while still in an atomic context. Correct usage requires exactly one put for each previous get, and no further use of the objects afterward.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release two reference counts (blkg and bfqg) via dedicated put functions; no other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure mode; after this put the object may be freed and must not be used again — retrying would cause a double-free.",
+      "contract_summary": "Release wrapper that decrements the reference count of both a blkg (via blkg_put) and its associated bfq_group (via bfqg_put). This pairs with a prior bfqg_and_blkg_get call. After calling this function, both the blkg and bfqg pointers must be considered potentially freed and must not be dereferenced. The caller must ensure that no other concurrent use of these objects exists, and that any necessary locks (e.g., queue lock, RCU read lock) are held if the put might trigger a free while still in an atomic context. Correct usage requires exactly one put for each previous get, and no further use of the objects afterward."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqg.pd.blkg.refcnt.data.count",
+          "bfq_group--blkg_policy_data--blkcg_gq--percpu_ref--percpu_ref_data--atomic_long_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The first operation matches the callee info for bfqg_put. The second operation lacks callee information and incorrectly starts the access path from parameter 1 for an operation on a derived object (blkg), which is not a function interface variable; thus it is removed."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bfqg.ref.refs",
+        "bfq_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure mode; after this put the object may be freed and must not be used again — retrying would cause a double-free.",
+    "contract_summary": "Release wrapper that decrements the reference count of both a blkg (via blkg_put) and its associated bfq_group (via bfqg_put). This pairs with a prior bfqg_and_blkg_get call. After calling this function, both the blkg and bfqg pointers must be considered potentially freed and must not be dereferenced. The caller must ensure that no other concurrent use of these objects exists, and that any necessary locks (e.g., queue lock, RCU read lock) are held if the put might trigger a free while still in an atomic context. Correct usage requires exactly one put for each previous get, and no further use of the objects afterward."
+  }
+}

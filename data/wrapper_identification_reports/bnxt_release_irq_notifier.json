@@ -1,0 +1,82 @@
+{
+  "function_name": "bnxt_release_irq_notifier",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "irq_set_affinity_notifier",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "notify.kref.refcount.refs",
+      "member_type_chain": "irq_affinity_notify--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "irq_set_affinity_notifier",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "notify.kref.refcount.refs",
+      "member_type_chain": "irq_affinity_notify--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional; the callee handles refcount decrement internally and no return value indicates failure. Retrying would be a double release.",
+  "contract_summary": "This function releases the interrupt affinity notifier for a given IRQ vector by clearing the notifier via irq_set_affinity_notifier(irq->vector, NULL). This decrements the internal kref of the notifier and disables future notifications. After calling this function, the caller must not use the notifier again. Typically called during IRQ teardown or cleanup, and the caller must ensure the IRQ vector is no longer in active use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call irq_set_affinity_notifier with NULL, which releases the affinity notifier associated with the IRQ vector. This is a pure release wrapper with no additional logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional; the callee handles refcount decrement internally and no return value indicates failure. Retrying would be a double release.",
+      "contract_summary": "This function releases the interrupt affinity notifier for a given IRQ vector by clearing the notifier via irq_set_affinity_notifier(irq->vector, NULL). This decrements the internal kref of the notifier and disables future notifications. After calling this function, the caller must not use the notifier again. Typically called during IRQ teardown or cleanup, and the caller must ensure the IRQ vector is no longer in active use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "parameter",
+          "1",
+          "irq.vector.kref.refcount.refs",
+          "bnxt_irq--irq_affinity_notify--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The refcount operation is claimed on irq->vector->kref.refcount.refs via the set function irq_set_affinity_notifier, but the actual call passes NULL as the second argument. The callee info indicates the operation is performed on parameter 1 (the notifier), but with NULL there is no valid object to access. Therefore, the refcount operation does not actually occur on the specified path in this function call."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "bnxt_release_irq_notifier releases the IRQ affinity notifier by calling irq_set_affinity_notifier with a NULL notifier. This is a release wrapper, but the extracted candidate operation (set on irq.vector.kref.refcount.refs) is invalid because the second argument is NULL, so no refcount operation occurs on that path. The actual refcount decrement happens internally on the previous notifier object, which is not directly represented in the function's parameter/return flow. Thus, no valid candidate operation is present in the call."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional; the callee handles refcount decrement internally and no return value indicates failure. Retrying would be a double release.",
+    "contract_summary": "This function releases the interrupt affinity notifier for a given IRQ vector by clearing the notifier via irq_set_affinity_notifier(irq->vector, NULL). This decrements the internal kref of the notifier and disables future notifications. After calling this function, the caller must not use the notifier again. Typically called during IRQ teardown or cleanup, and the caller must ensure the IRQ vector is no longer in active use."
+  }
+}

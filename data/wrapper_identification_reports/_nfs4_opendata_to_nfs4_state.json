@@ -1,0 +1,115 @@
+{
+  "function_name": "_nfs4_opendata_to_nfs4_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "state.count.refs",
+      "nfs4_state--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nfs4_opendata_find_nfs4_state",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "state.count.refs",
+      "member_type_chain": "nfs4_state--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "nfs4_put_open_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.count.refs",
+      "member_type_chain": "nfs4_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nfs4_opendata_find_nfs4_state",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "state.count.refs",
+      "member_type_chain": "nfs4_state--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "nfs4_put_open_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.count.refs",
+      "member_type_chain": "nfs4_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure with -EAGAIN indicates a transient error (e.g., stateid update failed) that can be retried at a higher level by reissuing the OPEN RPC.",
+  "contract_summary": "This function obtains an nfs4_state with an incremented reference count from a given nfs4_opendata. It first attempts a cached open path; otherwise, it gets a state from the RPC response (via nfs4_opendata_find_nfs4_state, which performs a get). It then processes delegation delegation information and updates the open stateid. If the stateid update fails, the function releases the acquired state reference and returns -EAGAIN. On success, the caller receives a fully initialized state with a reference and must eventually call nfs4_put_open_state to release it. The function is a get-wrapper with necessary but limited business logic (delegation processing and stateid update) that is part of the state object's construction.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire (get) an nfs4_state with a valid reference from opendata, with additional processing of delegation and stateid updates; refcount management is central but not exclusive.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure with -EAGAIN indicates a transient error (e.g., stateid update failed) that can be retried at a higher level by reissuing the OPEN RPC.",
+      "contract_summary": "This function obtains an nfs4_state with an incremented reference count from a given nfs4_opendata. It first attempts a cached open path; otherwise, it gets a state from the RPC response (via nfs4_opendata_find_nfs4_state, which performs a get). It then processes delegation delegation information and updates the open stateid. If the stateid update fails, the function releases the acquired state reference and returns -EAGAIN. On success, the caller receives a fully initialized state with a reference and must eventually call nfs4_put_open_state to release it. The function is a get-wrapper with necessary but limited business logic (delegation processing and stateid update) that is part of the state object's construction."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "state.count.refs",
+          "nfs4_state--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "state.count.refs",
+          "nfs4_state--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a pointer to nfs4_state with an acquired reference from nfs4_opendata_find_nfs4_state, which is a get function for its return value. The access path state.count.refs correctly traces from the return variable to the refcount field, and the type chain nfs4_state--refcount_struct--atomic_t is consistent with callee information and code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "state.count.refs",
+        "nfs4_state--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure with -EAGAIN indicates a transient error (e.g., stateid update failed) that can be retried at a higher level by reissuing the OPEN RPC.",
+    "contract_summary": "This function obtains an nfs4_state with an incremented reference count from a given nfs4_opendata. It first attempts a cached open path; otherwise, it gets a state from the RPC response (via nfs4_opendata_find_nfs4_state, which performs a get). It then processes delegation delegation information and updates the open stateid. If the stateid update fails, the function releases the acquired state reference and returns -EAGAIN. On success, the caller receives a fully initialized state with a reference and must eventually call nfs4_put_open_state to release it. The function is a get-wrapper with necessary but limited business logic (delegation processing and stateid update) that is part of the state object's construction."
+  }
+}

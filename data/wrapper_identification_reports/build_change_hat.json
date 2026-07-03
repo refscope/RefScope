@@ -1,0 +1,160 @@
+{
+  "function_name": "build_change_hat",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_find_child",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "profile.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.label.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.label.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_new_learning_profile",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "profile.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_new_learning_profile",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "profile.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.label.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures are either permanent (ENOENT – hat does not exist) or transient (ENOMEM – allocation failure), but the wrapper does not define a retry contract; the caller should not blindly retry.",
+  "contract_summary": "Lookup-or-create wrapper for a hat profile, returning a pointer to its embedded label on success, or an error pointer. On success, the caller acquires a reference to the label (via the profile's refcount) and must release it with aa_put_label() when done. The function may create a new learning profile in complain mode if the hat is not found. An audit is performed unconditionally. The caller must check the return value with IS_ERR() and must not call this function again with the same parameters on ENOENT unless the hat is expected to be created externally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to look up or create a hat profile and return its label, which is a reference-counted object. The refcount operations (get on root, put on root, implicit get from creation) are central, but auditing and conditional logic reduce purity.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures are either permanent (ENOENT – hat does not exist) or transient (ENOMEM – allocation failure), but the wrapper does not define a retry contract; the caller should not blindly retry.",
+      "contract_summary": "Lookup-or-create wrapper for a hat profile, returning a pointer to its embedded label on success, or an error pointer. On success, the caller acquires a reference to the label (via the profile's refcount) and must release it with aa_put_label() when done. The function may create a new learning profile in complain mode if the hat is not found. An audit is performed unconditionally. The caller must check the return value with IS_ERR() and must not call this function again with the same parameters on ENOENT unless the hat is expected to be created externally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.label.count.refcount",
+          "aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "root.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "root.label.count.count",
+          "aa_profile--aa_label--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "All candidate operations have incorrect location/index: the first two claim 'return' with path starting from 'root', but the actual return value is hat->label, not root. The third claims 'put' on parameter 1 (profile), but the actual put is on local variable root. Therefore, none of the operations are supported by the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function build_change_hat is not a pure refcount wrapper. It contains complex decision logic, audit, and error handling. The reference count operations (aa_get_profile, aa_get_profile_rcu, aa_put_profile) are on the local variable root, which is not the critical variable passed to the caller. The critical variable hat's reference is managed indirectly through aa_find_child or aa_new_learning_profile, not via direct refcount operations in this function. Therefore, none of the candidate operations correctly describe a refcount wrapper on the returned value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures are either permanent (ENOENT – hat does not exist) or transient (ENOMEM – allocation failure), but the wrapper does not define a retry contract; the caller should not blindly retry.",
+    "contract_summary": "Lookup-or-create wrapper for a hat profile, returning a pointer to its embedded label on success, or an error pointer. On success, the caller acquires a reference to the label (via the profile's refcount) and must release it with aa_put_label() when done. The function may create a new learning profile in complain mode if the hat is not found. An audit is performed unconditionally. The caller must check the return value with IS_ERR() and must not call this function again with the same parameters on ENOENT unless the hat is expected to be created externally."
+  }
+}

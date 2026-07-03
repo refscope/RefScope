@@ -1,0 +1,77 @@
+{
+  "function_name": "blk_eh_timer_return",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": null,
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bsg_job_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount",
+      "member_type_chain": "bsg_job--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bsg_job_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount",
+      "member_type_chain": "bsg_job--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bsg_job_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount.refs",
+      "member_type_chain": "bsg_job--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bsg_job_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount",
+      "member_type_chain": "bsg_job--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bsg_job_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount",
+      "member_type_chain": "bsg_job--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": true,
+      "requested_functions": [
+        "blk_eh_timer_return"
+      ],
+      "reason": "The provided code is only a typedef and struct definition, not the actual function implementation. The callee info references bsg_job_get/put but the target function's body is missing. We need the function body to determine if its primary purpose is reference-count management."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": null,
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

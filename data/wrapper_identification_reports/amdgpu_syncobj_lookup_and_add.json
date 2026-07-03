@@ -1,0 +1,74 @@
+{
+  "function_name": "amdgpu_syncobj_lookup_and_add",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_sync_fence",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "f.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_sync_fence",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "f.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry semantics are not part of this function's contract; failure to find the syncobj or add the fence typically indicates a permanent error (invalid handle or memory pressure) that does not warrant retry within this call.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to look up a dma_fence from a syncobj via drm_syncobj_find_fence and add it to the parser's sync object via amdgpu_sync_fence. The refcount operations (get in amdgpu_sync_fence, put via dma_fence_put) are incidental to the high-level task of adding a fence to the sync object, not the primary function.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry semantics are not part of this function's contract; failure to find the syncobj or add the fence typically indicates a permanent error (invalid handle or memory pressure) that does not warrant retry within this call.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry semantics are not part of this function's contract; failure to find the syncobj or add the fence typically indicates a permanent error (invalid handle or memory pressure) that does not warrant retry within this call.",
+    "contract_summary": ""
+  }
+}

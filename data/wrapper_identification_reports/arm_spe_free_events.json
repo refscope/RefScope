@@ -1,0 +1,82 @@
+{
+  "function_name": "arm_spe_free_events",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "arm_spe_free_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "priv.thread.orig.refcnt.refs",
+      "member_type_chain": "arm_spe_queue--thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "arm_spe_free_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "priv.thread.orig.refcnt.refs",
+      "member_type_chain": "arm_spe_queue--thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The puts always execute on all queues; no failure mode exists. Calling again would double-release (use-after-free).",
+  "contract_summary": "This function releases all ARM SPE trace queues and their associated thread references. It calls arm_spe_free_queue (a put function) on each queue's priv, which decrements the refcount of the underlying thread (via priv->thread->orig->refcnt). After releasing references, it sets each queue's priv to NULL and frees the queue array via auxtrace_queues__free. The caller must ensure that no subsequent operations use these queues after calling this function. This is a cleanup function typically called at session teardown or when processing is complete; it should not be called multiple times on the same session.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on all SPE queue thread objects via arm_spe_free_queue (a put function) and free the queues array. Non-refcount logic is minimal: iteration, NULL assignment, and free call.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The puts always execute on all queues; no failure mode exists. Calling again would double-release (use-after-free).",
+      "contract_summary": "This function releases all ARM SPE trace queues and their associated thread references. It calls arm_spe_free_queue (a put function) on each queue's priv, which decrements the refcount of the underlying thread (via priv->thread->orig->refcnt). After releasing references, it sets each queue's priv to NULL and frees the queue array via auxtrace_queues__free. The caller must ensure that no subsequent operations use these queues after calling this function. This is a cleanup function typically called at session teardown or when processing is complete; it should not be called multiple times on the same session."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "session.auxtrace.queues.queue_array[i].priv.thread.orig.refcnt.refs",
+          "perf_session--arm_spe--auxtrace_queues--auxtrace_queue--arm_spe_queue--thread--original_thread--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path `session.auxtrace.queues.queue_array[i].priv.thread.orig.refcnt.refs` is incorrect. It skips the necessary container_of conversion from session->auxtrace to the arm_spe structure; instead, it incorrectly assumes that `auxtrace` is a struct that directly contains `queues`. Additionally, segment count mismatch: 8 path segments vs 9 types in the type chain. The path is inconsistent with the actual code structure."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function `arm_spe_free_events` is a cleanup helper that iterates over all queues, calls `arm_spe_free_queue` on each, and then frees the queues. It does not return or pass any reference-counted object to the caller; it internally manages multiple objects without a single critical variable flowing out. Moreover, the candidate path incorrectly skipped the container_of conversion from `session->auxtrace` to `struct arm_spe`. The function lacks focused refcount semantics and is not a reference-count wrapper or helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The puts always execute on all queues; no failure mode exists. Calling again would double-release (use-after-free).",
+    "contract_summary": "This function releases all ARM SPE trace queues and their associated thread references. It calls arm_spe_free_queue (a put function) on each queue's priv, which decrements the refcount of the underlying thread (via priv->thread->orig->refcnt). After releasing references, it sets each queue's priv to NULL and frees the queue array via auxtrace_queues__free. The caller must ensure that no subsequent operations use these queues after calling this function. This is a cleanup function typically called at session teardown or when processing is complete; it should not be called multiple times on the same session."
+  }
+}

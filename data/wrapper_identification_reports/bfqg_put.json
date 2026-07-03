@@ -1,0 +1,99 @@
+{
+  "function_name": "bfqg_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bfqg.ref.refs",
+      "bfq_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount decrement always happens; free is internal. If caller double-puts that's a use-after-free bug, not a retry scenario.",
+  "contract_summary": "Put wrapper for bfq_group: decrements the refcount and, if it reaches zero, frees the object. The caller must have a valid reference and must not use the object after this call because it may be deallocated. This is a standard release operation — the caller's ownership of that reference is relinquished.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of a bfq_group and conditionally free it; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount decrement always happens; free is internal. If caller double-puts that's a use-after-free bug, not a retry scenario.",
+      "contract_summary": "Put wrapper for bfq_group: decrements the refcount and, if it reaches zero, frees the object. The caller must have a valid reference and must not use the object after this call because it may be deallocated. This is a standard release operation — the caller's ownership of that reference is relinquished."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &bfqg->ref, which is a put operation on the bfqg parameter. The access path bfqg.ref.refs correctly traces from parameter 1 to the atomic refcount field, and the type chain bfq_group--refcount_t--atomic_t matches the structure definitions (bfq_group has a ref field of type refcount_t, which contains refs of type atomic_t)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bfqg.ref.refs",
+        "bfq_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount decrement always happens; free is internal. If caller double-puts that's a use-after-free bug, not a retry scenario.",
+    "contract_summary": "Put wrapper for bfq_group: decrements the refcount and, if it reaches zero, frees the object. The caller must have a valid reference and must not use the object after this call because it may be deallocated. This is a standard release operation — the caller's ownership of that reference is relinquished."
+  }
+}

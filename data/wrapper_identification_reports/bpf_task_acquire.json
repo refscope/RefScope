@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_task_acquire",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "p.rcu_users.refs",
+      "task_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the task's refcount has reached zero; the task is dying or dead, so retrying would not succeed.",
+  "contract_summary": "This is a get-wrapper that conditionally acquires a reference on a task_struct by incrementing its rcu_users refcount if it is non-zero. On success, it returns the task pointer, transferring ownership of the reference to the caller, who must later release it with a corresponding put (e.g., bpf_task_release). On failure (NULL return), no reference was taken, and the task must not be used. The function is safe to call without holding any locks; the refcount operation is atomic and does not require RCU read-side protection. Callers must check the return value for NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on a task_struct's rcu_users refcount via refcount_inc_not_zero, returning the pointer on success or NULL on failure.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the task's refcount has reached zero; the task is dying or dead, so retrying would not succeed.",
+      "contract_summary": "This is a get-wrapper that conditionally acquires a reference on a task_struct by incrementing its rcu_users refcount if it is non-zero. On success, it returns the task pointer, transferring ownership of the reference to the caller, who must later release it with a corresponding put (e.g., bpf_task_release). On failure (NULL return), no reference was taken, and the task must not be used. The function is safe to call without holding any locks; the refcount operation is atomic and does not require RCU read-side protection. Callers must check the return value for NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.rcu_users.refs",
+          "task_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_inc_not_zero call operates on p->rcu_users. The returned pointer p is the same object. The access path starts from p (the returned pointer variable), then .rcu_users (refcount_t), then .refs (atomic_t), matching the callee's path r.refs. The type chain task_struct--refcount_t--atomic_t is correct per kernel struct definitions. Segment counts are equal (3 vs 3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "p.rcu_users.refs",
+        "task_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the task's refcount has reached zero; the task is dying or dead, so retrying would not succeed.",
+    "contract_summary": "This is a get-wrapper that conditionally acquires a reference on a task_struct by incrementing its rcu_users refcount if it is non-zero. On success, it returns the task pointer, transferring ownership of the reference to the caller, who must later release it with a corresponding put (e.g., bpf_task_release). On failure (NULL return), no reference was taken, and the task must not be used. The function is safe to call without holding any locks; the refcount operation is atomic and does not require RCU read-side protection. Callers must check the return value for NULL."
+  }
+}

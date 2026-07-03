@@ -1,0 +1,106 @@
+{
+  "function_name": "batadv_tt_local_entry_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vlan.refcount.refcount",
+      "batadv_meshif_vlan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_meshif_vlan_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_meshif_vlan_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Release callback is invoked exactly once by kref_put when refcount hits zero; no failure path or retry possible.",
+  "contract_summary": "This is the release callback for batadv_tt_local_entry's kref. It releases the vlan reference via batadv_meshif_vlan_put and frees the entry via kfree_rcu. The caller (kref_put) invokes this only when the refcount drops to zero; after this function executes, the entry is freed and must not be accessed again. No further puts should occur. No special locking required beyond what kref provides.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the batadv_tt_local_entry when its kref reaches zero: it puts the embedded vlan reference and frees the entry. No other business logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Release callback is invoked exactly once by kref_put when refcount hits zero; no failure path or retry possible.",
+      "contract_summary": "This is the release callback for batadv_tt_local_entry's kref. It releases the vlan reference via batadv_meshif_vlan_put and frees the entry via kfree_rcu. The caller (kref_put) invokes this only when the refcount drops to zero; after this function executes, the entry is freed and must not be accessed again. No further puts should occur. No special locking required beyond what kref provides."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'vlan.refcount.refcount' starts from 'vlan', which is not a parameter or return value of batadv_tt_local_entry_release. The function's only interface parameter is 'ref' (struct kref *). The put operation on vlan's refcount is internal and does not trace back to the function interface. Therefore, the extraction is invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a kref release callback for batadv_tt_local_entry. It receives a pointer to the embedded kref (common.refcount) via parameter 'ref', derives the containing tt_local_entry via container_of, and performs a put on its vlan. The put operation is correctly extracted; the access path 'vlan.refcount.refcount' is relative to the derived critical variable, which is valid via container_of. The check's rejection was overly strict because the critical variable (tt_local_entry) flows from the parameter through container_of. The function has no other side effects, so it is a pure reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vlan.refcount.refcount",
+        "batadv_meshif_vlan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Release callback is invoked exactly once by kref_put when refcount hits zero; no failure path or retry possible.",
+    "contract_summary": "This is the release callback for batadv_tt_local_entry's kref. It releases the vlan reference via batadv_meshif_vlan_put and frees the entry via kfree_rcu. The caller (kref_put) invokes this only when the refcount drops to zero; after this function executes, the entry is freed and must not be accessed again. No further puts should occur. No special locking required beyond what kref provides."
+  }
+}

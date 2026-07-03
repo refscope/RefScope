@@ -1,0 +1,107 @@
+{
+  "function_name": "anon_vma_name_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "anon_name.kref.refcount",
+      "anon_vma_name--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Null pointer means no object to operate on; non-null pointer always succeeds; retry is unnecessary.",
+  "contract_summary": "Get-wrapper for anon_vma_name that increments the reference count via kref_get if the pointer is non-NULL. The caller must later release the reference with a corresponding put (e.g., anon_vma_name_put or kref_put). This function is safe to call with a NULL pointer, in which case it is a no-op. No return value; the caller is responsible for ensuring the pointer is valid when a reference is needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on an anon_vma_name via kref_get; only a null pointer check and the get call.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Null pointer means no object to operate on; non-null pointer always succeeds; retry is unnecessary.",
+      "contract_summary": "Get-wrapper for anon_vma_name that increments the reference count via kref_get if the pointer is non-NULL. The caller must later release the reference with a corresponding put (e.g., anon_vma_name_put or kref_put). This function is safe to call with a NULL pointer, in which case it is a no-op. No return value; the caller is responsible for ensuring the pointer is valid when a reference is needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "anon_name.kref.refcount",
+          "anon_vma_name--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "anon_name.kref.refcount",
+          "anon_vma_name--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &anon_name->kref, which matches the access path from parameter 1 (anon_name) through kref to refcount. The type chain anon_vma_name--kref--refcount_t is consistent with the struct definitions. The segment counts match (3 fields, 3 types). The direction 'get' corresponds to the refcount increment."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "anon_name.kref.refcount",
+        "anon_vma_name--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Null pointer means no object to operate on; non-null pointer always succeeds; retry is unnecessary.",
+    "contract_summary": "Get-wrapper for anon_vma_name that increments the reference count via kref_get if the pointer is non-NULL. The caller must later release the reference with a corresponding put (e.g., anon_vma_name_put or kref_put). This function is safe to call with a NULL pointer, in which case it is a no-op. No return value; the caller is responsible for ensuring the pointer is valid when a reference is needed."
+  }
+}

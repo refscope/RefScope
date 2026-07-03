@@ -1,0 +1,247 @@
+{
+  "function_name": "batadv_neigh_node_create",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "neigh_node.refcount.refcount",
+      "batadv_neigh_node--kref--refcount_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "neigh_node.refcount.refcount.refs",
+      "batadv_neigh_node--kref--refcount_struct--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "neigh_node.refcount.refcount",
+      "batadv_neigh_node--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_neigh_node_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "res.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_get_or_create",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hardif_neigh.refcount.refcount",
+      "member_type_chain": "batadv_hardif_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_node_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "res.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure only occurs on memory allocation for the new node or hardif_neigh. Immediate retry is unlikely to succeed because available memory is unlikely to change between calls. Caller should propagate the NULL return and handle the error.",
+  "contract_summary": "This function returns a referenced batadv_neigh_node (reference count already incremented) to the caller. It first attempts to find an existing node via batadv_neigh_node_get; if found, it takes a reference on that node and returns it. If not found, it creates a new batadv_neigh_node, initializes its fields, takes an internal reference, and also acquires a reference from the hardif_neigh node. The caller receives the node with a fresh reference that must be released via batadv_neigh_node_put. The function acquires and releases the orig_node->neigh_list_lock internally. On failure (memory allocation error), it returns NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to get-or-create a batadv_neigh_node and return it with an acquired reference. Includes necessary initialization (address copy, timestamp, list init) but these are minimal and intrinsic to the creation lifecycle. The hardif_neigh get-or-create is also refcount management. The overall function is a classic get-or-create wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure only occurs on memory allocation for the new node or hardif_neigh. Immediate retry is unlikely to succeed because available memory is unlikely to change between calls. Caller should propagate the NULL return and handle the error.",
+      "contract_summary": "This function returns a referenced batadv_neigh_node (reference count already incremented) to the caller. It first attempts to find an existing node via batadv_neigh_node_get; if found, it takes a reference on that node and returns it. If not found, it creates a new batadv_neigh_node, initializes its fields, takes an internal reference, and also acquires a reference from the hardif_neigh node. The caller receives the node with a fresh reference that must be released via batadv_neigh_node_put. The function acquires and releases the orig_node->neigh_list_lock internally. On failure (memory allocation error), it returns NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount.refs",
+          "batadv_neigh_node--kref--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount.refs",
+          "batadv_neigh_node--kref--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "All four operations are consistent with the code. (1) The 'get' on return (index 0) corresponds to the explicit kref_get in the new-node path. (2) The 'set' on return corresponds to kref_init from the new-node path. (3) The second 'get' on return corresponds to the implicit get from batadv_neigh_node_get when an existing node is found. (4) The 'get' on parameter 2 (hard_iface) corresponds to kref_get on &hard_iface->refcount. All access paths and type chains match the callee info and the actual struct definitions, and segment counts are equal in each case."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "neigh_node.refcount.refcount",
+        "batadv_neigh_node--kref--refcount_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "neigh_node.refcount.refcount.refs",
+        "batadv_neigh_node--kref--refcount_struct--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "neigh_node.refcount.refcount",
+        "batadv_neigh_node--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure only occurs on memory allocation for the new node or hardif_neigh. Immediate retry is unlikely to succeed because available memory is unlikely to change between calls. Caller should propagate the NULL return and handle the error.",
+    "contract_summary": "This function returns a referenced batadv_neigh_node (reference count already incremented) to the caller. It first attempts to find an existing node via batadv_neigh_node_get; if found, it takes a reference on that node and returns it. If not found, it creates a new batadv_neigh_node, initializes its fields, takes an internal reference, and also acquires a reference from the hardif_neigh node. The caller receives the node with a fresh reference that must be released via batadv_neigh_node_put. The function acquires and releases the orig_node->neigh_list_lock internally. On failure (memory allocation error), it returns NULL."
+  }
+}

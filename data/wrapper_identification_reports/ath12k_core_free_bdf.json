@@ -1,0 +1,99 @@
+{
+  "function_name": "ath12k_core_free_bdf",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "bd.fw.priv.ref.refcount",
+      "ath12k_board_data--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "release_firmware is a void put function that always succeeds; retrying would risk double-free.",
+  "contract_summary": "Put wrapper that releases the firmware reference held in `bd->fw` via `release_firmware`, then zeroes the entire board data structure. This function is used to free a board data descriptor after use or on error paths. The caller must ensure that the board data was previously populated (e.g., via `ath12k_core_fetch_bdf`). After this call, `bd` is zeroed and must not be used or released again. The firmware reference is only released if `bd->fw` is not an error pointer (i.e., if it is NULL or valid). The function always zeros the structure regardless of the error check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a firmware reference (put operation) via release_firmware and zero out the board data structure; the memset is a standard cleanup step, not business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "release_firmware is a void put function that always succeeds; retrying would risk double-free.",
+      "contract_summary": "Put wrapper that releases the firmware reference held in `bd->fw` via `release_firmware`, then zeroes the entire board data structure. This function is used to free a board data descriptor after use or on error paths. The caller must ensure that the board data was previously populated (e.g., via `ath12k_core_fetch_bdf`). After this call, `bd` is zeroed and must not be used or released again. The firmware reference is only released if `bd->fw` is not an error pointer (i.e., if it is NULL or valid). The function always zeros the structure regardless of the error check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bd.fw.priv.ref.refcount",
+          "ath12k_board_data--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bd.fw.priv.ref.refcount",
+          "ath12k_board_data--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code calls release_firmware(bd->fw), which is a put operation on the firmware's refcount. The critical variable is parameter 2 (bd), and the access path bd.fw.priv.ref.refcount correctly traces from bd through fw, priv, ref to refcount_t. The type chain matches the structure hierarchy (ath12k_board_data -> firmware -> fw_priv -> kref -> refcount_t). The segment count (5) equals the number of types in the chain (5), confirming completeness. No other refcount operations exist."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "bd.fw.priv.ref.refcount",
+        "ath12k_board_data--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "release_firmware is a void put function that always succeeds; retrying would risk double-free.",
+    "contract_summary": "Put wrapper that releases the firmware reference held in `bd->fw` via `release_firmware`, then zeroes the entire board data structure. This function is used to free a board data descriptor after use or on error paths. The caller must ensure that the board data was previously populated (e.g., via `ath12k_core_fetch_bdf`). After this call, `bd` is zeroed and must not be used or released again. The firmware reference is only released if `bd->fw` is not an error pointer (i.e., if it is NULL or valid). The function always zeros the structure regardless of the error check."
+  }
+}

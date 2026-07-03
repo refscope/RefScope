@@ -1,0 +1,99 @@
+{
+  "function_name": "__xfrm_state_lookup_all",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "x.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xfrm_state_hold_rcu",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xfrm_state_hold_rcu",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means no matching state exists under the given parameters; retrying immediately will likely fail again unless the hash table is modified concurrently (unlikely). The caller can retry later if state addition is expected, but the function itself does not indicate transient errors.",
+  "contract_summary": "This function performs a locked lookup of an xfrm_state by SPI, destination address, protocol, family, mark, and optional offload device. If a matching state is found, it holds an RCU-protected reference (via xfrm_state_hold_rcu) and returns the pointer. The caller must release this reference with a corresponding xfrm_state_put when done. The function must be called under RCU read lock. On failure (no match or dying state), NULL is returned and no reference is taken. The caller must check the return value before using the returned pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to find an xfrm_state by key and acquire a reference to it. The matching logic is the lookup, but the core semantic is returning a referenced object to the caller. The refcount increment is the essential operation for safe ownership transfer.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means no matching state exists under the given parameters; retrying immediately will likely fail again unless the hash table is modified concurrently (unlikely). The caller can retry later if state addition is expected, but the function itself does not indicate transient errors.",
+      "contract_summary": "This function performs a locked lookup of an xfrm_state by SPI, destination address, protocol, family, mark, and optional offload device. If a matching state is found, it holds an RCU-protected reference (via xfrm_state_hold_rcu) and returns the pointer. The caller must release this reference with a corresponding xfrm_state_put when done. The function must be called under RCU read lock. On failure (no match or dying state), NULL is returned and no reference is taken. The caller must check the return value before using the returned pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns struct xfrm_state *x after calling xfrm_state_hold_rcu(x) which increments x->refcnt.refs. The operation's location is 'return' with index 0, the access path 'x.refcnt.refs' correctly traces from the return variable to the refcount field, and the type chain 'xfrm_state--refcount_t--atomic_t' matches. Segment count matches (3 segments vs 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "x.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means no matching state exists under the given parameters; retrying immediately will likely fail again unless the hash table is modified concurrently (unlikely). The caller can retry later if state addition is expected, but the function itself does not indicate transient errors.",
+    "contract_summary": "This function performs a locked lookup of an xfrm_state by SPI, destination address, protocol, family, mark, and optional offload device. If a matching state is found, it holds an RCU-protected reference (via xfrm_state_hold_rcu) and returns the pointer. The caller must release this reference with a corresponding xfrm_state_put when done. The function must be called under RCU read lock. On failure (no match or dying state), NULL is returned and no reference is taken. The caller must check the return value before using the returned pointer."
+  }
+}

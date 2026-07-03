@@ -1,0 +1,58 @@
+{
+  "function_name": "alloc_release",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_ct_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nfct.ct_general.use.refs",
+      "member_type_chain": "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_ct_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nfct.ct_general.use.refs",
+      "member_type_chain": "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If allocation fails, retrying is unlikely to succeed without external memory availability changes; the function has no persistent state.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "This function allocates a conntrack object and immediately releases it, without returning the object to the caller. It is not a wrapper that transfers ownership or manages a reference for an external caller; it is a self-contained test or no-op pattern.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If allocation fails, retrying is unlikely to succeed without external memory availability changes; the function has no persistent state.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If allocation fails, retrying is unlikely to succeed without external memory availability changes; the function has no persistent state.",
+    "contract_summary": ""
+  }
+}

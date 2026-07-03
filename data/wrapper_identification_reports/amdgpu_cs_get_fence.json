@@ -1,0 +1,122 @@
+{
+  "function_name": "amdgpu_cs_get_fence",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "fence.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_ctx_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ctx.refcount.refcount",
+      "member_type_chain": "amdgpu_ctx--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_ctx_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcount.refcount",
+      "member_type_chain": "amdgpu_ctx--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_ctx_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ctx.refcount.refcount",
+      "member_type_chain": "amdgpu_ctx--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_ctx_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcount.refcount",
+      "member_type_chain": "amdgpu_ctx--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (context not found, entity lookup error, or invalid sequence number) indicates the requested fence does not exist or is invalid; retrying without changing conditions will produce the same error.",
+  "contract_summary": "This function acquires a reference on a fence from an AMDGPU context. It temporarily holds a reference on the context to safely look up the entity and fence. On success, the caller receives a fence with an elevated refcount and must call dma_fence_put to release it. On failure, an ERR_PTR is returned and no fence reference is transferred. The function releases the context reference before returning the fence.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to retrieve a fence with an acquired reference. The context get/put management is internal and necessary only to safely look up the fence. This is analogous to a get-or-create wrapper that returns an object with a refcount.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (context not found, entity lookup error, or invalid sequence number) indicates the requested fence does not exist or is invalid; retrying without changing conditions will produce the same error.",
+      "contract_summary": "This function acquires a reference on a fence from an AMDGPU context. It temporarily holds a reference on the context to safely look up the entity and fence. On success, the caller receives a fence with an elevated refcount and must call dma_fence_put to release it. On failure, an ERR_PTR is returned and no fence reference is transferred. The function releases the context reference before returning the fence."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The callee information only covers amdgpu_ctx_get/put on the context, not on the fence. The candidate operation assumes a get on the return fence's refcount via amdgpu_ctx_get_fence, but the callee info for that function is not provided, so the operation is unsupported and cannot be validated."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function's sole purpose is to retrieve a dma_fence with an acquired reference via amdgpu_ctx_get_fence, while managing context lifetime. The returned fence is the critical variable that flows to the caller. Although the callee info for amdgpu_ctx_get_fence is missing, the code pattern (get an object, return it) and the name 'get_fence' strongly indicate a get operation on the fence's refcount. The candidate operation correctly captures this."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "fence.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (context not found, entity lookup error, or invalid sequence number) indicates the requested fence does not exist or is invalid; retrying without changing conditions will produce the same error.",
+    "contract_summary": "This function acquires a reference on a fence from an AMDGPU context. It temporarily holds a reference on the context to safely look up the entity and fence. On success, the caller receives a fence with an elevated refcount and must call dma_fence_put to release it. On failure, an ERR_PTR is returned and no fence reference is transferred. The function releases the context reference before returning the fence."
+  }
+}

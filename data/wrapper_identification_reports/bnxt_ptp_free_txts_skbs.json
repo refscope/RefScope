@@ -1,0 +1,99 @@
+{
+  "function_name": "bnxt_ptp_free_txts_skbs",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ptp.txts_req.tx_skb.users.refs",
+      "bnxt_ptp_cfg--bnxt_ptp_tx_req--sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operations never fail; if an skb is valid it is freed; retry would cause double-free.",
+  "contract_summary": "This function releases all pending TX timestamp skbs in the PTP structure. It iterates over the ring, freeing each skb that is not an error or NULL. It also resets the availability counter and the consumer index to reflect the freed entries. The caller must ensure that no other context is concurrently accessing these skbs; the function synchronizes by cancelling and rescheduling the PTP worker. After this call, the TX timestamp ring is empty and available for new requests.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is releasing (freeing) all pending TX timestamp skbs via dev_kfree_skb_any, which is a put operation. The additional state resets and worker management are minimal and directly related to the bulk release.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operations never fail; if an skb is valid it is freed; retry would cause double-free.",
+      "contract_summary": "This function releases all pending TX timestamp skbs in the PTP structure. It iterates over the ring, freeing each skb that is not an error or NULL. It also resets the availability counter and the consumer index to reflect the freed entries. The caller must ensure that no other context is concurrently accessing these skbs; the function synchronizes by cancelling and rescheduling the PTP worker. After this call, the TX timestamp ring is empty and available for new requests."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ptp.txts_req.tx_skb.users.refs",
+          "bnxt_ptp_cfg--bnxt_ptp_tx_req--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ptp.txts_req.tx_skb.users.refs",
+          "bnxt_ptp_cfg--bnxt_ptp_tx_req--sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb_any is called on txts_req->tx_skb, which decrements the refcount of skb->users. The access path from parameter ptp through txts_req (array) to tx_skb to users.refs matches the type chain. The array index is implicit and does not affect the path. Thus the operation is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ptp.txts_req.tx_skb.users.refs",
+        "bnxt_ptp_cfg--bnxt_ptp_tx_req--sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operations never fail; if an skb is valid it is freed; retry would cause double-free.",
+    "contract_summary": "This function releases all pending TX timestamp skbs in the PTP structure. It iterates over the ring, freeing each skb that is not an error or NULL. It also resets the availability counter and the consumer index to reflect the freed entries. The caller must ensure that no other context is concurrently accessing these skbs; the function synchronizes by cancelling and rescheduling the PTP worker. After this call, the TX timestamp ring is empty and available for new requests."
+  }
+}

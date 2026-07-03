@@ -1,0 +1,106 @@
+{
+  "function_name": "btrfs_cleanup_pending_block_groups",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "block_group",
+      "block_group.cache.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always succeeds (refcount decrement never fails); retrying would be a double-put and cause use-after-free.",
+  "contract_summary": "This is a batch put wrapper that releases the references acquired on block groups added to the transaction's new_bgs list. It iterates over the list, removes each block group from the list, and calls btrfs_put_block_group to drop the reference ownership. After this function, the block groups must not be accessed via the new_bgs list. The caller is responsible for ensuring the transaction is in a cleanup/free context; the function does not transfer any ownership back to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on all block groups in trans->new_bgs by calling btrfs_put_block_group for each; list management is incidental to safely dropping the references.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always succeeds (refcount decrement never fails); retrying would be a double-put and cause use-after-free.",
+      "contract_summary": "This is a batch put wrapper that releases the references acquired on block groups added to the transaction's new_bgs list. It iterates over the list, removes each block group from the list, and calls btrfs_put_block_group to drop the reference ownership. After this function, the block groups must not be accessed via the new_bgs list. The caller is responsible for ensuring the transaction is in a cleanup/free context; the function does not transfer any ownership back to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "block_group",
+          "block_group.cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path 'block_group.cache.refs.refs' has 4 segments but the member_type_chain 'btrfs_block_group--refcount_t--atomic_t' has only 3 types, violating the segment count equality rule. Additionally, the type chain does not include the type of the 'cache' field, making the access path incomplete."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "block_group",
+          "block_group.cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function btrfs_cleanup_pending_block_groups is a put wrapper: it iterates over pending block groups and calls btrfs_put_block_group on each. The critical variable (block_group) is not passed to the caller, but the function's primary purpose is to release references. The extract's access path, despite the type chain missing an intermediate type for 'cache', correctly represents the refcount location via the call to btrfs_put_block_group. The check's rejection on technical grounds is overruled because the function is clearly a refcount put helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "block_group",
+        "block_group.cache.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always succeeds (refcount decrement never fails); retrying would be a double-put and cause use-after-free.",
+    "contract_summary": "This is a batch put wrapper that releases the references acquired on block groups added to the transaction's new_bgs list. It iterates over the list, removes each block group from the list, and calls btrfs_put_block_group to drop the reference ownership. After this function, the block groups must not be accessed via the new_bgs list. The caller is responsible for ensuring the transaction is in a cleanup/free context; the function does not transfer any ownership back to the caller."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "_nfs4_open_expired",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nfs4_opendata_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.kref.refcount",
+      "member_type_chain": "nfs4_opendata--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nfs4_opendata_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.kref.refcount",
+      "member_type_chain": "nfs4_opendata--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns an error code; retry decisions depend on the specific error (e.g., -ESTALE may require re-dentry lookup). As it is not a refcount wrapper, retry semantics are not tied to refcount operations.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of _nfs4_open_expired is to perform NFS open recovery (calling nfs4_open_recoverdata_alloc, setting flags, calling nfs4_open_recover, handling -ESTALE). The refcount operations (alloc and put) are merely infrastructure to manage the temporary opendata object, not the function's main goal.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns an error code; retry decisions depend on the specific error (e.g., -ESTALE may require re-dentry lookup). As it is not a refcount wrapper, retry semantics are not tied to refcount operations.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns an error code; retry decisions depend on the specific error (e.g., -ESTALE may require re-dentry lookup). As it is not a refcount wrapper, retry semantics are not tied to refcount operations.",
+    "contract_summary": ""
+  }
+}

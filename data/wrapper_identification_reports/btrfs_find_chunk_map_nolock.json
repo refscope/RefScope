@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_find_chunk_map_nolock",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "map.refs.refs",
+      "btrfs_chunk_map--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means no matching chunk map exists for the given range at this moment. Retrying with the same parameters is unlikely to succeed unless the mapping tree is modified externally, which is not under the caller's control.",
+  "contract_summary": "This function looks up a chunk map in the mapping tree (caller must hold the appropriate lock, as indicated by the '_nolock' suffix). If a matching map is found, it increments the map's reference count and returns the pointer. The caller acquires ownership of one reference and must release it via a corresponding put (e.g., btrfs_free_chunk_map). If no map covers the requested logical range, NULL is returned; the caller must handle this case appropriately (e.g., by waiting for metadata updates or reporting an error).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a chunk map in the RB tree and acquire a reference on it via refcount_inc. The tree traversal and fallback search are intrinsic to locating the object; there is no additional business logic beyond the refcount increment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means no matching chunk map exists for the given range at this moment. Retrying with the same parameters is unlikely to succeed unless the mapping tree is modified externally, which is not under the caller's control.",
+      "contract_summary": "This function looks up a chunk map in the mapping tree (caller must hold the appropriate lock, as indicated by the '_nolock' suffix). If a matching map is found, it increments the map's reference count and returns the pointer. The caller acquires ownership of one reference and must release it via a corresponding put (e.g., btrfs_free_chunk_map). If no map covers the requested logical range, NULL is returned; the caller must handle this case appropriately (e.g., by waiting for metadata updates or reporting an error)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "map.refs.refs",
+          "btrfs_chunk_map--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "map.refs.refs",
+          "btrfs_chunk_map--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls refcount_inc on map->refs (or prev_map->refs) and returns that pointer. The critical variable at the interface is the return value. The access path 'map.refs.refs' (starting from the local variable representing the returned object) and type chain 'btrfs_chunk_map--refcount_t--atomic_t' are consistent with the struct definition and callee information. Segments count matches, direction 'get' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "map.refs.refs",
+        "btrfs_chunk_map--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means no matching chunk map exists for the given range at this moment. Retrying with the same parameters is unlikely to succeed unless the mapping tree is modified externally, which is not under the caller's control.",
+    "contract_summary": "This function looks up a chunk map in the mapping tree (caller must hold the appropriate lock, as indicated by the '_nolock' suffix). If a matching map is found, it increments the map's reference count and returns the pointer. The caller acquires ownership of one reference and must release it via a corresponding put (e.g., btrfs_free_chunk_map). If no map covers the requested logical range, NULL is returned; the caller must handle this case appropriately (e.g., by waiting for metadata updates or reporting an error)."
+  }
+}

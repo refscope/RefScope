@@ -1,0 +1,143 @@
+{
+  "function_name": "apparmor_bprm_committed_creds",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "current_ctx",
+      "current_ctx.onexec.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "current_ctx",
+      "current_ctx.previous.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_clear_task_ctx_trans",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always succeeds; there is no failure path and no reason to retry.",
+  "contract_summary": "This function is a put wrapper that releases two references (the onexec and previous labels) from the current task's security context, clearing the transitional state incurred during an exec. It is called after a successful binary execution to finalize the label transition. The operation always succeeds, does not return a value, and transfers no ownership to the caller. The caller (the bprm_committed_creds hook) must have already ensured the relevant state is set; after this function, the references are dropped and must not be used again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release two refcounts (onctx.onexec and ctx.previous) via aa_clear_task_ctx_trans, making it a pure put wrapper for transitional exec state cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always succeeds; there is no failure path and no reason to retry.",
+      "contract_summary": "This function is a put wrapper that releases two references (the onexec and previous labels) from the current task's security context, clearing the transitional state incurred during an exec. It is called after a successful binary execution to finalize the label transition. The operation always succeeds, does not return a value, and transfers no ownership to the caller. The caller (the bprm_committed_creds hook) must have already ensured the relevant state is set; after this function, the references are dropped and must not be used again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "current_ctx",
+          "current_ctx.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "current_ctx",
+          "current_ctx.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "current_ctx",
+          "current_ctx.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "current_ctx",
+          "current_ctx.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls aa_clear_task_ctx_trans on the current task's context, which performs put operations on the onexec and previous label counts as described. The access paths and type chains accurately reflect the member pointer dereferences from the task context to the refcount fields. The segment counts match the type chain lengths, and the critical variable (current_ctx) is correctly identified as a global object (current task context)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "current_ctx",
+        "current_ctx.onexec.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "current_ctx",
+        "current_ctx.previous.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always succeeds; there is no failure path and no reason to retry.",
+    "contract_summary": "This function is a put wrapper that releases two references (the onexec and previous labels) from the current task's security context, clearing the transitional state incurred during an exec. It is called after a successful binary execution to finalize the label transition. The operation always succeeds, does not return a value, and transfers no ownership to the caller. The caller (the bprm_committed_creds hook) must have already ensured the relevant state is set; after this function, the references are dropped and must not be used again."
+  }
+}

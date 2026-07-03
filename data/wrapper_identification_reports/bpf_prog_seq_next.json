@@ -1,0 +1,127 @@
+{
+  "function_name": "bpf_prog_seq_next",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "v.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "ret.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Return of NULL from bpf_prog_get_curr_or_next indicates no more programs; retrying with the same prog_id will continue to fail.",
+  "contract_summary": "This function implements the seq_file 'next' operation for iterating over BPF programs. It unconditionally releases the reference to the previous program via bpf_prog_put, then attempts to acquire a reference to the next program by incrementing the prog_id and calling bpf_prog_get_curr_or_next. If no next program exists (NULL return), the iteration ends. The returned bpf_prog pointer carries a reference that must be released by the caller (typically bpf_prog_seq_stop) to avoid leaks. The function is a pure refcount management wrapper with no additional side effects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to manage refcount lifecycle during iteration: put previous bpf_prog, get next bpf_prog. Only additional logic is incrementing pos and prog_id counters.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Return of NULL from bpf_prog_get_curr_or_next indicates no more programs; retrying with the same prog_id will continue to fail.",
+      "contract_summary": "This function implements the seq_file 'next' operation for iterating over BPF programs. It unconditionally releases the reference to the previous program via bpf_prog_put, then attempts to acquire a reference to the next program by incrementing the prog_id and calling bpf_prog_get_curr_or_next. If no next program exists (NULL return), the iteration ends. The returned bpf_prog pointer carries a reference that must be released by the caller (typically bpf_prog_seq_stop) to avoid leaks. The function is a pure refcount management wrapper with no additional side effects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "v.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "ret.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "v.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "ret.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code and callee information. The put operation correctly identifies parameter v (parameter 2) with path v.aux.refcnt, matching the callee's put on the input. The get operation correctly identifies the return value with path ret.aux.refcnt, matching the callee's get on the return. The access path segment counts (3 each) match the type chain segments (3 types), and the type chains are consistent with struct bpf_prog containing aux (struct bpf_prog_aux) containing refcnt (atomic64_t)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "v.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "ret.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Return of NULL from bpf_prog_get_curr_or_next indicates no more programs; retrying with the same prog_id will continue to fail.",
+    "contract_summary": "This function implements the seq_file 'next' operation for iterating over BPF programs. It unconditionally releases the reference to the previous program via bpf_prog_put, then attempts to acquire a reference to the next program by incrementing the prog_id and calling bpf_prog_get_curr_or_next. If no next program exists (NULL return), the iteration ends. The returned bpf_prog pointer carries a reference that must be released by the caller (typically bpf_prog_seq_stop) to avoid leaks. The function is a pure refcount management wrapper with no additional side effects."
+  }
+}

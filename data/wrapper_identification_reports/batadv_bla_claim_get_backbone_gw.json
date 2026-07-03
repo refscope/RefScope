@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_bla_claim_get_backbone_gw",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "backbone_gw.refcount.refcount",
+      "batadv_bla_backbone_gw--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get never fails; the operation is unconditional. If the backbone_gw pointer were NULL, it would be a bug (null dereference) rather than a retry scenario.",
+  "contract_summary": "This is a get-wrapper that acquires a reference on the backbone gateway (struct batadv_bla_backbone_gw) stored in the claim. The caller must pair this call with a corresponding kref_put to release the reference when done. The function does not check for NULL; it assumes the backbone_gw pointer is valid. The spinlock protects concurrent access to the claim's backbone_gw field. After this call, the caller holds a counted reference that ensures the backbone_gw object remains alive until released. The caller is responsible for releasing the reference exactly once, typically via batadv_bla_backbone_gw_put or a similar kref_put wrapper.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to retrieve the backbone_gw pointer from the claim while incrementing its kref refcount, with no other logic besides locking/unlocking. It passes the referenced object back to the caller.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get never fails; the operation is unconditional. If the backbone_gw pointer were NULL, it would be a bug (null dereference) rather than a retry scenario.",
+      "contract_summary": "This is a get-wrapper that acquires a reference on the backbone gateway (struct batadv_bla_backbone_gw) stored in the claim. The caller must pair this call with a corresponding kref_put to release the reference when done. The function does not check for NULL; it assumes the backbone_gw pointer is valid. The spinlock protects concurrent access to the claim's backbone_gw field. After this call, the caller holds a counted reference that ensures the backbone_gw object remains alive until released. The caller is responsible for releasing the reference exactly once, typically via batadv_bla_backbone_gw_put or a similar kref_put wrapper."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "backbone_gw.refcount.refcount",
+          "batadv_bla_backbone_gw--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "backbone_gw.refcount.refcount",
+          "batadv_bla_backbone_gw--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &backbone_gw->refcount, where backbone_gw is returned to caller. The access path backbone_gw.refcount.refcount matches the return variable, and the type chain batadv_bla_backbone_gw--kref--refcount_t is consistent with struct definitions. Segment counts match (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "backbone_gw.refcount.refcount",
+        "batadv_bla_backbone_gw--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get never fails; the operation is unconditional. If the backbone_gw pointer were NULL, it would be a bug (null dereference) rather than a retry scenario.",
+    "contract_summary": "This is a get-wrapper that acquires a reference on the backbone gateway (struct batadv_bla_backbone_gw) stored in the claim. The caller must pair this call with a corresponding kref_put to release the reference when done. The function does not check for NULL; it assumes the backbone_gw pointer is valid. The spinlock protects concurrent access to the claim's backbone_gw field. After this call, the caller holds a counted reference that ensures the backbone_gw object remains alive until released. The caller is responsible for releasing the reference exactly once, typically via batadv_bla_backbone_gw_put or a similar kref_put wrapper."
+  }
+}

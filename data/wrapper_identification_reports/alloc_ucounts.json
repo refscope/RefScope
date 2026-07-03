@@ -1,0 +1,127 @@
+{
+  "function_name": "alloc_ucounts",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "new.count",
+      "ucounts--rcuref"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "ns.ns.__ns_ref",
+      "user_namespace--ns_common--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_user_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.ns.__ns_ref",
+      "member_type_chain": "user_namespace--ns_common--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_user_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.ns.__ns_ref",
+      "member_type_chain": "user_namespace--ns_common--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure only occurs on memory allocation (kzalloc) — retry is pointless if memory is exhausted, and the get path always falls back to create, so no caller retry is needed.",
+  "contract_summary": "This is a get-or-create wrapper for ucounts structures. It first attempts to find an existing entry and atomically increments its reference count via rcuref_get. If not found, it allocates a new one, initializes its rcuref count to 1, and inserts it into the hash table. In both cases, the caller receives a pointer with a reference they must later release via put_ucounts. On allocation failure, NULL is returned. The function also takes a reference on the associated user namespace via get_user_ns, which is released by put_ucounts.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is get-or-create of ucounts objects: either acquire an existing reference via rcuref_get or initialize a new one with rcuref_init; the remaining logic (lookup, allocation, hash insertion) is minimal setup tightly coupled to refcount lifecycle.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure only occurs on memory allocation (kzalloc) — retry is pointless if memory is exhausted, and the get path always falls back to create, so no caller retry is needed.",
+      "contract_summary": "This is a get-or-create wrapper for ucounts structures. It first attempts to find an existing entry and atomically increments its reference count via rcuref_get. If not found, it allocates a new one, initializes its rcuref count to 1, and inserts it into the hash table. In both cases, the caller receives a pointer with a reference they must later release via put_ucounts. On allocation failure, NULL is returned. The function also takes a reference on the associated user namespace via get_user_ns, which is released by put_ucounts."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "new.count",
+          "ucounts--rcuref"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "ns.ns.__ns_ref",
+          "user_namespace--ns_common--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "new.count",
+          "ucounts--rcuref"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "ns.ns.__ns_ref",
+          "user_namespace--ns_common--refcount_t"
+        ]
+      ],
+      "reason": "rcuref_init(&new->count, 1) sets the rcuref count to 1; the new ucounts pointer is returned. get_user_ns(new->ns) increments the user namespace refcount, which is accessible via parameter ns (the caller's ns argument) with path ns->ns.__ns_ref. Both operations are supported by the code and the access paths and type chains are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "new.count",
+        "ucounts--rcuref"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "ns.ns.__ns_ref",
+        "user_namespace--ns_common--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure only occurs on memory allocation (kzalloc) — retry is pointless if memory is exhausted, and the get path always falls back to create, so no caller retry is needed.",
+    "contract_summary": "This is a get-or-create wrapper for ucounts structures. It first attempts to find an existing entry and atomically increments its reference count via rcuref_get. If not found, it allocates a new one, initializes its rcuref count to 1, and inserts it into the hash table. In both cases, the caller receives a pointer with a reference they must later release via put_ucounts. On allocation failure, NULL is returned. The function also takes a reference on the associated user namespace via get_user_ns, which is released by put_ucounts."
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "function_name": "__nsinfo__zput",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "nsip[0]->refcnt.refs",
+      "nsinfo--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nsinfo__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nsi.refcnt.refs",
+      "member_type_chain": "nsinfo--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nsinfo__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nsi.refcnt.refs",
+      "member_type_chain": "nsinfo--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "After a successful put the object may be freed; retrying would cause a double-put which is a use-after-free bug. The guard against NULL ensures safety but retry is never meaningful.",
+  "contract_summary": "Safe-release wrapper: decrements the reference count of the nsinfo object pointed to by *nsip via nsinfo__put, then sets *nsip to NULL. The caller must not access the object after this call and must not call put again on the now-null pointer. If nsip itself is NULL or *nsip is NULL, the call is a no-op. This wrapper prevents double-puts and use-after-frees by ensuring the pointer is cleared.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a struct nsinfo via nsinfo__put and then nullify the pointer to prevent use-after-free or double-put. No other business logic present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "After a successful put the object may be freed; retrying would cause a double-put which is a use-after-free bug. The guard against NULL ensures safety but retry is never meaningful.",
+      "contract_summary": "Safe-release wrapper: decrements the reference count of the nsinfo object pointed to by *nsip via nsinfo__put, then sets *nsip to NULL. The caller must not access the object after this call and must not call put again on the now-null pointer. If nsip itself is NULL or *nsip is NULL, the call is a no-op. This wrapper prevents double-puts and use-after-frees by ensuring the pointer is cleared."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "nsip[0].refcnt.refs",
+          "nsinfo--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'nsip[0].refcnt.refs' is invalid because nsip is of type struct nsinfo **, so nsip[0] yields a pointer (struct nsinfo *), not a struct. Using dot to access a member on a pointer is incorrect. The correct path would require an arrow or explicit dereference (e.g., (*nsip).refcnt.refs or nsip[0]->refcnt.refs). Since the path does not correctly represent the C type semantics, the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "nsip[0]->refcnt.refs",
+          "nsinfo--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a clear 'zput' wrapper: it takes a double pointer to nsinfo, calls nsinfo__put on the pointed-to object, and zeroes the pointer. The candidate operation correctly identifies a put on the refcnt field, but the original access path 'nsip[0].refcnt.refs' was syntactically invalid (nsip[0] yields a pointer, not a struct). The corrected path uses '->' to access the member. The critical variable (the nsinfo object) is passed via parameter 1 and the function performs only the put and zeroing, giving high purity."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "nsip[0]->refcnt.refs",
+        "nsinfo--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "After a successful put the object may be freed; retrying would cause a double-put which is a use-after-free bug. The guard against NULL ensures safety but retry is never meaningful.",
+    "contract_summary": "Safe-release wrapper: decrements the reference count of the nsinfo object pointed to by *nsip via nsinfo__put, then sets *nsip to NULL. The caller must not access the object after this call and must not call put again on the now-null pointer. If nsip itself is NULL or *nsip is NULL, the call is a no-op. This wrapper prevents double-puts and use-after-frees by ensuring the pointer is cleared."
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "function_name": "__iommufd_access_create",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "access.obj.users.refs",
+      "iommufd_access--iommufd_object--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "iommufd_object_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.wait_cnt.refs",
+      "member_type_chain": "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "iommufd_object_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_ioas--iommufd_object--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount_inc operation is unconditional and always succeeds after allocation; there is no refcount failure to retry. Allocation failure is not a refcount issue.",
+  "contract_summary": "This function creates a new iommufd_access object, initializes its mutex, and increments its reference count to represent the caller's ownership. The caller receives a pointer to the object with a reference count of 1 (the calling driver is a user). The caller must later call iommufd_access_destroy() to release this reference. The function returns an ERR_PTR on allocation failure.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate an iommufd_access object and give the caller an initial reference via refcount_inc. The mutex initialization is a minor setup step; the real business is refcount management.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount_inc operation is unconditional and always succeeds after allocation; there is no refcount failure to retry. Allocation failure is not a refcount issue.",
+      "contract_summary": "This function creates a new iommufd_access object, initializes its mutex, and increments its reference count to represent the caller's ownership. The caller receives a pointer to the object with a reference count of 1 (the calling driver is a user). The caller must later call iommufd_access_destroy() to release this reference. The function returns an ERR_PTR on allocation failure."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "access.obj.users.refs",
+          "iommufd_access--iommufd_object--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "access.obj.users.refs",
+          "iommufd_access--iommufd_object--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_inc on &access->obj.users is a get operation on the returned object. The access path 'access.obj.users.refs' correctly traces from the return value (access) through obj, users to the atomic refs field. The segment count (4) matches the type chain length (4). The type chain iommufd_access--iommufd_object--refcount_struct--atomic_t is consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "access.obj.users.refs",
+        "iommufd_access--iommufd_object--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount_inc operation is unconditional and always succeeds after allocation; there is no refcount failure to retry. Allocation failure is not a refcount issue.",
+    "contract_summary": "This function creates a new iommufd_access object, initializes its mutex, and increments its reference count to represent the caller's ownership. The caller receives a pointer to the object with a reference count of 1 (the calling driver is a user). The caller must later call iommufd_access_destroy() to release this reference. The function returns an ERR_PTR on allocation failure."
+  }
+}

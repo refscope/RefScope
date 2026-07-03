@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_seq64_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev->seq64.sbo->tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_seq64--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "A put operation releases a reference; retrying would cause a double-free bug.",
+  "contract_summary": "This is a put wrapper that releases the seq64 buffer object (adev->seq64.sbo) by calling amdgpu_bo_free_kernel, which decrements the buffer's refcount and frees it if zero. It should be called exactly once during driver teardown. After calling this function, the buffer must not be accessed. No return value to check; the operation always executes unconditionally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release reference on the seq64 buffer object via amdgpu_bo_free_kernel (a put operation). No other logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "A put operation releases a reference; retrying would cause a double-free bug.",
+      "contract_summary": "This is a put wrapper that releases the seq64 buffer object (adev->seq64.sbo) by calling amdgpu_bo_free_kernel, which decrements the buffer's refcount and frees it if zero. It should be called exactly once during driver teardown. After calling this function, the buffer must not be accessed. No return value to check; the operation always executes unconditionally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev->seq64.sbo->tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_seq64--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev->seq64.sbo->tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_seq64--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The callee amdgpu_bo_free_kernel is a put function on the bo pointed to by &adev->seq64.sbo. The access path starting from adev (parameter 1) to the refcount field is consistent. Segment counts match (7 segments, 7 types). Type chain matches struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev->seq64.sbo->tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_seq64--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "A put operation releases a reference; retrying would cause a double-free bug.",
+    "contract_summary": "This is a put wrapper that releases the seq64 buffer object (adev->seq64.sbo) by calling amdgpu_bo_free_kernel, which decrements the buffer's refcount and frees it if zero. It should be called exactly once during driver teardown. After calling this function, the buffer must not be accessed. No return value to check; the operation always executes unconditionally."
+  }
+}

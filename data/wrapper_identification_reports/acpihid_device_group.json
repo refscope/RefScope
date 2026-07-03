@@ -1,0 +1,106 @@
+{
+  "function_name": "acpihid_device_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "devices_kobj.kref.refcount",
+      "iommu_group--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "iommu_group_ref_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "group.devices_kobj.kref.refcount",
+      "member_type_chain": "iommu_group--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "iommu_group_ref_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "group.devices_kobj.kref.refcount",
+      "member_type_chain": "iommu_group--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (devid < 0) indicates a permanent error condition (e.g., unsupported device); retrying would not change the outcome.",
+  "contract_summary": "Get-or-create wrapper for iommu_group: Given a device, this function returns an iommu_group with an acquired reference count. It first looks up the device in the global acpihid_map by its ACPI HID ID; if a matching entry with a non-NULL group exists, it increments that group's reference count via iommu_group_ref_get. Otherwise, it creates a new group via generic_device_group (which sets the initial refcount to 1) and caches it in the map entry. The caller receives an iommu_group pointer with an additional reference and must call iommu_group_put when done. On error (negative devid), returns ERR_PTR, which the caller must check and not use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to return an iommu_group with an appropriate reference count, either by acquiring a reference on an existing group or by creating a new one. The list iteration and ID lookup are in service of finding which group to get or create. The only refcount operation is iommu_group_ref_get in one branch, and the creation path implicitly establishes a new reference. The function is a classic get-or-create wrapper for reference-counted objects.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (devid < 0) indicates a permanent error condition (e.g., unsupported device); retrying would not change the outcome.",
+      "contract_summary": "Get-or-create wrapper for iommu_group: Given a device, this function returns an iommu_group with an acquired reference count. It first looks up the device in the global acpihid_map by its ACPI HID ID; if a matching entry with a non-NULL group exists, it increments that group's reference count via iommu_group_ref_get. Otherwise, it creates a new group via generic_device_group (which sets the initial refcount to 1) and caches it in the map entry. The caller receives an iommu_group pointer with an additional reference and must call iommu_group_put when done. On error (negative devid), returns ERR_PTR, which the caller must check and not use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "entry->group.devices_kobj.kref.refcount",
+          "iommu_group--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path 'entry->group.devices_kobj.kref.refcount' starts from 'entry', not from the critical variable (return value). The path should start from the returned iommu_group pointer. Additionally, the path has 5 segments while the type chain has 4 types, indicating a mismatch. The operation is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "devices_kobj.kref.refcount",
+          "iommu_group--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a get-wrapper for iommu_group. It retrieves or creates a group and takes a reference. The candidate operation was correct in intention but had an incorrect member_access_path starting from 'entry' instead of the returned group pointer. The corrected path 'devices_kobj.kref.refcount' starts from the returned iommu_group pointer and matches the type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "devices_kobj.kref.refcount",
+        "iommu_group--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (devid < 0) indicates a permanent error condition (e.g., unsupported device); retrying would not change the outcome.",
+    "contract_summary": "Get-or-create wrapper for iommu_group: Given a device, this function returns an iommu_group with an acquired reference count. It first looks up the device in the global acpihid_map by its ACPI HID ID; if a matching entry with a non-NULL group exists, it increments that group's reference count via iommu_group_ref_get. Otherwise, it creates a new group via generic_device_group (which sets the initial refcount to 1) and caches it in the map entry. The caller receives an iommu_group pointer with an additional reference and must call iommu_group_put when done. On error (negative devid), returns ERR_PTR, which the caller must check and not use."
+  }
+}

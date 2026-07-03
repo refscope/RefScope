@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_get_vlan_from_info",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "vlan.refcount.refcount",
+      "batadv_meshif_vlan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_meshif_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_meshif_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when the VLAN ID attribute is missing (invalid input) or the VLAN object does not exist; retrying without changing conditions would produce the same failure.",
+  "contract_summary": "This wrapper acquires a reference to a batadv_meshif_vlan object identified by a VLAN ID from a netlink message. The caller must release the reference by calling batadv_meshif_vlan_put (or the appropriate release function) when the object is no longer needed. On failure, it returns an ERR_PTR; on success, it returns a valid pointer to a VLAN object with an incremented reference count. The function performs minimal validation and lookup; its primary purpose is reference management. There is no additional locking requirement beyond what the internal get function enforces.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to look up a batadv_meshif_vlan by VLAN ID and acquire a reference to it via batadv_meshif_vlan_get. The only non-refcount logic is attribute validation and VID extraction, which are minimal and necessary for the lookup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when the VLAN ID attribute is missing (invalid input) or the VLAN object does not exist; retrying without changing conditions would produce the same failure.",
+      "contract_summary": "This wrapper acquires a reference to a batadv_meshif_vlan object identified by a VLAN ID from a netlink message. The caller must release the reference by calling batadv_meshif_vlan_put (or the appropriate release function) when the object is no longer needed. On failure, it returns an ERR_PTR; on success, it returns a valid pointer to a VLAN object with an incremented reference count. The function performs minimal validation and lookup; its primary purpose is reference management. There is no additional locking requirement beyond what the internal get function enforces."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ]
+      ],
+      "reason": "The batadv_meshif_vlan_get function returns a vlan pointer with an acquired refcount. The access path vlan.refcount.refcount correctly traces from the return variable through the kref structure to the refcount_t field, matching the type chain. The segment counts are equal (3 each), and the location 'return' is appropriate as the critical variable flows to the caller via the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "vlan.refcount.refcount",
+        "batadv_meshif_vlan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when the VLAN ID attribute is missing (invalid input) or the VLAN object does not exist; retrying without changing conditions would produce the same failure.",
+    "contract_summary": "This wrapper acquires a reference to a batadv_meshif_vlan object identified by a VLAN ID from a netlink message. The caller must release the reference by calling batadv_meshif_vlan_put (or the appropriate release function) when the object is no longer needed. On failure, it returns an ERR_PTR; on success, it returns a valid pointer to a VLAN object with an incremented reference count. The function performs minimal validation and lookup; its primary purpose is reference management. There is no additional locking requirement beyond what the internal get function enforces."
+  }
+}

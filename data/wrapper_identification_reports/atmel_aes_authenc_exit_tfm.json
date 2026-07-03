@@ -1,0 +1,52 @@
+{
+  "function_name": "atmel_aes_authenc_exit_tfm",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a put-style wrapper; if it fails (e.g., due to a double-free or invalid state), retrying would be unsafe and indicates a prior bug.",
+  "contract_summary": "This function is an exit callback for the atmel AES authenc transformation; it releases the authentication context (ctx->auth) by calling atmel_sha_authenc_free, which typically decrements a reference count or frees the underlying object. The caller (crypto subsystem) invokes this when the tfm instance is destroyed; after this call, the context must not be accessed. The operation is unconditional and void—no return value to check. The function assumes ctx->auth is valid and will be properly freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the authentication context (ctx->auth) via atmel_sha_authenc_free, which is a reference-count release or deallocation operation. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a put-style wrapper; if it fails (e.g., due to a double-free or invalid state), retrying would be unsafe and indicates a prior bug.",
+      "contract_summary": "This function is an exit callback for the atmel AES authenc transformation; it releases the authentication context (ctx->auth) by calling atmel_sha_authenc_free, which typically decrements a reference count or frees the underlying object. The caller (crypto subsystem) invokes this when the tfm instance is destroyed; after this call, the context must not be accessed. The operation is unconditional and void—no return value to check. The function assumes ctx->auth is valid and will be properly freed."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "crypto_tfm_ctx"
+      ],
+      "reason": "Need the implementation of crypto_tfm_ctx to trace how the context pointer is obtained from tfm->base, which is necessary to construct the full member access path from the parameter 'tfm' (struct crypto_aead *) to the refcount field of the internal ahash transform."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No extracted reference-count operations were provided in the candidate list, so there is nothing to validate. The function code only calls atmel_sha_authenc_free, which is not reflected in the candidate list."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 0,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a put-style wrapper; if it fails (e.g., due to a double-free or invalid state), retrying would be unsafe and indicates a prior bug.",
+    "contract_summary": "This function is an exit callback for the atmel AES authenc transformation; it releases the authentication context (ctx->auth) by calling atmel_sha_authenc_free, which typically decrements a reference count or frees the underlying object. The caller (crypto subsystem) invokes this when the tfm instance is destroyed; after this call, the context must not be accessed. The operation is unconditional and void—no return value to check. The function assumes ctx->auth is valid and will be properly freed."
+  }
+}

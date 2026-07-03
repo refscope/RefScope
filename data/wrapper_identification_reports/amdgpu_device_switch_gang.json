@@ -1,0 +1,194 @@
+{
+  "function_name": "amdgpu_device_switch_gang",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "gang.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "gang.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "old.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_device_get_gang",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_device_get_gang",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function's 'failure' is not a refcount operation failure but an unsuccessful exchange; the caller gets the old fence with an extra ref and may decide to wait for it, but the wrapper itself does not indicate a transient error requiring immediate retry.",
+  "contract_summary": "Attempts to atomically swap the device's gang fence with a new one. On success (returns NULL), the device holds a reference to the new gang; the caller retains its original reference. On failure (returns non-NULL), the device still holds the old gang, and the caller receives the old gang with an incremented reference (must call dma_fence_put eventually), while the new gang's extra reference is dropped. The caller must check the return value and release any returned fence when done.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to atomically replace the device's gang fence pointer while managing refcounts via dma_fence_get/put and amdgpu_device_get_gang. The only non-refcount logic is the cmpxchg and signaled check, which are integral to the exchange semantics.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function's 'failure' is not a refcount operation failure but an unsuccessful exchange; the caller gets the old fence with an extra ref and may decide to wait for it, but the wrapper itself does not indicate a transient error requiring immediate retry.",
+      "contract_summary": "Attempts to atomically swap the device's gang fence with a new one. On success (returns NULL), the device holds a reference to the new gang; the caller retains its original reference. On failure (returns non-NULL), the device still holds the old gang, and the caller receives the old gang with an incremented reference (must call dma_fence_put eventually), while the new gang's extra reference is dropped. The caller must check the return value and release any returned fence when done."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "gang.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "gang.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "old.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "old.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "gang.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "gang.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "old.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "dma_fence_get(gang) and dma_fence_put(gang) in the code are correctly captured as get/put on parameter 1 (gang). amdgpu_device_get_gang returns a reference assigned to old; this is a get on the return value (old holds the reference and may be returned). The fourth candidate (put on return) is incorrect because dma_fence_put(old) in the cmpxchg success path releases a local reference before returning NULL — the put is not on the function's return value (which is NULL). The access paths and type chains are consistent with the callee information and code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "gang.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "gang.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "old.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function's 'failure' is not a refcount operation failure but an unsuccessful exchange; the caller gets the old fence with an extra ref and may decide to wait for it, but the wrapper itself does not indicate a transient error requiring immediate retry.",
+    "contract_summary": "Attempts to atomically swap the device's gang fence with a new one. On success (returns NULL), the device holds a reference to the new gang; the caller retains its original reference. On failure (returns non-NULL), the device still holds the old gang, and the caller receives the old gang with an incremented reference (must call dma_fence_put eventually), while the new gang's extra reference is dropped. The caller must check the return value and release any returned fence when done."
+  }
+}

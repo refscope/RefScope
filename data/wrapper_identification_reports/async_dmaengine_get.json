@@ -1,0 +1,99 @@
+{
+  "function_name": "async_dmaengine_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "global",
+      "dmaengine_ref_count",
+      "dmaengine_ref_count",
+      "int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dmaengine_get",
+      "get_or_put": "get",
+      "index": "dmaengine_ref_count",
+      "location": "global",
+      "member_access_path": "dmaengine_ref_count",
+      "member_type_chain": "int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dmaengine_get",
+      "get_or_put": "get",
+      "index": "dmaengine_ref_count",
+      "location": "global",
+      "member_access_path": "dmaengine_ref_count",
+      "member_type_chain": "int"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount increment always succeeds and never fails, so retry is not applicable.",
+  "contract_summary": "Macro wrapper that acquires a reference on the global DMA engine subsystem reference counter (dmaengine_ref_count). The caller must pair each call with async_dmaengine_put() to decrement the counter when the subsystem is no longer needed. This macro is unconditional and always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the global dmaengine_ref_count via a direct call to dmaengine_get(), with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount increment always succeeds and never fails, so retry is not applicable.",
+      "contract_summary": "Macro wrapper that acquires a reference on the global DMA engine subsystem reference counter (dmaengine_ref_count). The caller must pair each call with async_dmaengine_put() to decrement the counter when the subsystem is no longer needed. This macro is unconditional and always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "dmaengine_ref_count",
+          "dmaengine_ref_count",
+          "int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "dmaengine_ref_count",
+          "dmaengine_ref_count",
+          "int"
+        ]
+      ],
+      "reason": "async_dmaengine_get is defined as dmaengine_get(), which increments the global dmaengine_ref_count. The access path 'dmaengine_ref_count' (1 segment) and type chain 'int' (1 type) are equal and consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "global",
+        "dmaengine_ref_count",
+        "dmaengine_ref_count",
+        "int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount increment always succeeds and never fails, so retry is not applicable.",
+    "contract_summary": "Macro wrapper that acquires a reference on the global DMA engine subsystem reference counter (dmaengine_ref_count). The caller must pair each call with async_dmaengine_put() to decrement the counter when the subsystem is no longer needed. This macro is unconditional and always succeeds."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__xfrm_state_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "x.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations must only be called when the caller holds a valid reference; retrying would cause a double-put and use-after-free.",
+  "contract_summary": "This is a put (release) wrapper that decrements the reference count of an xfrm_state. It must be called when the caller wishes to release a previously acquired reference. After calling, the pointer must not be used again, and no further put should be performed. The operation is unconditional and always succeeds; the caller must already own a valid reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to decrement the refcount of an xfrm_state; no other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations must only be called when the caller holds a valid reference; retrying would cause a double-put and use-after-free.",
+      "contract_summary": "This is a put (release) wrapper that decrements the reference count of an xfrm_state. It must be called when the caller wishes to release a previously acquired reference. After calling, the pointer must not be used again, and no further put should be performed. The operation is unconditional and always succeeds; the caller must already own a valid reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The candidate correctly reflects that refcount_dec is a put operation on parameter x, with access path x.refcnt.refs matching the callee's r.refs, and type chain xfrm_state--refcount_t--atomic_t is consistent with the struct definition."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "x.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations must only be called when the caller holds a valid reference; retrying would cause a double-put and use-after-free.",
+    "contract_summary": "This is a put (release) wrapper that decrements the reference count of an xfrm_state. It must be called when the caller wishes to release a previously acquired reference. After calling, the pointer must not be used again, and no further put should be performed. The operation is unconditional and always succeeds; the caller must already own a valid reference."
+  }
+}

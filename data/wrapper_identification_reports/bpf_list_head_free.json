@@ -1,0 +1,82 @@
+{
+  "function_name": "bpf_list_head_free",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__bpf_obj_drop_impl",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.refcount.refs",
+      "member_type_chain": "unknown--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__bpf_obj_drop_impl",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.refcount.refs",
+      "member_type_chain": "unknown--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation unconditionally drops references on all elements; if __bpf_obj_drop_impl never fails, no retry needed. If list is empty, it's a no-op.",
+  "contract_summary": "Drains all nodes from a bpf_list_head and drops each referenced object via __bpf_obj_drop_impl, a refcount-based release. This is a bulk put wrapper that transfers ownership of the objects from the list to the drop function, freeing them. The caller must ensure the list is not concurrently modified and that the spin lock is properly acquired. After this function, the list is empty and all objects are freed; no further operations should be performed on the list or the released objects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to drain all nodes from the list and drop each via __bpf_obj_drop_impl (a refcount put). Only minimal supporting logic (spinlock, offset calculation, loop). This is a bulk release wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation unconditionally drops references on all elements; if __bpf_obj_drop_impl never fails, no retry needed. If list is empty, it's a no-op.",
+      "contract_summary": "Drains all nodes from a bpf_list_head and drops each referenced object via __bpf_obj_drop_impl, a refcount-based release. This is a bulk put wrapper that transfers ownership of the objects from the list to the drop function, freeing them. The caller must ensure the list is not concurrently modified and that the spin lock is properly acquired. After this function, the list is empty and all objects are freed; no further operations should be performed on the list or the released objects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "list_head.next.refcount.refs",
+          "list_head--list_head--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation attempts to trace the refcount change from parameter list_head (index 2) via path 'list_head.next.refcount.refs', but the refcount is on the container object of the list node, not directly accessible via list_head.next. The correct access requires a container_of operation to obtain the container structure, which is not captured in the path. Additionally, the type chain is inconsistent because struct list_head does not contain a refcount field. Therefore, the operation is not supported."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function `bpf_list_head_free` drains a list and calls __bpf_obj_drop_impl on each container object, which is a refcount put. However, the proposed candidate path 'list_head.next.refcount.refs' is invalid: struct list_head does not contain a refcount field. The refcount is on the container objects obtained via container_of from list nodes, not directly accessible from the list_head parameter. Since no parameter or return value directly carries the refcounted object, and the only proposed operation is incorrect, the function does not meet the criteria for a reference-count wrapper/helper despite its refcount-related activity. The check stage correctly rejected the candidate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation unconditionally drops references on all elements; if __bpf_obj_drop_impl never fails, no retry needed. If list is empty, it's a no-op.",
+    "contract_summary": "Drains all nodes from a bpf_list_head and drops each referenced object via __bpf_obj_drop_impl, a refcount-based release. This is a bulk put wrapper that transfers ownership of the objects from the list to the drop function, freeing them. The caller must ensure the list is not concurrently modified and that the spin lock is properly acquired. After this function, the list is empty and all objects are freed; no further operations should be performed on the list or the released objects."
+  }
+}

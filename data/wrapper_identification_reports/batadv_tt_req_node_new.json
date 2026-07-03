@@ -1,0 +1,159 @@
+{
+  "function_name": "batadv_tt_req_node_new",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "tt_req_node.refcount.refcount.refs",
+      "batadv_tt_req_node--kref--refcount_struct--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "tt_req_node.refcount.refcount",
+      "batadv_tt_req_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Allocation failure due to memory pressure; immediate retry likely to fail again.",
+  "contract_summary": "Get-or-create wrapper for batadv_tt_req_node. Looks up an existing tt_req_node in the request list for the given orig_node. If a valid (non-timed-out) node exists, returns NULL to indicate no new node needed. Otherwise allocates a new node, initializes its refcount to 2 (one from the list, one for the caller), adds it to the list, and returns it. The caller must call kref_put (via batadv_tt_req_node_put) when done with the returned node to release the caller's reference. The list holds the other reference which will be released upon removal. NULL return indicates either an existing valid entry or allocation failure; caller should handle both cases (e.g., use existing request or retry later).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to get-or-create a batadv_tt_req_node with refcount management (kref_init then kref_get). The only non-refcount logic is the existence check and timeout validation, which is minimal and directly related to the decision to create a new node.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Allocation failure due to memory pressure; immediate retry likely to fail again.",
+      "contract_summary": "Get-or-create wrapper for batadv_tt_req_node. Looks up an existing tt_req_node in the request list for the given orig_node. If a valid (non-timed-out) node exists, returns NULL to indicate no new node needed. Otherwise allocates a new node, initializes its refcount to 2 (one from the list, one for the caller), adds it to the list, and returns it. The caller must call kref_put (via batadv_tt_req_node_put) when done with the returned node to release the caller's reference. The list holds the other reference which will be released upon removal. NULL return indicates either an existing valid entry or allocation failure; caller should handle both cases (e.g., use existing request or retry later)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "tt_req_node.refcount.refcount.refs",
+          "batadv_tt_req_node--kref--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "tt_req_node.refcount.refcount",
+          "batadv_tt_req_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "tt_req_node.refcount.refcount.refs",
+          "batadv_tt_req_node--kref--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "tt_req_node.refcount.refcount",
+          "batadv_tt_req_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: kref_init sets the refcount (refs member) and kref_get acquires a reference on the returned object. The access paths correctly trace from the return value (tt_req_node) through the struct members to the refcount fields, matching the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "tt_req_node.refcount.refcount.refs",
+        "batadv_tt_req_node--kref--refcount_struct--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "tt_req_node.refcount.refcount",
+        "batadv_tt_req_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Allocation failure due to memory pressure; immediate retry likely to fail again.",
+    "contract_summary": "Get-or-create wrapper for batadv_tt_req_node. Looks up an existing tt_req_node in the request list for the given orig_node. If a valid (non-timed-out) node exists, returns NULL to indicate no new node needed. Otherwise allocates a new node, initializes its refcount to 2 (one from the list, one for the caller), adds it to the list, and returns it. The caller must call kref_put (via batadv_tt_req_node_put) when done with the returned node to release the caller's reference. The list holds the other reference which will be released upon removal. NULL return indicates either an existing valid entry or allocation failure; caller should handle both cases (e.g., use existing request or retry later)."
+  }
+}

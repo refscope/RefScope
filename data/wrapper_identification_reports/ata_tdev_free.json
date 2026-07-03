@@ -1,0 +1,99 @@
+{
+  "function_name": "ata_tdev_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.tdev.kobj.kref.refcount",
+      "ata_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device decrements refcount and cannot be retried; if the refcount is already zero it indicates a double-free bug rather than a transient condition.",
+  "contract_summary": "Release a reference on the ATA device by calling transport_destroy_device for transport-level cleanup, followed by put_device to decrement the device's refcount. After this call, the caller must not access the device as it may be freed if the refcount reaches zero. Transport_destroy_device is part of the release sequence and does not affect the refcount. This function represents the final put step in the device lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function's primary purpose is to release a reference on the ATA device via put_device; transport_destroy_device is a mandatory cleanup step tightly coupled to the release lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device decrements refcount and cannot be retried; if the refcount is already zero it indicates a double-free bug rather than a transient condition.",
+      "contract_summary": "Release a reference on the ATA device by calling transport_destroy_device for transport-level cleanup, followed by put_device to decrement the device's refcount. After this call, the caller must not access the device as it may be freed if the refcount reaches zero. Transport_destroy_device is part of the release sequence and does not affect the refcount. This function represents the final put step in the device lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.tdev.kobj.kref.refcount",
+          "ata_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.tdev.kobj.kref.refcount",
+          "ata_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put_device call on &dev->tdev decrements the refcount. The access path from parameter 1 (dev) through .tdev.kobj.kref.refcount matches the callee's path. The type chain ata_device--device--kobject--kref--refcount_t is consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.tdev.kobj.kref.refcount",
+        "ata_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device decrements refcount and cannot be retried; if the refcount is already zero it indicates a double-free bug rather than a transient condition.",
+    "contract_summary": "Release a reference on the ATA device by calling transport_destroy_device for transport-level cleanup, followed by put_device to decrement the device's refcount. After this call, the caller must not access the device as it may be freed if the refcount reaches zero. Transport_destroy_device is part of the release sequence and does not affect the refcount. This function represents the final put step in the device lifecycle."
+  }
+}

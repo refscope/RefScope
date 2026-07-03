@@ -1,0 +1,155 @@
+{
+  "function_name": "aa_free_task_ctx",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.nnp.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.previous.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.onexec.count.count.refcount",
+      "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional (aside from null check) and always succeed; retrying is not applicable.",
+  "contract_summary": "This function releases the AppArmor label references held by a task context (the nnp, previous, and onexec fields). It is a cleanup helper that should be called when discarding a task_ctx structure. After calling aa_free_task_ctx, the labels inside the context are no longer valid and must not be accessed, though the context struct itself can be freed. It is the put-equivalent for a set of fields, analogous to a destructor. The caller must ensure that the context is not used again after this call without re-initializing the fields.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "All the function does is conditionally call aa_put_label on three fields of the context; no other logic. It is a pure multi-put wrapper for releasing references on label objects.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional (aside from null check) and always succeed; retrying is not applicable.",
+      "contract_summary": "This function releases the AppArmor label references held by a task context (the nnp, previous, and onexec fields). It is a cleanup helper that should be called when discarding a task_ctx structure. After calling aa_free_task_ctx, the labels inside the context are no longer valid and must not be accessed, though the context struct itself can be freed. It is the put-equivalent for a set of fields, analogous to a destructor. The caller must ensure that the context is not used again after this call without re-initializing the fields."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.nnp.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.nnp.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.previous.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.onexec.count.count.refcount",
+          "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function aa_free_task_ctx calls aa_put_label on ctx->nnp, ctx->previous, and ctx->onexec. Each call decrements the refcount of the label via the path count.count.refcount, consistent with the callee info. The access paths start from parameter 1 (ctx) and follow the struct fields to the refcount. The type chains correctly include aa_task_ctx followed by the callee's chain. Segment counts match (5 each). All operations are put operations as expected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.nnp.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.previous.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.onexec.count.count.refcount",
+        "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional (aside from null check) and always succeed; retrying is not applicable.",
+    "contract_summary": "This function releases the AppArmor label references held by a task context (the nnp, previous, and onexec fields). It is a cleanup helper that should be called when discarding a task_ctx structure. After calling aa_free_task_ctx, the labels inside the context are no longer valid and must not be accessed, though the context struct itself can be freed. It is the put-equivalent for a set of fields, analogous to a destructor. The caller must ensure that the context is not used again after this call without re-initializing the fields."
+  }
+}

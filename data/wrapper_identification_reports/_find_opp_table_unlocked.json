@@ -1,0 +1,99 @@
+{
+  "function_name": "_find_opp_table_unlocked",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "opp_table.kref.refcount",
+      "opp_table--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_pm_opp_get_opp_table_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_pm_opp_get_opp_table_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when no matching OPP table exists for the device; retrying without changing the device or adding a table will not succeed.",
+  "contract_summary": "Get-wrapper that searches the global opp_tables list for an OPP table associated with the given device. If found, it acquires a reference (increments kref) and returns the table pointer. The caller must check the return value: on success, the caller owns the reference and must later call a corresponding put function (e.g., dev_pm_opp_put_opp_table) to release it. On failure (ERR_PTR(-ENODEV)), no reference is taken. The function must be called with the appropriate lock held (typically opp_table_lock) to protect the list iteration.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an OPP table for a device and acquire a reference to it via dev_pm_opp_get_opp_table_ref. The list iteration and device matching are minimal setup for the get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when no matching OPP table exists for the device; retrying without changing the device or adding a table will not succeed.",
+      "contract_summary": "Get-wrapper that searches the global opp_tables list for an OPP table associated with the given device. If found, it acquires a reference (increments kref) and returns the table pointer. The caller must check the return value: on success, the caller owns the reference and must later call a corresponding put function (e.g., dev_pm_opp_put_opp_table) to release it. On failure (ERR_PTR(-ENODEV)), no reference is taken. The function must be called with the appropriate lock held (typically opp_table_lock) to protect the list iteration."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the matched opp_table after incrementing its refcount via dev_pm_opp_get_opp_table_ref. The access path opp_table.kref.refcount starting from the return value and type chain opp_table--kref--refcount_t are consistent with the callee information and the actual struct definitions. Segment counts match (3 segments vs 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "opp_table.kref.refcount",
+        "opp_table--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when no matching OPP table exists for the device; retrying without changing the device or adding a table will not succeed.",
+    "contract_summary": "Get-wrapper that searches the global opp_tables list for an OPP table associated with the given device. If found, it acquires a reference (increments kref) and returns the table pointer. The caller must check the return value: on success, the caller owns the reference and must later call a corresponding put function (e.g., dev_pm_opp_put_opp_table) to release it. On failure (ERR_PTR(-ENODEV)), no reference is taken. The function must be called with the appropriate lock held (typically opp_table_lock) to protect the list iteration."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "__sctp_rcv_init_lookup",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__sctp_lookup_association",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "pt[0].refcnt.refs",
+      "member_type_chain": "sctp_transport--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__sctp_lookup_association",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "pt[0].refcnt.refs",
+      "member_type_chain": "sctp_transport--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to perform a lookup of an SCTP association based on INIT chunk parameters. It contains significant non-refcount logic including parsing the INIT chunk, iterating over address parameters, and calling address family conversion functions. The refcount increment on the transport (via __sctp_lookup_association) is an incidental side effect of the lookup, not the main goal. This contrasts with true wrappers like kref_get_unless_zero that have only refcount management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

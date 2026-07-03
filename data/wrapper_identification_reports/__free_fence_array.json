@@ -1,0 +1,143 @@
+{
+  "function_name": "__free_fence_array",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "fences[n].syncobj.refcount.refcount",
+      "eb_fence--drm_syncobj--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "fences[n].dma_fence.refcount.refcount",
+      "eb_fence--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_syncobj_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_syncobj--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_syncobj_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_syncobj--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Puts are unconditional and always succeed; no retry needed.",
+  "contract_summary": "This is a put wrapper that releases all references held by each fence entry in the array: it calls drm_syncobj_put on the syncobj, dma_fence_put on the dma_fence, and dma_fence_chain_free on the chain_fence, then frees the entire fences array with kvfree. After calling this function, the caller must not access any element of the fences array or any of the objects referenced within, as they may have been freed. This function is typically called in error paths or when a batch of fences is no longer needed. It is the counterpart to the get or allocation functions that originally acquired these references.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release references on syncobj, dma_fence, and chain_fence for each element in the array, then free the array itself. This is a pure cleanup/destructor wrapper with no business logic beyond refcount management and memory deallocation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Puts are unconditional and always succeed; no retry needed.",
+      "contract_summary": "This is a put wrapper that releases all references held by each fence entry in the array: it calls drm_syncobj_put on the syncobj, dma_fence_put on the dma_fence, and dma_fence_chain_free on the chain_fence, then frees the entire fences array with kvfree. After calling this function, the caller must not access any element of the fences array or any of the objects referenced within, as they may have been freed. This function is typically called in error paths or when a batch of fences is no longer needed. It is the counterpart to the get or allocation functions that originally acquired these references."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fences[n].syncobj.refcount.refcount",
+          "eb_fence--drm_syncobj--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "fences[n].dma_fence.refcount.refcount",
+          "eb_fence--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fences[n].syncobj.refcount.refcount",
+          "eb_fence--drm_syncobj--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "fences[n].dma_fence.refcount.refcount",
+          "eb_fence--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent: __free_fence_array calls drm_syncobj_put on fences[n].syncobj and dma_fence_put on fences[n].dma_fence, which decrement the respective refcounts. Access paths from parameter 1 (fences) via array element and field match the callee's internal paths. Type chain segment counts equal path segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "fences[n].syncobj.refcount.refcount",
+        "eb_fence--drm_syncobj--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "fences[n].dma_fence.refcount.refcount",
+        "eb_fence--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Puts are unconditional and always succeed; no retry needed.",
+    "contract_summary": "This is a put wrapper that releases all references held by each fence entry in the array: it calls drm_syncobj_put on the syncobj, dma_fence_put on the dma_fence, and dma_fence_chain_free on the chain_fence, then frees the entire fences array with kvfree. After calling this function, the caller must not access any element of the fences array or any of the objects referenced within, as they may have been freed. This function is typically called in error paths or when a batch of fences is no longer needed. It is the counterpart to the get or allocation functions that originally acquired these references."
+  }
+}

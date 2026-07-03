@@ -1,0 +1,70 @@
+{
+  "function_name": "btrfs_free_chunk_map",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always decrements the refcount; there is no failure mode (the caller must already hold a valid reference). Retrying would cause a use-after-free.",
+  "contract_summary": "Put wrapper that releases a reference to a struct btrfs_chunk_map by decrementing its reference count. If the count reaches zero, the object is freed. Designed for use with the __free() automatic cleanup attribute (via DEFINE_FREE macro); can also be called manually. After calling, the caller must not access the pointer. The refcount decrement is unconditional and always performed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the refcount of a btrfs_chunk_map via refcount_dec_and_test and conditionally free the object. No other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always decrements the refcount; there is no failure mode (the caller must already hold a valid reference). Retrying would cause a use-after-free.",
+      "contract_summary": "Put wrapper that releases a reference to a struct btrfs_chunk_map by decrementing its reference count. If the count reaches zero, the object is freed. Designed for use with the __free() automatic cleanup attribute (via DEFINE_FREE macro); can also be called manually. After calling, the caller must not access the pointer. The refcount decrement is unconditional and always performed."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "btrfs_free_chunk_map"
+      ],
+      "reason": "The function body of btrfs_free_chunk_map is not provided. Need to see its implementation to determine the critical variable (the parameter of type struct btrfs_chunk_map *) and how it accesses the refcount field (r.refs) referenced in the callee info. Without the body, we cannot construct the member_access_path starting from the function interface."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No reference-count operations were provided for validation; the Candidate ResultList is empty."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always decrements the refcount; there is no failure mode (the caller must already hold a valid reference). Retrying would cause a use-after-free.",
+    "contract_summary": "Put wrapper that releases a reference to a struct btrfs_chunk_map by decrementing its reference count. If the count reaches zero, the object is freed. Designed for use with the __free() automatic cleanup attribute (via DEFINE_FREE macro); can also be called manually. After calling, the caller must not access the pointer. The refcount decrement is unconditional and always performed."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "__ublk_check_and_get_req",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "io.ref.refs",
+      "ublk_io--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "io.ref.refs",
+      "ublk_io--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ublk_put_req_ref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "io.ref.refs",
+      "member_type_chain": "ublk_io--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "ublk_get_req_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "io.ref.refs",
+      "member_type_chain": "ublk_io--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ublk_put_req_ref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "io.ref.refs",
+      "member_type_chain": "ublk_io--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "ublk_get_req_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "io.ref.refs",
+      "member_type_chain": "ublk_io--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure of ublk_get_req_ref indicates the IO refcount is zero (object dying); subsequent validation failures indicate the request is not in a valid state (e.g., completed) – retrying is unlikely to succeed and may be unsafe.",
+  "contract_summary": "This is a conditional get-wrapper that atomically acquires a reference to a block request from the ublk tag set and validates its state (started, tag match, has data) before returning it to the caller. The caller must check the return value for NULL and, if non-NULL, is responsible for later releasing the reference via ublk_put_req_ref on the same io and request. Failure indicates the request is not currently available – retrying is not recommended as the failure is typically final (refcount zero or transitional state).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference to a block request via ublk_get_req_ref and return it; the validation checks (started, tag, data) are integral to the safe get operation.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure of ublk_get_req_ref indicates the IO refcount is zero (object dying); subsequent validation failures indicate the request is not in a valid state (e.g., completed) – retrying is unlikely to succeed and may be unsafe.",
+      "contract_summary": "This is a conditional get-wrapper that atomically acquires a reference to a block request from the ublk tag set and validates its state (started, tag match, has data) before returning it to the caller. The caller must check the return value for NULL and, if non-NULL, is responsible for later releasing the reference via ublk_put_req_ref on the same io and request. Failure indicates the request is not currently available – retrying is not recommended as the failure is typically final (refcount zero or transitional state)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "io.ref.refs",
+          "ublk_io--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "io.ref.refs",
+          "ublk_io--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "io.ref.refs",
+          "ublk_io--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "io.ref.refs",
+          "ublk_io--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both ublk_get_req_ref and ublk_put_req_ref are called on parameter 1 (io), and the callee info indicates they operate on io.ref.refs with the given type chain. The access path has three segments matching the three types in the chain. The get/put operations are consistent with the code logic: get is used to acquire a reference before using the request, and put is used in error paths after a successful get. No inconsistencies found."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "io.ref.refs",
+        "ublk_io--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "io.ref.refs",
+        "ublk_io--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure of ublk_get_req_ref indicates the IO refcount is zero (object dying); subsequent validation failures indicate the request is not in a valid state (e.g., completed) – retrying is unlikely to succeed and may be unsafe.",
+    "contract_summary": "This is a conditional get-wrapper that atomically acquires a reference to a block request from the ublk tag set and validates its state (started, tag match, has data) before returning it to the caller. The caller must check the return value for NULL and, if non-NULL, is responsible for later releasing the reference via ublk_put_req_ref on the same io and request. Failure indicates the request is not currently available – retrying is not recommended as the failure is typically final (refcount zero or transitional state)."
+  }
+}

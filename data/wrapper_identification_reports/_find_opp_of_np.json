@@ -1,0 +1,106 @@
+{
+  "function_name": "_find_opp_of_np",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "kref.refcount",
+      "dev_pm_opp--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_pm_opp_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp.kref.refcount",
+      "member_type_chain": "dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_pm_opp_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp.kref.refcount",
+      "member_type_chain": "dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (not found) means the specific OPP node is not in the table; retrying is only useful if OPPs can be dynamically added later, which is uncommon; typical caller should handle NULL as 'not present' without retry.",
+  "contract_summary": "This is a lookup-and-get wrapper: it searches the opp_table's opp_list for an OPP matching the given device node pointer. If found, it increments the OPP's reference count via dev_pm_opp_get and returns the pointer to the caller. The caller is responsible for releasing that reference with dev_pm_opp_put when done. The lookup is performed while holding the opp_table's lock. If no matching OPP is found, it returns NULL without acquiring any reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a dev_pm_opp by node pointer and acquire a reference via dev_pm_opp_get, with only list iteration as supporting logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (not found) means the specific OPP node is not in the table; retrying is only useful if OPPs can be dynamically added later, which is uncommon; typical caller should handle NULL as 'not present' without retry.",
+      "contract_summary": "This is a lookup-and-get wrapper: it searches the opp_table's opp_list for an OPP matching the given device node pointer. If found, it increments the OPP's reference count via dev_pm_opp_get and returns the pointer to the caller. The caller is responsible for releasing that reference with dev_pm_opp_put when done. The lookup is performed while holding the opp_table's lock. If no matching OPP is found, it returns NULL without acquiring any reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp.kref.refcount",
+          "dev_pm_opp--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'opp.kref.refcount' in the candidate incorrectly starts with the local variable name 'opp' instead of starting from the returned pointer. The critical variable at the function interface is the returned struct dev_pm_opp *, so the path should be 'kref.refcount'. The inclusion of 'opp' makes the path inconsistent with the location 'return'."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "kref.refcount",
+          "dev_pm_opp--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function finds an OPP by device node and returns it with a reference count increment via dev_pm_opp_get. The critical variable is the returned struct dev_pm_opp *, and the reference count path relative to that pointer is kref.refcount. The original candidate used 'opp.kref.refcount', which includes the local variable name; correcting to 'kref.refcount' aligns with the return location."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "kref.refcount",
+        "dev_pm_opp--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (not found) means the specific OPP node is not in the table; retrying is only useful if OPPs can be dynamically added later, which is uncommon; typical caller should handle NULL as 'not present' without retry.",
+    "contract_summary": "This is a lookup-and-get wrapper: it searches the opp_table's opp_list for an OPP matching the given device node pointer. If found, it increments the OPP's reference count via dev_pm_opp_get and returns the pointer to the caller. The caller is responsible for releasing that reference with dev_pm_opp_put when done. The lookup is performed while holding the opp_table's lock. If no matching OPP is found, it returns NULL without acquiring any reference."
+  }
+}

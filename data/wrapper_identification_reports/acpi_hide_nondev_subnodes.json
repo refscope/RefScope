@@ -1,0 +1,115 @@
+{
+  "function_name": "acpi_hide_nondev_subnodes",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "dn",
+      "dn.kobj.kref.refcount",
+      "acpi_data_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "acpi_hide_nondev_subnodes",
+      "get_or_put": "put",
+      "index": "dn",
+      "location": "global",
+      "member_access_path": "dn.kobj.kref.refcount",
+      "member_type_chain": "acpi_data_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "acpi_hide_nondev_subnodes",
+      "get_or_put": "put",
+      "index": "dn",
+      "location": "global",
+      "member_access_path": "dn.kobj.kref.refcount",
+      "member_type_chain": "acpi_data_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operation always executes on each present subnode; if a kobject_put fails (e.g., refcount already zero), retrying would cause a double-put and use-after-free risk.",
+  "contract_summary": "This function recursively iterates over all non-device subnodes of an ACPI device data structure and releases each subnode's reference by calling kobject_put. It consumes the references that were presumably held by the parent. After return, the subnodes may be freed and must not be used. No reference is passed back to the caller; this is purely a release operation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of all non-device subnodes via kobject_put, recursively. The only additional logic is a list_empty check and iteration; no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operation always executes on each present subnode; if a kobject_put fails (e.g., refcount already zero), retrying would cause a double-put and use-after-free risk.",
+      "contract_summary": "This function recursively iterates over all non-device subnodes of an ACPI device data structure and releases each subnode's reference by calling kobject_put. It consumes the references that were presumably held by the parent. After return, the subnodes may be freed and must not be used. No reference is passed back to the caller; this is purely a release operation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "dn",
+          "dn.kobj.kref.refcount",
+          "acpi_data_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "dn",
+          "dn.kobj.kref.refcount",
+          "acpi_data_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put operation via kobject_put(&dn->kobj) acts on dn->kobj.kref.refcount. The access path dn.kobj.kref.refcount and type chain acpi_data_node--kobject--kref--refcount_t correctly trace from the local variable dn to the refcount field. Segment counts match (4 segments and 4 types). The recursive call is consistent with the callee info treating the function as a put on dn."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "dn",
+        "dn.kobj.kref.refcount",
+        "acpi_data_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operation always executes on each present subnode; if a kobject_put fails (e.g., refcount already zero), retrying would cause a double-put and use-after-free risk.",
+    "contract_summary": "This function recursively iterates over all non-device subnodes of an ACPI device data structure and releases each subnode's reference by calling kobject_put. It consumes the references that were presumably held by the parent. After return, the subnodes may be freed and must not be used. No reference is passed back to the caller; this is purely a release operation."
+  }
+}

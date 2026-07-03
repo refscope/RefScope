@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_get_profile",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "p.label.count.count.refcount",
+      "aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get is unconditional and always succeeds when called; failure is not possible, so retry is irrelevant.",
+  "contract_summary": "Get-wrapper for struct aa_profile: increments the reference count (via kref_get) if the profile pointer is non-NULL, otherwise returns NULL. The caller receives the same profile pointer with one additional reference. The caller must later release this reference by calling aa_put_profile (or equivalent). This is a simple reference acquisition with no allocation or error paths — it never fails.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on aa_profile by incrementing its kref (via kref_get). The only other logic is a NULL-safety check. No other side effects.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get is unconditional and always succeeds when called; failure is not possible, so retry is irrelevant.",
+      "contract_summary": "Get-wrapper for struct aa_profile: increments the reference count (via kref_get) if the profile pointer is non-NULL, otherwise returns NULL. The caller receives the same profile pointer with one additional reference. The caller must later release this reference by calling aa_put_profile (or equivalent). This is a simple reference acquisition with no allocation or error paths — it never fails."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "p.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "p.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function increments the refcount on p->label.count.count via kref_get. The access path from parameter p (index 1) through fields .label.count.count.refcount matches the callee's expected path (kref.refcount). The type chain aa_profile--aa_label--aa_count--kref--refcount_t has 5 segments, matching the 5 segments in the path. The critical variable is correctly identified as the input parameter p, which is also returned. All extraction criteria are satisfied."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "p.label.count.count.refcount",
+        "aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get is unconditional and always succeeds when called; failure is not possible, so retry is irrelevant.",
+    "contract_summary": "Get-wrapper for struct aa_profile: increments the reference count (via kref_get) if the profile pointer is non-NULL, otherwise returns NULL. The caller receives the same profile pointer with one additional reference. The caller must later release this reference by calling aa_put_profile (or equivalent). This is a simple reference acquisition with no allocation or error paths — it never fails."
+  }
+}

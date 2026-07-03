@@ -1,0 +1,143 @@
+{
+  "function_name": "btrfs_extent_state_free_cachep",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "extent_state_cache",
+      "extent_state_cache.refcount",
+      "kmem_cache--int"
+    ],
+    [
+      "put",
+      "global",
+      "extent_state_cache",
+      "extent_state_cache.kobj.kref.refcount",
+      "kmem_cache--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper: once kmem_cache_destroy is called, the cache is either freed or marked for destruction; retrying would likely cause a double-free or use-after-free. No retry possible.",
+  "contract_summary": "This is a put-wrapper that destroys the btrfs extent_state_cache. It calls btrfs_extent_state_leak_debug_check() as a debug preparation, then calls kmem_cache_destroy() to release the reference on the cache. After calling this function, the cache pointer must not be used again. This is typically called during module cleanup to finalize the cache lifecycle. There is no return value, and the operation is unconditional; the caller must ensure it is called exactly once during teardown, and that no other references to the cache remain.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is destruction of the extent_state_cache, which calls kmem_cache_destroy (a put operation). The debug check is minor preparatory logic. The function transfers ownership of the cache reference to the destructor, after which the cache must not be used.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper: once kmem_cache_destroy is called, the cache is either freed or marked for destruction; retrying would likely cause a double-free or use-after-free. No retry possible.",
+      "contract_summary": "This is a put-wrapper that destroys the btrfs extent_state_cache. It calls btrfs_extent_state_leak_debug_check() as a debug preparation, then calls kmem_cache_destroy() to release the reference on the cache. After calling this function, the cache pointer must not be used again. This is typically called during module cleanup to finalize the cache lifecycle. There is no return value, and the operation is unconditional; the caller must ensure it is called exactly once during teardown, and that no other references to the cache remain."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "extent_state_cache",
+          "extent_state_cache.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "global",
+          "extent_state_cache",
+          "extent_state_cache.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "extent_state_cache",
+          "extent_state_cache.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "global",
+          "extent_state_cache",
+          "extent_state_cache.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both candidate operations are consistent with the function code: kmem_cache_destroy is called on the global variable extent_state_cache, and the callee performs a put on its parameter. The access paths and type chains match the provided callee information, and segment counts are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "extent_state_cache",
+        "extent_state_cache.refcount",
+        "kmem_cache--int"
+      ],
+      [
+        "put",
+        "global",
+        "extent_state_cache",
+        "extent_state_cache.kobj.kref.refcount",
+        "kmem_cache--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper: once kmem_cache_destroy is called, the cache is either freed or marked for destruction; retrying would likely cause a double-free or use-after-free. No retry possible.",
+    "contract_summary": "This is a put-wrapper that destroys the btrfs extent_state_cache. It calls btrfs_extent_state_leak_debug_check() as a debug preparation, then calls kmem_cache_destroy() to release the reference on the cache. After calling this function, the cache pointer must not be used again. This is typically called during module cleanup to finalize the cache lifecycle. There is no return value, and the operation is unconditional; the caller must ensure it is called exactly once during teardown, and that no other references to the cache remain."
+  }
+}

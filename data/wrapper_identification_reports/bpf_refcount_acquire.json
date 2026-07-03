@@ -1,0 +1,70 @@
+{
+  "function_name": "bpf_refcount_acquire",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If refcount_inc_not_zero fails, the object's refcount is already zero (object is dead/dying); retrying will not revive the object.",
+  "contract_summary": "Acquire a reference on a BPF kptr by incrementing its refcount via refcount_inc_not_zero. Returns the same pointer on success, or NULL if the object's refcount is zero (object is being freed). The caller must check the return value and, if non-NULL, must later release the reference with the corresponding bpf_refcount_release (or equivalent) function. The operation is conditional on the object being alive — once the refcount hits zero, the object is no longer accessible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a BPF kptr by incrementing its refcount via refcount_inc_not_zero. The macro simply delegates to the implementation with minimal overhead.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If refcount_inc_not_zero fails, the object's refcount is already zero (object is dead/dying); retrying will not revive the object.",
+      "contract_summary": "Acquire a reference on a BPF kptr by incrementing its refcount via refcount_inc_not_zero. Returns the same pointer on success, or NULL if the object's refcount is zero (object is being freed). The caller must check the return value and, if non-NULL, must later release the reference with the corresponding bpf_refcount_release (or equivalent) function. The operation is conditional on the object being alive — once the refcount hits zero, the object is no longer accessible."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "bpf_refcount_acquire_impl"
+      ],
+      "reason": "Need the implementation of bpf_refcount_acquire_impl to determine how the refcount operation is performed on the input pointer and to construct the complete member_access_path and type_chain from the function interface."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No candidate operations to validate. The function bpf_refcount_acquire is a macro that calls bpf_refcount_acquire_impl, likely returning the pointer after acquiring the refcount, but no operations were provided in the candidate list."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If refcount_inc_not_zero fails, the object's refcount is already zero (object is dead/dying); retrying will not revive the object.",
+    "contract_summary": "Acquire a reference on a BPF kptr by incrementing its refcount via refcount_inc_not_zero. Returns the same pointer on success, or NULL if the object's refcount is zero (object is being freed). The caller must check the return value and, if non-NULL, must later release the reference with the corresponding bpf_refcount_release (or equivalent) function. The operation is conditional on the object being alive — once the refcount hits zero, the object is no longer accessible."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__ipv6_neigh_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "n.refcnt.refs",
+      "neighbour--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the neighbor entry does not exist or its refcount reached zero (it is being freed); retrying cannot resurrect a dying object and a non-existent entry will not appear without explicit creation.",
+  "contract_summary": "RCU-protected get-wrapper: performs a lookup of a neighbour entry by device and key, and if found and still alive (refcount non-zero), increments its reference count via refcount_inc_not_zero. Returns the neighbour with an acquired reference, or NULL if the entry is missing or already being freed. The caller must release the reference with neigh_release() when done. The RCU read lock is held temporarily inside the function; the caller does not need to hold it externally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to safely acquire a reference on a neighbour entry after lookup; the refcount_inc_not_zero is the core operation, with RCU lock/unlock as supporting infrastructure.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the neighbor entry does not exist or its refcount reached zero (it is being freed); retrying cannot resurrect a dying object and a non-existent entry will not appear without explicit creation.",
+      "contract_summary": "RCU-protected get-wrapper: performs a lookup of a neighbour entry by device and key, and if found and still alive (refcount non-zero), increments its reference count via refcount_inc_not_zero. Returns the neighbour with an acquired reference, or NULL if the entry is missing or already being freed. The caller must release the reference with neigh_release() when done. The RCU read lock is held temporarily inside the function; the caller does not need to hold it externally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The critical variable is the return value (n). The access path n.refcnt.refs correctly traces from the neighbour pointer through the refcnt field (refcount_t) to the refs atomic counter, matching the callee's path. The type chain neighbour--refcount_t--atomic_t is consistent with struct definitions and the callee information. Segment counts are equal (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "n.refcnt.refs",
+        "neighbour--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the neighbor entry does not exist or its refcount reached zero (it is being freed); retrying cannot resurrect a dying object and a non-existent entry will not appear without explicit creation.",
+    "contract_summary": "RCU-protected get-wrapper: performs a lookup of a neighbour entry by device and key, and if found and still alive (refcount non-zero), increments its reference count via refcount_inc_not_zero. Returns the neighbour with an acquired reference, or NULL if the entry is missing or already being freed. The caller must release the reference with neigh_release() when done. The RCU read lock is held temporarily inside the function; the caller does not need to hold it externally."
+  }
+}

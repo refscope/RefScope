@@ -1,0 +1,122 @@
+{
+  "function_name": "begin_current_label_crit_section",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable – the get operation either succeeds or is not needed; failure is not expected, and the function does not have a failure return path that would require retry.",
+  "contract_summary": "This function begins a critical section for using the current AppArmor label. It ensures the label is the newest version, acquiring a reference if the raw label is stale, and may update the current label to the newest version. The caller must pair this with end_current_label_crit_section() to release the reference. The returned label is valid only within the critical section and should not be used after the matching end function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The function primarily manages the lifecycle of an AppArmor label during a critical section: it obtains a non-stale label, potentially acquiring a new reference and adjusting current label state. The refcount operations are central, but there is additional logic to replace the current label as a side effect.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable – the get operation either succeeds or is not needed; failure is not expected, and the function does not have a failure return path that would require retry.",
+      "contract_summary": "This function begins a critical section for using the current AppArmor label. It ensures the label is the newest version, acquiring a reference if the raw label is stale, and may update the current label to the newest version. The caller must pair this with end_current_label_crit_section() to release the reference. The returned label is valid only within the critical section and should not be used after the matching end function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get operation candidate is rejected because the callee info indicates aa_get_newest_label increments the refcount of its parameter (the old label), not the return value. Since the function has no input parameter, the get cannot be associated with the return interface. The put operation (aa_put_label) is correctly performed on the label that is eventually returned, with the access path and type chain consistent with the callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable – the get operation either succeeds or is not needed; failure is not expected, and the function does not have a failure return path that would require retry.",
+    "contract_summary": "This function begins a critical section for using the current AppArmor label. It ensures the label is the newest version, acquiring a reference if the raw label is stale, and may update the current label to the newest version. The caller must pair this with end_current_label_crit_section() to release the reference. The returned label is valid only within the critical section and should not be used after the matching end function."
+  }
+}

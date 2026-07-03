@@ -1,0 +1,99 @@
+{
+  "function_name": "aead_exit_geniv",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.__crt_ctx.child.base.refcnt.refs",
+      "crypto_aead--crypto_tfm--aead_geniv_ctx--crypto_aead--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_aead",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_aead",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation unconditionally releases the child reference; retrying would lead to a double-free (use-after-free).",
+  "contract_summary": "Put wrapper that releases the child AEAD instance held in the geniv context. The caller must not use the child after this call. This function is typically called when the parent AEAD tfm is destroyed, ensuring proper lifecycle. No return value is provided; the release is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls crypto_free_aead to release the child AEAD instance. There is no other logic; it is a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation unconditionally releases the child reference; retrying would lead to a double-free (use-after-free).",
+      "contract_summary": "Put wrapper that releases the child AEAD instance held in the geniv context. The caller must not use the child after this call. This function is typically called when the parent AEAD tfm is destroyed, ensuring proper lifecycle. No return value is provided; the release is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.child.base.refcnt.refs",
+          "crypto_aead--crypto_tfm--aead_geniv_ctx--crypto_aead--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.child.base.refcnt.refs",
+          "crypto_aead--crypto_tfm--aead_geniv_ctx--crypto_aead--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function aead_exit_geniv calls crypto_free_aead(ctx->child). The access path from parameter tfm (crypto_aead) through base.__crt_ctx to the child's refcnt.refs exactly matches the code. The type chain and segment count are consistent with the callee information. The operation is a valid put on the refcount of the child ae ad."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.__crt_ctx.child.base.refcnt.refs",
+        "crypto_aead--crypto_tfm--aead_geniv_ctx--crypto_aead--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation unconditionally releases the child reference; retrying would lead to a double-free (use-after-free).",
+    "contract_summary": "Put wrapper that releases the child AEAD instance held in the geniv context. The caller must not use the child after this call. This function is typically called when the parent AEAD tfm is destroyed, ensuring proper lifecycle. No return value is provided; the release is unconditional."
+  }
+}

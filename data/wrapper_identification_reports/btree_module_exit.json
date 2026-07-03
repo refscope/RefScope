@@ -1,0 +1,122 @@
+{
+  "function_name": "btree_module_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "btree_cachep",
+      "btree_cachep.kobj.kref.refcount",
+      "kmem_cache--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation unconditionally decrements the reference count; retrying would cause a double-free (use-after-free).",
+  "contract_summary": "Put wrapper: releases the reference on the btree_cachep via kmem_cache_destroy. Must be called exactly once during module cleanup when the cache is no longer in use. After this call, the cache pointer is invalid and must not be accessed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call kmem_cache_destroy, which is a put operation on the kmem_cache. It contains no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation unconditionally decrements the reference count; retrying would cause a double-free (use-after-free).",
+      "contract_summary": "Put wrapper: releases the reference on the btree_cachep via kmem_cache_destroy. Must be called exactly once during module cleanup when the cache is no longer in use. After this call, the cache pointer is invalid and must not be accessed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "btree_cachep",
+          "btree_cachep.refcount",
+          "kmem_cache--int"
+        ],
+        [
+          "put",
+          "global",
+          "btree_cachep",
+          "btree_cachep.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "btree_cachep",
+          "btree_cachep.kobj.kref.refcount",
+          "kmem_cache--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Only the second candidate is consistent with the actual struct kmem_cache, which uses a kobject with kref for reference counting. The first candidate's direct 'refcount' field does not exist in the struct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "btree_cachep",
+        "btree_cachep.kobj.kref.refcount",
+        "kmem_cache--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation unconditionally decrements the reference count; retrying would cause a double-free (use-after-free).",
+    "contract_summary": "Put wrapper: releases the reference on the btree_cachep via kmem_cache_destroy. Must be called exactly once during module cleanup when the cache is no longer in use. After this call, the cache pointer is invalid and must not be accessed."
+  }
+}

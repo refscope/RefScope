@@ -1,0 +1,58 @@
+{
+  "function_name": "a6xx_gmu_set_initial_freq",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_pm_opp_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp.kref.refcount",
+      "member_type_chain": "dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_pm_opp_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp.kref.refcount",
+      "member_type_chain": "dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If dev_pm_opp_find_freq_exact fails (e.g., frequency not in OPP table), the condition is permanent for that frequency; retrying will not succeed because the OPP table does not change.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to set the initial GMU frequency, not to manage OPP references. The OPP get/put are incidental steps to safely acquire and release the OPP object while performing the frequency configuration. No reference-counted object is transferred to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If dev_pm_opp_find_freq_exact fails (e.g., frequency not in OPP table), the condition is permanent for that frequency; retrying will not succeed because the OPP table does not change.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If dev_pm_opp_find_freq_exact fails (e.g., frequency not in OPP table), the condition is permanent for that frequency; retrying will not succeed because the OPP table does not change.",
+    "contract_summary": ""
+  }
+}

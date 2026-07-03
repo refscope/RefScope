@@ -1,0 +1,274 @@
+{
+  "function_name": "aa_new_learning_profile",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "profile.label.count.count",
+      "aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "profile.label.count.count.refcount",
+      "aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_find_child",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "profile.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.proxy.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_find_child",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "profile.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.proxy.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation failure (OOM) which is non-recoverable in typical kernel contexts; retry is not supported and would likely fail again under the same conditions.",
+  "contract_summary": "This function is a get-or-create factory for learning 'null' profiles. It returns a profile with a new reference; the caller must later release it via aa_free_profile. On creation, the profile is initialized to APPARMOR_COMPLAIN mode and optionally set as a hat. The function ensures deduplication via a mutex-protected second lookup after allocation, preventing race conditions. It returns NULL only on memory allocation failure; otherwise always returns a valid profile with an acquired reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The function's primary purpose is to return a learning profile with an acquired reference. It either finds an existing profile (incrementing refcount) or creates a new one (initial refcount 1). Additional logic includes name generation, mode/flag setup, and deduplication, but the core is get-or-create refcount management. Purity is medium due to non-trivial setup on creation path.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation failure (OOM) which is non-recoverable in typical kernel contexts; retry is not supported and would likely fail again under the same conditions.",
+      "contract_summary": "This function is a get-or-create factory for learning 'null' profiles. It returns a profile with a new reference; the caller must later release it via aa_free_profile. On creation, the profile is initialized to APPARMOR_COMPLAIN mode and optionally set as a hat. The function ensures deduplication via a mutex-protected second lookup after allocation, preventing race conditions. It returns NULL only on memory allocation failure; otherwise always returns a valid profile with an acquired reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count",
+          "aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "profile.ns.unconfined.label.count.count",
+          "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "profile.base.hname.count.refcount.refs",
+          "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "profile.parent.label.count.count",
+          "aa_profile--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "profile.label.proxy.count.count",
+          "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "profile.attach.xmatch.count.refcount",
+          "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count",
+          "aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count.refcount",
+          "aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "Accepted two get operations: the first from aa_find_child (path profile.label.count.count) and the second from aa_get_profile (path profile.label.count.count.refcount), as both apply to the returned profile. Rejected all put operations because they refer to internal aa_free_profile calls on a local profile that is not returned."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "profile.label.count.count",
+        "aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "profile.label.count.count.refcount",
+        "aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 8,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation failure (OOM) which is non-recoverable in typical kernel contexts; retry is not supported and would likely fail again under the same conditions.",
+    "contract_summary": "This function is a get-or-create factory for learning 'null' profiles. It returns a profile with a new reference; the caller must later release it via aa_free_profile. On creation, the profile is initialized to APPARMOR_COMPLAIN mode and optionally set as a hat. The function ensures deduplication via a mutex-protected second lookup after allocation, preventing race conditions. It returns NULL only on memory allocation failure; otherwise always returns a valid profile with an acquired reference."
+  }
+}

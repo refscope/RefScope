@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_kfree_skb_dtor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations release a reference; retrying would result in double-put and use-after-free.",
+  "contract_summary": "Release wrapper: decrements the reference count of the socket buffer (skb) via bpf_kfree_skb. After this call, the caller must not use the skb pointer, as it may have been freed if the refcount reached zero. The function returns void and always executes unconditionally; the caller has no return value to check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call bpf_kfree_skb, which is a put function that decrements the reference count of the skb. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations release a reference; retrying would result in double-put and use-after-free.",
+      "contract_summary": "Release wrapper: decrements the reference count of the socket buffer (skb) via bpf_kfree_skb. After this call, the caller must not use the skb pointer, as it may have been freed if the refcount reached zero. The function returns void and always executes unconditionally; the caller has no return value to check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function bpf_kfree_skb_dtor calls bpf_kfree_skb on its parameter skb, which is a put operation on skb->users.refs. The access path segments (skb, users, refs) match the type chain segments (sk_buff, refcount_t, atomic_t). The operation is consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations release a reference; retrying would result in double-put and use-after-free.",
+    "contract_summary": "Release wrapper: decrements the reference count of the socket buffer (skb) via bpf_kfree_skb. After this call, the caller must not use the skb pointer, as it may have been freed if the refcount reached zero. The function returns void and always executes unconditionally; the caller has no return value to check."
+  }
+}

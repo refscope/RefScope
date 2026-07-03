@@ -1,0 +1,99 @@
+{
+  "function_name": "cachefiles_put_kiocb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ki.ki_refcnt.refs",
+      "cachefiles_kiocb--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always succeeds; there is no failure case to retry.",
+  "contract_summary": "This is a put wrapper for cachefiles_kiocb objects. It decrements the reference count and, on reaching zero, releases the associated cachefiles object, the file reference, and frees the kiocb itself. After calling this function, the caller must not access the kiocb pointer, as it may be freed. No return value to check; the operation is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to decrement the refcount of cachefiles_kiocb and, on reaching zero, perform cleanup (put object, fput, kfree). This is a classic put wrapper with refcount_dec_and_test as the core operation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always succeeds; there is no failure case to retry.",
+      "contract_summary": "This is a put wrapper for cachefiles_kiocb objects. It decrements the reference count and, on reaching zero, releases the associated cachefiles object, the file reference, and frees the kiocb itself. After calling this function, the caller must not access the kiocb pointer, as it may be freed. No return value to check; the operation is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ki.ki_refcnt.refs",
+          "cachefiles_kiocb--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ki.ki_refcnt.refs",
+          "cachefiles_kiocb--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &ki->ki_refcnt, which decrements the refcount on the object pointed to by parameter 1 (ki). The access path ki.ki_refcnt.refs correctly traces from the parameter to the atomic_t field, and the type chain cachefiles_kiocb--refcount_t--atomic_t matches the struct definitions. The segment count (3) equals the type chain length (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ki.ki_refcnt.refs",
+        "cachefiles_kiocb--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always succeeds; there is no failure case to retry.",
+    "contract_summary": "This is a put wrapper for cachefiles_kiocb objects. It decrements the reference count and, on reaching zero, releases the associated cachefiles object, the file reference, and frees the kiocb itself. After calling this function, the caller must not access the kiocb pointer, as it may be freed. No return value to check; the operation is unconditional."
+  }
+}

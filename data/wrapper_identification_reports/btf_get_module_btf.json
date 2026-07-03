@@ -1,0 +1,99 @@
+{
+  "function_name": "btf_get_module_btf",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "btf.refcnt.refs",
+      "btf--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Returns NULL when no BTF is available for the given module; this is not a transient condition, so retrying is pointless.",
+  "contract_summary": "This function acquires a reference to a BTF object: if module is NULL, it returns the vmlinux BTF with an elevated refcount; otherwise, it searches the per-module BTF list for the matching module and returns its BTF with an elevated refcount, or NULL if not found. The caller is responsible for calling btf_put() on the returned pointer when done. The function is thread-safe via the btf_module_mutex for the module list lookup. The caller must check the return value for NULL before use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire and return a reference-counted BTF pointer (either vmlinux or per-module) with an incremented refcount. The lookup and error-checking logic is minimal and intrinsic to the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Returns NULL when no BTF is available for the given module; this is not a transient condition, so retrying is pointless.",
+      "contract_summary": "This function acquires a reference to a BTF object: if module is NULL, it returns the vmlinux BTF with an elevated refcount; otherwise, it searches the per-module BTF list for the matching module and returns its BTF with an elevated refcount, or NULL if not found. The caller is responsible for calling btf_put() on the returned pointer when done. The function is thread-safe via the btf_module_mutex for the module list lookup. The caller must check the return value for NULL before use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "btf_get is called on the btf pointer that is returned, incrementing its refcount. The access path from return variable 'btf' through .refcnt.refs and type chain btf--refcount_struct--atomic_t are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "btf.refcnt.refs",
+        "btf--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Returns NULL when no BTF is available for the given module; this is not a transient condition, so retrying is pointless.",
+    "contract_summary": "This function acquires a reference to a BTF object: if module is NULL, it returns the vmlinux BTF with an elevated refcount; otherwise, it searches the per-module BTF list for the matching module and returns its BTF with an elevated refcount, or NULL if not found. The caller is responsible for calling btf_put() on the returned pointer when done. The function is thread-safe via the btf_module_mutex for the module list lookup. The caller must check the return value for NULL before use."
+  }
+}

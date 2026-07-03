@@ -1,0 +1,106 @@
+{
+  "function_name": "arp_failure_skb_discard",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kfree_skb unconditionally releases a reference; retrying would risk a use-after-free or double-free.",
+  "contract_summary": "This is a put wrapper that releases a reference on an sk_buff by calling kfree_skb. The caller must not use the skb pointer after this call. The function unconditionally decrements the skb's refcount and frees the object if the refcount reaches zero. The dev parameter is unused, indicating this wrapper likely conforms to a specific callback signature. No special locking or error handling is required.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function body consists solely of a call to kfree_skb(skb), which is a refcount put operation on the skb. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kfree_skb unconditionally releases a reference; retrying would risk a use-after-free or double-free.",
+      "contract_summary": "This is a put wrapper that releases a reference on an sk_buff by calling kfree_skb. The caller must not use the skb pointer after this call. The function unconditionally decrements the skb's refcount and frees the object if the refcount reaches zero. The dev parameter is unused, indicating this wrapper likely conforms to a specific callback signature. No special locking or error handling is required."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation specifies parameter index 2, but the function arp_failure_skb_discard has only one parameter (index 1). The critical variable is the parameter skb (index 1), so the index is incorrect. Per the rules, if the location/index is wrong, all operations depending on it are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The check stage incorrectly stated that the function has only one parameter; it actually has two parameters: dev (index 1) and skb (index 2). The candidate operation correctly refers to parameter 2 (skb). The function's sole purpose is to call kfree_skb(skb), which is a put operation on the skb reference. No other logic is present, so it is a high-purity wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kfree_skb unconditionally releases a reference; retrying would risk a use-after-free or double-free.",
+    "contract_summary": "This is a put wrapper that releases a reference on an sk_buff by calling kfree_skb. The caller must not use the skb pointer after this call. The function unconditionally decrements the skb's refcount and frees the object if the refcount reaches zero. The dev parameter is unused, indicating this wrapper likely conforms to a specific callback signature. No special locking or error handling is required."
+  }
+}

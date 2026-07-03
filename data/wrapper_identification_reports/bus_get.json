@@ -1,0 +1,99 @@
+{
+  "function_name": "bus_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bus.p.subsys.kobj.kref.refcount",
+      "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the bus is no longer valid; retrying will not change the outcome.",
+  "contract_summary": "Get wrapper that acquires a reference on the bus_type's underlying subsys_private structure. Returns a pointer to the bus_type if the bus is still valid (non-zero refcount), else NULL. The caller must check the return value and, if non-NULL, must later release the reference with a corresponding put (e.g., bus_put). This function does not allocate resources; it only takes a reference to an existing object. The caller must not use the bus pointer after the reference is released.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the bus_type via bus_to_subsys; the only logic is the NULL check and return. The critical variable bus is returned to the caller on success.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the bus is no longer valid; retrying will not change the outcome.",
+      "contract_summary": "Get wrapper that acquires a reference on the bus_type's underlying subsys_private structure. Returns a pointer to the bus_type if the bus is still valid (non-zero refcount), else NULL. The caller must check the return value and, if non-NULL, must later release the reference with a corresponding put (e.g., bus_put). This function does not allocate resources; it only takes a reference to an existing object. The caller must not use the bus pointer after the reference is released."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bus.p.subsys.kobj.kref.refcount",
+          "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "bus_get calls bus_to_subsys which performs a get on the refcount accessible via bus->p.subsys.kobj.kref.refcount. The function returns 'bus' only when the get succeeds, so the critical variable is the return value 'bus'. The access path and type chain are consistent: bus_type has p (subsys_private*), which has subsys (kset), which has kobj (kobject), which has kref (kref), which has refcount (refcount_t). Segment counts match (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bus.p.subsys.kobj.kref.refcount",
+        "bus_type--subsys_private--kset--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the bus is no longer valid; retrying will not change the outcome.",
+    "contract_summary": "Get wrapper that acquires a reference on the bus_type's underlying subsys_private structure. Returns a pointer to the bus_type if the bus is still valid (non-zero refcount), else NULL. The caller must check the return value and, if non-NULL, must later release the reference with a corresponding put (e.g., bus_put). This function does not allocate resources; it only takes a reference to an existing object. The caller must not use the bus pointer after the reference is released."
+  }
+}

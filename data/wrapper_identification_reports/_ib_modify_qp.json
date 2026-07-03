@@ -1,0 +1,122 @@
+{
+  "function_name": "_ib_modify_qp",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rdma_fill_sgid_attr",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "ah_attr.grh.sgid_attr.entry.kref.refcount",
+      "member_type_chain": "rdma_ah_attr--ib_global_route--ib_gid_attr--ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_lag_get_ah_roce_slave",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "slave.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "rdma_update_sgid_attr",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.attr.kref.refcount",
+      "member_type_chain": "ib_gid_attr--ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_unfill_sgid_attr",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ah_attr.grh.sgid_attr.entry.kref.refcount",
+      "member_type_chain": "rdma_ah_attr--rdma_ah_attr_grh--ib_gid_attr--ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_lag_put_ah_roce_slave",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "xmit_slave.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rdma_lag_get_ah_roce_slave",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "slave.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "rdma_fill_sgid_attr",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "ah_attr.grh.sgid_attr.entry.kref.refcount",
+      "member_type_chain": "rdma_ah_attr--ib_global_route--ib_gid_attr--ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_update_sgid_attr",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.attr.kref.refcount",
+      "member_type_chain": "ib_gid_attr--ib_gid_table_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rdma_lag_put_ah_roce_slave",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "xmit_slave.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "rdma_unfill_sgid_attr",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ah_attr.grh.sgid_attr.entry.kref.refcount",
+      "member_type_chain": "rdma_ah_attr--rdma_ah_attr_grh--ib_gid_attr--ib_gid_table_entry--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to modify a QP (Queue Pair) with various attributes; reference-count operations (get/put on sgid_attr and net_device) are incidental steps within a larger body of validation, attribute setting, security, and state management logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

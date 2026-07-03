@@ -1,0 +1,106 @@
+{
+  "function_name": "bfq_exit_bfqq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "bfqq.new_bfqq.ref",
+      "bfq_queue--bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_put_cooperator",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.new_bfqq.ref",
+      "member_type_chain": "bfq_queue--bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_put_cooperator",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.new_bfqq.ref",
+      "member_type_chain": "bfq_queue--bfq_queue--int"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and always succeed; a retry would cause a double-release.",
+  "contract_summary": "This function releases the reference count of a bfq_queue via two put operations: bfq_put_cooperator (decrement cooperator reference) and bfq_release_process_ref (decrement process reference). It also handles the case where the queue is currently in service by forcing expiration and scheduling dispatch. After calling this function, the bfq_queue pointer is invalid and must not be used. No return value; the caller does not need to check success.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement references on the bfq_queue via bfq_put_cooperator and bfq_release_process_ref, and perform necessary cleanup if the queue is currently in service. The expiration and dispatch are standard lifecycle steps for a queue being exited.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and always succeed; a retry would cause a double-release.",
+      "contract_summary": "This function releases the reference count of a bfq_queue via two put operations: bfq_put_cooperator (decrement cooperator reference) and bfq_release_process_ref (decrement process reference). It also handles the case where the queue is currently in service by forcing expiration and scheduling dispatch. After calling this function, the bfq_queue pointer is invalid and must not be used. No return value; the caller does not need to check success."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqq.ref",
+          "bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqq.new_bfqq.ref",
+          "bfq_queue--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqq.new_bfqq.ref",
+          "bfq_queue--bfq_queue--int"
+        ]
+      ],
+      "reason": "The extracted operation matches the callee bfq_put_cooperator: it operates on parameter 2 (bfqq), with access path bfqq.new_bfqq.ref and type chain bfq_queue--bfq_queue--int. The first candidate (bfqq.ref) is rejected because the callee's path goes through new_bfqq, not directly to ref."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "bfqq.new_bfqq.ref",
+        "bfq_queue--bfq_queue--int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and always succeed; a retry would cause a double-release.",
+    "contract_summary": "This function releases the reference count of a bfq_queue via two put operations: bfq_put_cooperator (decrement cooperator reference) and bfq_release_process_ref (decrement process reference). It also handles the case where the queue is currently in service by forcing expiration and scheduling dispatch. After calling this function, the bfq_queue pointer is invalid and must not be used. No return value; the caller does not need to check success."
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "function_name": "av7110_ir_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "THIS_MODULE",
+      "THIS_MODULE.refcnt",
+      "module--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "THIS_MODULE",
+      "location": "global",
+      "member_access_path": "THIS_MODULE.refcnt",
+      "member_type_chain": "module--atomic_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.input_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--input_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "THIS_MODULE",
+      "location": "global",
+      "member_access_path": "THIS_MODULE.refcnt",
+      "member_type_chain": "module--atomic_t"
+    },
+    {
+      "callee_function_name": "rc_free_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.input_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "rc_dev--input_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a release wrapper; if the put failed it would indicate a double-free or reference leak, and retrying would only escalate the error.",
+  "contract_summary": "Release wrapper: unregisters the RC device via rc_unregister_device and then releases the reference to it via rc_free_device (which decrements the device's refcount and the module's refcount). After calling this function, the caller must not use the rcdev pointer anymore. No return value to check; the operation is unconditional and should only be called once.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to unregister and release (put) the IR RC device; there is no other logic. It passes the critical refcounted object (av7110->ir.rcdev) to rc_free_device, which is a put function.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a release wrapper; if the put failed it would indicate a double-free or reference leak, and retrying would only escalate the error.",
+      "contract_summary": "Release wrapper: unregisters the RC device via rc_unregister_device and then releases the reference to it via rc_free_device (which decrements the device's refcount and the module's refcount). After calling this function, the caller must not use the rcdev pointer anymore. No return value to check; the operation is unconditional and should only be called once."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "av7110.ir.rcdev.dev.dev.kobj.kref.refcount",
+          "av7110--ir--rc_dev--device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "THIS_MODULE",
+          "THIS_MODULE.refcnt",
+          "module--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "av7110.ir.rcdev.dev.input_dev.dev.kobj.kref.refcount",
+          "av7110--ir--rc_dev--input_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "THIS_MODULE",
+          "THIS_MODULE.refcnt",
+          "module--atomic_t"
+        ]
+      ],
+      "reason": "Only the global THIS_MODULE refcount operation is consistent. The parameter-based operations (1 and 3) have invalid access paths: operation 1 uses 'av7110.ir.rcdev.dev.dev.kobj.kref.refcount' which includes an impossible second 'dev' field inside struct device; operation 3 has a segment mismatch (9 path segments vs 8 type chain segments) and an inaccurate type chain that omits the device type from rc_dev. Both parameter operations do not correspond to valid refcount access paths in the actual struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "THIS_MODULE",
+        "THIS_MODULE.refcnt",
+        "module--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a release wrapper; if the put failed it would indicate a double-free or reference leak, and retrying would only escalate the error.",
+    "contract_summary": "Release wrapper: unregisters the RC device via rc_unregister_device and then releases the reference to it via rc_free_device (which decrements the device's refcount and the module's refcount). After calling this function, the caller must not use the rcdev pointer anymore. No return value to check; the operation is unconditional and should only be called once."
+  }
+}

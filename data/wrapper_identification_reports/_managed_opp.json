@@ -1,0 +1,99 @@
+{
+  "function_name": "_managed_opp",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "managed_table.kref.refcount",
+      "opp_table--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_pm_opp_get_opp_table_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_pm_opp_get_opp_table_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates no matching shared OPP table exists for the given device/index; retrying without changing conditions would yield the same result.",
+  "contract_summary": "This function finds a managed (shared) OPP table associated with a device and increments its reference count. It returns a pointer to the opp_table with an additional reference held. If no matching shared table is found, it returns NULL. The caller must check the return value and, if non-NULL, later release the reference using dev_pm_opp_put_opp_table (or similar) when the table is no longer needed. The device node obtained via _opp_of_get_opp_desc_node is automatically freed via __free() cleanup attribute; no manual free is required.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a shared OPP table and acquire a reference to it via dev_pm_opp_get_opp_table_ref. The iteration and condition checks are purely to locate the correct table; the only external effect is the refcount increment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates no matching shared OPP table exists for the given device/index; retrying without changing conditions would yield the same result.",
+      "contract_summary": "This function finds a managed (shared) OPP table associated with a device and increments its reference count. It returns a pointer to the opp_table with an additional reference held. If no matching shared table is found, it returns NULL. The caller must check the return value and, if non-NULL, later release the reference using dev_pm_opp_put_opp_table (or similar) when the table is no longer needed. The device node obtained via _opp_of_get_opp_desc_node is automatically freed via __free() cleanup attribute; no manual free is required."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "managed_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "managed_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ],
+      "reason": "dev_pm_opp_get_opp_table_ref is a get function on opp_table (via opp_table->kref.refcount). The returned managed_table is assigned from that call (under condition). The access path starts from the return variable managed_table, which is of type struct opp_table, and traces to kref.refcount, matching the callee's path and type chain. Location 'return' index '0' correctly identifies the critical variable flowing out."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "managed_table.kref.refcount",
+        "opp_table--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates no matching shared OPP table exists for the given device/index; retrying without changing conditions would yield the same result.",
+    "contract_summary": "This function finds a managed (shared) OPP table associated with a device and increments its reference count. It returns a pointer to the opp_table with an additional reference held. If no matching shared table is found, it returns NULL. The caller must check the return value and, if non-NULL, later release the reference using dev_pm_opp_put_opp_table (or similar) when the table is no longer needed. The device node obtained via _opp_of_get_opp_desc_node is automatically freed via __free() cleanup attribute; no manual free is required."
+  }
+}

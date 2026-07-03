@@ -1,0 +1,58 @@
+{
+  "function_name": "__mlx5_ib_dereg_mr",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mlx5r_deref_wait_odp_mkey",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mmkey.usecount.refs",
+      "member_type_chain": "mlx5_ib_mkey--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mlx5r_deref_wait_odp_mkey",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mmkey.usecount.refs",
+      "member_type_chain": "mlx5_ib_mkey--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a get wrapper; refcount deref is part of cleanup, not acquisition.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs a complex deregistration of an MR, including handling ODP, integrity MRs, destroying PSVs, releasing umem, and freeing memory. The refcount operation (mlx5r_deref_wait_odp_mkey) is only a small step in the cleanup path; the primary purpose is not refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a get wrapper; refcount deref is part of cleanup, not acquisition.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a get wrapper; refcount deref is part of cleanup, not acquisition.",
+    "contract_summary": ""
+  }
+}

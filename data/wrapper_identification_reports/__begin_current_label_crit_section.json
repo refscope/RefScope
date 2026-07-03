@@ -1,0 +1,99 @@
+{
+  "function_name": "__begin_current_label_crit_section",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__begin_cred_crit_section",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__begin_cred_crit_section",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation is unconditional and always succeeds; there is no failure path to retry.",
+  "contract_summary": "This function acquires a reference on the AppArmor label associated with the current task's credentials. The returned label pointer is valid and the caller must call a corresponding put function (e.g., end_current_label_crit_section) when done with the label, unless *needput is false (indicating the reference is borrowed from a transient context). The function is intended for use inside critical sections where the label must be safely pinned. The caller must not use the label after releasing the reference. The needput flag signals whether an explicit decrement is required.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is a thin inline wrapper that forwards current_cred() and a needput pointer to __begin_cred_crit_section, whose sole purpose is to acquire a reference on the security label from the current task's credentials.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation is unconditional and always succeeds; there is no failure path to retry.",
+      "contract_summary": "This function acquires a reference on the AppArmor label associated with the current task's credentials. The returned label pointer is valid and the caller must call a corresponding put function (e.g., end_current_label_crit_section) when done with the label, unless *needput is false (indicating the reference is borrowed from a transient context). The function is intended for use inside critical sections where the label must be safely pinned. The caller must not use the label after releasing the reference. The needput flag signals whether an explicit decrement is required."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function directly returns the result of __begin_cred_crit_section, which is a get operation on the return value. The access path and type chain match the callee information. The critical variable is correctly identified as the return value (index 0). The four-segment path and four-type chain are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation is unconditional and always succeeds; there is no failure path to retry.",
+    "contract_summary": "This function acquires a reference on the AppArmor label associated with the current task's credentials. The returned label pointer is valid and the caller must call a corresponding put function (e.g., end_current_label_crit_section) when done with the label, unless *needput is false (indicating the reference is borrowed from a transient context). The function is intended for use inside critical sections where the label must be safely pinned. The caller must not use the label after releasing the reference. The needput flag signals whether an explicit decrement is required."
+  }
+}

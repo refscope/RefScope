@@ -1,0 +1,70 @@
+{
+  "function_name": "__of_get_dma_parent",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_get_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "np.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_get_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "np.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns NULL when no parent node is found; retrying would not change the device tree topology.",
+  "contract_summary": "Get-wrapper that acquires a reference on the DMA-capable parent device node. First attempts to get the parent via the 'interconnects' property with 'dma-mem' name; on failure falls back to the direct parent via of_get_parent. The returned node's reference count is incremented; caller must release with of_node_put. May return NULL if no parent exists; caller must check and handle NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to return a device node (the DMA parent) with an incremented reference count, either via the 'interconnects' property or direct parent lookup. No significant non-refcount logic exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns NULL when no parent node is found; retrying would not change the device tree topology.",
+      "contract_summary": "Get-wrapper that acquires a reference on the DMA-capable parent device node. First attempts to get the parent via the 'interconnects' property with 'dma-mem' name; on failure falls back to the direct parent via of_get_parent. The returned node's reference count is incremented; caller must release with of_node_put. May return NULL if no parent exists; caller must check and handle NULL."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "__of_parse_phandle_with_args"
+      ],
+      "reason": "Need the implementation of __of_parse_phandle_with_args to determine if it performs a get (refcount increment) on the returned phandle node (args.np). The current function has two return paths: one via of_get_parent (which is a known get), and one via args.np obtained from of_parse_phandle_with_args. Without knowing whether that function increments the refcount, we cannot fully trace the refcount operations for all return paths."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No candidate reference-count operations provided for validation; the function code does not contain any additional get/put calls beyond those in callees, and no inconsistent operations are present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns NULL when no parent node is found; retrying would not change the device tree topology.",
+    "contract_summary": "Get-wrapper that acquires a reference on the DMA-capable parent device node. First attempts to get the parent via the 'interconnects' property with 'dma-mem' name; on failure falls back to the direct parent via of_get_parent. The returned node's reference count is incremented; caller must release with of_node_put. May return NULL if no parent exists; caller must check and handle NULL."
+  }
+}

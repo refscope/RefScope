@@ -1,0 +1,99 @@
+{
+  "function_name": "__ip_vs_conn_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cp.refcnt.refs",
+      "ip_vs_conn--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Decrementing a refcount that is already at zero indicates a use-after-free bug; retrying would double-free. The operation always succeeds if used correctly.",
+  "contract_summary": "This is a put wrapper that releases a reference on an ip_vs_conn object. The caller must have previously acquired a reference (e.g., via a get operation or allocation) and must not use the object after calling this function unless it holds another reference. The function includes a full memory barrier to ensure proper ordering of prior writes before the decrement. It is the release side of the reference-count lifecycle and must be called exactly once for each reference acquired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of an ip_vs_conn structure via refcount_dec. The memory barrier ensures proper ordering. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Decrementing a refcount that is already at zero indicates a use-after-free bug; retrying would double-free. The operation always succeeds if used correctly.",
+      "contract_summary": "This is a put wrapper that releases a reference on an ip_vs_conn object. The caller must have previously acquired a reference (e.g., via a get operation or allocation) and must not use the object after calling this function unless it holds another reference. The function includes a full memory barrier to ensure proper ordering of prior writes before the decrement. It is the release side of the reference-count lifecycle and must be called exactly once for each reference acquired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cp.refcnt.refs",
+          "ip_vs_conn--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cp.refcnt.refs",
+          "ip_vs_conn--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec(&cp->refcnt) operates on cp->refcnt.refs, consistent with callee info. The access path cp.refcnt.refs matches the member chain ip_vs_conn->refcount_t->atomic_t. The number of segments (3) equals the number of types in chain (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cp.refcnt.refs",
+        "ip_vs_conn--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Decrementing a refcount that is already at zero indicates a use-after-free bug; retrying would double-free. The operation always succeeds if used correctly.",
+    "contract_summary": "This is a put wrapper that releases a reference on an ip_vs_conn object. The caller must have previously acquired a reference (e.g., via a get operation or allocation) and must not use the object after calling this function unless it holds another reference. The function includes a full memory barrier to ensure proper ordering of prior writes before the decrement. It is the release side of the reference-count lifecycle and must be called exactly once for each reference acquired."
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "function_name": "__get_acl",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "acl.a_refcount.refs",
+      "posix_acl--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "posix_acl_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_cached_acl",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "set_cached_acl",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_inode_acl",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "posix_acl_dup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "posix_acl_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "posix_acl_dup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_cached_acl",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "acl.a_refcount.refs",
+      "member_type_chain": "posix_acl--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operations themselves never fail; failures (NULL/ERR_PTR) come from filesystem errors or ACL unavailability, which may be transient but are not refcount failures. Retry is left to the caller but is not inherent to the refcount wrapper.",
+  "contract_summary": "Get-wrapper for posix_acl objects. Returns a pointer to a POSIX ACL with an elevated reference count (refcount). The caller must call posix_acl_release() when done with the ACL. The function handles caching: it first checks cache, then uses the filesystem's get_acl/get_inode_acl method to fetch it if uncached. It ensures race-free caching with sentinel. Returns NULL if ACLs are disabled, or ERR_PTR on filesystem error. The caller must check the return value. The returned ACL is valid until released.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference-counted ACL from cache or filesystem. It returns the ACL with an elevated refcount that the caller must release. Caching and sentinel handling are subordinate to the reference management goal.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operations themselves never fail; failures (NULL/ERR_PTR) come from filesystem errors or ACL unavailability, which may be transient but are not refcount failures. Retry is left to the caller but is not inherent to the refcount wrapper.",
+      "contract_summary": "Get-wrapper for posix_acl objects. Returns a pointer to a POSIX ACL with an elevated reference count (refcount). The caller must call posix_acl_release() when done with the ACL. The function handles caching: it first checks cache, then uses the filesystem's get_acl/get_inode_acl method to fetch it if uncached. It ensures race-free caching with sentinel. Returns NULL if ACLs are disabled, or ERR_PTR on filesystem error. The caller must check the return value. The returned ACL is valid until released."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "acl.a_refcount.refs",
+          "posix_acl--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "acl.a_refcount.refs",
+          "posix_acl--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "acl.a_refcount.refs",
+          "posix_acl--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "acl.a_refcount.refs",
+          "posix_acl--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Only the return value get operation is valid: the function returns 'acl' after calling posix_acl_dup() (or get_cached_acl()), which increments the refcount on the returned pointer. The other two candidate operations (get on parameter 1, put on parameter 1) are not supported by the code; there is no refcount operation on any parameter of __get_acl."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "acl.a_refcount.refs",
+        "posix_acl--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operations themselves never fail; failures (NULL/ERR_PTR) come from filesystem errors or ACL unavailability, which may be transient but are not refcount failures. Retry is left to the caller but is not inherent to the refcount wrapper.",
+    "contract_summary": "Get-wrapper for posix_acl objects. Returns a pointer to a POSIX ACL with an elevated reference count (refcount). The caller must call posix_acl_release() when done with the ACL. The function handles caching: it first checks cache, then uses the filesystem's get_acl/get_inode_acl method to fetch it if uncached. It ensures race-free caching with sentinel. Returns NULL if ACLs are disabled, or ERR_PTR on filesystem error. The caller must check the return value. The returned ACL is valid until released."
+  }
+}

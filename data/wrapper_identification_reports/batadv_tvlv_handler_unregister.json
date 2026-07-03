@@ -1,0 +1,171 @@
+{
+  "function_name": "batadv_tvlv_handler_unregister",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tvlv_handler.refcount.refcount",
+      "batadv_tvlv_handler--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tvlv_handler.refcount.refcount",
+      "batadv_tvlv_handler--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tvlv_handler.refcount.refcount",
+      "batadv_tvlv_handler--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_tvlv_handler_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tvlv_handler.refcount.refcount",
+      "member_type_chain": "batadv_tvlv_handler--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tvlv_handler_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tvlv_handler.refcount.refcount",
+      "member_type_chain": "batadv_tvlv_handler--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_tvlv_handler_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tvlv_handler.refcount.refcount",
+      "member_type_chain": "batadv_tvlv_handler--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tvlv_handler_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tvlv_handler.refcount.refcount",
+      "member_type_chain": "batadv_tvlv_handler--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If batadv_tvlv_handler_get returns NULL, the handler does not exist in the list; retrying will not succeed unless the handler is registered in between, which is not a typical retry scenario. The function correctly handles the absent case as a no-op.",
+  "contract_summary": "Unregisters a tvlv handler identified by type and version. Looks up the handler via batadv_tvlv_handler_get, which acquires a temporary reference. Under lock, removes the handler from the list, and then releases both the temporary reference and the list's own reference via batadv_tvlv_handler_put. After this function, the handler is no longer in the list and its refcount is decremented appropriately (the list reference is released). Callers should not use the handler after unregistration; the function is safe to call even if the handler is not registered (get returns NULL, no-op). Must be paired with a prior registration.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to unregister a tvlv handler, which involves looking it up, removing it from the list, and releasing the list's reference (two puts). The only non-refcount logic is the list removal, which is directly required for the unregister operation. The function is essentially a put wrapper that combines a get, two puts, and list management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If batadv_tvlv_handler_get returns NULL, the handler does not exist in the list; retrying will not succeed unless the handler is registered in between, which is not a typical retry scenario. The function correctly handles the absent case as a no-op.",
+      "contract_summary": "Unregisters a tvlv handler identified by type and version. Looks up the handler via batadv_tvlv_handler_get, which acquires a temporary reference. Under lock, removes the handler from the list, and then releases both the temporary reference and the list's own reference via batadv_tvlv_handler_put. After this function, the handler is no longer in the list and its refcount is decremented appropriately (the list reference is released). Callers should not use the handler after unregistration; the function is safe to call even if the handler is not registered (get returns NULL, no-op). Must be paired with a prior registration."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tvlv_handler.refcount.refcount",
+          "batadv_tvlv_handler--kref--refcount_t"
+        ]
+      ],
+      "reason": "All three operations are supported by the code. The 'get' corresponds to batadv_tvlv_handler_get returning a pointer that is stored in tvlv_handler, whose refcount is implicitly incremented. The two 'put' operations correspond to the two explicit calls to batadv_tvlv_handler_put on the same tvlv_handler pointer. The access paths and type chains are consistent with the callee info and the function interfaces (return value for get, first parameter for put). Segment counts match (3 segments vs 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tvlv_handler.refcount.refcount",
+        "batadv_tvlv_handler--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tvlv_handler.refcount.refcount",
+        "batadv_tvlv_handler--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tvlv_handler.refcount.refcount",
+        "batadv_tvlv_handler--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If batadv_tvlv_handler_get returns NULL, the handler does not exist in the list; retrying will not succeed unless the handler is registered in between, which is not a typical retry scenario. The function correctly handles the absent case as a no-op.",
+    "contract_summary": "Unregisters a tvlv handler identified by type and version. Looks up the handler via batadv_tvlv_handler_get, which acquires a temporary reference. Under lock, removes the handler from the list, and then releases both the temporary reference and the list's own reference via batadv_tvlv_handler_put. After this function, the handler is no longer in the list and its refcount is decremented appropriately (the list reference is released). Callers should not use the handler after unregistration; the function is safe to call even if the handler is not registered (get returns NULL, no-op). Must be paired with a prior registration."
+  }
+}

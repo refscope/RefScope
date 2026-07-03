@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_tt_orig_list_entry_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ref.parent.orig_node.refcount.refcount",
+      "kref--batadv_tt_orig_list_entry--batadv_orig_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This function is a release callback that frees the object; it only runs once when refcount reaches zero; retrying would double-free.",
+  "contract_summary": "Caller must not use the batadv_tt_orig_list_entry after this function is called. This is the last decrement (kref_put) release callback: it releases a reference on the associated orig_node and then frees the entry via RCU. No further access to the entry is allowed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primarily releases a kref reference by decrementing the orig_node reference and freeing the list entry via RCU, with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This function is a release callback that frees the object; it only runs once when refcount reaches zero; retrying would double-free.",
+      "contract_summary": "Caller must not use the batadv_tt_orig_list_entry after this function is called. This is the last decrement (kref_put) release callback: it releases a reference on the associated orig_node and then frees the entry via RCU. No further access to the entry is allowed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.parent.orig_node.refcount.refcount",
+          "kref--batadv_tt_orig_list_entry--batadv_orig_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.parent.orig_node.refcount.refcount",
+          "kref--batadv_tt_orig_list_entry--batadv_orig_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The batadv_orig_node_put is called on orig_entry->orig_node, which is derived from the kref parameter. The path 'ref.parent.orig_node.refcount.refcount' uses 'parent' to represent the container_of operation, and each segment corresponds to the type chain sequence. The segment count (5) matches the type chain count (5). The direction 'put' and parameter index are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ref.parent.orig_node.refcount.refcount",
+        "kref--batadv_tt_orig_list_entry--batadv_orig_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This function is a release callback that frees the object; it only runs once when refcount reaches zero; retrying would double-free.",
+    "contract_summary": "Caller must not use the batadv_tt_orig_list_entry after this function is called. This is the last decrement (kref_put) release callback: it releases a reference on the associated orig_node and then frees the entry via RCU. No further access to the entry is allowed."
+  }
+}

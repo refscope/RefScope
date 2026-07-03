@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_get_bioc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "bioc.refs.refs",
+      "btrfs_io_context--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc always succeeds and does not return an error; if the precondition (refcount > 0) is violated, retrying would not fix the underlying bug.",
+  "contract_summary": "Acquires a reference on a btrfs_io_context object by incrementing its refcount. The caller must ensure the object is already live (refcount > 0) before calling; a WARN_ON is used to catch violations. After this call, the caller holds an additional reference and must eventually release it with a corresponding put (e.g., btrfs_put_bioc). The function does not transfer ownership—it shares it.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to increment the refcount of a btrfs_io_context, with a warning if refcount is zero. It contains no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc always succeeds and does not return an error; if the precondition (refcount > 0) is violated, retrying would not fix the underlying bug.",
+      "contract_summary": "Acquires a reference on a btrfs_io_context object by incrementing its refcount. The caller must ensure the object is already live (refcount > 0) before calling; a WARN_ON is used to catch violations. After this call, the caller holds an additional reference and must eventually release it with a corresponding put (e.g., btrfs_put_bioc). The function does not transfer ownership—it shares it."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bioc.refs.refs",
+          "btrfs_io_context--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bioc.refs.refs",
+          "btrfs_io_context--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&bioc->refs) increments the refcount on the parameter bioc. The access path from parameter 1 (bioc) through field refs (which is of type refcount_t) and subfield refs (atomic_t) matches the callee's path r.refs. The type chain btrfs_io_context--refcount_t--atomic_t is consistent with the code. Direction 'get' is correct for refcount_inc."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "bioc.refs.refs",
+        "btrfs_io_context--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc always succeeds and does not return an error; if the precondition (refcount > 0) is violated, retrying would not fix the underlying bug.",
+    "contract_summary": "Acquires a reference on a btrfs_io_context object by incrementing its refcount. The caller must ensure the object is already live (refcount > 0) before calling; a WARN_ON is used to catch violations. After this call, the caller holds an additional reference and must eventually release it with a corresponding put (e.g., btrfs_put_bioc). The function does not transfer ownership—it shares it."
+  }
+}

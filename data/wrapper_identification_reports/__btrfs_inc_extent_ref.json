@@ -1,0 +1,71 @@
+{
+  "function_name": "__btrfs_inc_extent_ref",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Internal retry is already performed (handles -EAGAIN by switching to tree backref); other errors indicate transaction abort or allocation failure, retrying would not succeed without changing conditions.",
+  "contract_summary": "This function increments the extent reference count for a given delayed reference node. It first attempts to insert an inline extent backref; if space is insufficient (-EAGAIN), it falls back to directly updating the extent item's refs field and inserting a normal tree backref (tree block or extent data). The caller must check the return value; on error the transaction should be aborted. The function does not transfer ownership of any object to the caller—it modifies the extent tree state to reflect one additional reference to the extent. The caller is responsible for providing a valid transaction handle and delayed ref node.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the extent reference count (refs field) and insert/update extent backrefs; all logic is directly in service of refcount management.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Internal retry is already performed (handles -EAGAIN by switching to tree backref); other errors indicate transaction abort or allocation failure, retrying would not succeed without changing conditions.",
+      "contract_summary": "This function increments the extent reference count for a given delayed reference node. It first attempts to insert an inline extent backref; if space is insufficient (-EAGAIN), it falls back to directly updating the extent item's refs field and inserting a normal tree backref (tree block or extent data). The caller must check the return value; on error the transaction should be aborted. The function does not transfer ownership of any object to the caller—it modifies the extent tree state to reflect one additional reference to the extent. The caller is responsible for providing a valid transaction handle and delayed ref node."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "btrfs_extent_refs",
+        "btrfs_set_extent_refs"
+      ],
+      "reason": "Need implementations of btrfs_extent_refs and btrfs_set_extent_refs to determine the exact field name and type chain from btrfs_extent_item to the actual refcount (atomic_t). The current callee info does not include these functions, which directly access the reference count field."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No reference-count operations were extracted; the candidate list is empty. The callee btrfs_release_path is a put but not extracted, so no consistency issues to report."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Internal retry is already performed (handles -EAGAIN by switching to tree backref); other errors indicate transaction abort or allocation failure, retrying would not succeed without changing conditions.",
+    "contract_summary": "This function increments the extent reference count for a given delayed reference node. It first attempts to insert an inline extent backref; if space is insufficient (-EAGAIN), it falls back to directly updating the extent item's refs field and inserting a normal tree backref (tree block or extent data). The caller must check the return value; on error the transaction should be aborted. The function does not transfer ownership of any object to the caller—it modifies the extent tree state to reflect one additional reference to the extent. The caller is responsible for providing a valid transaction handle and delayed ref node."
+  }
+}

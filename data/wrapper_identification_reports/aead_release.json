@@ -1,0 +1,99 @@
+{
+  "function_name": "aead_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "private.base.refcnt.refs",
+      "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_aead",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_aead",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "A put wrapper does not fail; retrying would lead to use-after-free.",
+  "contract_summary": "aead_release is a put wrapper that releases a reference on a crypto_aead object by calling crypto_free_aead. After this call, the object may be freed, and the caller must not use the pointer again. The operation is unconditional and safe to call only if a valid reference is held. No error return or special locking is required.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on an aead object via crypto_free_aead; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "A put wrapper does not fail; retrying would lead to use-after-free.",
+      "contract_summary": "aead_release is a put wrapper that releases a reference on a crypto_aead object by calling crypto_free_aead. After this call, the object may be freed, and the caller must not use the pointer again. The operation is unconditional and safe to call only if a valid reference is held. No error return or special locking is required."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "private.tfm.base.refcnt.refs",
+          "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "private.base.refcnt.refs",
+          "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation is correctly a put on parameter 1. The candidate access path 'private.tfm.base.refcnt.refs' had an extra segment 'tfm' (since the callee uses 'tfm' as its parameter name, but from the caller's perspective, 'private' directly points to a crypto_aead structure). Corrected path to 'private.base.refcnt.refs' matches the actual struct layout (crypto_aead.base -> crypto_tfm.refcnt -> refcount_t.refs -> atomic_t), and segment count (4) equals type chain length (4)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "private.base.refcnt.refs",
+        "crypto_aead--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "A put wrapper does not fail; retrying would lead to use-after-free.",
+    "contract_summary": "aead_release is a put wrapper that releases a reference on a crypto_aead object by calling crypto_free_aead. After this call, the object may be freed, and the caller must not use the pointer again. The operation is unconditional and safe to call only if a valid reference is held. No error return or special locking is required."
+  }
+}

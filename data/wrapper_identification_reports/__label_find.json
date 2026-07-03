@@ -1,0 +1,99 @@
+{
+  "function_name": "__label_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.count.refcount",
+      "aa_label--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__vec_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "this.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__vec_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "this.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If __vec_find returns NULL, the label was not found in the vector; retrying with the same input will not change the outcome.",
+  "contract_summary": "Lookup wrapper: searches for a label in a vector using the input label's vector and size. If found, acquires a reference (refcount increment) on that label and returns it; otherwise returns NULL. The input label is used only as a key and is not modified or released. The caller must check the return value and, if non-NULL, release the reference with a corresponding aa_label_put when done.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function exclusively calls __vec_find to perform a label lookup with refcount increment; the only non-refcount logic is a debug assertion.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If __vec_find returns NULL, the label was not found in the vector; retrying with the same input will not change the outcome.",
+      "contract_summary": "Lookup wrapper: searches for a label in a vector using the input label's vector and size. If found, acquires a reference (refcount increment) on that label and returns it; otherwise returns NULL. The input label is used only as a key and is not modified or released. The caller must check the return value and, if non-NULL, release the reference with a corresponding aa_label_put when done."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.count.refcount",
+          "aa_label--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.count.refcount",
+          "aa_label--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function __label_find returns the result of __vec_find, which according to callee info returns a pointer to an aa_label with an incremented reference count. The access path from the return value (ret) to the refcount field is ret.count.refcount, and the type chain aa_label->count (kref)->refcount (refcount_t) is consistent. No other operations are present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.count.refcount",
+        "aa_label--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If __vec_find returns NULL, the label was not found in the vector; retrying with the same input will not change the outcome.",
+    "contract_summary": "Lookup wrapper: searches for a label in a vector using the input label's vector and size. If found, acquires a reference (refcount increment) on that label and returns it; otherwise returns NULL. The input label is used only as a key and is not modified or released. The caller must check the return value and, if non-NULL, release the reference with a corresponding aa_label_put when done."
+  }
+}

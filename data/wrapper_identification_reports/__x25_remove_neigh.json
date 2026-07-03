@@ -1,0 +1,99 @@
+{
+  "function_name": "__x25_remove_neigh",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "nb.refcnt.refs",
+      "x25_neigh--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "x25_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nb.refcnt.refs",
+      "member_type_chain": "x25_neigh--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "x25_neigh_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nb.refcnt.refs",
+      "member_type_chain": "x25_neigh--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path; the condition guards against double removal. If the node is not in the list, the operation is a no-op; retrying is pointless.",
+  "contract_summary": "Put-wrapper that safely removes an x25_neigh entry from its list before releasing a reference. The caller must ensure nb is valid and that after this call, nb is no longer used (the refcount decrement may free the object). The list_del prevents use-after-free by unlinking the node before the put. If the node is not already in a list (e.g., already removed), the function does nothing, so it is safe to call multiple times.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to safely remove a neighbor from its list and then release a reference via x25_neigh_put. The list removal is minimal and directly supports the refcount release, making the function a put-wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path; the condition guards against double removal. If the node is not in the list, the operation is a no-op; retrying is pointless.",
+      "contract_summary": "Put-wrapper that safely removes an x25_neigh entry from its list before releasing a reference. The caller must ensure nb is valid and that after this call, nb is no longer used (the refcount decrement may free the object). The list_del prevents use-after-free by unlinking the node before the put. If the node is not already in a list (e.g., already removed), the function does nothing, so it is safe to call multiple times."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "nb.refcnt.refs",
+          "x25_neigh--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "nb.refcnt.refs",
+          "x25_neigh--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls x25_neigh_put(nb) which decrements the refcount of nb. The candidate correctly identifies nb as parameter 1, with access path nb.refcnt.refs and type chain x25_neigh--refcount_t--atomic_t. The path segments and type chain lengths match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "nb.refcnt.refs",
+        "x25_neigh--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path; the condition guards against double removal. If the node is not in the list, the operation is a no-op; retrying is pointless.",
+    "contract_summary": "Put-wrapper that safely removes an x25_neigh entry from its list before releasing a reference. The caller must ensure nb is valid and that after this call, nb is no longer used (the refcount decrement may free the object). The list_del prevents use-after-free by unlinking the node before the put. If the node is not already in a list (e.g., already removed), the function does nothing, so it is safe to call multiple times."
+  }
+}

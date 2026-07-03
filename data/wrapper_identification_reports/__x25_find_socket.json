@@ -1,0 +1,99 @@
+{
+  "function_name": "__x25_find_socket",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "s.sk_refcnt.refs",
+      "sock--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure (NULL) means no matching socket found; the socket may become available later (e.g., new connection), so retrying could succeed.",
+  "contract_summary": "This function searches the global x25_list for a socket with matching LCI and neighbour. If found, it increments the socket's refcount via sock_hold and returns the socket pointer. The caller must release the reference with sock_put when done and must hold the appropriate lock (e.g., x25_list_lock) that protects x25_list during the call, as the list iteration is not self-synchronized. Returns NULL if no matching socket exists; the caller may retry later if conditions change (e.g., a new socket with that LCI becomes available).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a socket by LCI/neighbour and acquire a reference via sock_hold; only negligible unrelated logic (loop and conditional return).",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure (NULL) means no matching socket found; the socket may become available later (e.g., new connection), so retrying could succeed.",
+      "contract_summary": "This function searches the global x25_list for a socket with matching LCI and neighbour. If found, it increments the socket's refcount via sock_hold and returns the socket pointer. The caller must release the reference with sock_put when done and must hold the appropriate lock (e.g., x25_list_lock) that protects x25_list during the call, as the list iteration is not self-synchronized. Returns NULL if no matching socket exists; the caller may retry later if conditions change (e.g., a new socket with that LCI becomes available)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "s.sk_refcnt.refs",
+          "sock--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "s.sk_refcnt.refs",
+          "sock--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "sock_hold(s) is called on the matching socket, and the function returns that socket. The access path s.sk_refcnt.refs and type chain sock--refcount_struct--atomic_t match the callee info exactly. Segment count (3) is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "s.sk_refcnt.refs",
+        "sock--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure (NULL) means no matching socket found; the socket may become available later (e.g., new connection), so retrying could succeed.",
+    "contract_summary": "This function searches the global x25_list for a socket with matching LCI and neighbour. If found, it increments the socket's refcount via sock_hold and returns the socket pointer. The caller must release the reference with sock_put when done and must hold the appropriate lock (e.g., x25_list_lock) that protects x25_list during the call, as the list iteration is not self-synchronized. Returns NULL if no matching socket exists; the caller may retry later if conditions change (e.g., a new socket with that LCI becomes available)."
+  }
+}

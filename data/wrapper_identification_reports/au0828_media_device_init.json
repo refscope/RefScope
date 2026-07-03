@@ -1,0 +1,99 @@
+{
+  "function_name": "au0828_media_device_init",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dev.media_dev.refcount.refcount",
+      "au0828_dev--media_device_instance--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "media_device_usb_allocate",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mdev.refcount.refcount",
+      "member_type_chain": "media_device_instance--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "media_device_usb_allocate",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mdev.refcount.refcount",
+      "member_type_chain": "media_device_instance--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates memory allocation failure or similar system error; retrying without changing conditions is unlikely to succeed and is not the intended usage pattern.",
+  "contract_summary": "This function is a creation/set wrapper: it allocates a media_device instance via media_device_usb_allocate, which initializes the device's reference count to 1, and stores the pointer in dev->media_dev. The caller gains ownership of this reference and must later release it with a corresponding media_device_put() call (or equivalent). On success, returns 0; on failure (e.g., out of memory), returns a negative errno. The caller must check the return value to determine success. This function is only active when CONFIG_MEDIA_CONTROLLER is enabled; otherwise it is a no-op and returns 0 without allocating.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to allocate a media_device (via media_device_usb_allocate) and store it in dev->media_dev. The callee initializes the refcount, making this a set/creation wrapper. There is no other significant logic besides the allocation and assignment under the CONFIG_MEDIA_CONTROLLER ifdef.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates memory allocation failure or similar system error; retrying without changing conditions is unlikely to succeed and is not the intended usage pattern.",
+      "contract_summary": "This function is a creation/set wrapper: it allocates a media_device instance via media_device_usb_allocate, which initializes the device's reference count to 1, and stores the pointer in dev->media_dev. The caller gains ownership of this reference and must later release it with a corresponding media_device_put() call (or equivalent). On success, returns 0; on failure (e.g., out of memory), returns a negative errno. The caller must check the return value to determine success. This function is only active when CONFIG_MEDIA_CONTROLLER is enabled; otherwise it is a no-op and returns 0 without allocating."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.media_dev.refcount.refcount",
+          "au0828_dev--media_device_instance--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.media_dev.refcount.refcount",
+          "au0828_dev--media_device_instance--kref--refcount_t"
+        ]
+      ],
+      "reason": "The refcount increment is performed by media_device_usb_allocate on the returned object, which is then stored in dev->media_dev. The candidate correctly identifies this as a get operation on parameter 1 (dev) with an access path that navigates from dev to the refcount field. The type chain au0828_dev--media_device_instance--kref--refcount_t matches the callee's type information (media_device_instance--kref--refcount_t) for the first three types after the starting struct, and the number of path segments equals the number of types in the chain. All conditions for validation are satisfied."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dev.media_dev.refcount.refcount",
+        "au0828_dev--media_device_instance--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates memory allocation failure or similar system error; retrying without changing conditions is unlikely to succeed and is not the intended usage pattern.",
+    "contract_summary": "This function is a creation/set wrapper: it allocates a media_device instance via media_device_usb_allocate, which initializes the device's reference count to 1, and stores the pointer in dev->media_dev. The caller gains ownership of this reference and must later release it with a corresponding media_device_put() call (or equivalent). On success, returns 0; on failure (e.g., out of memory), returns a negative errno. The caller must check the return value to determine success. This function is only active when CONFIG_MEDIA_CONTROLLER is enabled; otherwise it is a no-op and returns 0 without allocating."
+  }
+}

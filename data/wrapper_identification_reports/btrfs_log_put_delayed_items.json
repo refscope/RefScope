@@ -1,0 +1,129 @@
+{
+  "function_name": "btrfs_log_put_delayed_items",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper; failure indicates a bug (refcount already zero) rather than a transient condition; retry would cause use-after-free.",
+  "contract_summary": "This function is a release (put) wrapper for delayed items and the delayed node after inode logging. It iterates over the provided `ins_list` and `del_list` of delayed items, marks each as logged, removes them from the log list, and decrements their reference count (freeing the item if the count reaches zero). It also decrements the reference count of the delayed node obtained via `btrfs_get_delayed_node`. The caller must ensure that the lists are not used after this call and that the inode remains alive during logging (ensuring the node refcount stays > 1). No return value to check; the function assumes valid state and does not transfer any ownership.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release batch references on delayed items and the delayed node after logging, with minimal additional logic (marking logged, list management, ASSERT).",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper; failure indicates a bug (refcount already zero) rather than a transient condition; retry would cause use-after-free.",
+      "contract_summary": "This function is a release (put) wrapper for delayed items and the delayed node after inode logging. It iterates over the provided `ins_list` and `del_list` of delayed items, marks each as logged, removes them from the log list, and decrements their reference count (freeing the item if the count reaches zero). It also decrements the reference count of the delayed node obtained via `btrfs_get_delayed_node`. The caller must ensure that the lists are not used after this call and that the inode remains alive during logging (ensuring the node refcount stays > 1). No return value to check; the function assumes valid state and does not transfer any ownership."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "inode.delayed_node.refs.refs",
+          "btrfs_inode--btrfs_delayed_node--refcount_struct--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "inode.delayed_node.refs.refs",
+          "btrfs_inode--btrfs_delayed_node--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate incorrectly identifies the critical variable for both get and put operations as parameter 1 (inode). The get operation from btrfs_get_delayed_node is on the returned node (return value), not on inode. The put operations (refcount_dec on node and refcount_dec_and_test on items) act on the node and item objects, not on inode. Therefore, all operations with location 'parameter' index 1 are unsupported by the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function btrfs_log_put_delayed_items performs logging cleanup (marking items as logged, removing from lists, freeing items) and manipulates refcounts on the delayed node and items as part of this process. The candidate operations incorrectly target parameter 'inode', but the actual get (btrfs_get_delayed_node) returns a local node, and the puts (refcount_dec/refcount_dec_and_test) act on node and items, not on inode. The function's primary purpose is not reference-count management, so it is not a wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper; failure indicates a bug (refcount already zero) rather than a transient condition; retry would cause use-after-free.",
+    "contract_summary": "This function is a release (put) wrapper for delayed items and the delayed node after inode logging. It iterates over the provided `ins_list` and `del_list` of delayed items, marks each as logged, removes them from the log list, and decrements their reference count (freeing the item if the count reaches zero). It also decrements the reference count of the delayed node obtained via `btrfs_get_delayed_node`. The caller must ensure that the lists are not used after this call and that the inode remains alive during logging (ensuring the node refcount stays > 1). No return value to check; the function assumes valid state and does not transfer any ownership."
+  }
+}

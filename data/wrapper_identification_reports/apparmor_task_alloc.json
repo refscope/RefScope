@@ -1,0 +1,194 @@
+{
+  "function_name": "apparmor_task_alloc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "0",
+      "task.security.nnp.count.count.refcount",
+      "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "0",
+      "task.security.previous.count.count.refcount",
+      "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "0",
+      "task.security.onexec.count.count.refcount",
+      "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_dup_task_ctx",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.nnp.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_dup_task_ctx",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_dup_task_ctx",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_dup_task_ctx",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.nnp.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_dup_task_ctx",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_dup_task_ctx",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation never fails (always returns 0) and is unconditional — no retry needed.",
+  "contract_summary": "Acquires references on the current task's AppArmor labels (nnp, previous, onexec) and assigns them to the new task's security context. This is part of the fork/exec lifecycle: the new task starts with a snapshot of the parent's label state. The caller (kernel's copy_process) is responsible for eventually releasing these references via apparmor_task_free or equivalent when the task is freed. No error handling is needed because aa_dup_task_ctx always succeeds (returns void).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function is a single call to aa_dup_task_ctx which increments refcounts on three labels (nnp, previous, onexec) from the current task into the new task's context. There is no other logic — purely reference-count management for task security labels.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation never fails (always returns 0) and is unconditional — no retry needed.",
+      "contract_summary": "Acquires references on the current task's AppArmor labels (nnp, previous, onexec) and assigns them to the new task's security context. This is part of the fork/exec lifecycle: the new task starts with a snapshot of the parent's label state. The caller (kernel's copy_process) is responsible for eventually releasing these references via apparmor_task_free or equivalent when the task is freed. No error handling is needed because aa_dup_task_ctx always succeeds (returns void)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "task.security.nnp.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "task.security.previous.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "task.security.onexec.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operations incorrectly identify the critical variable as the new task (parameter 0) with path 'task.security...', but the get operation performed by aa_dup_task_ctx is on the source context (current's task_ctx, parameter 1). The access paths start from 'new' in the callee info, but 'new' is the first parameter (dest), not the second. The candidate paths add an extra 'task.security' segment that is not part of the callee's reported path, and the direction (get) applies to the source, not the dest. No operations are correctly attributed to the function's interface."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "0",
+          "task.security.nnp.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "0",
+          "task.security.previous.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "0",
+          "task.security.onexec.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function apparmor_task_alloc is a pure wrapper around aa_dup_task_ctx, which increments refcounts on the new task's security context labels (accessed via task->security). The critical variable is the new task (parameter 0), and the get operations are performed on its labels. The candidate paths are correct, but the parameter index was mistakenly 1 instead of 0; this correction reflects the actual interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "0",
+        "task.security.nnp.count.count.refcount",
+        "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "0",
+        "task.security.previous.count.count.refcount",
+        "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "0",
+        "task.security.onexec.count.count.refcount",
+        "task_struct--aa_task_ctx--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation never fails (always returns 0) and is unconditional — no retry needed.",
+    "contract_summary": "Acquires references on the current task's AppArmor labels (nnp, previous, onexec) and assigns them to the new task's security context. This is part of the fork/exec lifecycle: the new task starts with a snapshot of the parent's label state. The caller (kernel's copy_process) is responsible for eventually releasing these references via apparmor_task_free or equivalent when the task is freed. No error handling is needed because aa_dup_task_ctx always succeeds (returns void)."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "adiantum_exit_tfm",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.__crt_ctx.streamcipher.base.refcnt.refs",
+      "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.__crt_ctx.blockcipher.base.refcnt.refs",
+      "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_cipher--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_cipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_cipher--crypto_tfm--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "crypto_free_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_cipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_cipher--crypto_tfm--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "crypto_free_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The free functions always succeed (void) and there is no failure path; retry is neither possible nor meaningful.",
+  "contract_summary": "Put-wrapper that releases the references held on the streamcipher and blockcipher objects in the adiantum_tfm context. It is called during tfm destruction. The call is unconditional and void-returning; the caller must ensure the context is valid. After this call, the tfm context must not be used. There is no error path and no reference is returned to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release two reference-counted cipher objects via crypto_free_skcipher and crypto_free_cipher, which are pure put operations. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The free functions always succeed (void) and there is no failure path; retry is neither possible nor meaningful.",
+      "contract_summary": "Put-wrapper that releases the references held on the streamcipher and blockcipher objects in the adiantum_tfm context. It is called during tfm destruction. The call is unconditional and void-returning; the caller must ensure the context is valid. After this call, the tfm context must not be used. There is no error path and no reference is returned to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.streamcipher.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.blockcipher.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_cipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.streamcipher.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.blockcipher.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_cipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both candidates correctly trace the refcount operations from the function parameter (index 1, tfm) through the embedded context (adiantum_tfm_ctx) to the inner skcipher and cipher objects being freed. The access path lengths (7 segments) match the type chain lengths, and the callee information confirms that crypto_free_skcipher and crypto_free_cipher are put operations on the respective objects' refcount fields."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.__crt_ctx.streamcipher.base.refcnt.refs",
+        "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.__crt_ctx.blockcipher.base.refcnt.refs",
+        "crypto_skcipher--crypto_tfm--adiantum_tfm_ctx--crypto_cipher--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The free functions always succeed (void) and there is no failure path; retry is neither possible nor meaningful.",
+    "contract_summary": "Put-wrapper that releases the references held on the streamcipher and blockcipher objects in the adiantum_tfm context. It is called during tfm destruction. The call is unconditional and void-returning; the caller must ensure the context is valid. After this call, the tfm context must not be used. There is no error path and no reference is returned to the caller."
+  }
+}

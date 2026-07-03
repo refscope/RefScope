@@ -1,0 +1,234 @@
+{
+  "function_name": "aa_replace_profiles",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_profile_loaddata",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "data.pcount.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "update_to_newest_parent",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_profile_loaddata",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "data.pcount.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_prepare_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__lookup_replace",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "p[0].label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "share_name",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new.base.hname.count.refcount",
+      "member_type_chain": "aa_profile--aa_profile_base--counted_str--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "update_to_newest_parent",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "newest.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "update_to_newest_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "newest.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "share_name",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "old.base.hname.count.refcount",
+      "member_type_chain": "aa_profile--aa_profile_base--counted_str--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_profile_loaddata",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "data.pcount.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "update_to_newest_parent",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "new.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_profile_loaddata",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "data.pcount.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_prepare_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__lookup_replace",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "p[0].label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "share_name",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new.base.hname.count.refcount",
+      "member_type_chain": "aa_profile--aa_profile_base--counted_str--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "update_to_newest_parent",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "newest.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "update_to_newest_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "newest.label.count.count.refcount",
+      "member_type_chain": "aa_profile--aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "share_name",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "old.base.hname.count.refcount",
+      "member_type_chain": "aa_profile--aa_profile_base--counted_str--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to atomically replace AppArmor policy profiles, involving unpacking, validation, namespace preparation, file system entry creation, and auditing. Reference-count operations (gets/puts) are scattered throughout as part of the business logic, not as the main goal.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 12,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

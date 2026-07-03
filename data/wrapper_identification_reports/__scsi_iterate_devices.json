@@ -1,0 +1,143 @@
+{
+  "function_name": "__scsi_iterate_devices",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "next.sdev_gendev.kobj.kref.refcount",
+      "scsi_device--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "prev.sdev_gendev.kobj.kref.refcount",
+      "scsi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "scsi_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "scsi_device_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "scsi_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "scsi_device_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If scsi_device_get fails for a particular device (indicating it's being torn down), the iterator moves to the next element; retrying the entire call is pointless because the function already handles the failure by skipping the problematic device.",
+  "contract_summary": "This function is an iterator helper for traversing all non-pseudo SCSI devices attached to a given Scsi_Host. It returns a pointer to the next device with an elevated reference count, and releases the reference on the previously returned device (if non-NULL). The caller must call scsi_device_put on the returned device when done, unless using the for_each_scsi_device macro which automates this. On each call, the caller must provide the previous device (or NULL to start). When iteration completes (returns NULL), the caller must scsi_device_put the last device obtained. Error paths inside the iterator automatically skip devices that are being removed, so no additional error handling is required by the caller beyond checking for NULL termination.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to iterate over the scsi_device list while managing references: it gets a reference on the next device and puts the previous one. The only non-refcount logic is the list traversal and pseudo-device check, which are minimal and directly support the refcount iteration pattern.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If scsi_device_get fails for a particular device (indicating it's being torn down), the iterator moves to the next element; retrying the entire call is pointless because the function already handles the failure by skipping the problematic device.",
+      "contract_summary": "This function is an iterator helper for traversing all non-pseudo SCSI devices attached to a given Scsi_Host. It returns a pointer to the next device with an elevated reference count, and releases the reference on the previously returned device (if non-NULL). The caller must call scsi_device_put on the returned device when done, unless using the for_each_scsi_device macro which automates this. On each call, the caller must provide the previous device (or NULL to start). When iteration completes (returns NULL), the caller must scsi_device_put the last device obtained. Error paths inside the iterator automatically skip devices that are being removed, so no additional error handling is required by the caller beyond checking for NULL termination."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "prev.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "prev.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: scsi_device_get is called on 'next' which is the return value, and scsi_device_put is called on 'prev' which is parameter 1. The access paths from the respective variables to the refcount field match the callee information, and the type chains are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "next.sdev_gendev.kobj.kref.refcount",
+        "scsi_device--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "prev.sdev_gendev.kobj.kref.refcount",
+        "scsi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If scsi_device_get fails for a particular device (indicating it's being torn down), the iterator moves to the next element; retrying the entire call is pointless because the function already handles the failure by skipping the problematic device.",
+    "contract_summary": "This function is an iterator helper for traversing all non-pseudo SCSI devices attached to a given Scsi_Host. It returns a pointer to the next device with an elevated reference count, and releases the reference on the previously returned device (if non-NULL). The caller must call scsi_device_put on the returned device when done, unless using the for_each_scsi_device macro which automates this. On each call, the caller must provide the previous device (or NULL to start). When iteration completes (returns NULL), the caller must scsi_device_put the last device obtained. Error paths inside the iterator automatically skip devices that are being removed, so no additional error handling is required by the caller beyond checking for NULL termination."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_get_pdb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "pdb.count.refcount",
+      "aa_policydb--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation only executes on a non-NULL pointer; a NULL pointer is not a failure condition—there is no object to acquire a reference on, so retry is meaningless.",
+  "contract_summary": "This is a get-wrapper that increments the reference count on an aa_policydb object via kref_get. If the input pointer is non-NULL, it takes a new reference and returns the same pointer; the caller must later release that reference with a corresponding put (e.g., aa_put_pdb). If the input pointer is NULL, it returns NULL without any action. The function is typically used to safely acquire an additional reference to an already-live object, ensuring the object remains valid until the caller releases it. There is no failure path—the operation always succeeds when the object exists.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to increment a kref refcount on an aa_policydb object if the pointer is non-NULL, and return the pointer. No other business logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation only executes on a non-NULL pointer; a NULL pointer is not a failure condition—there is no object to acquire a reference on, so retry is meaningless.",
+      "contract_summary": "This is a get-wrapper that increments the reference count on an aa_policydb object via kref_get. If the input pointer is non-NULL, it takes a new reference and returns the same pointer; the caller must later release that reference with a corresponding put (e.g., aa_put_pdb). If the input pointer is NULL, it returns NULL without any action. The function is typically used to safely acquire an additional reference to an already-live object, ensuring the object remains valid until the caller releases it. There is no failure path—the operation always succeeds when the object exists."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "pdb.count.refcount",
+          "aa_policydb--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "pdb.count.refcount",
+          "aa_policydb--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&(pdb->count)) increments the refcount of pdb->count. The access path from parameter 1 is pdb.count.refcount, with the type chain aa_policydb (struct) -> kref (struct) -> refcount_t. This matches the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "pdb.count.refcount",
+        "aa_policydb--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation only executes on a non-NULL pointer; a NULL pointer is not a failure condition—there is no object to acquire a reference on, so retry is meaningless.",
+    "contract_summary": "This is a get-wrapper that increments the reference count on an aa_policydb object via kref_get. If the input pointer is non-NULL, it takes a new reference and returns the same pointer; the caller must later release that reference with a corresponding put (e.g., aa_put_pdb). If the input pointer is NULL, it returns NULL without any action. The function is typically used to safely acquire an additional reference to an already-live object, ensuring the object remains valid until the caller releases it. There is no failure path—the operation always succeeds when the object exists."
+  }
+}

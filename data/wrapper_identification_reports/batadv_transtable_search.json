@@ -1,0 +1,179 @@
+{
+  "function_name": "batadv_transtable_search",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "orig_node.refcount.refcount.refs",
+      "batadv_orig_node--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_global_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_global_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_local_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_local_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_local_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tt_local_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_tt_global_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_global_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_global_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_global_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_local_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_local_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_local_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "tt_local_entry.common.refcount.refcount",
+      "member_type_chain": "batadv_tt_local_entry--batadv_tt_common_entry--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails only when the orig_node refcount is already zero (object being freed); retrying will not revive the object.",
+  "contract_summary": "This function looks up the global translation table entry for a given address and returns the best originator node (struct batadv_orig_node *) with an acquired reference. The caller must release this reference via batadv_orig_node_put() when done. The function also handles AP isolation by optionally searching the local table and checking isolation flags. On success, the returned orig_node is guaranteed to have a positive refcount; on failure (e.g., no global entry, AP isolated, or originator being freed), NULL is returned. Temporary references to local and global TT entries are properly released inside the function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to search the translation table and return an originator node with an acquired reference; refcount management (get on orig_node, put on intermediate TT entries) is central, but includes AP isolation check and best-originator selection logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails only when the orig_node refcount is already zero (object being freed); retrying will not revive the object.",
+      "contract_summary": "This function looks up the global translation table entry for a given address and returns the best originator node (struct batadv_orig_node *) with an acquired reference. The caller must release this reference via batadv_orig_node_put() when done. The function also handles AP isolation by optionally searching the local table and checking isolation flags. On success, the returned orig_node is guaranteed to have a positive refcount; on failure (e.g., no global entry, AP isolated, or originator being freed), NULL is returned. Temporary references to local and global TT entries are properly released inside the function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount.refs",
+          "batadv_orig_node--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount.refs",
+          "batadv_orig_node--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on &orig_node->refcount, which increments the refcount of the returned orig_node. The access path from the return variable orig_node to the atomic_t field is refcount.refcount.refs, matching the type chain batadv_orig_node->kref->refcount_t->atomic_t. This is consistent with the callee's definition."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "orig_node.refcount.refcount.refs",
+        "batadv_orig_node--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 6,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails only when the orig_node refcount is already zero (object being freed); retrying will not revive the object.",
+    "contract_summary": "This function looks up the global translation table entry for a given address and returns the best originator node (struct batadv_orig_node *) with an acquired reference. The caller must release this reference via batadv_orig_node_put() when done. The function also handles AP isolation by optionally searching the local table and checking isolation flags. On success, the returned orig_node is guaranteed to have a positive refcount; on failure (e.g., no global entry, AP isolated, or originator being freed), NULL is returned. Temporary references to local and global TT entries are properly released inside the function."
+  }
+}

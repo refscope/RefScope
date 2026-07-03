@@ -1,0 +1,115 @@
+{
+  "function_name": "__devlink_nl_pre_doit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "devlink.refcount.refs",
+      "devlink--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devlink_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "devlink_get_from_attrs_lock",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devlink_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "devlink_get_from_attrs_lock",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the object does not exist or parameters are invalid; retrying with same inputs will not change outcome.",
+  "contract_summary": "This function is a pre-doit handler that acquires a reference to a devlink instance (and optionally a devlink port) from the netlink attributes, and stores them in the genl_info for the subsequent doit operation. On success, the caller holds a reference to the devlink (and possibly port) and must release them after use via matching _put and unlock. On failure (e.g., invalid attributes, no such devlink), the function returns an error without acquiring any references. The function handles cleanup correctly: if port lookup fails, it releases the devlink reference. The caller should check the return value before using the stored pointers.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire references to devlink and optionally devlink_port from netlink attributes and store them in info for the doit handler. Error handling properly releases references.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the object does not exist or parameters are invalid; retrying with same inputs will not change outcome.",
+      "contract_summary": "This function is a pre-doit handler that acquires a reference to a devlink instance (and optionally a devlink port) from the netlink attributes, and stores them in the genl_info for the subsequent doit operation. On success, the caller holds a reference to the devlink (and possibly port) and must release them after use via matching _put and unlock. On failure (e.g., invalid attributes, no such devlink), the function returns an error without acquiring any references. The function handles cleanup correctly: if port lookup fails, it releases the devlink reference. The caller should check the return value before using the stored pointers."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "devlink.refcount.refs",
+          "devlink--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "devlink.refcount.refs",
+          "devlink--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function obtains a reference via devlink_get_from_attrs_lock, which increases the refcount on the devlink. The devlink is stored in info->user_ptr[0] as the output to the caller. The access path devlink.refcount.refs and type chain devlink--refcount_t--atomic_t are consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "devlink.refcount.refs",
+        "devlink--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the object does not exist or parameters are invalid; retrying with same inputs will not change outcome.",
+    "contract_summary": "This function is a pre-doit handler that acquires a reference to a devlink instance (and optionally a devlink port) from the netlink attributes, and stores them in the genl_info for the subsequent doit operation. On success, the caller holds a reference to the devlink (and possibly port) and must release them after use via matching _put and unlock. On failure (e.g., invalid attributes, no such devlink), the function returns an error without acquiring any references. The function handles cleanup correctly: if port lookup fails, it releases the devlink reference. The caller should check the return value before using the stored pointers."
+  }
+}

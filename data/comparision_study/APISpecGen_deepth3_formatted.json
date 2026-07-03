@@ -1,0 +1,6167 @@
+[
+  {
+    "API": "iscsi_get_conn",
+    "SecOp": "iscsi_put_conn",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->iscsi_get_conn",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "aa_get_profile_loaddata",
+    "SecOp": "aa_put_profile_loaddata",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_profile_loaddata",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "get_dyn_protmem",
+    "SecOp": "put_dyn_protmem",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_dyn_protmem",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "ip_map_cached_get",
+    "SecOp": "ip_map_cached_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->cache_get->ip_map_cached_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "perf_thread_map__get",
+    "SecOp": "perf_thread_map__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->perf_thread_map__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "of_find_node_by_phandle",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 19,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_node_by_phandle",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "audit_get_watch",
+    "SecOp": "audit_put_watch",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->audit_get_watch",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "afs_get_vlserver",
+    "SecOp": "afs_put_vlserver",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->afs_get_vlserver",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "intel_timeline_get",
+    "SecOp": "intel_timeline_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->intel_timeline_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mlxsw_sp_acl_tcam_vchunk_get",
+    "SecOp": "mlxsw_sp_acl_tcam_vchunk_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_acl_tcam_vchunk_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "mana_get_qp_ref",
+    "SecOp": "mana_put_qp_ref",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mana_get_qp_ref",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "blk_get_queue",
+    "SecOp": "blk_put_queue",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->blk_get_queue",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "get_watch_queue",
+    "SecOp": "put_watch_queue",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->get_watch_queue",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "ubi_get_by_major",
+    "SecOp": "ubi_put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ubi_get_by_major",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "get_next_sas_device",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->sas_device_get->get_next_sas_device",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "aie2_cmd_get_out_fence",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->aie2_cmd_get_out_fence",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "mlx5_vdpa_get_mr",
+    "SecOp": "mlx5_vdpa_put_mr",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->_mlx5_vdpa_get_mr->mlx5_vdpa_get_mr",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "vmci_resource_by_handle",
+    "SecOp": "vmci_resource_put",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 2,
+    "API_path": "kref_get->vmci_resource_get->vmci_resource_by_handle",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "blt_copy",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->blt_copy",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "kobject_get",
+    "SecOp": "kobject_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 1,
+    "API_path": "kref_get->kobject_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "pcmcia_get_socket",
+    "SecOp": "pcmcia_put_socket",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->pcmcia_get_socket",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "drm_bridge_get",
+    "SecOp": "drm_bridge_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_bridge_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "llsec_lookup_key",
+    "SecOp": "llsec_key_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->llsec_key_get->llsec_lookup_key",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "xe_migrate_clear",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->xe_migrate_clear",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "open_mtd_device",
+    "SecOp": "put_mtd_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->__get_mtd_device->get_mtd_device->open_mtd_device",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "gb_control_get",
+    "SecOp": "gb_control_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->gb_control_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "o2nm_node_get",
+    "SecOp": "o2nm_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->config_item_get->o2nm_node_get",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "__mpt3sas_get_sdev_by_rphy",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_by_rphy",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "riocm_get_channel",
+    "SecOp": "riocm_put_channel",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 1,
+    "API_path": "kref_get->riocm_get_channel",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "rsi_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->rsi_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "btrfs_next_block_group",
+    "SecOp": "btrfs_put_block_group",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->btrfs_get_block_group->btrfs_next_block_group",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "gb_connection_hd_find",
+    "SecOp": "gb_connection_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->gb_connection_get->gb_connection_hd_find",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "rc_dev_get_from_fd",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->rc_dev_get_from_fd",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "crypto_mod_get",
+    "SecOp": "crypto_mod_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->crypto_alg_get->crypto_mod_get",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "rnbd_clt_get_sess",
+    "SecOp": "rnbd_clt_put_sess",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->rnbd_clt_get_sess",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "submit_async_request",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->submit_async_request",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "of_node_get",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 54,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->of_node_get",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "nvme_get_ctrl",
+    "SecOp": "nvme_put_ctrl",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->nvme_get_ctrl",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "of_node_get",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 61,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->of_node_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "p9_fid_get",
+    "SecOp": "p9_fid_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->p9_fid_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "multi_lrc_nop_request",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->multi_lrc_nop_request",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "get_multi_transaction",
+    "SecOp": "put_multi_transaction",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->get_multi_transaction",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "mpt3sas_get_sdev_by_handle",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 3,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_by_handle->mpt3sas_get_sdev_by_handle",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "msm_submitqueue_get",
+    "SecOp": "msm_submitqueue_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->msm_submitqueue_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "q6asm_audio_client_alloc",
+    "SecOp": "q6asm_audio_client_free",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->q6asm_get_audio_client->q6asm_audio_client_alloc",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_cb_from_cs_chunk",
+    "SecOp": "hl_cb_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->hl_mmap_mem_buf_get->hl_cb_get->get_cb_from_cs_chunk",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "rpcrdma_ep_get",
+    "SecOp": "rpcrdma_ep_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->rpcrdma_ep_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "kobject_get",
+    "SecOp": "kobject_put",
+    "hasUsage": true,
+    "usageCount": 11,
+    "depth": 1,
+    "API_path": "kref_get->kobject_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "scmi_get_active_handler",
+    "SecOp": "scmi_put_active_handler",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->scmi_get_active_handler",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "ceph_get_snap_context",
+    "SecOp": "ceph_put_snap_context",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->ceph_get_snap_context",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "mlx5_fc_local_get",
+    "SecOp": "mlx5_fc_local_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlx5_fc_local_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "panthor_vm_get_heap_pool",
+    "SecOp": "panthor_heap_pool_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->panthor_heap_pool_get->panthor_vm_get_heap_pool",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "drm_gpuvm_bo_get",
+    "SecOp": "drm_gpuvm_bo_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->drm_gpuvm_bo_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "usb_get_dev",
+    "SecOp": "usb_put_dev",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->usb_get_dev",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "aa_label_alloc",
+    "SecOp": "label_free_or_put_new",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_alloc_proxy->aa_label_alloc",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "audit_get_parent",
+    "SecOp": "audit_put_parent",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->fsnotify_get_mark->audit_get_parent",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "__nvmem_device_get",
+    "SecOp": "__nvmem_device_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->__nvmem_device_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_nfs4_file",
+    "SecOp": "put_nfs4_file",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_nfs4_file",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "find_get_pid",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_pid->find_get_pid",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "rio_dev_get",
+    "SecOp": "rio_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->rio_dev_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "drm_syncobj_find",
+    "SecOp": "drm_syncobj_put",
+    "hasUsage": true,
+    "usageCount": 14,
+    "depth": 2,
+    "API_path": "kref_get->drm_syncobj_get->drm_syncobj_find",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "sync_timeline_get",
+    "SecOp": "sync_timeline_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->sync_timeline_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "garbage",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->garbage",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "get_nfs_open_context",
+    "SecOp": "put_nfs_open_context",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->get_nfs_open_context",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "tty_driver_kref_get",
+    "SecOp": "tty_driver_kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->tty_driver_kref_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "mlxsw_afk_key_info_get",
+    "SecOp": "mlxsw_afk_key_info_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlxsw_afk_key_info_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "media_request_get",
+    "SecOp": "media_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->media_request_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "wrap_timeline",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->wrap_timeline",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "pmf_get_function",
+    "SecOp": "pmf_put_function",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->pmf_get_function",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "aa_get_newest_cred_label",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->aa_get_newest_cred_label",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "gss_get_ctx",
+    "SecOp": "gss_put_ctx",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->gss_get_ctx",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "fib_rule_get",
+    "SecOp": "fib_rule_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->fib_rule_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "label_merge_insert",
+    "SecOp": "label_free_or_put_new",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_label->label_merge_insert",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "peek_discard_list",
+    "SecOp": "btrfs_put_block_group",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->btrfs_get_block_group->peek_discard_list",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "get_current_rng_nolock",
+    "SecOp": "put_rng",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->get_current_rng_nolock",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "nfc_llcp_sock_get",
+    "SecOp": "nfc_llcp_sock_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->sock_hold->nfc_llcp_sock_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "of_find_all_nodes",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_all_nodes",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "gio_dev_get",
+    "SecOp": "gio_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->gio_dev_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "__ceph_monc_get_version",
+    "SecOp": "put_generic_request",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->ceph_msg_get->send_generic_request->__ceph_monc_get_version",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "ip6_mc_find_idev",
+    "SecOp": "in6_dev_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->in6_dev_get->ip6_mc_find_idev",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "batadv_iv_ogm_orig_get",
+    "SecOp": "batadv_orig_node_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->batadv_iv_ogm_orig_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "bpf_trampoline_get",
+    "SecOp": "bpf_trampoline_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->bpf_trampoline_lookup->bpf_trampoline_get",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "nsinfo__get",
+    "SecOp": "nsinfo__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->nsinfo__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "rcar_fcp_get",
+    "SecOp": "rcar_fcp_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->rcar_fcp_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "isci_lookup_device",
+    "SecOp": "isci_put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->isci_lookup_device",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "irdma_find_listener",
+    "SecOp": "refcount_dec",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->irdma_find_listener",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "ssam_cdev_get",
+    "SecOp": "ssam_cdev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ssam_cdev_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "video_get",
+    "SecOp": "video_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->video_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "j1939_session_get",
+    "SecOp": "j1939_session_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->j1939_session_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "amdgpu_cs_get_fence",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->amdgpu_ctx_get_fence->amdgpu_cs_get_fence",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "mux_state_get",
+    "SecOp": "mux_state_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->mux_get->mux_state_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "btf_get_module_btf",
+    "SecOp": "btf_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->btf_get->btf_get_module_btf",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "aa_get_newest_cred_label_condref",
+    "SecOp": "aa_put_label_condref",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->aa_get_newest_cred_label_condref",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "x_to_label",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->x_to_label",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "dev_find_class",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->dev_find_class",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "drm_framebuffer_get",
+    "SecOp": "drm_framebuffer_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->drm_mode_object_get->drm_framebuffer_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "ceph_find_incompatible",
+    "SecOp": "ceph_put_snap_context",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->ceph_get_snap_context->ceph_find_incompatible",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "dma_fence_get_stub",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 10,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->dma_fence_get_stub",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "xe_sched_job_get",
+    "SecOp": "xe_sched_job_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->xe_sched_job_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "find_ufence_get",
+    "SecOp": "xe_sync_ufence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->user_fence_get->xe_sync_ufence_get->find_ufence_get",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "batadv_orig_node_vlan_new",
+    "SecOp": "batadv_orig_node_vlan_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->batadv_orig_node_vlan_new",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_pid_task",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 16,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->get_pid_task",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "aarp_entry_get",
+    "SecOp": "aarp_entry_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->aarp_entry_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "intel_context_init",
+    "SecOp": "intel_context_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->i915_vm_get->intel_context_init",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "hl_ctx_get",
+    "SecOp": "hl_ctx_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 1,
+    "API_path": "kref_get->hl_ctx_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "tty_lookup_driver",
+    "SecOp": "tty_driver_kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->tty_driver_kref_get->tty_lookup_driver",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "fw_unit_get",
+    "SecOp": "fw_unit_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->fw_unit_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "zfcp_get_port_by_wwpn",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->zfcp_get_port_by_wwpn",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "begin_current_label_crit_section",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_replace_current_label->begin_current_label_crit_section",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "mpi3mr_get_tgtdev_by_handle",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 10,
+    "depth": 3,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_by_handle->mpi3mr_get_tgtdev_by_handle",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "exp_get",
+    "SecOp": "exp_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->cache_get->exp_get",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "btrfs_search_slot_get_root",
+    "SecOp": "free_extent_buffer",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->btrfs_search_slot_get_root",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "mpt3sas_get_pdev_from_target",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->pcie_device_get->__mpt3sas_get_pdev_from_target->mpt3sas_get_pdev_from_target",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "mlx5e_flow_get",
+    "SecOp": "mlx5e_flow_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mlx5e_flow_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "isci_get_device",
+    "SecOp": "isci_put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->isci_get_device",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "cached_dev_get",
+    "SecOp": "cached_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->cached_dev_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "nfc_llcp_find_local",
+    "SecOp": "nfc_llcp_local_put",
+    "hasUsage": true,
+    "usageCount": 11,
+    "depth": 2,
+    "API_path": "kref_get->nfc_llcp_local_get->nfc_llcp_find_local",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "ap_get_qdev",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ap_get_qdev",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "drbd_find_resource",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->drbd_find_resource",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "ocxl_afu_get",
+    "SecOp": "ocxl_afu_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ocxl_afu_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "aa_get_ns",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "xe_bo_get",
+    "SecOp": "xe_bo_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->drm_gem_object_get->xe_bo_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "get_binfmt_handler",
+    "SecOp": "put_binfmt_handler",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_binfmt_handler",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "gpio_device_get",
+    "SecOp": "gpio_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->gpio_device_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "j1939_session_get_by_addr",
+    "SecOp": "j1939_session_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->j1939_session_get->j1939_session_get_by_addr_locked->j1939_session_get_by_addr",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "macsec_txsa_get",
+    "SecOp": "macsec_txsa_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->macsec_txsa_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "muxnet_get",
+    "SecOp": "muxnet_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->muxnet_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "userfaultfd_ctx_get",
+    "SecOp": "userfaultfd_ctx_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->userfaultfd_ctx_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "amdgpu_get_xgmi_hive",
+    "SecOp": "amdgpu_put_xgmi_hive",
+    "hasUsage": true,
+    "usageCount": 19,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->amdgpu_get_xgmi_hive",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_task_struct",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_task_struct",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_rpccred",
+    "SecOp": "put_rpccred",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->get_rpccred",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "target_get_sess_cmd",
+    "SecOp": "target_put_sess_cmd",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->target_get_sess_cmd",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "hns_roce_table_get",
+    "SecOp": "hns_roce_table_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "get_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 62,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->get_device",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "dlm_get_lock_resource",
+    "SecOp": "dlm_lockres_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dlm_lockres_get->__dlm_insert_lockres->dlm_get_lock_resource",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "tree_get_node",
+    "SecOp": "tree_put_node",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->tree_get_node",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "aa_get_ns",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "ceph_get_mds_session",
+    "SecOp": "ceph_put_mds_session",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->ceph_get_mds_session",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "get_group_info",
+    "SecOp": "put_group_info",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_group_info",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "tb_xdomain_get",
+    "SecOp": "tb_xdomain_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->tb_xdomain_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "cache_init",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->cache_init",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "btf_get",
+    "SecOp": "btf_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->btf_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "usb_get_urb",
+    "SecOp": "usb_put_urb",
+    "hasUsage": true,
+    "usageCount": 15,
+    "depth": 1,
+    "API_path": "kref_get->usb_get_urb",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "dev_get_dev_node",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->dev_get_dev_node",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "i915_first_error_state",
+    "SecOp": "i915_gpu_coredump_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->i915_gpu_coredump_get->i915_first_error_state",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "sk_psock_init",
+    "SecOp": "sk_psock_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->sock_hold->sk_psock_init",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "get_mtd_device_nm",
+    "SecOp": "put_mtd_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->__get_mtd_device->get_mtd_device_nm",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "qcom_pmic_get_base_usid",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->qcom_pmic_get_base_usid",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "sg_get_dev",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->sg_get_dev",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_tree",
+    "SecOp": "put_tree",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_tree",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "btrfs_log_get_delayed_items",
+    "SecOp": "btrfs_log_put_delayed_items",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->btrfs_get_delayed_node->btrfs_log_get_delayed_items",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "pci_dev_get",
+    "SecOp": "pci_dev_put",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->pci_dev_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "get_next_pcie_device",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->pcie_device_get->get_next_pcie_device",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "alloc_mad",
+    "SecOp": "free_mad",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 1,
+    "API_path": "kref_get->alloc_mad",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "l2tp_tunnel_get",
+    "SecOp": "l2tp_tunnel_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->l2tp_tunnel_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "nfs4_xattr_get_cache",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 1,
+    "API_path": "kref_get->nfs4_xattr_get_cache",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "pwrseq_unit_setup",
+    "SecOp": "pwrseq_unit_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->pwrseq_unit_get->pwrseq_unit_setup",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_css_set",
+    "SecOp": "put_css_set",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_css_set",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "spi_controller_get",
+    "SecOp": "spi_controller_put",
+    "hasUsage": true,
+    "usageCount": 43,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->spi_controller_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "rpmb_dev_get",
+    "SecOp": "rpmb_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->rpmb_dev_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "nvmem_cell_get",
+    "SecOp": "nvmem_cell_put",
+    "hasUsage": true,
+    "usageCount": 28,
+    "depth": 3,
+    "API_path": "kref_get->__nvmem_device_get->of_nvmem_cell_get->nvmem_cell_get",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "q6asm_get_audio_client",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->q6asm_get_audio_client",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "pnfs_get_layout_hdr",
+    "SecOp": "pnfs_put_layout_hdr",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->pnfs_get_layout_hdr",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "parport_get_port",
+    "SecOp": "parport_put_port",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->parport_get_port",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "tty_get_pgrp",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_pid->tty_get_pgrp",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "i915_gem_context_get_engine",
+    "SecOp": "intel_context_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 2,
+    "API_path": "kref_get->intel_context_get->i915_gem_context_get_engine",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "isci_get_device",
+    "SecOp": "isci_put_device",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->isci_get_device",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "pinctrl_get_select",
+    "SecOp": "pinctrl_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->pinctrl_get->pinctrl_get_select",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "iio_device_get",
+    "SecOp": "iio_device_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->iio_device_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "batadv_tp_init_recv",
+    "SecOp": "batadv_tp_vars_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->batadv_tp_init_recv",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "aa_get_newest_label",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "c4iw_rqtpool_alloc",
+    "SecOp": "c4iw_rqtpool_free",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->c4iw_rqtpool_alloc",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "amdgpu_ttm_job_submit",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->amdgpu_job_submit->amdgpu_ttm_job_submit",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "omap_dss_get_device",
+    "SecOp": "omap_dss_put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->omap_dss_get_device",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "drm_dev_get",
+    "SecOp": "drm_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_dev_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "spi_dev_get",
+    "SecOp": "spi_dev_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->spi_dev_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "tty_driver_lookup_tty",
+    "SecOp": "tty_kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->tty_kref_get->tty_driver_lookup_tty",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "j1939_ecu_get_by_addr_locked",
+    "SecOp": "j1939_ecu_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->j1939_ecu_get->j1939_ecu_get_by_addr_locked",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "__scsi_find_target",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->__scsi_find_target",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "fsnotify_get_mark",
+    "SecOp": "fsnotify_put_mark",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->fsnotify_get_mark",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "ocfs2_refcount_tree_get",
+    "SecOp": "ocfs2_refcount_tree_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ocfs2_refcount_tree_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "ivpu_user_limits_get",
+    "SecOp": "ivpu_user_limits_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ivpu_user_limits_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "aa_lookupn_ns",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns->aa_lookupn_ns",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "hidp_session_find",
+    "SecOp": "hidp_session_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->hidp_session_get->hidp_session_find",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "tty_get_pgrp",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_pid->tty_get_pgrp",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "svc_export_update",
+    "SecOp": "exp_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->svc_export_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "fastrpc_context_get",
+    "SecOp": "fastrpc_context_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->fastrpc_context_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "scsi_device_get",
+    "SecOp": "scsi_device_put",
+    "hasUsage": true,
+    "usageCount": 13,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->scsi_device_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "bus_find_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 27,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->bus_find_device",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "amdgpu_userq_get",
+    "SecOp": "amdgpu_userq_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->amdgpu_userq_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "find_css_set",
+    "SecOp": "put_css_set",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_css_set->find_css_set",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "__get_mtd_device",
+    "SecOp": "__put_mtd_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->__get_mtd_device",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "host1x_memory_context_get",
+    "SecOp": "host1x_memory_context_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->host1x_memory_context_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "iio_buffer_block_get",
+    "SecOp": "iio_buffer_block_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->iio_buffer_block_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "nf_conntrack_helper_try_module_get",
+    "SecOp": "nf_conntrack_helper_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->nf_conntrack_helper_try_module_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "cache_init",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->cache_init",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "aa_get_label",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_label",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mlx5e_hairpin_get",
+    "SecOp": "mlx5e_hairpin_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlx5e_hairpin_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "pvr_vm_context_lookup",
+    "SecOp": "pvr_vm_context_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->pvr_vm_context_get->pvr_vm_context_lookup",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "lynx_get",
+    "SecOp": "lynx_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->lynx_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "mlx5e_tc_int_port_get",
+    "SecOp": "mlx5e_tc_int_port_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->mlx5e_int_port_lookup->mlx5e_tc_int_port_get",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "cxgbit_get_cnp",
+    "SecOp": "cxgbit_put_cnp",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->cxgbit_get_cnp",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "fuse_conn_get",
+    "SecOp": "fuse_conn_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->fuse_conn_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "i915_vma_get",
+    "SecOp": "i915_vma_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->drm_gem_object_get->i915_gem_object_get->i915_vma_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "drm_gem_object_get",
+    "SecOp": "drm_gem_object_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 1,
+    "API_path": "kref_get->drm_gem_object_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "afs_get_vlserverlist",
+    "SecOp": "afs_put_vlserverlist",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->afs_get_vlserverlist",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "__mpi3mr_get_tgtdev_by_addr_and_rphy",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_by_addr_and_rphy",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "pep_find_pipe",
+    "SecOp": "__sock_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->sock_hold->pep_find_pipe",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "iopf_get_dev_fault_param",
+    "SecOp": "iopf_put_dev_fault_param",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->iopf_get_dev_fault_param",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "ublk_get_disk",
+    "SecOp": "ublk_put_disk",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ublk_get_disk",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "dsa_tree_get",
+    "SecOp": "dsa_tree_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->dsa_tree_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "prestera_nexthop_group_get",
+    "SecOp": "prestera_nexthop_group_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->prestera_nexthop_group_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "aa_get_current_label",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_label->aa_get_current_label",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "btrfs_delayed_node_ref_tracker_alloc",
+    "SecOp": "btrfs_delayed_node_ref_tracker_free",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->ref_tracker_alloc->btrfs_delayed_node_ref_tracker_alloc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "next_tgid",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->next_tgid",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "rxe_get_mcg",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->__rxe_lookup_mcg->rxe_get_mcg",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "pnfs_get_commit_array",
+    "SecOp": "pnfs_put_commit_array",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->pnfs_get_commit_array",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "dma_fence_get",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 30,
+    "depth": 1,
+    "API_path": "kref_get->dma_fence_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "intel_context_create",
+    "SecOp": "intel_context_put",
+    "hasUsage": true,
+    "usageCount": 62,
+    "depth": 3,
+    "API_path": "kref_get->i915_vm_get->intel_context_init->intel_context_create",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "comedi_dev_get_from_minor",
+    "SecOp": "comedi_dev_put",
+    "hasUsage": true,
+    "usageCount": 12,
+    "depth": 3,
+    "API_path": "kref_get->comedi_dev_get->comedi_dev_get_from_subdevice_minor->comedi_dev_get_from_minor",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "devcom_component_get",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->devcom_component_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "calipso_doi_getdef",
+    "SecOp": "calipso_doi_putdef",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->calipso_doi_getdef",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "ssb_device_get",
+    "SecOp": "ssb_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ssb_device_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "pvr_vm_find_gem_object",
+    "SecOp": "pvr_gem_object_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->drm_gem_object_get->pvr_gem_object_get->pvr_vm_find_gem_object",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "snd_hda_codec_pcm_get",
+    "SecOp": "snd_hda_codec_pcm_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->snd_hda_codec_pcm_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "aa_get_current_ns",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns->aa_get_current_ns",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "comedi_buf_map_from_subdev_get",
+    "SecOp": "comedi_buf_map_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->comedi_buf_map_get->comedi_buf_map_from_subdev_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "ubi_get_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ubi_get_device",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "kunit_find_named_resource",
+    "SecOp": "kunit_put_resource",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kunit_get_resource->kunit_find_resource->kunit_find_named_resource",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "nop_user_request",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->nop_user_request",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "xen_dt_get_node",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->xen_dt_get_node",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "xe_vm_lookup",
+    "SecOp": "xe_vm_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->drm_gpuvm_get->xe_vm_get->xe_vm_lookup",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "j1939_session_get_simple",
+    "SecOp": "j1939_session_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->j1939_session_get->j1939_session_get_simple",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "prestera_vr_get",
+    "SecOp": "prestera_vr_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->prestera_vr_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "gmap_get",
+    "SecOp": "gmap_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->gmap_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "i915_gem_context_get_eb_vm",
+    "SecOp": "i915_vm_put",
+    "hasUsage": true,
+    "usageCount": 12,
+    "depth": 2,
+    "API_path": "kref_get->i915_vm_get->i915_gem_context_get_eb_vm",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "comedi_get_is_subdevice_running",
+    "SecOp": "comedi_put_is_subdevice_running",
+    "hasUsage": true,
+    "usageCount": 13,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->comedi_get_is_subdevice_running",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "afs_get_vlserverlist",
+    "SecOp": "afs_put_vlserverlist",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->afs_get_vlserverlist",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "get_mtd_device",
+    "SecOp": "put_mtd_device",
+    "hasUsage": true,
+    "usageCount": 10,
+    "depth": 2,
+    "API_path": "kref_get->__get_mtd_device->get_mtd_device",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "macio_dev_get",
+    "SecOp": "macio_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->macio_dev_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "qh_get",
+    "SecOp": "qh_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->qh_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "alloc_qpc",
+    "SecOp": "free_qpc",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_get->alloc_qpc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "get_address_handler",
+    "SecOp": "put_address_handler",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->get_address_handler",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "ipmi_si_remove_by_data",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ipmi_si_remove_by_data",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "pmf_find_device",
+    "SecOp": "pmf_put_device",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->pmf_get_device->pmf_find_device",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "ibmvfc_get_target",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->__ibmvfc_get_target->ibmvfc_get_target",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "zcrypt_card_get",
+    "SecOp": "zcrypt_card_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->zcrypt_card_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "tb_domain_get",
+    "SecOp": "tb_domain_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->tb_domain_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "hl_dio_get_iopath",
+    "SecOp": "hl_dio_put_iopath",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->hl_ctx_get->hl_dio_get_iopath",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "__gpr_read",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->__gpr_read",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "mlxsw_sp_acl_ruleset_get",
+    "SecOp": "mlxsw_sp_acl_ruleset_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_acl_ruleset_ref_inc->mlxsw_sp_acl_ruleset_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "usb_get_urb",
+    "SecOp": "usb_put_urb",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->usb_get_urb",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "scsi_device_from_queue",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->scsi_device_from_queue",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "__mpt3sas_get_pdev_by_handle",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->pcie_device_get->__mpt3sas_get_pdev_by_handle",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "tty_port_tty_get",
+    "SecOp": "tty_kref_put",
+    "hasUsage": true,
+    "usageCount": 39,
+    "depth": 2,
+    "API_path": "kref_get->tty_kref_get->tty_port_tty_get",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_proxy_common_ref",
+    "SecOp": "aa_put_proxy",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_proxy->get_proxy_common_ref",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "mlxsw_sp_lag_get",
+    "SecOp": "mlxsw_sp_lag_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_lag_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "key_get",
+    "SecOp": "key_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->__key_get->key_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "fcloop_nport_get",
+    "SecOp": "fcloop_nport_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->fcloop_nport_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "wkup_m3_ipc_get",
+    "SecOp": "wkup_m3_ipc_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->wkup_m3_ipc_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "hantro_get_v4l2_m2m_dev",
+    "SecOp": "v4l2_m2m_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->v4l2_m2m_get->hantro_get_v4l2_m2m_dev",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "xe_oa_submit_bb",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->xe_oa_submit_bb",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "__aa_find_or_create_ns",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns->__aa_find_or_create_ns",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "pde_get",
+    "SecOp": "pde_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->pde_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "crypto_spawn_alg",
+    "SecOp": "crypto_mod_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->crypto_alg_get->crypto_spawn_alg",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "get_nfsdfs_clp",
+    "SecOp": "nfsd4_put_client",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->get_nfsdfs_client->get_nfsdfs_clp",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "xe_device_asid_to_vm",
+    "SecOp": "xe_vm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->drm_gpuvm_get->xe_vm_get->xe_device_asid_to_vm",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "rsc_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->rsc_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "sdtx_device_get",
+    "SecOp": "sdtx_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->sdtx_device_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "drm_crtc_commit_get",
+    "SecOp": "drm_crtc_commit_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->drm_crtc_commit_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "i915_vm_get",
+    "SecOp": "i915_vm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->i915_vm_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mpi3mr_get_tgtdev_by_addr",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_by_addr->mpi3mr_get_tgtdev_by_addr",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "batadv_bla_get_backbone_gw",
+    "SecOp": "batadv_backbone_gw_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->batadv_bla_get_backbone_gw",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "msm_gpu_crashstate_get",
+    "SecOp": "msm_gpu_crashstate_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->msm_gpu_crashstate_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "drm_syncobj_get",
+    "SecOp": "drm_syncobj_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->drm_syncobj_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "get_ctx",
+    "SecOp": "put_ctx",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_ctx",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "panfrost_jm_ctx_get",
+    "SecOp": "panfrost_jm_ctx_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->panfrost_jm_ctx_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "j1939_session_get_by_addr_locked",
+    "SecOp": "j1939_session_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->j1939_session_get->j1939_session_get_by_addr_locked",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "class_find_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 16,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->class_find_device",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "config_group_find_item",
+    "SecOp": "config_item_put",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 2,
+    "API_path": "kref_get->config_item_get->config_group_find_item",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "btrfs_first_delayed_node",
+    "SecOp": "refcount_dec",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->btrfs_first_delayed_node",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "do_chunk_alloc",
+    "SecOp": "btrfs_put_block_group",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->btrfs_get_block_group->do_chunk_alloc",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "task_group_seq_get_next",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->task_group_seq_get_next",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "get_dev",
+    "SecOp": "put_dev",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_dev",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "pci_get_host_bridge_device",
+    "SecOp": "pci_put_host_bridge_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->pci_get_host_bridge_device",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "mlx5_esw_indir_table_rule_get",
+    "SecOp": "mlx5_esw_indir_table_rule_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlx5_esw_indir_table_rule_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "_zfcp_unit_find",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->_zfcp_unit_find",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "get_nsproxy",
+    "SecOp": "put_nsproxy",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_nsproxy",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "j1939_sk_get_incomplete_session",
+    "SecOp": "j1939_session_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->j1939_session_get->j1939_sk_get_incomplete_session",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_spu_context",
+    "SecOp": "put_spu_context",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->get_spu_context",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "aa_get_newest_cred_label_condref",
+    "SecOp": "aa_put_label_condref",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->aa_get_newest_cred_label_condref",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "mlxsw_sp_acl_tcam_vregion_get",
+    "SecOp": "mlxsw_sp_acl_tcam_vregion_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_acl_tcam_vregion_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "mlx5_ct_fs_smfs_matcher_get",
+    "SecOp": "mlx5_ct_fs_smfs_matcher_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mlx5_ct_fs_smfs_matcher_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "hl_cb_kernel_create",
+    "SecOp": "hl_cb_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->hl_mmap_mem_buf_get->hl_cb_get->hl_cb_kernel_create",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "fw_card_get",
+    "SecOp": "fw_card_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->fw_card_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "aa_get_proxy",
+    "SecOp": "aa_put_proxy",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_proxy",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "in6_dev_get",
+    "SecOp": "in6_dev_put",
+    "hasUsage": true,
+    "usageCount": 19,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->in6_dev_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "drm_dp_mst_topology_get_port",
+    "SecOp": "drm_dp_mst_topology_put_port",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_dp_mst_topology_get_port",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "gss_add_msg",
+    "SecOp": "refcount_dec",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->gss_add_msg",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "fw_card_get",
+    "SecOp": "fw_card_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->fw_card_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "nouveau_uvma_region_get",
+    "SecOp": "nouveau_uvma_region_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->nouveau_uvma_region_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "nouveau_uvmm_bind_job_get",
+    "SecOp": "nouveau_uvmm_bind_job_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->nouveau_uvmm_bind_job_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "lima_ctx_get",
+    "SecOp": "lima_ctx_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->lima_ctx_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "mlx5_ldev_get",
+    "SecOp": "mlx5_ldev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->mlx5_ldev_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "sdtx_device_get",
+    "SecOp": "sdtx_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->sdtx_device_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__mpt3sas_get_sdev_by_addr",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_by_addr",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "__ceph_monc_get_version",
+    "SecOp": "put_generic_request",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->get_generic_request->register_generic_request->__ceph_monc_get_version",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "find_get_context",
+    "SecOp": "put_ctx",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_ctx->find_get_context",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "msm_gem_submit_get",
+    "SecOp": "msm_gem_submit_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->msm_gem_submit_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "sk_psock_get",
+    "SecOp": "sk_psock_put",
+    "hasUsage": true,
+    "usageCount": 16,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->sk_psock_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "panthor_vm_pool_get_vm",
+    "SecOp": "panthor_vm_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->drm_gpuvm_get->panthor_vm_get->panthor_vm_pool_get_vm",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "mpi3mr_get_tgtdev_by_perst_id",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_by_perst_id->mpi3mr_get_tgtdev_by_perst_id",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "__mpt3sas_get_pdev_from_target",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->pcie_device_get->__mpt3sas_get_pdev_from_target",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "user_fence_get",
+    "SecOp": "user_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->user_fence_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "drm_connector_get",
+    "SecOp": "drm_connector_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->drm_mode_object_get->drm_connector_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "i915_gem_object_get",
+    "SecOp": "i915_gem_object_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->drm_gem_object_get->i915_gem_object_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "tegra20_emc_find_node_by_ram_code",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->tegra20_emc_find_node_by_ram_code",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "pruss_get",
+    "SecOp": "pruss_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->pruss_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "batadv_bla_claim_get_backbone_gw",
+    "SecOp": "batadv_backbone_gw_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 1,
+    "API_path": "kref_get->batadv_bla_claim_get_backbone_gw",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "in_dev_get",
+    "SecOp": "in_dev_put",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->in_dev_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "aca_get",
+    "SecOp": "aca_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->aca_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "mlx5e_ktls_priv_rx_get",
+    "SecOp": "mlx5e_ktls_priv_rx_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlx5e_ktls_priv_rx_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "ssam_cdev_get",
+    "SecOp": "ssam_cdev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ssam_cdev_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "get_ns_common_ref",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns->get_ns_common_ref",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "addr_to_mapping",
+    "SecOp": "panfrost_gem_mapping_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->addr_to_mapping",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "comedi_buf_write_alloc",
+    "SecOp": "comedi_buf_write_free",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->comedi_get_is_subdevice_running->comedi_buf_write_alloc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "tipc_aead_get",
+    "SecOp": "tipc_aead_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->tipc_aead_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "lookup_or_create_module_kobject",
+    "SecOp": "kobject_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->lookup_or_create_module_kobject",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "gss_cred_get_ctx",
+    "SecOp": "gss_put_ctx",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->gss_get_ctx->gss_cred_get_ctx",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "kvm_get_kvm",
+    "SecOp": "kvm_put_kvm",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->kvm_get_kvm",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "i915_gem_context_get",
+    "SecOp": "i915_gem_context_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->i915_gem_context_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "group_from_handle",
+    "SecOp": "group_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->group_get->group_from_handle",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_oldest_context",
+    "SecOp": "ceph_put_snap_context",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->ceph_get_snap_context->get_oldest_context",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "ap_get",
+    "SecOp": "ap_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->ap_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "gb_control_get",
+    "SecOp": "gb_control_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->gb_control_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "skb_get",
+    "SecOp": "skb_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->skb_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "get_fw_req",
+    "SecOp": "put_fw_req",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->get_fw_req",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "bdi_get",
+    "SecOp": "bdi_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->bdi_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "btrfs_get_caching_control",
+    "SecOp": "btrfs_put_caching_control",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->btrfs_get_caching_control",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "ssb_device_get",
+    "SecOp": "ssb_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->ssb_device_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "mpt3sas_get_sdev_by_addr",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_by_addr->mpt3sas_get_sdev_by_addr",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "tty_kref_get",
+    "SecOp": "tty_kref_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->tty_kref_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "fastrpc_channel_ctx_get",
+    "SecOp": "fastrpc_channel_ctx_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->fastrpc_channel_ctx_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "fw_request_get",
+    "SecOp": "fw_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->fw_request_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "qeth_get_cmd",
+    "SecOp": "qeth_put_cmd",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->qeth_get_cmd",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "cs_get",
+    "SecOp": "cs_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->cs_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "nfsd_file_get",
+    "SecOp": "nfsd_file_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->nfsd_file_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "i915_vm_get",
+    "SecOp": "i915_vm_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->i915_vm_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "dlm_lowcomms_new_msg",
+    "SecOp": "dlm_lowcomms_put_msg",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->dlm_lowcomms_new_msg",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "txopt_get",
+    "SecOp": "txopt_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->txopt_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "label_merge_insert",
+    "SecOp": "label_free_or_put_new",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->__label_insert->label_merge_insert",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "get_pid",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_pid",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "etnaviv_iommu_context_get",
+    "SecOp": "etnaviv_iommu_context_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->etnaviv_iommu_context_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "ib_uverbs_get_async_event",
+    "SecOp": "uverbs_uobject_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->uverbs_uobject_get->ib_uverbs_get_async_event",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "conn_get",
+    "SecOp": "conn_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->conn_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__dlm_lookup_lockres_full",
+    "SecOp": "dlm_lockres_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 2,
+    "API_path": "kref_get->dlm_lockres_get->__dlm_lookup_lockres_full",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "first_tid",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->first_tid",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "zfcp_ccw_adapter_by_cdev",
+    "SecOp": "zfcp_ccw_adapter_put",
+    "hasUsage": true,
+    "usageCount": 15,
+    "depth": 1,
+    "API_path": "kref_get->zfcp_ccw_adapter_by_cdev",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "msi_bitmap_alloc",
+    "SecOp": "msi_bitmap_free",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->msi_bitmap_alloc",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "fsnotify_init_mark",
+    "SecOp": "fsnotify_put_mark",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->fsnotify_get_group->fsnotify_init_mark",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "__core_scsi3_alloc_registration",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->__core_scsi3_do_alloc_registration->__core_scsi3_alloc_registration",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "batadv_last_bonding_get",
+    "SecOp": "batadv_orig_ifinfo_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->batadv_last_bonding_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "user_event_get",
+    "SecOp": "user_event_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->user_event_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "timehist_get_thread",
+    "SecOp": "thread__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->thread__get->timehist_get_thread",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "xe_gt_sriov_pf_config_get_lmem_obj",
+    "SecOp": "xe_bo_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->drm_gem_object_get->xe_bo_get->xe_gt_sriov_pf_config_get_lmem_obj",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "nitrox_get_first_device",
+    "SecOp": "nitrox_put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->nitrox_get_first_device",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "scsi_tape_get",
+    "SecOp": "scsi_tape_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->scsi_tape_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "gb_operation_get",
+    "SecOp": "gb_operation_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->gb_operation_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "i2c_get_adapter",
+    "SecOp": "i2c_put_adapter",
+    "hasUsage": true,
+    "usageCount": 21,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->i2c_get_adapter",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "get_tee_heap",
+    "SecOp": "put_tee_heap",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->get_tee_heap",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "irdma_get_cqp_request",
+    "SecOp": "irdma_put_cqp_request",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->irdma_get_cqp_request",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "ring_buffer_get",
+    "SecOp": "ring_buffer_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->ring_buffer_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "iscsi_get_task",
+    "SecOp": "iscsi_put_task",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->iscsi_get_task",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "bdi_get_by_id",
+    "SecOp": "bdi_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->bdi_get->bdi_get_by_id",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "qh_get",
+    "SecOp": "qh_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->qh_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "exp_get",
+    "SecOp": "exp_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->cache_get->exp_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "__cxl_decoder_detach",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->__cxl_decoder_detach",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "mlxsw_sp_nexthop_group_inc",
+    "SecOp": "mlxsw_sp_nexthop_group_dec",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mlxsw_sp_nexthop_group_inc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "driver_find_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->driver_find_device",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "find_memory_block_by_id",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->find_memory_block_by_id",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "rproc_get_by_phandle",
+    "SecOp": "rproc_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->rproc_get_by_phandle",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "ptp_ocp_nvmem_device_get",
+    "SecOp": "ptp_ocp_nvmem_device_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->__nvmem_device_get->nvmem_device_find->ptp_ocp_nvmem_device_get",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "unicam_get",
+    "SecOp": "unicam_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->unicam_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "spi_controller_get",
+    "SecOp": "spi_controller_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->spi_controller_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "__mpt3sas_get_sdev_from_target",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_from_target",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "of_drm_find_and_get_bridge",
+    "SecOp": "drm_bridge_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->drm_bridge_get->of_drm_find_and_get_bridge",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_hem_table",
+    "SecOp": "put_hem_table",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_get->get_hem_table",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "of_find_node_by_type",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 40,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_node_by_type",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "rxe_lookup_mcg",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->__rxe_lookup_mcg->rxe_lookup_mcg",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "xe_file_get",
+    "SecOp": "xe_file_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->xe_file_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "svc_expkey_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->svc_expkey_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "macsec_rxsa_get",
+    "SecOp": "macsec_rxsa_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->macsec_rxsa_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "get_current_tty",
+    "SecOp": "tty_kref_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 2,
+    "API_path": "kref_get->tty_kref_get->get_current_tty",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "of_irq_find_parent",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 22,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_irq_find_parent",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "aa_get_pdb",
+    "SecOp": "aa_put_pdb",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_pdb",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "batadv_tt_req_node_new",
+    "SecOp": "batadv_tt_req_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->batadv_tt_req_node_new",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "vmci_resource_get",
+    "SecOp": "vmci_resource_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->vmci_resource_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "vmci_ctx_get",
+    "SecOp": "vmci_ctx_put",
+    "hasUsage": true,
+    "usageCount": 14,
+    "depth": 1,
+    "API_path": "kref_get->vmci_ctx_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "xp_get_pool",
+    "SecOp": "xp_put_pool",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->xp_get_pool",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "cma_id_get",
+    "SecOp": "cma_id_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->cma_id_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "lookup_get_request",
+    "SecOp": "ceph_mdsc_put_request",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->ceph_mdsc_get_request->lookup_get_request",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "smbdirect_connection_get_mr_io",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->smbdirect_connection_get_mr_io",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "pinctrl_get",
+    "SecOp": "pinctrl_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->pinctrl_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "batadv_orig_ifinfo_new",
+    "SecOp": "batadv_orig_ifinfo_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->batadv_orig_ifinfo_new",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "coredump_next_context",
+    "SecOp": "put_spu_context",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->get_spu_context->coredump_next_context",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "hl_cb_get",
+    "SecOp": "hl_cb_put",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 2,
+    "API_path": "kref_get->hl_mmap_mem_buf_get->hl_cb_get",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "usb_get_intf",
+    "SecOp": "usb_put_intf",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->usb_get_intf",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "nvmet_cq_get",
+    "SecOp": "nvmet_cq_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->nvmet_cq_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "xe_vm_range_unbind",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->dma_fence_get_stub->xe_vm_range_unbind",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "xe_exec_queue_lookup",
+    "SecOp": "xe_exec_queue_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 2,
+    "API_path": "kref_get->xe_exec_queue_get->xe_exec_queue_lookup",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "j1939_ecu_get_by_name",
+    "SecOp": "j1939_ecu_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->j1939_ecu_get->j1939_ecu_get_by_name_locked->j1939_ecu_get_by_name",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "nvme_init_ns_head",
+    "SecOp": "nvme_put_ns_head",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->nvme_alloc_ns_head->nvme_init_ns_head",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "wg_peer_get",
+    "SecOp": "wg_peer_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->wg_peer_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_nth_filter",
+    "SecOp": "__put_seccomp_filter",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->__get_seccomp_filter->get_nth_filter",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "cxgbit_get_csk",
+    "SecOp": "cxgbit_put_csk",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->cxgbit_get_csk",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "wg_peer_get",
+    "SecOp": "wg_peer_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->wg_peer_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "l2cap_conn_get",
+    "SecOp": "l2cap_conn_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->l2cap_conn_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "pwrseq_unit_get",
+    "SecOp": "pwrseq_unit_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->pwrseq_unit_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "kunit_find_resource",
+    "SecOp": "kunit_put_resource",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 2,
+    "API_path": "kref_get->kunit_get_resource->kunit_find_resource",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "of_find_node_with_property",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_node_with_property",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "media_request_get_by_fd",
+    "SecOp": "media_request_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->media_request_get->media_request_get_by_fd",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "mlx5e_tc_int_port_get",
+    "SecOp": "mlx5e_tc_int_port_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->mlx5e_int_port_lookup->mlx5e_tc_int_port_get",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "tcf_block_refcnt_get",
+    "SecOp": "tcf_block_refcnt_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->tcf_block_refcnt_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "nexthop_get",
+    "SecOp": "nexthop_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->nexthop_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "net_passive_inc",
+    "SecOp": "net_passive_dec",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->net_passive_inc",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "v3d_job_init",
+    "SecOp": "v3d_job_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->v3d_stats_get->v3d_job_init",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "btrfs_root_node",
+    "SecOp": "free_extent_buffer",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->btrfs_root_node",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "comedi_dev_get_from_minor",
+    "SecOp": "comedi_dev_put",
+    "hasUsage": true,
+    "usageCount": 12,
+    "depth": 3,
+    "API_path": "kref_get->comedi_dev_get->comedi_dev_get_from_board_minor->comedi_dev_get_from_minor",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "tipc_conn_alloc",
+    "SecOp": "conn_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->conn_get->tipc_conn_alloc",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "i915_vma_get",
+    "SecOp": "i915_vma_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->drm_gem_object_get->i915_gem_object_get->i915_vma_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "core_get_se_deve_from_rtpi",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->core_get_se_deve_from_rtpi",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "msi_bitmap_alloc",
+    "SecOp": "msi_bitmap_free",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->msi_bitmap_alloc",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "aa_alloc_profile",
+    "SecOp": "aa_free_profile",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_alloc_proxy->aa_alloc_profile",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "drm_pagemap_get",
+    "SecOp": "drm_pagemap_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_pagemap_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "v4l2_ctrls_find_req_obj",
+    "SecOp": "media_request_object_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->media_request_object_get->v4l2_ctrls_find_req_obj",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "omapdss_device_get",
+    "SecOp": "omapdss_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->omapdss_device_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "pci_device_group",
+    "SecOp": "iommu_group_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->iommu_group_get->pci_device_group",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "map__get",
+    "SecOp": "map__put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->map__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "xe_pagefault_asid_to_vm",
+    "SecOp": "xe_vm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->drm_gpuvm_get->xe_vm_get->xe_pagefault_asid_to_vm",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "__mpi3mr_get_tgtdev_from_tgtpriv",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_from_tgtpriv",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "configfs_get_config_item",
+    "SecOp": "config_item_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->config_item_get->configfs_get_config_item",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "kcov_get",
+    "SecOp": "kcov_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->kcov_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "refcount_inc",
+    "SecOp": "refcount_dec",
+    "hasUsage": true,
+    "usageCount": 23,
+    "depth": 1,
+    "API_path": "kref_get->refcount_inc",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "begin_current_label_crit_section",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->begin_current_label_crit_section",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "hub_get",
+    "SecOp": "hub_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->hub_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "btrfs_get_delayed_node",
+    "SecOp": "refcount_dec",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->btrfs_get_delayed_node",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "nfsd_file_get",
+    "SecOp": "nfsd_file_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->nfsd_file_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "spufs_assert_affinity",
+    "SecOp": "put_spu_context",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->get_spu_context->spufs_assert_affinity",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "svc_xprt_get",
+    "SecOp": "svc_xprt_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->svc_xprt_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__mpi3mr_get_tgtdev_by_perst_id",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_by_perst_id",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "iscsi_lookup_endpoint",
+    "SecOp": "iscsi_put_endpoint",
+    "hasUsage": true,
+    "usageCount": 10,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->iscsi_lookup_endpoint",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "fw_unit_get",
+    "SecOp": "fw_unit_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->fw_unit_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "host1x_channel_get",
+    "SecOp": "host1x_channel_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->host1x_channel_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "batadv_hardif_add_interface",
+    "SecOp": "batadv_hardif_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->batadv_hardif_add_interface",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "mpt3sas_get_sdev_from_target",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_from_target->mpt3sas_get_sdev_from_target",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "of_find_node_by_name",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 95,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_node_by_name",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "amdgpu_ctx_get_fence",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->amdgpu_ctx_get_fence",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_nfs_open_context",
+    "SecOp": "put_nfs_open_context",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->get_nfs_open_context",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "get_skb",
+    "SecOp": "skb_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->skb_get->get_skb",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "efct_node_find",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->efct_node_find",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "acpi_ipmi_msg_get",
+    "SecOp": "acpi_ipmi_msg_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->acpi_ipmi_msg_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__mpt3sas_get_sdev_by_handle",
+    "SecOp": "sas_device_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->sas_device_get->__mpt3sas_get_sdev_by_handle",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "fsnotify_find_mark",
+    "SecOp": "fsnotify_put_mark",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->fsnotify_get_mark->fsnotify_find_mark",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "fuse_ctl_file_conn_get",
+    "SecOp": "fuse_conn_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->fuse_conn_get->fuse_ctl_file_conn_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "fcloop_tfcp_req_get",
+    "SecOp": "fcloop_tfcp_req_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->fcloop_tfcp_req_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "sunrpc_cache_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "alloc_pd",
+    "SecOp": "free_pd",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->i915_vm_resv_get->alloc_pt_dma->alloc_pd",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "of_graph_get_port_parent",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_graph_get_port_parent",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "esw_qos_get",
+    "SecOp": "esw_qos_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->esw_qos_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "tipc_node_get",
+    "SecOp": "tipc_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->tipc_node_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "aa_label_merge",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->aa_label_merge",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "xe_gem_prime_import",
+    "SecOp": "drm_gem_object_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->drm_gem_object_get->xe_gem_prime_import",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "__i915_request_create",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->__i915_request_create",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "key_get",
+    "SecOp": "key_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->__key_get->key_get",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "find_port_by_devt",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->find_port_by_devt_in_portdev->find_port_by_devt",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "nop_user_request",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_sw_fence_await_dma_fence->nop_user_request",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "fbnic_fw_get_cmpl_by_type",
+    "SecOp": "fbnic_fw_put_cmpl",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 1,
+    "API_path": "kref_get->fbnic_fw_get_cmpl_by_type",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "scsiback_do_translation",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->scsiback_do_translation",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "tipc_node_create",
+    "SecOp": "tipc_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->tipc_node_get->tipc_node_create",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "drm_dp_mst_get_port_malloc",
+    "SecOp": "drm_dp_mst_put_port_malloc",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_dp_mst_get_port_malloc",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "ceph_osdc_get_request",
+    "SecOp": "ceph_osdc_put_request",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ceph_osdc_get_request",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "of_find_node_opts_by_path",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_node_opts_by_path",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "crypto_mod_get",
+    "SecOp": "crypto_mod_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->crypto_alg_get->crypto_mod_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "alloc_srqc",
+    "SecOp": "free_srqc",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_get->alloc_srqc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "rdma_get_counter_by_id",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->rdma_get_counter_by_id",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "xe_sync_in_fence_get",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->xe_exec_queue_last_fence_get->xe_sync_in_fence_get",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "kernel_vm",
+    "SecOp": "i915_vm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->i915_vm_get->kernel_vm",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "xfs_healthmon_get",
+    "SecOp": "xfs_healthmon_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->xfs_healthmon_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "j1939_netdev_start",
+    "SecOp": "j1939_priv_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->j1939_netdev_start",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_pid",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_pid",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_ep",
+    "SecOp": "put_ep",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_ep",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "perf_cpu_map__get",
+    "SecOp": "perf_cpu_map__put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->perf_cpu_map__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "intel_context_get",
+    "SecOp": "intel_context_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->intel_context_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "dlm_get_mle_inuse",
+    "SecOp": "dlm_put_mle_inuse",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->dlm_get_mle_inuse",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "get_pi_state",
+    "SecOp": "put_pi_state",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->get_pi_state",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "of_get_next_parent",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 11,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_get_next_parent",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "semaphore_queue",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->semaphore_queue",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "alloc_mr_key",
+    "SecOp": "free_mr_key",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_get->alloc_mr_key",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "sas_get_local_phy",
+    "SecOp": "sas_put_local_phy",
+    "hasUsage": true,
+    "usageCount": 12,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->sas_get_local_phy",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "mshv_partition_get",
+    "SecOp": "mshv_partition_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mshv_partition_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "i915_request_get",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 75,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->i915_request_get",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "dma_fence_get",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 41,
+    "depth": 1,
+    "API_path": "kref_get->dma_fence_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "eventfd_ctx_fileget",
+    "SecOp": "eventfd_ctx_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 1,
+    "API_path": "kref_get->eventfd_ctx_fileget",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "amdgpu_ctx_get",
+    "SecOp": "amdgpu_ctx_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 1,
+    "API_path": "kref_get->amdgpu_ctx_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "sync_file_get_fence",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->sync_file_get_fence",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "mpt3sas_get_pdev_by_wwid",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->pcie_device_get->__mpt3sas_get_pdev_by_wwid->mpt3sas_get_pdev_by_wwid",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "get_uprobe",
+    "SecOp": "put_uprobe",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_uprobe",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "cache_get",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->cache_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "batadv_neigh_ifinfo_new",
+    "SecOp": "batadv_neigh_ifinfo_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->batadv_neigh_ifinfo_new",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "ipoib_neigh_get",
+    "SecOp": "ipoib_neigh_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->ipoib_neigh_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "fcloop_lport_get",
+    "SecOp": "fcloop_lport_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->fcloop_lport_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "mlxsw_sp_parsing_depth_inc",
+    "SecOp": "mlxsw_sp_parsing_depth_dec",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mlxsw_sp_parsing_depth_inc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "nfs4_xattr_hash_find",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->nfs4_xattr_hash_find",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "__mpi3mr_get_tgtdev_by_addr",
+    "SecOp": "mpi3mr_tgtdev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->mpi3mr_tgtdev_get->__mpi3mr_get_tgtdev_by_addr",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "intel_context_get",
+    "SecOp": "intel_context_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 1,
+    "API_path": "kref_get->intel_context_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "client_get",
+    "SecOp": "client_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->client_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "j1939_ecu_get_by_name_locked",
+    "SecOp": "j1939_ecu_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->j1939_ecu_get->j1939_ecu_get_by_name_locked",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "xe_lrc_get",
+    "SecOp": "xe_lrc_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->xe_lrc_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "tegra_drm_mapping_get",
+    "SecOp": "tegra_drm_mapping_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->tegra_drm_mapping_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "cipso_v4_doi_getdef",
+    "SecOp": "cipso_v4_doi_putdef",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->cipso_v4_doi_getdef",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "comedi_buf_read_alloc",
+    "SecOp": "comedi_buf_read_free",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->comedi_get_is_subdevice_running->comedi_buf_read_alloc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "audit_get_tty",
+    "SecOp": "audit_put_tty",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->tty_kref_get->audit_get_tty",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "ublk_get_req_ref",
+    "SecOp": "ublk_put_req_ref",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->ublk_get_req_ref",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "rnbd_clt_get_dev",
+    "SecOp": "rnbd_clt_put_dev",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->rnbd_clt_get_dev",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "cpu_rmap_get",
+    "SecOp": "cpu_rmap_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->cpu_rmap_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "zcrypt_queue_get",
+    "SecOp": "zcrypt_queue_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->zcrypt_queue_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "of_get_next_parent",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 11,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_get_next_parent",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "of_find_matching_node_and_match",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 23,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_matching_node_and_match",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "scrub_workers_get",
+    "SecOp": "scrub_workers_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->scrub_workers_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "aa_get_label",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_label",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "record_registers",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->record_registers",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "panfrost_jm_ctx_get",
+    "SecOp": "panfrost_jm_ctx_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->panfrost_jm_ctx_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "batadv_v_ogm_orig_get",
+    "SecOp": "batadv_orig_node_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->batadv_v_ogm_orig_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "dj_get_receiver_dev",
+    "SecOp": "dj_put_receiver_dev",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->dj_find_receiver_dev->dj_get_receiver_dev",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "autogroup_create",
+    "SecOp": "autogroup_kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->autogroup_kref_get->autogroup_create",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "aa_get_dfa",
+    "SecOp": "aa_put_dfa",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_dfa",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "dvb_frontend_get",
+    "SecOp": "dvb_frontend_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->dvb_frontend_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mlx5_get_uars_page",
+    "SecOp": "mlx5_put_uars_page",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->mlx5_get_uars_page",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_current_rng",
+    "SecOp": "put_rng",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->get_current_rng",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "get_loaddata_common_ref",
+    "SecOp": "aa_put_i_loaddata",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_i_loaddata->get_loaddata_common_ref",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "zpci_bus_get",
+    "SecOp": "zpci_bus_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->__zpci_bus_get->zpci_bus_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "idtoname_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->idtoname_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "__label_insert",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_label->__label_insert",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "panthor_vm_get",
+    "SecOp": "panthor_vm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->drm_gpuvm_get->panthor_vm_get",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "hns_roce_table_get",
+    "SecOp": "hns_roce_table_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_mhop_get->hns_roce_table_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "crypto_alg_get",
+    "SecOp": "crypto_alg_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->crypto_alg_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_bridge",
+    "SecOp": "put_bridge",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->get_bridge",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__label_update",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->aa_get_label->__label_update",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_task_pid",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 9,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_pid->get_task_pid",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "iommu_group_get",
+    "SecOp": "iommu_group_put",
+    "hasUsage": true,
+    "usageCount": 11,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->iommu_group_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "aa_label_insert",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->__label_insert->aa_label_insert",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "usb_get_phy",
+    "SecOp": "usb_put_phy",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->usb_get_phy",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "group_get",
+    "SecOp": "group_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->group_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "device_find_child",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 21,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->device_find_child",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "slim_get_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->slim_get_device",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "i915_ttm_resource_get_st",
+    "SecOp": "i915_refct_sgt_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->i915_refct_sgt_get->i915_ttm_resource_get_st",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "of_get_parent",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 119,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_get_parent",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "pci_bus_get",
+    "SecOp": "pci_bus_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->pci_bus_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "pcistub_device_find",
+    "SecOp": "pcistub_device_put",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 2,
+    "API_path": "kref_get->pcistub_device_get->pcistub_device_find",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "vsp1_video_pipeline_get",
+    "SecOp": "vsp1_video_pipeline_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->vsp1_video_pipeline_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "threads__findnew",
+    "SecOp": "thread__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->thread__get->threads__findnew",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "bus_get_dev_root",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 34,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->bus_get_dev_root",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "mlxsw_sp_span_agent_get",
+    "SecOp": "mlxsw_sp_span_agent_put",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_span_entry_get->mlxsw_sp_span_agent_get",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "isp1301_get_client",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->isp1301_get_client",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "btrfs_readdir_get_delayed_items",
+    "SecOp": "btrfs_readdir_put_delayed_items",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->btrfs_get_delayed_node->btrfs_readdir_get_delayed_items",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "xe_exec_queue_get_lrc",
+    "SecOp": "xe_lrc_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->xe_lrc_get->xe_exec_queue_get_lrc",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "threads__find",
+    "SecOp": "thread__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->thread__get->threads__find",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "i915_request_mark_eio",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->i915_request_mark_eio",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "acpi_ipmi_dev_get",
+    "SecOp": "acpi_ipmi_dev_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->acpi_ipmi_dev_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "erdma_cep_get",
+    "SecOp": "erdma_cep_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->erdma_cep_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "user_event_mm_get",
+    "SecOp": "user_event_mm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->user_event_mm_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "soundbus_dev_get",
+    "SecOp": "soundbus_dev_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->soundbus_dev_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "ipoib_neigh_alloc",
+    "SecOp": "ipoib_neigh_free",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->ipoib_neigh_alloc",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "tb_cfg_request_get",
+    "SecOp": "tb_cfg_request_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->tb_cfg_request_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "drm_gem_shmem_get_pages_locked",
+    "SecOp": "drm_gem_shmem_put_pages_locked",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->drm_gem_shmem_get_pages_locked",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "vchiq_service_get",
+    "SecOp": "vchiq_service_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->vchiq_service_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__dlm_lookup_lockres",
+    "SecOp": "dlm_lockres_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->dlm_lockres_get->__dlm_lookup_lockres_full->__dlm_lookup_lockres",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "atusb_alloc_urbs",
+    "SecOp": "atusb_free_urbs",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->usb_get_urb->usb_anchor_urb->atusb_alloc_urbs",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "btrfs_get_block_group",
+    "SecOp": "btrfs_put_block_group",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->btrfs_get_block_group",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "nop_request",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->nop_request",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "create_timestamp",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->create_timestamp",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "alloc_buf",
+    "SecOp": "free_buf",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->alloc_buf",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "br_vlan_get_master",
+    "SecOp": "br_vlan_put_master",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->br_vlan_get_master",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "i915_gem_object_frontbuffer_get",
+    "SecOp": "i915_gem_object_frontbuffer_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->i915_gem_object_frontbuffer_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "siw_qp_get",
+    "SecOp": "siw_qp_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->siw_qp_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "hidp_session_get",
+    "SecOp": "hidp_session_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->hidp_session_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "crypto_alg_get",
+    "SecOp": "crypto_alg_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->crypto_alg_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "xe_vm_get",
+    "SecOp": "xe_vm_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->drm_gpuvm_get->xe_vm_get",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "j1939_ecu_get_by_addr",
+    "SecOp": "j1939_ecu_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->j1939_ecu_get->j1939_ecu_get_by_addr_locked->j1939_ecu_get_by_addr",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "nametoid_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->nametoid_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "xe_exec_queue_get",
+    "SecOp": "xe_exec_queue_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->xe_exec_queue_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "eb_requests_get",
+    "SecOp": "eb_requests_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->eb_requests_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "xe_exec_queue_last_fence_get_for_resume",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->xe_exec_queue_last_fence_get_for_resume",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "o2net_handler_get",
+    "SecOp": "o2net_handler_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->o2net_handler_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "alloc_cqc",
+    "SecOp": "free_cqc",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->hns_roce_table_get->alloc_cqc",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "acpi_dev_get",
+    "SecOp": "acpi_dev_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->acpi_dev_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "dev_pm_opp_get_of_node",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->dev_pm_opp_get_of_node",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "i915_gem_object_get",
+    "SecOp": "i915_gem_object_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->drm_gem_object_get->i915_gem_object_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "mlx5_tc_ct_entry_get",
+    "SecOp": "mlx5_tc_ct_entry_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mlx5_tc_ct_entry_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "dlm_lockres_get",
+    "SecOp": "dlm_lockres_put",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 1,
+    "API_path": "kref_get->dlm_lockres_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "__get_seccomp_filter",
+    "SecOp": "__put_seccomp_filter",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->__get_seccomp_filter",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "perf_mmap__get",
+    "SecOp": "perf_mmap__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->perf_mmap__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "nfs_dns_update",
+    "SecOp": "cache_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->cache_get->sunrpc_cache_update->nfs_dns_update",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "teedev_ctx_get",
+    "SecOp": "teedev_ctx_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->teedev_ctx_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "ucma_get_ctx",
+    "SecOp": "ucma_put_ctx",
+    "hasUsage": true,
+    "usageCount": 13,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->ucma_get_ctx",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "usb_get_intf",
+    "SecOp": "usb_put_intf",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->usb_get_intf",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "scsi_host_get",
+    "SecOp": "scsi_host_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->scsi_host_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "request_single_step_set_feature_urb",
+    "SecOp": "usb_put_urb",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->usb_get_urb->request_single_step_set_feature_urb",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "moxtet_alloc_device",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->moxtet_alloc_device",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "pidfd_get_pid",
+    "SecOp": "put_pid",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_pid->pidfd_get_pid",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "panfrost_jm_ctx_from_handle",
+    "SecOp": "panfrost_jm_ctx_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->panfrost_jm_ctx_get->panfrost_jm_ctx_from_handle",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "cx88_core_get",
+    "SecOp": "cx88_core_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->cx88_core_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "ceph_get_mds_session",
+    "SecOp": "ceph_put_mds_session",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->ceph_get_mds_session",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "uverbs_uobject_get",
+    "SecOp": "uverbs_uobject_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->uverbs_uobject_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mlxsw_sp_bridge_port_get",
+    "SecOp": "mlxsw_sp_bridge_port_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_bridge_port_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "__ip_vs_conn_get",
+    "SecOp": "__ip_vs_conn_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->__ip_vs_conn_get",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "of_phy_get",
+    "SecOp": "of_phy_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->of_phy_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "panthor_vm_get",
+    "SecOp": "panthor_vm_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->drm_gpuvm_get->panthor_vm_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_space",
+    "SecOp": "put_space",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->config_item_get->config_group_find_item->get_space",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "eventfd_ctx_fdget",
+    "SecOp": "eventfd_ctx_put",
+    "hasUsage": true,
+    "usageCount": 26,
+    "depth": 2,
+    "API_path": "kref_get->eventfd_ctx_fileget->eventfd_ctx_fdget",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "srp_rport_get",
+    "SecOp": "srp_rport_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->srp_rport_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "get_spu_context",
+    "SecOp": "put_spu_context",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->get_spu_context",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "checked_tl_write",
+    "SecOp": "i915_request_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 3,
+    "API_path": "kref_get->dma_fence_get->i915_request_get->checked_tl_write",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "next_tid",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->next_tid",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "prestera_acl_ruleset_get",
+    "SecOp": "prestera_acl_ruleset_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->prestera_acl_ruleset_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "of_find_compatible_node",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 293,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_find_compatible_node",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "drm_crtc_commit_get",
+    "SecOp": "drm_crtc_commit_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_crtc_commit_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "regulator_of_get_init_node",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->regulator_of_get_init_node",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "erdma_qp_get",
+    "SecOp": "erdma_qp_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->erdma_qp_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "amdgpu_job_submit",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->amdgpu_job_submit",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "drm_gpusvm_range_get",
+    "SecOp": "drm_gpusvm_range_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->drm_gpusvm_range_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mlx5_sd_get_adev",
+    "SecOp": "mlx5_sd_put_adev",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->mlx5_sd_get_adev",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "hl_ctx_get_fence",
+    "SecOp": "hl_fence_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->hl_fence_get->hl_ctx_get_fence_locked->hl_ctx_get_fence",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "j1939_priv_get_by_ndev",
+    "SecOp": "j1939_priv_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->j1939_priv_get->j1939_priv_get_by_ndev_locked->j1939_priv_get_by_ndev",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "drm_bridge_chain_get_first_bridge",
+    "SecOp": "drm_bridge_put",
+    "hasUsage": true,
+    "usageCount": 8,
+    "depth": 2,
+    "API_path": "kref_get->drm_bridge_get->drm_bridge_chain_get_first_bridge",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "amdgpu_gem_va_update_vm",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->amdgpu_gem_va_update_vm",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_config_cpu",
+    "SecOp": "perf_cpu_map__put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->perf_cpu_map__get->get_config_cpu",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "of_cpu_device_node_get",
+    "SecOp": "of_node_put",
+    "hasUsage": true,
+    "usageCount": 21,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->of_node_get->of_cpu_device_node_get",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "mpt3sas_get_pdev_by_handle",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 3,
+    "API_path": "kref_get->pcie_device_get->__mpt3sas_get_pdev_by_handle->mpt3sas_get_pdev_by_handle",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "cmd_ent_get",
+    "SecOp": "cmd_ent_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->cmd_ent_get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "pvr_hwrt_dataset_lookup",
+    "SecOp": "pvr_hwrt_dataset_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->pvr_hwrt_dataset_lookup",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "siw_cep_get",
+    "SecOp": "siw_cep_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 1,
+    "API_path": "kref_get->siw_cep_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "xe_file_get",
+    "SecOp": "xe_file_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->xe_file_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "mlxsw_sp_acl_ruleset_ref_inc",
+    "SecOp": "mlxsw_sp_acl_ruleset_ref_dec",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->mlxsw_sp_acl_ruleset_ref_inc",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "ceph_msg_get",
+    "SecOp": "ceph_msg_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->ceph_msg_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "nvmem_device_find",
+    "SecOp": "nvmem_device_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->__nvmem_device_get->nvmem_device_find",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "open_mtd_device",
+    "SecOp": "put_mtd_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->__get_mtd_device->get_mtd_device_nm->open_mtd_device",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "ceph_mdsc_get_request",
+    "SecOp": "ceph_mdsc_put_request",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->ceph_mdsc_get_request",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "c4iw_get_wr_wait",
+    "SecOp": "c4iw_put_wr_wait",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->c4iw_get_wr_wait",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "css_task_iter_next",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->css_task_iter_next",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "kfd_process_alloc_id",
+    "SecOp": "kfd_process_free_id",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->kfd_lookup_process_by_mm->kfd_process_alloc_id",
+    "var_path": "arg->retval->arg"
+  },
+  {
+    "API": "q6apm_get_audioreach_graph",
+    "SecOp": "kref_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->q6apm_get_audioreach_graph",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "l2cap_conn_get",
+    "SecOp": "l2cap_conn_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->l2cap_conn_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "aa_get_profile",
+    "SecOp": "aa_put_profile",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_profile",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "begin_current_label_crit_section",
+    "SecOp": "aa_put_label",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_label->aa_get_newest_label->begin_current_label_crit_section",
+    "var_path": "arg->retval->retval->retval"
+  },
+  {
+    "API": "find_and_get_file_info",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->find_and_get_file_info",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "dvb_device_get",
+    "SecOp": "dvb_device_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->dvb_device_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "get_group_info",
+    "SecOp": "put_group_info",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_group_info",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "v9fs_fid_find",
+    "SecOp": "p9_fid_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->p9_fid_get->v9fs_fid_find",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "hci_conn_get",
+    "SecOp": "hci_conn_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->hci_conn_get",
+    "var_path": "arg->retval->arg->arg"
+  },
+  {
+    "API": "dlm_lock_get",
+    "SecOp": "dlm_lock_put",
+    "hasUsage": true,
+    "usageCount": 7,
+    "depth": 1,
+    "API_path": "kref_get->dlm_lock_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "j1939_xtp_rx_rts_session_new",
+    "SecOp": "j1939_session_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->j1939_session_get->j1939_session_activate->j1939_xtp_rx_rts_session_new",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "lima_sched_context_queue_task",
+    "SecOp": "dma_fence_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->dma_fence_get->lima_sched_context_queue_task",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "get_slot",
+    "SecOp": "kobject_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->get_slot",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "hci_conn_get",
+    "SecOp": "hci_conn_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->hci_conn_get",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "i915_vma_get",
+    "SecOp": "i915_vma_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->drm_gem_object_get->i915_gem_object_get->i915_vma_get",
+    "var_path": "arg->arg->retval->arg"
+  },
+  {
+    "API": "kunit_alloc_and_get_resource",
+    "SecOp": "kunit_put_resource",
+    "hasUsage": true,
+    "usageCount": 5,
+    "depth": 2,
+    "API_path": "kref_get->kunit_get_resource->kunit_alloc_and_get_resource",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "cgroup__get",
+    "SecOp": "cgroup__put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->cgroup__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "hl_mmap_mem_buf_get",
+    "SecOp": "hl_mmap_mem_buf_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->hl_mmap_mem_buf_get",
+    "var_path": "arg->retval"
+  },
+  {
+    "API": "sc_get",
+    "SecOp": "sc_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 1,
+    "API_path": "kref_get->sc_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "aa_prepare_ns",
+    "SecOp": "aa_put_ns",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->aa_get_profile->aa_get_ns->aa_prepare_ns",
+    "var_path": "arg->arg->retval->retval"
+  },
+  {
+    "API": "sp_get",
+    "SecOp": "sp_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->sp_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "enclosure_find",
+    "SecOp": "put_device",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->kobject_get->get_device->enclosure_find",
+    "var_path": "arg->retval->arg->retval"
+  },
+  {
+    "API": "autogroup_task_get",
+    "SecOp": "autogroup_kref_put",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 2,
+    "API_path": "kref_get->autogroup_kref_get->autogroup_task_get",
+    "var_path": "arg->retval->retval"
+  },
+  {
+    "API": "amdxdna_drm_create_dev_heap_bo",
+    "SecOp": "drm_gem_object_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 2,
+    "API_path": "kref_get->drm_gem_object_get->amdxdna_drm_create_dev_heap_bo",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "aa_get_pdb",
+    "SecOp": "aa_put_pdb",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->aa_get_pdb",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "vc4_bo_inc_usecnt",
+    "SecOp": "vc4_bo_dec_usecnt",
+    "hasUsage": true,
+    "usageCount": 2,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->vc4_bo_inc_usecnt",
+    "var_path": "arg->arg->arg->arg"
+  },
+  {
+    "API": "find_get_task_by_vpid",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 6,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->get_task_struct->find_get_task_by_vpid",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "__mpt3sas_get_pdev_by_wwid",
+    "SecOp": "pcie_device_put",
+    "hasUsage": true,
+    "usageCount": 4,
+    "depth": 2,
+    "API_path": "kref_get->pcie_device_get->__mpt3sas_get_pdev_by_wwid",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "thread__get",
+    "SecOp": "thread__put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->thread__get",
+    "var_path": "arg->arg->arg"
+  },
+  {
+    "API": "mlx5_ct_fs_hmfs_matcher_get",
+    "SecOp": "mlx5_ct_fs_hmfs_matcher_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 3,
+    "API_path": "kref_get->refcount_inc->refcount_inc_not_zero->mlx5_ct_fs_hmfs_matcher_get",
+    "var_path": "arg->arg->arg->retval"
+  },
+  {
+    "API": "j1939_priv_get",
+    "SecOp": "j1939_priv_put",
+    "hasUsage": true,
+    "usageCount": 3,
+    "depth": 1,
+    "API_path": "kref_get->j1939_priv_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "dmabuf_obj_get",
+    "SecOp": "dmabuf_obj_put",
+    "hasUsage": true,
+    "usageCount": 1,
+    "depth": 1,
+    "API_path": "kref_get->dmabuf_obj_get",
+    "var_path": "arg->arg"
+  },
+  {
+    "API": "cpufreq_cpu_get",
+    "SecOp": "cpufreq_cpu_put",
+    "hasUsage": true,
+    "usageCount": 15,
+    "depth": 2,
+    "API_path": "kref_get->kobject_get->cpufreq_cpu_get",
+    "var_path": "arg->arg->retval"
+  },
+  {
+    "API": "get_task_struct",
+    "SecOp": "put_task_struct",
+    "hasUsage": true,
+    "usageCount": 30,
+    "depth": 2,
+    "API_path": "kref_get->refcount_inc->get_task_struct",
+    "var_path": "arg->arg->arg"
+  }
+]

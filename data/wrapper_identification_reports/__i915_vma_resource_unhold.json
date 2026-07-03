@@ -1,0 +1,143 @@
+{
+  "function_name": "__i915_vma_resource_unhold",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vma_res.hold_count.refs",
+      "i915_vma_resource--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "vma_res.bi.pages_rsgt.kref.refcount",
+      "i915_vma_resource--i915_vma_bind_info--i915_refct_sgt--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "i915_refct_sgt_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rsgt.kref.refcount",
+      "member_type_chain": "i915_refct_sgt--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "i915_refct_sgt_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rsgt.kref.refcount",
+      "member_type_chain": "i915_refct_sgt--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is irreversible; if hold_count were already zero, calling this function again would be a misuse (double-free). Retry cannot succeed.",
+  "contract_summary": "Release one hold on a vma_resource by decrementing hold_count. If this releases the last hold (hold_count reaches zero), signal the unbind fence to indicate unbind completion, release the runtime PM wakeref, remove the resource from the pending_unbind interval tree, and put the pages_rsgt. After calling this function, the caller must not access vma_res as its memory may be freed. Each prior hold must be paired with exactly one call to this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is decrementing hold_count and releasing the hold reference; the cleanup actions (fence signal, PM put, tree removal, pages_rsgt put) are part of the release lifecycle and only execute when the last hold is released.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is irreversible; if hold_count were already zero, calling this function again would be a misuse (double-free). Retry cannot succeed.",
+      "contract_summary": "Release one hold on a vma_resource by decrementing hold_count. If this releases the last hold (hold_count reaches zero), signal the unbind fence to indicate unbind completion, release the runtime PM wakeref, remove the resource from the pending_unbind interval tree, and put the pages_rsgt. After calling this function, the caller must not access vma_res as its memory may be freed. Each prior hold must be paired with exactly one call to this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vma_res.hold_count.refs",
+          "i915_vma_resource--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "vma_res.bi.pages_rsgt.kref.refcount",
+          "i915_vma_resource--i915_vma_bind_info--i915_refct_sgt--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vma_res.hold_count.refs",
+          "i915_vma_resource--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "vma_res.bi.pages_rsgt.kref.refcount",
+          "i915_vma_resource--i915_vma_bind_info--i915_refct_sgt--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are supported by the code. refcount_dec_and_test(&vma_res->hold_count) and i915_refct_sgt_put(vma_res->bi.pages_rsgt) match the callee info for put operations on the respective fields. The access paths and type chains are consistent with the function's parameter vma_res and the member structures."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vma_res.hold_count.refs",
+        "i915_vma_resource--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "vma_res.bi.pages_rsgt.kref.refcount",
+        "i915_vma_resource--i915_vma_bind_info--i915_refct_sgt--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is irreversible; if hold_count were already zero, calling this function again would be a misuse (double-free). Retry cannot succeed.",
+    "contract_summary": "Release one hold on a vma_resource by decrementing hold_count. If this releases the last hold (hold_count reaches zero), signal the unbind fence to indicate unbind completion, release the runtime PM wakeref, remove the resource from the pending_unbind interval tree, and put the pages_rsgt. After calling this function, the caller must not access vma_res as its memory may be freed. Each prior hold must be paired with exactly one call to this function."
+  }
+}

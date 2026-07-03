@@ -1,0 +1,115 @@
+{
+  "function_name": "alua_find_get_pg",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pg.kref.refcount.refs",
+      "alua_port_group--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs either because no matching object exists (list iteration complete) or because the matched object's refcount was zero (dying/freed). In both cases the object is not available; retrying immediately is unlikely to succeed unless concurrent creation inserts a new matching object.",
+  "contract_summary": "This function looks up an alua_port_group by group_id and device identifier string from a global list. If a matching object is found and its reference count is still positive (object not yet freed), it increments the reference count via kref_get_unless_zero and returns a pointer to the object, transferring ownership of one reference to the caller. If no match is found or the object is currently being torn down (refcount zero), it returns NULL. The caller must pair this with a corresponding kref_put (e.g., via alua_put_port_group) when the object is no longer needed. The function does not perform any locking for the list iteration; the caller must ensure appropriate synchronization (e.g., the list is RCU-protected or lock-protected).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to look up an alua_port_group by identifier and conditionally acquire a reference via kref_get_unless_zero. The lookup logic (list iteration, field comparisons) is integral to finding the object but is secondary to the refcount acquisition. The function returns the object with an additional reference that the caller must release.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs either because no matching object exists (list iteration complete) or because the matched object's refcount was zero (dying/freed). In both cases the object is not available; retrying immediately is unlikely to succeed unless concurrent creation inserts a new matching object.",
+      "contract_summary": "This function looks up an alua_port_group by group_id and device identifier string from a global list. If a matching object is found and its reference count is still positive (object not yet freed), it increments the reference count via kref_get_unless_zero and returns a pointer to the object, transferring ownership of one reference to the caller. If no match is found or the object is currently being torn down (refcount zero), it returns NULL. The caller must pair this with a corresponding kref_put (e.g., via alua_put_port_group) when the object is no longer needed. The function does not perform any locking for the list iteration; the caller must ensure appropriate synchronization (e.g., the list is RCU-protected or lock-protected)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pg.kref.refcount.refs",
+          "alua_port_group--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pg.kref.refcount.refs",
+          "alua_port_group--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on &pg->kref for the matching pg, which is returned. The access path from the return pointer pg through kref.refcount.refs and the type chain alua_port_group--kref--refcount_t--atomic_t match the callee's parameter path and code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pg.kref.refcount.refs",
+        "alua_port_group--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs either because no matching object exists (list iteration complete) or because the matched object's refcount was zero (dying/freed). In both cases the object is not available; retrying immediately is unlikely to succeed unless concurrent creation inserts a new matching object.",
+    "contract_summary": "This function looks up an alua_port_group by group_id and device identifier string from a global list. If a matching object is found and its reference count is still positive (object not yet freed), it increments the reference count via kref_get_unless_zero and returns a pointer to the object, transferring ownership of one reference to the caller. If no match is found or the object is currently being torn down (refcount zero), it returns NULL. The caller must pair this with a corresponding kref_put (e.g., via alua_put_port_group) when the object is no longer needed. The function does not perform any locking for the list iteration; the caller must ensure appropriate synchronization (e.g., the list is RCU-protected or lock-protected)."
+  }
+}

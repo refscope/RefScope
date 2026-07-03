@@ -1,0 +1,99 @@
+{
+  "function_name": "backlight_device_get_by_name",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bd.dev.kobj.kref.refcount",
+      "backlight_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "class_find_device_by_name",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "class_find_device_by_name",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when no device with the given name exists. Retrying without any expectation that the device will appear is not meaningful; the caller should handle the NULL return as a permanent absence unless it knows the device may be registered later (e.g., in a race with driver loading).",
+  "contract_summary": "Get-wrapper: acquires a reference on a backlight_device by name via class_find_device_by_name, which increments the underlying device's kobject refcount. Returns NULL if no matching device is found; the caller must check the return value. On success, the caller owns a reference and must release it with backlight_device_put() when the device is no longer needed. The function does not create or initialize the device; it only looks up an already-registered instance.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a backlight device by name and return it with an acquired reference. The only logic is calling class_find_device_by_name (which increments the kobject refcount) and converting the result. No other business logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when no device with the given name exists. Retrying without any expectation that the device will appear is not meaningful; the caller should handle the NULL return as a permanent absence unless it knows the device may be registered later (e.g., in a race with driver loading).",
+      "contract_summary": "Get-wrapper: acquires a reference on a backlight_device by name via class_find_device_by_name, which increments the underlying device's kobject refcount. Returns NULL if no matching device is found; the caller must check the return value. On success, the caller owns a reference and must release it with backlight_device_put() when the device is no longer needed. The function does not create or initialize the device; it only looks up an already-registered instance."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bd.dev.kobj.kref.refcount",
+          "backlight_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bd.dev.kobj.kref.refcount",
+          "backlight_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function backlight_device_get_by_name returns a backlight_device pointer obtained via class_find_device_by_name, which acquires a reference. The access path bd.dev.kobj.kref.refcount correctly traces from the return value (backlight_device) through its dev, kobj, kref, to the refcount field. The type chain backlight_device--device--kobject--kref--refcount_t matches. Both path and chain have 5 segments, consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bd.dev.kobj.kref.refcount",
+        "backlight_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when no device with the given name exists. Retrying without any expectation that the device will appear is not meaningful; the caller should handle the NULL return as a permanent absence unless it knows the device may be registered later (e.g., in a race with driver loading).",
+    "contract_summary": "Get-wrapper: acquires a reference on a backlight_device by name via class_find_device_by_name, which increments the underlying device's kobject refcount. Returns NULL if no matching device is found; the caller must check the return value. On success, the caller owns a reference and must release it with backlight_device_put() when the device is no longer needed. The function does not create or initialize the device; it only looks up an already-registered instance."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "aie2_ctx_syncobj_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "hwctx.priv.syncobj.refcount.refcount",
+      "amdxdna_hwctx--amdxdna_priv--drm_syncobj--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_syncobj_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_syncobj--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_syncobj_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_syncobj--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations decrement the refcount unconditionally; retrying would cause a double-free (use-after-free) as the reference is already released.",
+  "contract_summary": "Releases a drm_syncobj reference that is stored in the hwctx's priv structure. This is a standard put wrapper: it drops one reference on the syncobj object. After calling this function, the caller must not access hwctx->priv->syncobj. The syncobj handle itself is owned by userspace and will be closed separately; this function only releases the kernel-side reference. There is no return value — the operation is always performed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to call drm_syncobj_put on a stored syncobj pointer. There is no other logic, comments, or error handling; it is a pure reference-release wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations decrement the refcount unconditionally; retrying would cause a double-free (use-after-free) as the reference is already released.",
+      "contract_summary": "Releases a drm_syncobj reference that is stored in the hwctx's priv structure. This is a standard put wrapper: it drops one reference on the syncobj object. After calling this function, the caller must not access hwctx->priv->syncobj. The syncobj handle itself is owned by userspace and will be closed separately; this function only releases the kernel-side reference. There is no return value — the operation is always performed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hwctx.priv.syncobj.refcount.refcount",
+          "amdxdna_hwctx--amdxdna_priv--drm_syncobj--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "hwctx.priv.syncobj.refcount.refcount",
+          "amdxdna_hwctx--amdxdna_priv--drm_syncobj--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation drm_syncobj_put is a put on the drm_syncobj object passed as argument. The access path hwctx.priv.syncobj.refcount.refcount traces correctly from the function's parameter to the refcount_t field, and the type chain amdxdna_hwctx--amdxdna_priv--drm_syncobj--kref--refcount_t is consistent with the code and callee info. The segment count matches, and the direction is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "hwctx.priv.syncobj.refcount.refcount",
+        "amdxdna_hwctx--amdxdna_priv--drm_syncobj--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations decrement the refcount unconditionally; retrying would cause a double-free (use-after-free) as the reference is already released.",
+    "contract_summary": "Releases a drm_syncobj reference that is stored in the hwctx's priv structure. This is a standard put wrapper: it drops one reference on the syncobj object. After calling this function, the caller must not access hwctx->priv->syncobj. The syncobj handle itself is owned by userspace and will be closed separately; this function only releases the kernel-side reference. There is no return value — the operation is always performed."
+  }
+}

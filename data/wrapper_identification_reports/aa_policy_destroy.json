@@ -1,0 +1,81 @@
+{
+  "function_name": "aa_policy_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "policy.hname.count.refcount.refs",
+      "aa_policy--counted_str--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and has no failure path; retry is not applicable.",
+  "contract_summary": "This function is a put-wrapper that releases a reference to the policy's hname string via aa_put_str. It does not free the policy structure itself. After this call, the caller must not access policy->hname, as the string may be freed if its reference count reaches zero. This function is typically called as part of the policy destruction sequence. The caller is responsible for ensuring that policy is valid and that no further references to hname are held after the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole substantive action is calling aa_put_str on policy->hname. The AA_BUG calls are debugging assertions. Thus the primary purpose is to release a reference on the hname string.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and has no failure path; retry is not applicable.",
+      "contract_summary": "This function is a put-wrapper that releases a reference to the policy's hname string via aa_put_str. It does not free the policy structure itself. After this call, the caller must not access policy->hname, as the string may be freed if its reference count reaches zero. This function is typically called as part of the policy destruction sequence. The caller is responsible for ensuring that policy is valid and that no further references to hname are held after the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "policy.hname.count.refcount.refs",
+          "aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "policy.hname.count.refcount.refs",
+          "aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "aa_put_str(policy->hname) decrements the refcount on the counted_str pointed to by policy->hname. The access path correctly starts from the parameter policy, and the member chain matches the type chain with equal segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "policy.hname.count.refcount.refs",
+        "aa_policy--counted_str--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 0,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and has no failure path; retry is not applicable.",
+    "contract_summary": "This function is a put-wrapper that releases a reference to the policy's hname string via aa_put_str. It does not free the policy structure itself. After this call, the caller must not access policy->hname, as the string may be freed if its reference count reaches zero. This function is typically called as part of the policy destruction sequence. The caller is responsible for ensuring that policy is valid and that no further references to hname are held after the call."
+  }
+}

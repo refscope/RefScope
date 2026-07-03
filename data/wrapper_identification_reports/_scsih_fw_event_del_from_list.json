@@ -1,0 +1,99 @@
+{
+  "function_name": "_scsih_fw_event_del_from_list",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "fw_event.fw_work.refcount",
+      "fw_event_work--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fw_event_work_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fw_work.refcount.refcount",
+      "member_type_chain": "fw_event_work--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fw_event_work_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fw_work.refcount.refcount",
+      "member_type_chain": "fw_event_work--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the list is empty, the put is not executed; retrying would not change the condition and may indicate a double-removal or missing reference.",
+  "contract_summary": "This put-wrapper removes a fw_event_work from its list and drops one reference count on it. The caller must ensure the fw_event is currently on the list before calling; if it is not, the reference is not released. After this call, the caller must not access the fw_event unless it holds another valid reference. The function is thread-safe under the ioc->fw_event_lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to remove a fw_event_work from its list and decrement its reference count via fw_event_work_put. The only non-refcount logic is the spinlock and list removal, which are part of the lifecycle management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the list is empty, the put is not executed; retrying would not change the condition and may indicate a double-removal or missing reference.",
+      "contract_summary": "This put-wrapper removes a fw_event_work from its list and drops one reference count on it. The caller must ensure the fw_event is currently on the list before calling; if it is not, the reference is not released. After this call, the caller must not access the fw_event unless it holds another valid reference. The function is thread-safe under the ioc->fw_event_lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "fw_event.fw_work.refcount",
+          "fw_event_work--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "fw_event.fw_work.refcount",
+          "fw_event_work--kref--refcount_t"
+        ]
+      ],
+      "reason": "fw_event_work_put is called on fw_event, which is parameter 2. The access path fw_event.fw_work.refcount corresponds to the member chain fw_event_work->fw_work (kref)->refcount (refcount_t), consistent with the callee info. The segment counts match (3 segments, 3 types), and the put operation is conditional on list non-empty, which is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "fw_event.fw_work.refcount",
+        "fw_event_work--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the list is empty, the put is not executed; retrying would not change the condition and may indicate a double-removal or missing reference.",
+    "contract_summary": "This put-wrapper removes a fw_event_work from its list and drops one reference count on it. The caller must ensure the fw_event is currently on the list before calling; if it is not, the reference is not released. After this call, the caller must not access the fw_event unless it holds another valid reference. The function is thread-safe under the ioc->fw_event_lock."
+  }
+}

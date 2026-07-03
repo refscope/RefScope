@@ -1,0 +1,194 @@
+{
+  "function_name": "batadv_post_doit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "3",
+      "info.user_ptr[1].refcount.refcount",
+      "genl_info--void--batadv_hard_iface--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "3",
+      "info.user_ptr[1].refcount.refcount",
+      "genl_info--void--batadv_meshif_vlan--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "3",
+      "info.user_ptr[0].mesh_iface.dev_refcnt.refs",
+      "genl_info--void--batadv_priv--net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_meshif_vlan_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_meshif_vlan_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional once the path is entered; failing would indicate a bug (e.g., double-put) and retry would cause use-after-free.",
+  "contract_summary": "This function performs cleanup for a batadv netlink doit operation by releasing references to batadv_hard_iface, batadv_meshif_vlan, and net_device, based on internal flags (BATADV_FLAG_NEED_HARDIF, BATADV_FLAG_NEED_VLAN, BATADV_FLAG_NEED_MESH). It uses the corresponding put functions (batadv_hardif_put, batadv_meshif_vlan_put, dev_put) to drop references that were obtained earlier in the doit handler. The caller must ensure the pointers in info->user_ptr are valid and flags correctly indicate which references were taken. After calling this function, the caller must not use those pointers. The function does not return a value; it releases references unconditionally if the flag is set and pointer is non-NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references (put) on three types of objects based on internal flags; no other significant logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional once the path is entered; failing would indicate a bug (e.g., double-put) and retry would cause use-after-free.",
+      "contract_summary": "This function performs cleanup for a batadv netlink doit operation by releasing references to batadv_hard_iface, batadv_meshif_vlan, and net_device, based on internal flags (BATADV_FLAG_NEED_HARDIF, BATADV_FLAG_NEED_VLAN, BATADV_FLAG_NEED_MESH). It uses the corresponding put functions (batadv_hardif_put, batadv_meshif_vlan_put, dev_put) to drop references that were obtained earlier in the doit handler. The caller must ensure the pointers in info->user_ptr are valid and flags correctly indicate which references were taken. After calling this function, the caller must not use those pointers. The function does not return a value; it releases references unconditionally if the flag is set and pointer is non-NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "3",
+          "info.user_ptr[1].refcount.refcount",
+          "genl_info--void--batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "info.user_ptr[1].refcount.refcount",
+          "genl_info--void--batadv_meshif_vlan--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "info.user_ptr[0].mesh_iface.dev_refcnt.refs",
+          "genl_info--void--batadv_priv--net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "All three candidate operations incorrectly start the access path from 'info' (parameter 3). The refcount fields are on objects obtained via info->user_ptr (which are void pointers), not directly on 'info'. The critical variable for each put operation is an internal local variable (obtained after casting), not a function parameter or return value, so the operations cannot be represented as parameter or return operations. Additionally, the access paths after user_ptr[0/1] are invalid because void pointers have no member fields."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "3",
+          "info.user_ptr[1].refcount.refcount",
+          "genl_info--void--batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "info.user_ptr[1].refcount.refcount",
+          "genl_info--void--batadv_meshif_vlan--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "3",
+          "info.user_ptr[0].mesh_iface.dev_refcnt.refs",
+          "genl_info--void--batadv_priv--net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a standard generic netlink post_doit cleanup wrapper that releases references stored in info->user_ptr. Although user_ptr is a void pointer, the objects are implicitly typed by the calling context; the access paths and type chains in the candidate operations correctly capture the intent. The check stage's rejection based on void pointer member access is technically correct but overly restrictive for this common pattern. The function performs only put operations and has high purity, making it a clear refcount wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "3",
+        "info.user_ptr[1].refcount.refcount",
+        "genl_info--void--batadv_hard_iface--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "3",
+        "info.user_ptr[1].refcount.refcount",
+        "genl_info--void--batadv_meshif_vlan--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "3",
+        "info.user_ptr[0].mesh_iface.dev_refcnt.refs",
+        "genl_info--void--batadv_priv--net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional once the path is entered; failing would indicate a bug (e.g., double-put) and retry would cause use-after-free.",
+    "contract_summary": "This function performs cleanup for a batadv netlink doit operation by releasing references to batadv_hard_iface, batadv_meshif_vlan, and net_device, based on internal flags (BATADV_FLAG_NEED_HARDIF, BATADV_FLAG_NEED_VLAN, BATADV_FLAG_NEED_MESH). It uses the corresponding put functions (batadv_hardif_put, batadv_meshif_vlan_put, dev_put) to drop references that were obtained earlier in the doit handler. The caller must ensure the pointers in info->user_ptr are valid and flags correctly indicate which references were taken. After calling this function, the caller must not use those pointers. The function does not return a value; it releases references unconditionally if the flag is set and pointer is non-NULL."
+  }
+}

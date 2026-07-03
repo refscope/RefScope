@@ -1,0 +1,107 @@
+{
+  "function_name": "__live_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "active.ref.refcount",
+      "live_active--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Once a reference is put, the caller loses a reference to the object; retrying would cause a double-put (use-after-free) if the object was freed, or imbalance if not.",
+  "contract_summary": "This function decrements the reference count of a 'struct live_active' object via kref_put. When the reference count reaches zero, the release callback __live_release is invoked to free the object. After calling this function, the caller must not use the 'active' pointer; it is considered dead if the refcount drops to zero. No return value is provided to distinguish whether the object was freed, so callers must rely on the release callback for cleanup logic.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function consists solely of a call to kref_put with the object's ref member and a release callback, performing no other operations. It is a pure put-wrapper for the live_active reference count.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Once a reference is put, the caller loses a reference to the object; retrying would cause a double-put (use-after-free) if the object was freed, or imbalance if not.",
+      "contract_summary": "This function decrements the reference count of a 'struct live_active' object via kref_put. When the reference count reaches zero, the release callback __live_release is invoked to free the object. After calling this function, the caller must not use the 'active' pointer; it is considered dead if the refcount drops to zero. No return value is provided to distinguish whether the object was freed, so callers must rely on the release callback for cleanup logic."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "active.ref.refcount",
+          "live_active--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "active.ref.refcount",
+          "live_active--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put(&active->ref, __live_release) is a put operation on active->ref, which is a kref member. The access path 'active.ref.refcount' correctly traces from the parameter 'active' through field 'ref' (kref) to 'refcount' (refcount_t). The type chain 'live_active--kref--refcount_t' is consistent with the struct definitions. Segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "active.ref.refcount",
+        "live_active--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Once a reference is put, the caller loses a reference to the object; retrying would cause a double-put (use-after-free) if the object was freed, or imbalance if not.",
+    "contract_summary": "This function decrements the reference count of a 'struct live_active' object via kref_put. When the reference count reaches zero, the release callback __live_release is invoked to free the object. After calling this function, the caller must not use the 'active' pointer; it is considered dead if the refcount drops to zero. No return value is provided to distinguish whether the object was freed, so callers must rely on the release callback for cleanup logic."
+  }
+}

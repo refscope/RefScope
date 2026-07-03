@@ -1,0 +1,99 @@
+{
+  "function_name": "amdxdna_arg_bos_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "job.bos[i].refcount.refcount",
+      "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "drm_gem_object_put is unconditional and always succeeds; retrying is meaningless and would cause double-put.",
+  "contract_summary": "This function releases references to DRM GEM objects stored in the job's bos array. It iterates up to job->bo_cnt and calls drm_gem_object_put on each non-NULL entry. After this call, the caller must not access the GEM objects because their reference count may have reached zero and they could be freed. The caller must ensure each object in the array was previously obtained via a get operation (e.g., drm_gem_object_get). There is no return value and no failure mode; the operation is unconditional per element.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references (drm_gem_object_put) on each GEM object in the job's bos array; no other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "drm_gem_object_put is unconditional and always succeeds; retrying is meaningless and would cause double-put.",
+      "contract_summary": "This function releases references to DRM GEM objects stored in the job's bos array. It iterates up to job->bo_cnt and calls drm_gem_object_put on each non-NULL entry. After this call, the caller must not access the GEM objects because their reference count may have reached zero and they could be freed. The caller must ensure each object in the array was previously obtained via a get operation (e.g., drm_gem_object_get). There is no return value and no failure mode; the operation is unconditional per element."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "job.bos[i].refcount.refcount",
+          "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "job.bos[i].refcount.refcount",
+          "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "drm_gem_object_put is correctly called on job->bos[i], which is a pointer to drm_gem_object. The access path from parameter 1 (job) via bos[i] to refcount (kref) then refcount (refcount_t) matches the callee's path and type chain. Segment count 4 matches 4 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "job.bos[i].refcount.refcount",
+        "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "drm_gem_object_put is unconditional and always succeeds; retrying is meaningless and would cause double-put.",
+    "contract_summary": "This function releases references to DRM GEM objects stored in the job's bos array. It iterates up to job->bo_cnt and calls drm_gem_object_put on each non-NULL entry. After this call, the caller must not access the GEM objects because their reference count may have reached zero and they could be freed. The caller must ensure each object in the array was previously obtained via a get operation (e.g., drm_gem_object_get). There is no return value and no failure mode; the operation is unconditional per element."
+  }
+}

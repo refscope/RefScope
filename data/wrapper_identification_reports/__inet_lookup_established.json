@@ -1,0 +1,107 @@
+{
+  "function_name": "__inet_lookup_established",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "sk.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates socket not found or its refcount is zero (dying); retrying without new socket creation will not succeed.",
+  "contract_summary": "This function performs an RCU-protected lookup of an established socket in the inet ehash table. It acquires a reference via refcount_inc_not_zero on a matching socket, ensuring the returned socket is alive. If the socket is not found or its refcount is zero (dying), NULL is returned. The caller must check the return value and release the socket reference with sock_put when done. The function handles race conditions via nulls list markers and rechecks after acquiring the reference. It is intended to be called under rcu_read_lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an established socket and acquire a reference to it (refcount_inc_not_zero). All other logic (hash calculation, chain traversal, nulls check) is infrastructure for the lookup and secure reference acquisition.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates socket not found or its refcount is zero (dying); retrying without new socket creation will not succeed.",
+      "contract_summary": "This function performs an RCU-protected lookup of an established socket in the inet ehash table. It acquires a reference via refcount_inc_not_zero on a matching socket, ensuring the returned socket is alive. If the socket is not found or its refcount is zero (dying), NULL is returned. The caller must check the return value and release the socket reference with sock_put when done. The function handles race conditions via nulls list markers and rechecks after acquiring the reference. It is intended to be called under rcu_read_lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The candidate correctly identifies the get operation on the return value sk. The refcount is incremented via refcount_inc_not_zero(&sk->sk_refcnt) when a matching socket is found. The access path sk.sk_refcnt.refs matches the field layout of struct sock (sk_refcnt of type refcount_t, containing refs of type atomic_t). The type chain sock--refcount_t--atomic_t is consistent with the callee's type chain. Segment counts match (3 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "sk.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates socket not found or its refcount is zero (dying); retrying without new socket creation will not succeed.",
+    "contract_summary": "This function performs an RCU-protected lookup of an established socket in the inet ehash table. It acquires a reference via refcount_inc_not_zero on a matching socket, ensuring the returned socket is alive. If the socket is not found or its refcount is zero (dying), NULL is returned. The caller must check the return value and release the socket reference with sock_put when done. The function handles race conditions via nulls list markers and rechecks after acquiring the reference. It is intended to be called under rcu_read_lock."
+  }
+}

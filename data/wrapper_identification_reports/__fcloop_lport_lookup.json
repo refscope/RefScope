@@ -1,0 +1,99 @@
+{
+  "function_name": "__fcloop_lport_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "lport.ref.refs",
+      "fcloop_lport--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fcloop_lport_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lport.ref.refs",
+      "member_type_chain": "fcloop_lport--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fcloop_lport_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lport.ref.refs",
+      "member_type_chain": "fcloop_lport--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If fcloop_lport_get fails, the lport's refcount was already zero (object being freed); retrying cannot revive the object. If the lookup fails, the caller may retry later under changed conditions, but that is not related to refcount semantics.",
+  "contract_summary": "This function is a lookup-and-get wrapper: it searches the global list for an lport matching node_name and port_name, and if found, acquires a reference on it via fcloop_lport_get before returning the pointer. The caller is responsible for releasing the reference with a corresponding fcloop_lport_put when the lport is no longer needed. Returns NULL on failure (no match or get failure), which the caller MUST check before dereferencing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an fcloop_lport by identifiers and acquire a reference on it. The only logic beyond refcount management is iterating the global list to find the matching entry. This is analogous to the mlx5dr_definer_get example.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If fcloop_lport_get fails, the lport's refcount was already zero (object being freed); retrying cannot revive the object. If the lookup fails, the caller may retry later under changed conditions, but that is not related to refcount semantics.",
+      "contract_summary": "This function is a lookup-and-get wrapper: it searches the global list for an lport matching node_name and port_name, and if found, acquires a reference on it via fcloop_lport_get before returning the pointer. The caller is responsible for releasing the reference with a corresponding fcloop_lport_put when the lport is no longer needed. Returns NULL on failure (no match or get failure), which the caller MUST check before dereferencing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "lport.ref.refs",
+          "fcloop_lport--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "lport.ref.refs",
+          "fcloop_lport--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns the lport pointer after fcloop_lport_get(lport) increments lport->ref.refs. The critical variable is the return value (struct fcloop_lport*), and the access path 'lport.ref.refs' from that pointer through 'ref' (refcount_t) to 'refs' (atomic_t) matches the callee's type chain. The segment count (3 segments, 3 types) is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "lport.ref.refs",
+        "fcloop_lport--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If fcloop_lport_get fails, the lport's refcount was already zero (object being freed); retrying cannot revive the object. If the lookup fails, the caller may retry later under changed conditions, but that is not related to refcount semantics.",
+    "contract_summary": "This function is a lookup-and-get wrapper: it searches the global list for an lport matching node_name and port_name, and if found, acquires a reference on it via fcloop_lport_get before returning the pointer. The caller is responsible for releasing the reference with a corresponding fcloop_lport_put when the lport is no longer needed. Returns NULL on failure (no match or get failure), which the caller MUST check before dereferencing."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__prestera_kern_neigh_cache_destruct",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "n_cache.key.dev.dev_refcnt.refs",
+      "prestera_kern_neigh_cache--prestera_kern_neigh_key--net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dev_put is an unconditional release; if the refcount reaches zero the object is freed. Retrying after this call would result in a double-put and a use-after-free bug.",
+  "contract_summary": "Put wrapper: releases a reference to the net_device stored in n_cache->key.dev. This function is typically called during destruction of a prestera_kern_neigh_cache entry. After this call, the device reference count is decremented; if it becomes zero the device may be freed. The caller must ensure that n_cache is no longer used after this call, as the device pointer may become invalid. This put should be paired with a previous dev_hold or similar get operation performed when the cache entry was initialized.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The only logic in the function is a single call to dev_put, which decrements the refcount of a net_device. No other operations, assignments, or conditionals exist. The function's sole purpose is to release a device reference held in the neighbor cache entry.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dev_put is an unconditional release; if the refcount reaches zero the object is freed. Retrying after this call would result in a double-put and a use-after-free bug.",
+      "contract_summary": "Put wrapper: releases a reference to the net_device stored in n_cache->key.dev. This function is typically called during destruction of a prestera_kern_neigh_cache entry. After this call, the device reference count is decremented; if it becomes zero the device may be freed. The caller must ensure that n_cache is no longer used after this call, as the device pointer may become invalid. This put should be paired with a previous dev_hold or similar get operation performed when the cache entry was initialized."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "n_cache.key.dev.dev_refcnt.refs",
+          "prestera_kern_neigh_cache--prestera_kern_neigh_key--net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "n_cache.key.dev.dev_refcnt.refs",
+          "prestera_kern_neigh_cache--prestera_kern_neigh_key--net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_put is called on n_cache->key.dev, decrementing the refcount. The access path from parameter 2 (n_cache) through key.dev to dev_refcnt.refs is correct, and the type chain matches the callee info. The segment counts are equal (5 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "n_cache.key.dev.dev_refcnt.refs",
+        "prestera_kern_neigh_cache--prestera_kern_neigh_key--net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dev_put is an unconditional release; if the refcount reaches zero the object is freed. Retrying after this call would result in a double-put and a use-after-free bug.",
+    "contract_summary": "Put wrapper: releases a reference to the net_device stored in n_cache->key.dev. This function is typically called during destruction of a prestera_kern_neigh_cache entry. After this call, the device reference count is decremented; if it becomes zero the device may be freed. The caller must ensure that n_cache is no longer used after this call, as the device pointer may become invalid. This put should be paired with a previous dev_hold or similar get operation performed when the cache entry was initialized."
+  }
+}

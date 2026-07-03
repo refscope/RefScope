@@ -1,0 +1,143 @@
+{
+  "function_name": "__dlm_lockres_calc_usage",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "res.refs.refcount",
+      "dlm_lock_resource--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "res.refs.refcount",
+      "dlm_lock_resource--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dlm_lockres_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.refs.refcount",
+      "member_type_chain": "dlm_lock_resource--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dlm_lockres_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.refs.refcount",
+      "member_type_chain": "dlm_lock_resource--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dlm_lockres_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.refs.refcount",
+      "member_type_chain": "dlm_lock_resource--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dlm_lockres_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.refs.refcount",
+      "member_type_chain": "dlm_lock_resource--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This function does not have a failure mode; it unconditionally either adds to or removes from the purge list based on the current state. Retrying would only be needed if the resource's usage state changes again, which is driven by external events, not by a failed operation.",
+  "contract_summary": "This function adjusts the purge list membership of a lock resource based on whether it is unused. If the resource is unused and not already on the purge list, it adds the resource (incrementing its reference count) and increments the purge count. If the resource is in use but currently on the purge list, it removes it (decrementing its reference count) and decrements the purge count. The caller must hold both the dlm and resource spinlocks. The function does not transfer ownership; it manages a temporary reference held by the purge list itself. The resource's refcount is effectively pinned while on the purge list to prevent premature freeing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The primary purpose is to manage the lock resource's purge list membership and refcount based on usage state. It conditionally acquires or releases a reference via dlm_lockres_get/put, but also performs list manipulation and counter updates, making it more than a pure get/put wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This function does not have a failure mode; it unconditionally either adds to or removes from the purge list based on the current state. Retrying would only be needed if the resource's usage state changes again, which is driven by external events, not by a failed operation.",
+      "contract_summary": "This function adjusts the purge list membership of a lock resource based on whether it is unused. If the resource is unused and not already on the purge list, it adds the resource (incrementing its reference count) and increments the purge count. If the resource is in use but currently on the purge list, it removes it (decrementing its reference count) and decrements the purge count. The caller must hold both the dlm and resource spinlocks. The function does not transfer ownership; it manages a temporary reference held by the purge list itself. The resource's refcount is effectively pinned while on the purge list to prevent premature freeing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "res.refs.refcount",
+          "dlm_lock_resource--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "res.refs.refcount",
+          "dlm_lock_resource--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "res.refs.refcount",
+          "dlm_lock_resource--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "res.refs.refcount",
+          "dlm_lock_resource--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both dlm_lockres_get and dlm_lockres_put operate on parameter res (index 1). The access path res.refs.refcount and type chain dlm_lock_resource--kref--refcount_t match the callee info and are consistent with the code. The path segment count (3) equals the type chain count (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "res.refs.refcount",
+        "dlm_lock_resource--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "res.refs.refcount",
+        "dlm_lock_resource--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This function does not have a failure mode; it unconditionally either adds to or removes from the purge list based on the current state. Retrying would only be needed if the resource's usage state changes again, which is driven by external events, not by a failed operation.",
+    "contract_summary": "This function adjusts the purge list membership of a lock resource based on whether it is unused. If the resource is unused and not already on the purge list, it adds the resource (incrementing its reference count) and increments the purge count. If the resource is in use but currently on the purge list, it removes it (decrementing its reference count) and decrements the purge count. The caller must hold both the dlm and resource spinlocks. The function does not transfer ownership; it manages a temporary reference held by the purge list itself. The resource's refcount is effectively pinned while on the purge list to prevent premature freeing."
+  }
+}

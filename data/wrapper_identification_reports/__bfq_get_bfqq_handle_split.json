@@ -1,0 +1,106 @@
+{
+  "function_name": "__bfq_get_bfqq_handle_split",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bfqq.ref",
+      "bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_put_queue",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always returns a valid bfqq pointer (no failure path exposed); internal get_queue failure would cause NULL return but retry is unlikely to help without debugging.",
+  "contract_summary": "This is a get wrapper for bfq_queue objects that returns a bfqq with an elevated reference count. It either returns the existing queue (without changing reference count) or obtains a new queue via bfq_get_queue, putting any previous queue. It also handles split-related burst list tracking. The caller acquires ownership of a reference and must eventually call bfq_put_queue to release it. The function does not fail (always returns a valid bfqq pointer). The burst list logic is internal and does not affect the reference count contract.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to obtain a bfq_queue with an elevated reference count, either from cache or by creating a new one via bfq_get_queue and putting any stale queue. The burst list and split_time logic is secondary state management, so purity is medium.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always returns a valid bfqq pointer (no failure path exposed); internal get_queue failure would cause NULL return but retry is unlikely to help without debugging.",
+      "contract_summary": "This is a get wrapper for bfq_queue objects that returns a bfqq with an elevated reference count. It either returns the existing queue (without changing reference count) or obtains a new queue via bfq_get_queue, putting any previous queue. It also handles split-related burst list tracking. The caller acquires ownership of a reference and must eventually call bfq_put_queue to release it. The function does not fail (always returns a valid bfqq pointer). The burst list logic is internal and does not affect the reference count contract."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bfqq.ref",
+          "bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "bic.bfqq.ref",
+          "bfq_io_cq--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bfqq.ref",
+          "bfq_queue--int"
+        ]
+      ],
+      "reason": "The get operation on the return value is consistent: the function returns a bfq_queue with a reference held (either via existing reference or new allocation). The path 'bfqq.ref' and type chain 'bfq_queue--int' correctly represent the refcount field. The put operation candidate is invalid because the path 'bic.bfqq.ref' omits the intermediate 'bfqq_data[act_idx]' member and the type chain 'bfq_io_cq--bfq_queue--int' does not match the actual struct definition (bfq_io_cq has an array of struct bfq_iocq_bfqq_data, not a direct bfqq member). Additionally, indexing by act_idx is missing. Thus, the put operation is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bfqq.ref",
+        "bfq_queue--int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always returns a valid bfqq pointer (no failure path exposed); internal get_queue failure would cause NULL return but retry is unlikely to help without debugging.",
+    "contract_summary": "This is a get wrapper for bfq_queue objects that returns a bfqq with an elevated reference count. It either returns the existing queue (without changing reference count) or obtains a new queue via bfq_get_queue, putting any previous queue. It also handles split-related burst list tracking. The caller acquires ownership of a reference and must eventually call bfq_put_queue to release it. The function does not fail (always returns a valid bfqq pointer). The burst list logic is internal and does not affect the reference count contract."
+  }
+}

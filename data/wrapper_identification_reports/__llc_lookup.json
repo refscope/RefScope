@@ -1,0 +1,99 @@
+{
+  "function_name": "__llc_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "sk.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__llc_lookup_established",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rc.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__llc_lookup_established",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rc.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "A NULL return indicates no matching socket exists; retrying without a state change in the socket tables will likely fail again, and the refcount operation is never attempted on failure.",
+  "contract_summary": "Get-wrapper: searches for a connected or listening LLC socket matching the given addresses and net namespace. If found, it returns the socket with an incremented reference count (via the callee's internal get). The caller receives ownership of one reference and must pair this call with a corresponding sock_put (or equivalent release) when done. On failure (NULL), no reference is taken. The caller should check the return value before using the socket.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely performs a lookup via two callee get-functions and returns a socket with an acquired reference. No other logic exists; its sole purpose is to obtain a reference-counted socket object.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "A NULL return indicates no matching socket exists; retrying without a state change in the socket tables will likely fail again, and the refcount operation is never attempted on failure.",
+      "contract_summary": "Get-wrapper: searches for a connected or listening LLC socket matching the given addresses and net namespace. If found, it returns the socket with an incremented reference count (via the callee's internal get). The caller receives ownership of one reference and must pair this call with a corresponding sock_put (or equivalent release) when done. On failure (NULL), no reference is taken. The caller should check the return value before using the socket."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The candidate correctly identifies the get operation from the return value of __llc_lookup_established, which is assigned to sk and returned by __llc_lookup. The access path sk.sk_refcnt.refs and type chain sock--refcount_t--atomic_t are consistent with the callee information and the code's struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "sk.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "A NULL return indicates no matching socket exists; retrying without a state change in the socket tables will likely fail again, and the refcount operation is never attempted on failure.",
+    "contract_summary": "Get-wrapper: searches for a connected or listening LLC socket matching the given addresses and net namespace. If found, it returns the socket with an incremented reference count (via the callee's internal get). The caller receives ownership of one reference and must pair this call with a corresponding sock_put (or equivalent release) when done. On failure (NULL), no reference is taken. The caller should check the return value before using the socket."
+  }
+}

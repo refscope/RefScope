@@ -1,0 +1,99 @@
+{
+  "function_name": "__dlm_lookup_lockres_full",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "res.refs.refcount",
+      "dlm_lock_resource--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dlm_lockres_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.refs.refcount",
+      "member_type_chain": "dlm_lock_resource--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dlm_lockres_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "res.refs.refcount",
+      "member_type_chain": "dlm_lock_resource--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure (NULL) means the resource was not found in the hash table; the caller may retry later if the resource is expected to be created (e.g., after releasing and re-acquiring the spinlock).",
+  "contract_summary": "This is a lookup-and-get wrapper: it searches the lock resource hash table (under dlm->spinlock) for a resource matching the given name and length. If found, the resource's refcount is incremented via dlm_lockres_get and the pointer is returned to the caller. The caller holds the lock and must later release the reference with dlm_lockres_put when done with the resource. If the resource is not found, NULL is returned and no reference is acquired; the caller may retry after releasing the spinlock if a concurrent creation is possible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a lock resource and acquire a reference on it via dlm_lockres_get, returning the referenced object to the caller. The hash table iteration and name comparison are necessary steps to locate the object, but the core semantic is a get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure (NULL) means the resource was not found in the hash table; the caller may retry later if the resource is expected to be created (e.g., after releasing and re-acquiring the spinlock).",
+      "contract_summary": "This is a lookup-and-get wrapper: it searches the lock resource hash table (under dlm->spinlock) for a resource matching the given name and length. If found, the resource's refcount is incremented via dlm_lockres_get and the pointer is returned to the caller. The caller holds the lock and must later release the reference with dlm_lockres_put when done with the resource. If the resource is not found, NULL is returned and no reference is acquired; the caller may retry after releasing the spinlock if a concurrent creation is possible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "res.refs.refcount",
+          "dlm_lock_resource--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "res.refs.refcount",
+          "dlm_lock_resource--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls dlm_lockres_get(res) on the found resource and returns it. The access path res.refs.refcount and type chain dlm_lock_resource--kref--refcount_t are consistent with the callee information. The return value (index 0) is the critical variable."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "res.refs.refcount",
+        "dlm_lock_resource--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure (NULL) means the resource was not found in the hash table; the caller may retry later if the resource is expected to be created (e.g., after releasing and re-acquiring the spinlock).",
+    "contract_summary": "This is a lookup-and-get wrapper: it searches the lock resource hash table (under dlm->spinlock) for a resource matching the given name and length. If found, the resource's refcount is incremented via dlm_lockres_get and the pointer is returned to the caller. The caller holds the lock and must later release the reference with dlm_lockres_put when done with the resource. If the resource is not found, NULL is returned and no reference is acquired; the caller may retry after releasing the spinlock if a concurrent creation is possible."
+  }
+}

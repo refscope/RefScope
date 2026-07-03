@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_hardif_neigh_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hardif_neigh.refcount.refcount.refs",
+      "batadv_hardif_neigh_node--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the neighbor node does not exist or is already dying; retrying the same lookup without external changes will not succeed, and the function does not provide retry semantics.",
+  "contract_summary": "This function performs an RCU-protected lookup of a hard interface neighbor node by MAC address. If a matching node is found and its reference count is non-zero (i.e., the node is still alive), it increments the reference count via kref_get_unless_zero and returns a pointer to the node. The caller is responsible for releasing the reference with a corresponding put (e.g., batadv_hardif_neigh_put) once the node is no longer needed. If no matching node exists or the node is already dying (refcount zero), the function returns NULL, which the caller must check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to locate a hard interface neighbor node by address and conditionally acquire a reference on it. The only logic beyond refcount management is the list traversal and address comparison, which are inherent to the lookup needed for the get.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the neighbor node does not exist or is already dying; retrying the same lookup without external changes will not succeed, and the function does not provide retry semantics.",
+      "contract_summary": "This function performs an RCU-protected lookup of a hard interface neighbor node by MAC address. If a matching node is found and its reference count is non-zero (i.e., the node is still alive), it increments the reference count via kref_get_unless_zero and returns a pointer to the node. The caller is responsible for releasing the reference with a corresponding put (e.g., batadv_hardif_neigh_put) once the node is no longer needed. If no matching node exists or the node is already dying (refcount zero), the function returns NULL, which the caller must check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hardif_neigh.refcount.refcount.refs",
+          "batadv_hardif_neigh_node--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hardif_neigh.refcount.refcount.refs",
+          "batadv_hardif_neigh_node--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The kref_get_unless_zero call operates on &tmp_hardif_neigh->refcount, and the critical variable returned is hardif_neigh (of type batadv_hardif_neigh_node*). The access path from hardif_neigh to the final atomic_t is hardif_neigh.refcount.refcount.refs, matching the callee's internal path (kref.refcount.refs). The member type chain batadv_hardif_neigh_node->kref->refcount_t->atomic_t is consistent. The segment counts (4) match. Location 'return' index 0 is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hardif_neigh.refcount.refcount.refs",
+        "batadv_hardif_neigh_node--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the neighbor node does not exist or is already dying; retrying the same lookup without external changes will not succeed, and the function does not provide retry semantics.",
+    "contract_summary": "This function performs an RCU-protected lookup of a hard interface neighbor node by MAC address. If a matching node is found and its reference count is non-zero (i.e., the node is still alive), it increments the reference count via kref_get_unless_zero and returns a pointer to the node. The caller is responsible for releasing the reference with a corresponding put (e.g., batadv_hardif_neigh_put) once the node is no longer needed. If no matching node exists or the node is already dying (refcount zero), the function returns NULL, which the caller must check."
+  }
+}

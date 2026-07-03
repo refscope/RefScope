@@ -1,0 +1,99 @@
+{
+  "function_name": "__fib6_drop_pcpu_from",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "match.fib6_ref.refs",
+      "fib6_info--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fib6_info_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "f6i.fib6_ref.refs",
+      "member_type_chain": "fib6_info--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fib6_info_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "f6i.fib6_ref.refs",
+      "member_type_chain": "fib6_info--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation (fib6_info_release) should always succeed if the reference was properly held; no retry needed. The conditional nature means only matching CPU entries are processed; retrying would not change the condition as the match is being removed.",
+  "contract_summary": "This function is a put wrapper that releases the reference to a specific fib6_info (match) from all per-CPU cached routes that currently reference it. It atomically clears the from pointer in each pcpu_rt and decrements the refcount via fib6_info_release. The caller must ensure match is valid and that it is safe to release these references (e.g., match is being removed). After calling this function, match's refcount is decreased by the number of CPUs that had cached routes pointing to it. The caller must not use match after this if the refcount drops to zero and match is freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release references (put) from per-CPU cached routes that match a given fib6_info (match). All logic is focused on iterating over CPUs, atomically clearing the from pointer, and calling fib6_info_release. There is no other significant business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation (fib6_info_release) should always succeed if the reference was properly held; no retry needed. The conditional nature means only matching CPU entries are processed; retrying would not change the condition as the match is being removed.",
+      "contract_summary": "This function is a put wrapper that releases the reference to a specific fib6_info (match) from all per-CPU cached routes that currently reference it. It atomically clears the from pointer in each pcpu_rt and decrements the refcount via fib6_info_release. The caller must ensure match is valid and that it is safe to release these references (e.g., match is being removed). After calling this function, match's refcount is decreased by the number of CPUs that had cached routes pointing to it. The caller must not use match after this if the refcount drops to zero and match is freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "match.fib6_ref.refs",
+          "fib6_info--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "match.fib6_ref.refs",
+          "fib6_info--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls fib6_info_release on a pointer that is equal to 'match' (parameter 2). The access path match.fib6_ref.refs and type chain fib6_info--refcount_t--atomic_t are consistent with callee info and the code. Segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "match.fib6_ref.refs",
+        "fib6_info--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation (fib6_info_release) should always succeed if the reference was properly held; no retry needed. The conditional nature means only matching CPU entries are processed; retrying would not change the condition as the match is being removed.",
+    "contract_summary": "This function is a put wrapper that releases the reference to a specific fib6_info (match) from all per-CPU cached routes that currently reference it. It atomically clears the from pointer in each pcpu_rt and decrements the refcount via fib6_info_release. The caller must ensure match is valid and that it is safe to release these references (e.g., match is being removed). After calling this function, match's refcount is decreased by the number of CPUs that had cached routes pointing to it. The caller must not use match after this if the refcount drops to zero and match is freed."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bus_to_subsys",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "sp.subsys.kobj.kref.refcount",
+      "subsys_private--kset--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "subsys_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "subsys_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "The failure (NULL return) means the bus was not found in the list; this condition is transient if the bus is registered later, so retrying may succeed.",
+  "contract_summary": "Get-wrapper: acquires a reference on the subsys_private structure associated with a given bus type by searching the bus_kset list. Returns the subsys_private pointer with an incremented refcount on success, or NULL if the bus is not found. The caller must call subsys_put (or equivalent) to release the reference when done. The function does not take any locks beyond the list_lock during the lookup; the returned reference is valid as long as the caller holds it and the bus remains registered. There is no automatic cleanup mechanism; the caller is responsible for balancing the get and put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to find a subsys_private by bus type and acquire a reference via subsys_get; the list iteration is minimal and necessary for the lookup, but the core action is refcount acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "The failure (NULL return) means the bus was not found in the list; this condition is transient if the bus is registered later, so retrying may succeed.",
+      "contract_summary": "Get-wrapper: acquires a reference on the subsys_private structure associated with a given bus type by searching the bus_kset list. Returns the subsys_private pointer with an incremented refcount on success, or NULL if the bus is not found. The caller must call subsys_put (or equivalent) to release the reference when done. The function does not take any locks beyond the list_lock during the lookup; the returned reference is valid as long as the caller holds it and the bus remains registered. There is no automatic cleanup mechanism; the caller is responsible for balancing the get and put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sp.subsys.kobj.kref.refcount",
+          "subsys_private--kset--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "sp.subsys.kobj.kref.refcount",
+          "subsys_private--kset--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function 'bus_to_subsys' returns a struct subsys_private pointer after calling subsys_get(sp), which increments the refcount on the returned object. The access path 'sp.subsys.kobj.kref.refcount' correctly traces from the return variable (sp) through the nested structs: sp->subsys (struct kset) -> kobj (struct kobject) -> kref (struct kref) -> refcount (refcount_t). The type chain 'subsys_private--kset--kobject--kref--refcount_t' matches the actual struct definitions. Segment counts are equal (5 each), confirming the path is complete."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "sp.subsys.kobj.kref.refcount",
+        "subsys_private--kset--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "The failure (NULL return) means the bus was not found in the list; this condition is transient if the bus is registered later, so retrying may succeed.",
+    "contract_summary": "Get-wrapper: acquires a reference on the subsys_private structure associated with a given bus type by searching the bus_kset list. Returns the subsys_private pointer with an incremented refcount on success, or NULL if the bus is not found. The caller must call subsys_put (or equivalent) to release the reference when done. The function does not take any locks beyond the list_lock during the lookup; the returned reference is valid as long as the caller holds it and the bus remains registered. There is no automatic cleanup mechanism; the caller is responsible for balancing the get and put."
+  }
+}

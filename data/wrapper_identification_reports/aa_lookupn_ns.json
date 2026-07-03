@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_lookupn_ns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ns.unconfined.label.count.count.refcount",
+      "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_ns",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ns.unconfined.label.count.count.refcount",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the namespace does not exist; retrying with the same name will not create it, so retry is pointless.",
+  "contract_summary": "RCU-protected lookup-and-get: performs an atomic lookup of a namespace by name (via __aa_lookupn_ns) under RCU read lock, and if found, increments its reference count with aa_get_ns. Returns a pointer to the namespace with an elevated refcount, or NULL if not found. The caller must release the reference with aa_put_ns when done. The caller does not need to hold any locks; the RCU lock is managed internally. This is a read-only acquisition, not a creation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a namespace and acquire a reference count on it via aa_get_ns. The function consists solely of RCU locking, a lookup call, a get call, and unlock, with no other logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the namespace does not exist; retrying with the same name will not create it, so retry is pointless.",
+      "contract_summary": "RCU-protected lookup-and-get: performs an atomic lookup of a namespace by name (via __aa_lookupn_ns) under RCU read lock, and if found, increments its reference count with aa_get_ns. Returns a pointer to the namespace with an elevated refcount, or NULL if not found. The caller must release the reference with aa_put_ns when done. The caller does not need to hold any locks; the RCU lock is managed internally. This is a read-only acquisition, not a creation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.unconfined.label.count.count.refcount",
+          "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ns.unconfined.label.count.count.refcount",
+          "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The callee aa_get_ns increments refcount on the returned ns, which flows out of aa_lookupn_ns via the return. The access path ns.unconfined.label.count.count.refcount and type chain match the callee's description."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ns.unconfined.label.count.count.refcount",
+        "aa_ns--aa_profile--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the namespace does not exist; retrying with the same name will not create it, so retry is pointless.",
+    "contract_summary": "RCU-protected lookup-and-get: performs an atomic lookup of a namespace by name (via __aa_lookupn_ns) under RCU read lock, and if found, increments its reference count with aa_get_ns. Returns a pointer to the namespace with an elevated refcount, or NULL if not found. The caller must release the reference with aa_put_ns when done. The caller does not need to hold any locks; the RCU lock is managed internally. This is a read-only acquisition, not a creation."
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "function_name": "__proxy_share",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "old.proxy.count.count.refcount",
+      "aa_label--aa_proxy--aa_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "new.count.count.refcount",
+      "aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "new.proxy.count.count.refcount",
+      "aa_label--aa_proxy--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__aa_proxy_redirect",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__aa_proxy_redirect",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function returns void and always succeeds; there is no failure path that would require retry.",
+  "contract_summary": "This function shares the proxy of 'old' label with 'new' label by transferring a proxy reference from old to new, while also incrementing the refcount of the new label (via __aa_proxy_redirect). It unconditionally succeeds. After calling this function, the caller should consider that the new label has an extra reference and must be released appropriately (e.g., via aa_put_label) when no longer needed. The proxy reference management is internal; the caller does not need to manually get or put the proxy.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function performs only refcount operations (aa_get_proxy, __aa_proxy_redirect, aa_put_proxy) and a pointer assignment to share a proxy between two labels. There is no unrelated business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function returns void and always succeeds; there is no failure path that would require retry.",
+      "contract_summary": "This function shares the proxy of 'old' label with 'new' label by transferring a proxy reference from old to new, while also incrementing the refcount of the new label (via __aa_proxy_redirect). It unconditionally succeeds. After calling this function, the caller should consider that the new label has an extra reference and must be released appropriately (e.g., via aa_put_label) when no longer needed. The proxy reference management is internal; the caller does not need to manually get or put the proxy."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "old.proxy.count.count.refcount",
+          "aa_label--aa_proxy--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "new.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "new.proxy.count.count.refcount",
+          "aa_label--aa_proxy--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "old.proxy.count.count.refcount",
+          "aa_label--aa_proxy--aa_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "new.count.count.refcount",
+          "aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "new.proxy.count.count.refcount",
+          "aa_label--aa_proxy--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "All operations are consistent: aa_get_proxy(old->proxy) is a get on old's proxy, __aa_proxy_redirect(old,new) is a get on new's label count, and aa_put_proxy(proxy) (where proxy was new->proxy) is a put on new's original proxy. Access paths and type chains match the code and callee info, and segment counts are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "old.proxy.count.count.refcount",
+        "aa_label--aa_proxy--aa_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "new.count.count.refcount",
+        "aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "new.proxy.count.count.refcount",
+        "aa_label--aa_proxy--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function returns void and always succeeds; there is no failure path that would require retry.",
+    "contract_summary": "This function shares the proxy of 'old' label with 'new' label by transferring a proxy reference from old to new, while also incrementing the refcount of the new label (via __aa_proxy_redirect). It unconditionally succeeds. After calling this function, the caller should consider that the new label has an extra reference and must be released appropriately (e.g., via aa_put_label) when no longer needed. The proxy reference management is internal; the caller does not need to manually get or put the proxy."
+  }
+}

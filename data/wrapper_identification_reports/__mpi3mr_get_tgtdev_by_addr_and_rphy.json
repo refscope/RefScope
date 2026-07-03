@@ -1,0 +1,99 @@
+{
+  "function_name": "__mpi3mr_get_tgtdev_by_addr_and_rphy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tgtdev.ref_count.refcount",
+      "mpi3mr_tgt_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) means the device was not found in the list under the held lock; retrying immediately would not change the result because the list state is stable while holding the lock.",
+  "contract_summary": "This is a get-wrapper that looks up a target device by SAS address and rphy pointer while holding tgtdev_lock. If found, it increments the device's kref reference count and returns a pointer to the caller. The caller must release this reference with a corresponding put when the device is no longer needed. If no matching device is found, NULL is returned and no reference is taken. The caller must check the return value to determine success.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a target device by address and rphy, and if found, acquire a reference on it via mpi3mr_tgtdev_get. The only additional logic is the list traversal and condition check, which directly support the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) means the device was not found in the list under the held lock; retrying immediately would not change the result because the list state is stable while holding the lock.",
+      "contract_summary": "This is a get-wrapper that looks up a target device by SAS address and rphy pointer while holding tgtdev_lock. If found, it increments the device's kref reference count and returns a pointer to the caller. The caller must release this reference with a corresponding put when the device is no longer needed. If no matching device is found, NULL is returned and no reference is taken. The caller must check the return value to determine success."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "The callee mpi3mr_tgtdev_get increments the refcount on tgtdev, which is the return value. Access path tgtdev.ref_count.refcount correctly traces from the returned pointer to the refcount field, and the type chain mpi3mr_tgt_dev--kref--refcount_t is consistent with the callee info and the code structure."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tgtdev.ref_count.refcount",
+        "mpi3mr_tgt_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) means the device was not found in the list under the held lock; retrying immediately would not change the result because the list state is stable while holding the lock.",
+    "contract_summary": "This is a get-wrapper that looks up a target device by SAS address and rphy pointer while holding tgtdev_lock. If found, it increments the device's kref reference count and returns a pointer to the caller. The caller must release this reference with a corresponding put when the device is no longer needed. If no matching device is found, NULL is returned and no reference is taken. The caller must check the return value to determine success."
+  }
+}

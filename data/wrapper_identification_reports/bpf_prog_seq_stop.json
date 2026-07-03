@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_prog_seq_stop",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "v.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation never fails; if v is NULL no put is attempted so retry is pointless.",
+  "contract_summary": "This function is the seq_file stop callback for iterating over BPF programs. Its main role is to release the reference on the current bpf_prog object (v) that was acquired during the start/next callbacks by calling bpf_prog_put. If v is NULL, it calls __bpf_prog_seq_show for final output (unrelated to refcount). The caller (seq_file core) does not need to check return value. After this call, the pointer v must not be used; the caller must have previously obtained the reference appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a reference on a bpf_prog object when it is the current element in seq_file iteration; the put on non-NULL v is the key refcount operation. The NULL path calls an unrelated show function, but that is an edge case.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation never fails; if v is NULL no put is attempted so retry is pointless.",
+      "contract_summary": "This function is the seq_file stop callback for iterating over BPF programs. Its main role is to release the reference on the current bpf_prog object (v) that was acquired during the start/next callbacks by calling bpf_prog_put. If v is NULL, it calls __bpf_prog_seq_show for final output (unrelated to refcount). The caller (seq_file core) does not need to check return value. After this call, the pointer v must not be used; the caller must have previously obtained the reference appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "v.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "v.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "bpf_prog_put is called on v (parameter 2) when v is not null. The access path v.aux.refcnt correctly traces from v (struct bpf_prog *) through aux to refcnt, matching the callee info. Segment counts (3) and type chain (3 types) are consistent. The operation direction 'put' aligns with the callee being a put function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "v.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation never fails; if v is NULL no put is attempted so retry is pointless.",
+    "contract_summary": "This function is the seq_file stop callback for iterating over BPF programs. Its main role is to release the reference on the current bpf_prog object (v) that was acquired during the start/next callbacks by calling bpf_prog_put. If v is NULL, it calls __bpf_prog_seq_show for final output (unrelated to refcount). The caller (seq_file core) does not need to check return value. After this call, the pointer v must not be used; the caller must have previously obtained the reference appropriately."
+  }
+}

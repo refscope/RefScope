@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_get_proxy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "proxy.count.count.refcount",
+      "aa_proxy--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation never fails when proxy is non-NULL; NULL input is a no-op, so retry is not applicable.",
+  "contract_summary": "This is a get wrapper for aa_proxy. It acquires a reference on the proxy object by incrementing its kref counter. The function is safe to call with NULL, in which case it returns NULL without any refcount operation. The caller receives a pointer to the proxy with an additional reference; the caller must later release that reference using the corresponding put function (e.g., aa_put_proxy) to avoid leaks. The return value is the input proxy pointer, so the caller can check for NULL if needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on an aa_proxy object via kref_get, with a NULL-safety check. No other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation never fails when proxy is non-NULL; NULL input is a no-op, so retry is not applicable.",
+      "contract_summary": "This is a get wrapper for aa_proxy. It acquires a reference on the proxy object by incrementing its kref counter. The function is safe to call with NULL, in which case it returns NULL without any refcount operation. The caller receives a pointer to the proxy with an additional reference; the caller must later release that reference using the corresponding put function (e.g., aa_put_proxy) to avoid leaks. The return value is the input proxy pointer, so the caller can check for NULL if needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "proxy.count.count.refcount",
+          "aa_proxy--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "proxy.count.count.refcount",
+          "aa_proxy--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The kref_get call is on &(proxy->count.count), which corresponds to the access path 'proxy.count.count.refcount' starting from the parameter 'proxy'. The type chain aa_proxy--aa_count--kref--refcount_t matches the struct fields. The segment counts match (4 segments, 4 types). The callee info for kref_get is consistent with the inner kref.refcount part. Since the returned object is the same as the parameter, location parameter index 1 is appropriate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "proxy.count.count.refcount",
+        "aa_proxy--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation never fails when proxy is non-NULL; NULL input is a no-op, so retry is not applicable.",
+    "contract_summary": "This is a get wrapper for aa_proxy. It acquires a reference on the proxy object by incrementing its kref counter. The function is safe to call with NULL, in which case it returns NULL without any refcount operation. The caller receives a pointer to the proxy with an additional reference; the caller must later release that reference using the corresponding put function (e.g., aa_put_proxy) to avoid leaks. The return value is the input proxy pointer, so the caller can check for NULL if needed."
+  }
+}

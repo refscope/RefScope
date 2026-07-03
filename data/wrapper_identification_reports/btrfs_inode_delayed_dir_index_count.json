@@ -1,0 +1,74 @@
+{
+  "function_name": "btrfs_inode_delayed_dir_index_count",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_release_delayed_node",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when delayed node is absent or index_cnt is zero; these conditions may change later if the delayed node is created or index updated, but retrying without additional state changes would likely fail again.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to retrieve the delayed node's index_cnt and assign it to inode->index_cnt. The get/release of the delayed node is incidental to safely access its data, not the main goal. The function does not pass a reference-counted object back to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when delayed node is absent or index_cnt is zero; these conditions may change later if the delayed node is created or index updated, but retrying without additional state changes would likely fail again.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when delayed node is absent or index_cnt is zero; these conditions may change later if the delayed node is created or index updated, but retrying without additional state changes would likely fail again.",
+    "contract_summary": ""
+  }
+}

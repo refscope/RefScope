@@ -1,0 +1,99 @@
+{
+  "function_name": "af_alg_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sock.sk.sk_refcnt.refs",
+      "socket--sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation only executes if sock->sk is non-NULL; if NULL it is a no-op, and if non-NULL the put always succeeds (void function). No failure path exists, so retry is irrelevant.",
+  "contract_summary": "This function releases a reference on a socket (struct sock) held by the socket structure. It calls sock_put() to decrement the reference count, which may free the socket if the count reaches zero. After the call, the pointer sock->sk is set to NULL to prevent use-after-free. The caller must ensure that the socket structure is valid and must not access the original socket pointer after this call. This is typically used during socket release operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a socket via sock_put, with a NULL check and pointer clearing. No other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation only executes if sock->sk is non-NULL; if NULL it is a no-op, and if non-NULL the put always succeeds (void function). No failure path exists, so retry is irrelevant.",
+      "contract_summary": "This function releases a reference on a socket (struct sock) held by the socket structure. It calls sock_put() to decrement the reference count, which may free the socket if the count reaches zero. After the call, the pointer sock->sk is set to NULL to prevent use-after-free. The caller must ensure that the socket structure is valid and must not access the original socket pointer after this call. This is typically used during socket release operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sock.sk.sk_refcnt.refs",
+          "socket--sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sock.sk.sk_refcnt.refs",
+          "socket--sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "sock_put is called on sock->sk, which decrements the refcount at sk_refcnt.refs. The access path from the function parameter sock through .sk and .sk_refcnt.refs matches the callee's description. The type chain socket→sock→refcount_t→atomic_t is consistent with the struct definitions (struct socket has struct sock *sk, struct sock has refcount_t sk_refcnt, refcount_t wraps atomic_t). The segment counts (4 each) are equal, and the critical variable is correctly identified as the parameter sock."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sock.sk.sk_refcnt.refs",
+        "socket--sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation only executes if sock->sk is non-NULL; if NULL it is a no-op, and if non-NULL the put always succeeds (void function). No failure path exists, so retry is irrelevant.",
+    "contract_summary": "This function releases a reference on a socket (struct sock) held by the socket structure. It calls sock_put() to decrement the reference count, which may free the socket if the count reaches zero. After the call, the pointer sock->sk is set to NULL to prevent use-after-free. The caller must ensure that the socket structure is valid and must not access the original socket pointer after this call. This is typically used during socket release operations."
+  }
+}

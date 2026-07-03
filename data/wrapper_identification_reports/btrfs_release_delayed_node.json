@@ -1,0 +1,106 @@
+{
+  "function_name": "btrfs_release_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__btrfs_release_delayed_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "delayed_node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__btrfs_release_delayed_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "delayed_node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation unconditionally releases a reference; retrying would cause a double-free or use-after-free.",
+  "contract_summary": "This function unconditionally releases a reference on a btrfs_delayed_node by decrementing its refcount via __btrfs_release_delayed_node. Once called, the caller must not access the node pointer again, as the object may be freed if the refcount reaches zero. It is a paired release operation for a previous get or initial reference, and no error handling or retry is possible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls __btrfs_release_delayed_node (a put function) with no other logic, making it a pure reference-count release wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation unconditionally releases a reference; retrying would cause a double-free or use-after-free.",
+      "contract_summary": "This function unconditionally releases a reference on a btrfs_delayed_node by decrementing its refcount via __btrfs_release_delayed_node. Once called, the caller must not access the node pointer again, as the object may be freed if the refcount reaches zero. It is a paired release operation for a previous get or initial reference, and no error handling or retry is possible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable at the function interface is 'node' (parameter 0), but the candidate incorrectly specifies parameter index 1. According to the callee info, the put operation applies to the first parameter of the wrapper (node), not the second (tracker). Therefore, the operation is rejected due to incorrect location/index."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function btrfs_release_delayed_node is a thin wrapper that calls __btrfs_release_delayed_node with node as the first argument. According to callee info, __btrfs_release_delayed_node performs a put on its parameter (which is node). The critical variable is node (parameter 0), not tracker. The check correctly identified the index error, so the candidate operation is corrected to parameter 0."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation unconditionally releases a reference; retrying would cause a double-free or use-after-free.",
+    "contract_summary": "This function unconditionally releases a reference on a btrfs_delayed_node by decrementing its refcount via __btrfs_release_delayed_node. Once called, the caller must not access the node pointer again, as the object may be freed if the refcount reaches zero. It is a paired release operation for a previous get or initial reference, and no error handling or retry is possible."
+  }
+}

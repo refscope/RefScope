@@ -1,0 +1,33 @@
+{
+  "summary": {
+    "cross_validation_issues": 0,
+    "total_auto_vars": 1843,
+    "total_cleanup_defs": 105
+  },
+  "bugs": [
+    {
+      "bug_type": "Bug Type 1: return without no_free_ptr()",
+      "severity": "HIGH",
+      "file": "/home/liang/workspace/DataShare/TargetProj/linux-7.1.rc4-wllvm/drivers/pci/tsm.c",
+      "line": 668,
+      "var_name": "pf0",
+      "cleanup_name": "pci_dev_put",
+      "put_function": "pci_dev_put",
+      "function": "find_dsm_dev",
+      "description": "变量 'pf0' (__free(pci_dev_put)) 在函数 'find_dsm_dev' 中被 return，但未使用 no_free_ptr() 转移所有权。自动清理将调用 pci_dev_put() 释放引用，调用者收到悬空指针。",
+      "fix": "将 'return pf0;' 改为 'return no_free_ptr(pf0);' 或 'return_ptr(pf0);'"
+    },
+    {
+      "bug_type": "Bug Type 1: return without no_free_ptr()",
+      "severity": "HIGH",
+      "file": "/home/liang/workspace/DataShare/TargetProj/linux-7.1.rc4-wllvm/drivers/power/sequencing/core.c",
+      "line": 1011,
+      "var_name": "next",
+      "cleanup_name": "put_device",
+      "put_function": "put_device",
+      "function": "pwrseq_debugfs_seq_next",
+      "description": "变量 'next' (__free(put_device)) 在函数 'pwrseq_debugfs_seq_next' 中被 return，但未使用 no_free_ptr() 转移所有权。自动清理将调用 put_device() 释放引用，调用者收到悬空指针。",
+      "fix": "将 'return next;' 改为 'return no_free_ptr(next);' 或 'return_ptr(next);'"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "function_name": "ath10k_core_register_work",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ath10k_core_free_firmware_files",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ar.normal_mode_fw.fw_file.firmware.priv.ref.refcount",
+      "member_type_chain": "ath10k--ath10k_normal_mode_fw--ath10k_fw_file--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ath10k_core_free_firmware_files",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ar.pre_cal_file.priv.ref.refcount",
+      "member_type_chain": "ath10k--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ath10k_core_free_firmware_files",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ar.cal_file.priv.ref.refcount",
+      "member_type_chain": "ath10k--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ath10k_core_free_firmware_files",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ar.normal_mode_fw.fw_file.firmware.priv.ref.refcount",
+      "member_type_chain": "ath10k--ath10k_normal_mode_fw--ath10k_fw_file--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ath10k_core_free_firmware_files",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ar.pre_cal_file.priv.ref.refcount",
+      "member_type_chain": "ath10k--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ath10k_core_free_firmware_files",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ar.cal_file.priv.ref.refcount",
+      "member_type_chain": "ath10k--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is an initialization work handler that orchestrates multiple subsystem registrations (firmware, mac80211, coredump, debugfs, spectral, thermal, leds). Any refcount management (e.g., firmware file put in error path) is incidental and buried inside callees. The primary purpose is not reference-count wrapping but completing driver registration.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

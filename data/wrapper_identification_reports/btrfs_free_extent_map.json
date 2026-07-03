@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_free_extent_map",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "em.refs.refs",
+      "extent_map--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the refcount hits zero, the object is freed; retrying would be a use-after-free. If the refcount is not zero, the function does nothing further — no failure condition to retry.",
+  "contract_summary": "Put wrapper: releases a reference on an extent_map by decrementing its refcount via refcount_dec_and_test. If the refcount drops to zero, asserts that the extent_map is not in a tree or list, then frees the object via kmem_cache_free. The caller must not use the extent_map after calling this function, as it may have been freed. This function represents the release side of the reference-count lifecycle; it must be paired one-to-one with a prior get (acquisition) of a reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the refcount on an extent_map and conditionally free it when the count reaches zero. The only non-refcount logic is two WARN_ON checks, which are negligible assertions.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the refcount hits zero, the object is freed; retrying would be a use-after-free. If the refcount is not zero, the function does nothing further — no failure condition to retry.",
+      "contract_summary": "Put wrapper: releases a reference on an extent_map by decrementing its refcount via refcount_dec_and_test. If the refcount drops to zero, asserts that the extent_map is not in a tree or list, then frees the object via kmem_cache_free. The caller must not use the extent_map after calling this function, as it may have been freed. This function represents the release side of the reference-count lifecycle; it must be paired one-to-one with a prior get (acquisition) of a reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "em.refs.refs",
+          "extent_map--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "em.refs.refs",
+          "extent_map--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls refcount_dec_and_test(&em->refs), which is a put operation on parameter 1 (em). The access path from em to the atomic_t field is em.refs.refs, and the type chain extent_map--refcount_t--atomic_t is consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "em.refs.refs",
+        "extent_map--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the refcount hits zero, the object is freed; retrying would be a use-after-free. If the refcount is not zero, the function does nothing further — no failure condition to retry.",
+    "contract_summary": "Put wrapper: releases a reference on an extent_map by decrementing its refcount via refcount_dec_and_test. If the refcount drops to zero, asserts that the extent_map is not in a tree or list, then frees the object via kmem_cache_free. The caller must not use the extent_map after calling this function, as it may have been freed. This function represents the release side of the reference-count lifecycle; it must be paired one-to-one with a prior get (acquisition) of a reference."
+  }
+}

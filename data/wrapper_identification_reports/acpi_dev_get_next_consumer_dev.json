@@ -1,0 +1,106 @@
+{
+  "function_name": "acpi_dev_get_next_consumer_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      1,
+      "start.dev.kobj.kref.refcount",
+      "acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpi_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpi_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (returning NULL) means no more consumer devices exist; retrying will not change the list because the iterator has reached the end.",
+  "contract_summary": "Iterator wrapper for ACPI consumer device dependency list. Caller initializes with start=NULL to get the first consumer device (with a new reference). For subsequent calls, pass the previously returned device as start to advance to the next consumer. Each returned acpi_device has an acquired reference that the caller must release via acpi_dev_put() when done. The wrapper automatically releases the reference on the start device (previous consumer) to avoid leaks. Returns NULL when no more consumers are found. This pattern is similar to list_for_each_entry_safe combined with reference get/put semantics.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to iterate over consumer devices while managing references: acquiring a reference on the next consumer via acpi_get_acpi_dev and releasing the previous one via acpi_dev_put. The iteration state management is tightly coupled with reference handling.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (returning NULL) means no more consumer devices exist; retrying will not change the list because the iterator has reached the end.",
+      "contract_summary": "Iterator wrapper for ACPI consumer device dependency list. Caller initializes with start=NULL to get the first consumer device (with a new reference). For subsequent calls, pass the previously returned device as start to advance to the next consumer. Each returned acpi_device has an acquired reference that the caller must release via acpi_dev_put() when done. The wrapper automatically releases the reference on the start device (previous consumer) to avoid leaks. Returns NULL when no more consumers are found. This pattern is similar to list_for_each_entry_safe combined with reference get/put semantics."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "start.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          0,
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "start.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put operation on parameter 'start' is confirmed by the call to acpi_dev_put(start) and matches the callee info. The get operation on the return value is not supported: the function code does not contain any get call, and no get callee is provided. Therefore only the put is valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        1,
+        "start.dev.kobj.kref.refcount",
+        "acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (returning NULL) means no more consumer devices exist; retrying will not change the list because the iterator has reached the end.",
+    "contract_summary": "Iterator wrapper for ACPI consumer device dependency list. Caller initializes with start=NULL to get the first consumer device (with a new reference). For subsequent calls, pass the previously returned device as start to advance to the next consumer. Each returned acpi_device has an acquired reference that the caller must release via acpi_dev_put() when done. The wrapper automatically releases the reference on the start device (previous consumer) to avoid leaks. Returns NULL when no more consumers are found. This pattern is similar to list_for_each_entry_safe combined with reference get/put semantics."
+  }
+}

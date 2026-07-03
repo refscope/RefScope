@@ -1,0 +1,99 @@
+{
+  "function_name": "block_group_cache_tree_search",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the requested block group is not in the cache; this is not a transient condition — retrying the same search without changes will also fail.",
+  "contract_summary": "Search the block group cache tree for a block group containing or preceding bytenr. If a matching block group is found, acquire a reference (btrfs_get_block_group) and return the pointer. The caller must release the reference by calling btrfs_put_block_group when done. If no matching block group is found, return NULL; the caller must handle the error (e.g., create a new block group). This function holds a read lock during the search and get, ensuring atomicity.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Function's primary purpose is to search the block group cache tree and, if found, acquire a reference via btrfs_get_block_group, returning the pointer. The search logic is significant but serves as the prerequisite for the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the requested block group is not in the cache; this is not a transient condition — retrying the same search without changes will also fail.",
+      "contract_summary": "Search the block group cache tree for a block group containing or preceding bytenr. If a matching block group is found, acquire a reference (btrfs_get_block_group) and return the pointer. The caller must release the reference by calling btrfs_put_block_group when done. If no matching block group is found, return NULL; the caller must handle the error (e.g., create a new block group). This function holds a read lock during the search and get, ensuring atomicity."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function finds a block group via tree search and calls btrfs_get_block_group(ret) on the found node before returning it. The access path ret.refs.refs correctly traces from the returned pointer to the refcount_t field refs and then to the atomic_t inside. The type chain matches the structure definitions. The segment count is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the requested block group is not in the cache; this is not a transient condition — retrying the same search without changes will also fail.",
+    "contract_summary": "Search the block group cache tree for a block group containing or preceding bytenr. If a matching block group is found, acquire a reference (btrfs_get_block_group) and return the pointer. The caller must release the reference by calling btrfs_put_block_group when done. If no matching block group is found, return NULL; the caller must handle the error (e.g., create a new block group). This function holds a read lock during the search and get, ensuring atomicity."
+  }
+}

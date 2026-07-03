@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_device_get_gang",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "fence.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_get_rcu_safe",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_get_rcu_safe",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the fence is NULL or already dying (refcount zero), the object is permanently unavailable; retrying would not change the outcome.",
+  "contract_summary": "RCU-protected get-wrapper for the gang_submit fence of an AMDGPU device. Acquires a reference on the fence (incrementing its refcount) and returns it to the caller. The caller must release the reference with dma_fence_put() when done. Returns NULL if no gang_submit fence is set or if the fence is already being destroyed (refcount zero). The RCU lock is held only temporally during the get operation, so the caller must not assume RCU protection on the returned fence.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on adev->gang_submit fence via dma_fence_get_rcu_safe and return it to the caller. RCU lock is only setup/teardown for the get operation.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the fence is NULL or already dying (refcount zero), the object is permanently unavailable; retrying would not change the outcome.",
+      "contract_summary": "RCU-protected get-wrapper for the gang_submit fence of an AMDGPU device. Acquires a reference on the fence (incrementing its refcount) and returns it to the caller. The caller must release the reference with dma_fence_put() when done. Returns NULL if no gang_submit fence is set or if the fence is already being destroyed (refcount zero). The RCU lock is held only temporally during the get operation, so the caller must not assume RCU protection on the returned fence."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "fence.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function uses dma_fence_get_rcu_safe on &adev->gang_submit and returns the fence with an incremented refcount. The access path 'fence.refcount.refcount' and type chain 'dma_fence--kref--refcount_t' correctly trace from the return variable to the refcount field (fence->refcount.refcount). The segment count matches the type chain (3 segments, 3 types). The operation direction 'get' and location 'return', index 0 are correct as the critical variable is the returned fence."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "fence.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the fence is NULL or already dying (refcount zero), the object is permanently unavailable; retrying would not change the outcome.",
+    "contract_summary": "RCU-protected get-wrapper for the gang_submit fence of an AMDGPU device. Acquires a reference on the fence (incrementing its refcount) and returns it to the caller. The caller must release the reference with dma_fence_put() when done. Returns NULL if no gang_submit fence is set or if the fence is already being destroyed (refcount zero). The RCU lock is held only temporally during the get operation, so the caller must not assume RCU protection on the returned fence."
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "function_name": "__label_insert",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "this.count.refcount",
+      "aa_label--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__proxy_share",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "old.proxy.count.count.refcount",
+      "member_type_chain": "aa_label--aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__proxy_share",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__proxy_share",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new.proxy.count.count.refcount",
+      "member_type_chain": "aa_label--aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__aa_get_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.refcount",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always succeeds in returning a valid label with an acquired reference; no failure path exists, so retry is never needed.",
+  "contract_summary": "This function inserts a label into a label set or retrieves an existing equivalent label. It always returns a pointer to an aa_label that holds a newly acquired reference (via aa_get_label or __aa_get_label). The caller is responsible for calling aa_put_label on the returned label when it is no longer needed. If a duplicate is found and is alive, the function returns the existing label with an additional reference; if the duplicate is stale or replace is requested, the new label replaces the old one and a reference to the new label is returned. The tree insertion and proxy sharing are internal details that guarantee the returned label is properly integrated into the label set's lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to obtain a reference-counted label from a label set, either by finding an existing one or inserting a new one. The tree operations and proxy sharing are part of the get-or-insert mechanics, but the core contract is acquiring a reference that the caller must later release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always succeeds in returning a valid label with an acquired reference; no failure path exists, so retry is never needed.",
+      "contract_summary": "This function inserts a label into a label set or retrieves an existing equivalent label. It always returns a pointer to an aa_label that holds a newly acquired reference (via aa_get_label or __aa_get_label). The caller is responsible for calling aa_put_label on the returned label when it is no longer needed. If a duplicate is found and is alive, the function returns the existing label with an additional reference; if the duplicate is stale or replace is requested, the new label replaces the old one and a reference to the new label is returned. The tree insertion and proxy sharing are internal details that guarantee the returned label is properly integrated into the label set's lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "this.count.refcount",
+          "aa_label--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "this.count.refcount",
+          "aa_label--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations correctly identify that the function returns a label pointer with an incremented reference count. Candidate 1 corresponds to the __aa_get_label(this) path when an existing non-stale label is found and returned; the access path this.count.refcount and type chain aa_label--kref--refcount_t match the callee's (__aa_get_label) path and chain. Candidate 2 corresponds to the aa_get_label(label) path used in the replace branch and after insertion; the path label.count.count.refcount and type chain aa_label--aa_count--kref--refcount_t match the callee's (aa_get_label) path and chain. Segment counts are consistent (3=3 and 4=4), and the critical variable (return) is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "this.count.refcount",
+        "aa_label--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always succeeds in returning a valid label with an acquired reference; no failure path exists, so retry is never needed.",
+    "contract_summary": "This function inserts a label into a label set or retrieves an existing equivalent label. It always returns a pointer to an aa_label that holds a newly acquired reference (via aa_get_label or __aa_get_label). The caller is responsible for calling aa_put_label on the returned label when it is no longer needed. If a duplicate is found and is alive, the function returns the existing label with an additional reference; if the duplicate is stale or replace is requested, the new label replaces the old one and a reference to the new label is returned. The tree insertion and proxy sharing are internal details that guarantee the returned label is properly integrated into the label set's lifecycle."
+  }
+}

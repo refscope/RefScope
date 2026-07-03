@@ -1,0 +1,82 @@
+{
+  "function_name": "aurora_l2_remove",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "edac_device_free_ctl_info",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctl_info.dev.kobj.kref.refcount",
+      "member_type_chain": "edac_device_ctl_info--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "edac_device_free_ctl_info",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctl_info.dev.kobj.kref.refcount",
+      "member_type_chain": "edac_device_ctl_info--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation always succeeds; retry would cause double-free and use-after-free.",
+  "contract_summary": "This is a put wrapper for the edac_device_ctl_info structure. It releases the reference count acquired when the device was registered via platform_get_drvdata. After this call, the edac_device_ctl_info pointer is invalid and must not be used. The function also removes any associated debugfs entries and clears the platform driver data. It is called during device removal and should only be called once per device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Core purpose is to release the reference on edac_device_ctl_info via edac_device_free_ctl_info; debugfs removal and driver data nullification are minor cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation always succeeds; retry would cause double-free and use-after-free.",
+      "contract_summary": "This is a put wrapper for the edac_device_ctl_info structure. It releases the reference count acquired when the device was registered via platform_get_drvdata. After this call, the edac_device_ctl_info pointer is invalid and must not be used. The function also removes any associated debugfs entries and clears the platform driver data. It is called during device removal and should only be called once per device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "0",
+          "dci.dev.kobj.kref.refcount",
+          "edac_device_ctl_info--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable dci is a local variable not present in the function's parameter or return interface. The candidate location 'global' is incorrect; the object does not flow into or out of the function. Therefore the operation cannot be validated as a function-interface refcount operation."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function is a platform device remove callback that performs multiple cleanup actions: debugfs removal (conditional), device deletion, free of control info, and clearing driver data. While edac_device_free_ctl_info is a put operation, it is only one step among several. The critical variable dci is derived from the parameter pdev via platform_get_drvdata, but it is not directly passed in the function's interface (parameter or return). The function's primary purpose is resource cleanup, not specifically reference-count wrapping. Thus the check stage correctly rejected the candidate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation always succeeds; retry would cause double-free and use-after-free.",
+    "contract_summary": "This is a put wrapper for the edac_device_ctl_info structure. It releases the reference count acquired when the device was registered via platform_get_drvdata. After this call, the edac_device_ctl_info pointer is invalid and must not be used. The function also removes any associated debugfs entries and clears the platform driver data. It is called during device removal and should only be called once per device."
+  }
+}

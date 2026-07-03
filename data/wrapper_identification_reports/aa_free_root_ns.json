@@ -1,0 +1,138 @@
+{
+  "function_name": "aa_free_root_ns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "kernel_t",
+      "kernel_t.proxy.count.count",
+      "aa_label--aa_proxy--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_label_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_label_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_label_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_label_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and non-failing; double-put would indicate a bug, not a transient failure.",
+  "contract_summary": "Cleanup wrapper that releases the root namespace and associated kernel label references. Sets the global root_ns to NULL, then decrements refcounts on kernel_t via aa_label_free and on the namespace's unconfined label via aa_put_ns. This function is the final teardown for the root namespace; after calling it, the caller must not access root_ns or use any references to it. No lock/RCU requirements; assumes exclusive ownership at module unload.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release references on the root namespace and kernel_t label. All significant operations (aa_label_free, aa_put_ns) are refcount decrements; setting root_ns to NULL is a trivial cleanup side effect.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and non-failing; double-put would indicate a bug, not a transient failure.",
+      "contract_summary": "Cleanup wrapper that releases the root namespace and associated kernel label references. Sets the global root_ns to NULL, then decrements refcounts on kernel_t via aa_label_free and on the namespace's unconfined label via aa_put_ns. This function is the final teardown for the root namespace; after calling it, the caller must not access root_ns or use any references to it. No lock/RCU requirements; assumes exclusive ownership at module unload."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "kernel_t",
+          "kernel_t.proxy.count.count",
+          "aa_label--aa_proxy--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "root_ns",
+          "root_ns.unconfined.label.count.count",
+          "aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "kernel_t",
+          "kernel_t.proxy.count.count",
+          "aa_label--aa_proxy--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first operation is correct: aa_label_free(kernel_t) decrements the refcount on kernel_t's proxy. The second operation incorrectly uses root_ns as the critical variable; the actual argument to aa_put_ns is the local variable ns (which holds the original root_ns pointer), but root_ns is set to NULL before the call, so the path starting from root_ns is invalid. Therefore the second operation is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "kernel_t",
+        "kernel_t.proxy.count.count",
+        "aa_label--aa_proxy--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and non-failing; double-put would indicate a bug, not a transient failure.",
+    "contract_summary": "Cleanup wrapper that releases the root namespace and associated kernel label references. Sets the global root_ns to NULL, then decrements refcounts on kernel_t via aa_label_free and on the namespace's unconfined label via aa_put_ns. This function is the final teardown for the root namespace; after calling it, the caller must not access root_ns or use any references to it. No lock/RCU requirements; assumes exclusive ownership at module unload."
+  }
+}

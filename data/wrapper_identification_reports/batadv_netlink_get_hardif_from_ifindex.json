@@ -1,0 +1,139 @@
+{
+  "function_name": "batadv_netlink_get_hardif_from_ifindex",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_get_by_index",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_get_by_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_get_by_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount.refs",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_get_by_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either device does not exist or does not belong to this mesh; retrying is unlikely to succeed without external configuration change.",
+  "contract_summary": "This function is a get-wrapper for a batadv_hard_iface. It looks up a network device by ifindex, retrieves the associated hard_iface, validates that it belongs to the given bat_priv's mesh, and returns the hard_iface with an incremented reference count. The caller must check the return value (ERR_PTR on failure) and must call batadv_hardif_put when done with the returned hard_iface. On error, the function properly releases any intermediate references (net_device and hard_iface) to avoid leaks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference on a batadv_hard_iface via batadv_hardif_get_by_netdev and return it to the caller. The additional mesh_iface validation is lightweight and directly supports correct reference acquisition. Error paths properly release intermediate references.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either device does not exist or does not belong to this mesh; retrying is unlikely to succeed without external configuration change.",
+      "contract_summary": "This function is a get-wrapper for a batadv_hard_iface. It looks up a network device by ifindex, retrieves the associated hard_iface, validates that it belongs to the given bat_priv's mesh, and returns the hard_iface with an incremented reference count. The caller must check the return value (ERR_PTR on failure) and must call batadv_hardif_put when done with the returned hard_iface. On error, the function properly releases any intermediate references (net_device and hard_iface) to avoid leaks."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns hard_iface with an extra reference obtained via batadv_hardif_get_by_netdev. The access path hard_iface.refcount.refcount and type chain batadv_hard_iface--kref--refcount_t correctly trace from the return value to the refcount field, consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either device does not exist or does not belong to this mesh; retrying is unlikely to succeed without external configuration change.",
+    "contract_summary": "This function is a get-wrapper for a batadv_hard_iface. It looks up a network device by ifindex, retrieves the associated hard_iface, validates that it belongs to the given bat_priv's mesh, and returns the hard_iface with an incremented reference count. The caller must check the return value (ERR_PTR on failure) and must call batadv_hardif_put when done with the returned hard_iface. On error, the function properly releases any intermediate references (net_device and hard_iface) to avoid leaks."
+  }
+}

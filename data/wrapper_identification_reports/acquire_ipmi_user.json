@@ -1,0 +1,115 @@
+{
+  "function_name": "acquire_ipmi_user",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "user.refcount.refcount.refs",
+      "ipmi_user--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The object's refcount being zero indicates it is already being destroyed; retrying would not revive the object.",
+  "contract_summary": "This is a get-wrapper that conditionally acquires a reference on an ipmi_user structure via kref_get_unless_zero. It returns a pointer to the user if the reference was successfully taken (refcount non-zero), or NULL if the object is dying. The caller must check the return value and, if non-NULL, is responsible for releasing the reference using a corresponding put function when done.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is exclusively acquiring a reference via kref_get_unless_zero; no other logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The object's refcount being zero indicates it is already being destroyed; retrying would not revive the object.",
+      "contract_summary": "This is a get-wrapper that conditionally acquires a reference on an ipmi_user structure via kref_get_unless_zero. It returns a pointer to the user if the reference was successfully taken (refcount non-zero), or NULL if the object is dying. The caller must check the return value and, if non-NULL, is responsible for releasing the reference using a corresponding put function when done."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "user.refcount.refcount.refs",
+          "ipmi_user--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "user.refcount.refcount.refs",
+          "ipmi_user--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation correctly describes the kref_get_unless_zero call on user->refcount. The return value is the same user pointer, so using 'return' as location and starting the path from 'user' (which is both parameter and return) is acceptable. The member access path and type chain match the struct definitions (ipmi_user contains kref, which contains refcount_t, which contains atomic_t). Segment counts are equal (4 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "user.refcount.refcount.refs",
+        "ipmi_user--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The object's refcount being zero indicates it is already being destroyed; retrying would not revive the object.",
+    "contract_summary": "This is a get-wrapper that conditionally acquires a reference on an ipmi_user structure via kref_get_unless_zero. It returns a pointer to the user if the reference was successfully taken (refcount non-zero), or NULL if the object is dying. The caller must check the return value and, if non-NULL, is responsible for releasing the reference using a corresponding put function when done."
+  }
+}

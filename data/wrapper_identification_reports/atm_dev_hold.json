@@ -1,0 +1,115 @@
+{
+  "function_name": "atm_dev_hold",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dev.refcnt.refs",
+      "atm_dev--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always succeeds; retrying is meaningless.",
+  "contract_summary": "Acquires an additional reference on the ATM device, indicating that the caller now holds a reference that must be released with a corresponding atm_dev_put. The function does not transfer ownership but ensures the device remains alive while the caller uses it. The caller must not access the device after the last put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to increment the reference count of an ATM device via refcount_inc; no other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always succeeds; retrying is meaningless.",
+      "contract_summary": "Acquires an additional reference on the ATM device, indicating that the caller now holds a reference that must be released with a corresponding atm_dev_put. The function does not transfer ownership but ensures the device remains alive while the caller uses it. The caller must not access the device after the last put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.refcnt.refs",
+          "atm_dev--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.refcnt.refs",
+          "atm_dev--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc is called on &dev->refcnt, which increments the refcount of the atm_dev object. The access path dev.refcnt.refs correctly traces from the parameter dev to the atomic_t field. The type chain matches the struct definitions: atm_dev contains refcnt of type refcount_t, which contains refs of type atomic_t. The direction 'get' is appropriate for refcount_inc."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dev.refcnt.refs",
+        "atm_dev--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always succeeds; retrying is meaningless.",
+    "contract_summary": "Acquires an additional reference on the ATM device, indicating that the caller now holds a reference that must be released with a corresponding atm_dev_put. The function does not transfer ownership but ensures the device remains alive while the caller uses it. The caller must not access the device after the last put."
+  }
+}

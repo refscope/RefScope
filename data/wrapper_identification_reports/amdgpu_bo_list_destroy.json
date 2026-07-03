@@ -1,0 +1,90 @@
+{
+  "function_name": "amdgpu_bo_list_destroy",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the ID is invalid (list == NULL), retrying the same ID will never succeed. If the ID is valid, kref_put always executes without failure from the caller's perspective; no retry is needed.",
+  "contract_summary": "This function removes a bo_list handle from the file-private IDR and decrements the reference count via kref_put. It is the put side of the bo_list lifecycle: after calling this function, the caller must not use the bo_list object anymore via this handle. The function returns void and does not indicate whether the object was actually freed (the kref_put may or may not trigger the final release). No lock is required from the caller; the function internally acquires the bo_list_lock. This is typically called when a user-space handle is closed or a process exits.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to remove a bo_list handle from the IDR and release the reference via kref_put—pure put-wrapper with only minimal infrastructure (mutex, idr_remove).",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the ID is invalid (list == NULL), retrying the same ID will never succeed. If the ID is valid, kref_put always executes without failure from the caller's perspective; no retry is needed.",
+      "contract_summary": "This function removes a bo_list handle from the file-private IDR and decrements the reference count via kref_put. It is the put side of the bo_list lifecycle: after calling this function, the caller must not use the bo_list object anymore via this handle. The function returns void and does not indicate whether the object was actually freed (the kref_put may or may not trigger the final release). No lock is required from the caller; the function internally acquires the bo_list_lock. This is typically called when a user-space handle is closed or a process exits."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "list.refcount.refcount",
+          "amdgpu_bo_list--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The location 'return' is invalid because the function returns void. The critical variable 'list' is a local variable and not part of the function interface (neither parameter nor return). The refcount operation is internal, not tracking an object that flows out of the function."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function's critical variable (bo_list) is a local variable obtained via idr_remove using an identifier parameter. It is neither a parameter nor a return value of the function. The reference-count operation (kref_put) is internal and does not directly involve an object passed through the interface. Therefore, the function is not a reference-count wrapper/helper under the strict pipeline definition."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the ID is invalid (list == NULL), retrying the same ID will never succeed. If the ID is valid, kref_put always executes without failure from the caller's perspective; no retry is needed.",
+    "contract_summary": "This function removes a bo_list handle from the file-private IDR and decrements the reference count via kref_put. It is the put side of the bo_list lifecycle: after calling this function, the caller must not use the bo_list object anymore via this handle. The function returns void and does not indicate whether the object was actually freed (the kref_put may or may not trigger the final release). No lock is required from the caller; the function internally acquires the bo_list_lock. This is typically called when a user-space handle is closed or a process exits."
+  }
+}

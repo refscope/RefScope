@@ -1,0 +1,107 @@
+{
+  "function_name": "acpi_ipmi_dev_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ipmi_device.kref.refcount",
+      "acpi_ipmi_device--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) simply means no device is currently selected. The condition is state-dependent, but retrying without any change in selection will yield the same result. The caller should handle the absence gracefully, not retry in a loop.",
+  "contract_summary": "acpi_ipmi_dev_get is a get-wrapper that acquires a reference on the globally selected IPMI device (driver_data.selected_smi) under the ipmi_lock mutex. It returns a pointer to the acpi_ipmi_device with its kref incremented, or NULL if no device is currently selected. The caller takes ownership of the reference and must later call a corresponding put function (e.g., acpi_ipmi_dev_put) to release it. The mutex is only held during the lookup and get operation; after return the caller does not need to hold any lock to use the device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to conditionally acquire a reference on the system's selected IPMI device (driver_data.selected_smi) via kref_get and return it to the caller. The only additional logic is mutex locking/unlocking and a NULL check — trivial and directly supporting the refcount operation.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) simply means no device is currently selected. The condition is state-dependent, but retrying without any change in selection will yield the same result. The caller should handle the absence gracefully, not retry in a loop.",
+      "contract_summary": "acpi_ipmi_dev_get is a get-wrapper that acquires a reference on the globally selected IPMI device (driver_data.selected_smi) under the ipmi_lock mutex. It returns a pointer to the acpi_ipmi_device with its kref incremented, or NULL if no device is currently selected. The caller takes ownership of the reference and must later call a corresponding put function (e.g., acpi_ipmi_dev_put) to release it. The mutex is only held during the lookup and get operation; after return the caller does not need to hold any lock to use the device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ipmi_device.kref.refcount",
+          "acpi_ipmi_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ipmi_device.kref.refcount",
+          "acpi_ipmi_device--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a pointer to acpi_ipmi_device after incrementing its kref via kref_get(&ipmi_device->kref). The access path from the returned object to the refcount field is ipmi_device.kref.refcount (where ipmi_device is the returned pointer's target), and the type chain acpi_ipmi_device--kref--refcount_t is consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ipmi_device.kref.refcount",
+        "acpi_ipmi_device--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) simply means no device is currently selected. The condition is state-dependent, but retrying without any change in selection will yield the same result. The caller should handle the absence gracefully, not retry in a loop.",
+    "contract_summary": "acpi_ipmi_dev_get is a get-wrapper that acquires a reference on the globally selected IPMI device (driver_data.selected_smi) under the ipmi_lock mutex. It returns a pointer to the acpi_ipmi_device with its kref incremented, or NULL if no device is currently selected. The caller takes ownership of the reference and must later call a corresponding put function (e.g., acpi_ipmi_dev_put) to release it. The mutex is only held during the lookup and get operation; after return the caller does not need to hold any lock to use the device."
+  }
+}

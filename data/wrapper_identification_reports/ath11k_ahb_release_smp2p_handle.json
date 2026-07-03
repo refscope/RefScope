@@ -1,0 +1,99 @@
+{
+  "function_name": "ath11k_ahb_release_smp2p_handle",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ab.drv_priv.smp2p_info.smem_state.refcount.refcount",
+      "ath11k_base--ath11k_ahb--smp2p_info--qcom_smem_state--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "qcom_smem_state_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.refcount.refcount",
+      "member_type_chain": "qcom_smem_state--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "qcom_smem_state_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.refcount.refcount",
+      "member_type_chain": "qcom_smem_state--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation reduces a refcount; failure would indicate a double-free or use-after-free scenario, making retries dangerous and meaningless.",
+  "contract_summary": "Put wrapper that releases the smem_state reference stored in ab_ahb->smp2p_info.smem_state. The release only occurs if the smp2p_wow_exit hardware parameter is true, indicating that the reference was previously acquired and needs to be freed during teardown. After this call, the smem_state pointer must not be used. The function does not return a value; the caller is responsible for ensuring the reference is valid when the condition is met.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to release a reference to an smem_state via qcom_smem_state_put; the only other logic is a guard condition (smp2p_wow_exit) that controls whether the put is performed.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation reduces a refcount; failure would indicate a double-free or use-after-free scenario, making retries dangerous and meaningless.",
+      "contract_summary": "Put wrapper that releases the smem_state reference stored in ab_ahb->smp2p_info.smem_state. The release only occurs if the smp2p_wow_exit hardware parameter is true, indicating that the reference was previously acquired and needs to be freed during teardown. After this call, the smem_state pointer must not be used. The function does not return a value; the caller is responsible for ensuring the reference is valid when the condition is met."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ab.drv_priv.smp2p_info.smem_state.refcount.refcount",
+          "ath11k_base--ath11k_ahb--smp2p_info--qcom_smem_state--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ab.drv_priv.smp2p_info.smem_state.refcount.refcount",
+          "ath11k_base--ath11k_ahb--smp2p_info--qcom_smem_state--kref--refcount_t"
+        ]
+      ],
+      "reason": "The call to qcom_smem_state_put operates on ab_ahb->smp2p_info.smem_state. The access path from the function parameter ab (index 1) through drv_priv.smp2p_info.smem_state correctly traces to the refcount field. The type chain aligns with the callee's expected types, and the segment count (6) matches the chain count (6)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ab.drv_priv.smp2p_info.smem_state.refcount.refcount",
+        "ath11k_base--ath11k_ahb--smp2p_info--qcom_smem_state--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation reduces a refcount; failure would indicate a double-free or use-after-free scenario, making retries dangerous and meaningless.",
+    "contract_summary": "Put wrapper that releases the smem_state reference stored in ab_ahb->smp2p_info.smem_state. The release only occurs if the smp2p_wow_exit hardware parameter is true, indicating that the reference was previously acquired and needs to be freed during teardown. After this call, the smem_state pointer must not be used. The function does not return a value; the caller is responsible for ensuring the reference is valid when the condition is met."
+  }
+}

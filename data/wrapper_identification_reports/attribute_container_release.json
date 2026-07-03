@@ -1,0 +1,99 @@
+{
+  "function_name": "attribute_container_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "classdev.parent.kobj.kref.refcount",
+      "device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device unconditionally decrements the refcount; retrying would cause a use-after-free.",
+  "contract_summary": "This is a release wrapper for attribute containers. When a class device is released (its refcount reaches zero), this function frees the internal container and drops the reference on the parent device. Caller must not use the class device or the container after this function returns. This function is typically called from the device release infrastructure and should not be called directly.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the parent device via put_device as part of cleaning up an internal_container. The kfree of the container is a trivial side effect.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device unconditionally decrements the refcount; retrying would cause a use-after-free.",
+      "contract_summary": "This is a release wrapper for attribute containers. When a class device is released (its refcount reaches zero), this function frees the internal container and drops the reference on the parent device. Caller must not use the class device or the container after this function returns. This function is typically called from the device release infrastructure and should not be called directly."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "classdev.parent.kobj.kref.refcount",
+          "device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "classdev.parent.kobj.kref.refcount",
+          "device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_device is called on dev = classdev->parent, which correctly traces from parameter 1 (classdev) through parent field to the kref. The access path and type chain are consistent with the callee's definition."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "classdev.parent.kobj.kref.refcount",
+        "device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device unconditionally decrements the refcount; retrying would cause a use-after-free.",
+    "contract_summary": "This is a release wrapper for attribute containers. When a class device is released (its refcount reaches zero), this function frees the internal container and drops the reference on the parent device. Caller must not use the class device or the container after this function returns. This function is typically called from the device release infrastructure and should not be called directly."
+  }
+}

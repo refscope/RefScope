@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_iter_tcp_seq_next",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "seq.private.batch.sk.sk_refcnt.refs",
+      "seq_file--bpf_tcp_iter_state--bpf_tcp_batch_elem--sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (return NULL) indicates end of iteration; retrying would not produce new sockets.",
+  "contract_summary": "This is an iterator next function for BPF TCP iteration. It releases the reference on the previous socket and obtains a new referenced socket for the caller. The caller (seq_file) must call this repeatedly until NULL is returned, which signals the end of iteration. After each successful call, the caller holds a valid socket reference until the next invocation of this function (when it will be released). The function manages internal batching and does not require the caller to perform explicit refcount operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's core purpose is to manage socket reference counts during iteration: it releases the previous socket (via sock_gen_put) and acquires a reference on the next socket (via batch logic or bpf_iter_tcp_batch). The position and counter updates are trivial iteration bookkeeping.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (return NULL) indicates end of iteration; retrying would not produce new sockets.",
+      "contract_summary": "This is an iterator next function for BPF TCP iteration. It releases the reference on the previous socket and obtains a new referenced socket for the caller. The caller (seq_file) must call this repeatedly until NULL is returned, which signals the end of iteration. After each successful call, the caller holds a valid socket reference until the next invocation of this function (when it will be released). The function manages internal batching and does not require the caller to perform explicit refcount operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "seq.private.batch.sk.sk_refcnt.refs",
+          "seq_file--bpf_tcp_iter_state--bpf_tcp_batch_elem--sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "seq.private.batch.sk.sk_refcnt.refs",
+          "seq_file--bpf_tcp_iter_state--bpf_tcp_batch_elem--sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The put operation via sock_gen_put(iter->batch[iter->cur_sk++].sk) matches the access path starting from parameter 1 (seq) through seq->private (bpf_tcp_iter_state) to batch, then sk, and finally sk_refcnt.refs. The type chain and segment count are consistent with the callee information. No other refcount operations are present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "seq.private.batch.sk.sk_refcnt.refs",
+        "seq_file--bpf_tcp_iter_state--bpf_tcp_batch_elem--sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (return NULL) indicates end of iteration; retrying would not produce new sockets.",
+    "contract_summary": "This is an iterator next function for BPF TCP iteration. It releases the reference on the previous socket and obtains a new referenced socket for the caller. The caller (seq_file) must call this repeatedly until NULL is returned, which signals the end of iteration. After each successful call, the caller holds a valid socket reference until the next invocation of this function (when it will be released). The function manages internal batching and does not require the caller to perform explicit refcount operations."
+  }
+}

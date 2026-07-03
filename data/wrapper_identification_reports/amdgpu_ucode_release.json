@@ -1,0 +1,82 @@
+{
+  "function_name": "amdgpu_ucode_release",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always succeeds; retrying would mean a double-release (use-after-free) since the pointer is set to NULL after release.",
+  "contract_summary": "Release/put wrapper for firmware references. Releases one reference on the firmware object via release_firmware (decrements the kref inside fw_priv) and sets the caller's firmware pointer to NULL, preventing dangling pointer use. The caller must have previously acquired a firmware reference (e.g., via request_firmware) and must not dereference the firmware pointer after calling this function. This wrapper represents the end of the firmware reference lifecycle — no further operations on the firmware object are permitted after release.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is entirely reference-count management: calls release_firmware (a put operation on the firmware refcount) and nullifies the caller's pointer. The only non-refcount logic is the NULL assignment, which is standard cleanup to prevent use-after-free. This is a textbook put-wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always succeeds; retrying would mean a double-release (use-after-free) since the pointer is set to NULL after release.",
+      "contract_summary": "Release/put wrapper for firmware references. Releases one reference on the firmware object via release_firmware (decrements the kref inside fw_priv) and sets the caller's firmware pointer to NULL, preventing dangling pointer use. The caller must have previously acquired a firmware reference (e.g., via request_firmware) and must not dereference the firmware pointer after calling this function. This wrapper represents the end of the firmware reference lifecycle — no further operations on the firmware object are permitted after release."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fw.priv.ref.refcount",
+          "firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'fw.priv.ref.refcount' incorrectly treats parameter 'fw' as if it were a struct firmware, but 'fw' is a pointer to pointer to firmware (const struct firmware **). The object being released via release_firmware(*fw) is the firmware structure pointed to by *fw, not a member of fw itself. Therefore, the path is inconsistent with the function interface. Additionally, the critical variable is not directly the parameter; it is the dereferenced pointer, which the candidate does not correctly model."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function is a clear release wrapper: it calls release_firmware(*fw) and sets *fw = NULL. However, the candidate access path 'fw.priv.ref.refcount' incorrectly treats parameter 'fw' as a struct firmware, but 'fw' is a pointer-to-pointer (const struct firmware **). The actual refcount operation is on the firmware object pointed to by *fw, which is not correctly modeled in the candidate. Since no valid operation is present, ResultList is empty."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always succeeds; retrying would mean a double-release (use-after-free) since the pointer is set to NULL after release.",
+    "contract_summary": "Release/put wrapper for firmware references. Releases one reference on the firmware object via release_firmware (decrements the kref inside fw_priv) and sets the caller's firmware pointer to NULL, preventing dangling pointer use. The caller must have previously acquired a firmware reference (e.g., via request_firmware) and must not dereference the firmware pointer after calling this function. This wrapper represents the end of the firmware reference lifecycle — no further operations on the firmware object are permitted after release."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "function_name": "btrfs_get_extent",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_free_extent_map",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lookup_extent_mapping",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_alloc_extent_map",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_free_extent_map",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_alloc_extent_map",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure typically indicates -ENOMEM or -EIO, which are not transient; retrying without changing conditions would likely fail again.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to retrieve or create an extent_map for a given file range, involving complex btree lookups, extent type checks, and error handling. The refcount operations (alloc, free) are incidental to this broader business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure typically indicates -ENOMEM or -EIO, which are not transient; retrying without changing conditions would likely fail again.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure typically indicates -ENOMEM or -EIO, which are not transient; retrying without changing conditions would likely fail again.",
+    "contract_summary": ""
+  }
+}

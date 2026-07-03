@@ -1,0 +1,143 @@
+{
+  "function_name": "__mem_open",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "return",
+      "0",
+      "mm.mm_users",
+      "mm_struct--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "mm.mm_count",
+      "mm_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "proc_mem_open",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mm.mm_users",
+      "member_type_chain": "mm_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "proc_mem_open",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mm.mm_count",
+      "member_type_chain": "mm_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "proc_mem_open",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mm.mm_users",
+      "member_type_chain": "mm_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "proc_mem_open",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mm.mm_count",
+      "member_type_chain": "mm_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure from proc_mem_open indicates the mm is inaccessible or invalid; retrying under same conditions will not change the outcome.",
+  "contract_summary": "This is a get-wrapper that acquires a reference (via mm_count) on an mm_struct and stores it in the file's private_data. The caller (VFS file operations) is responsible for later releasing the reference via a corresponding put operation (e.g., mmput or mem_close). The function returns 0 on success and a negative errno on failure; the caller must check the return value. On success, the file's private_data holds a valid mm_struct that must not be used after the reference is released.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to an mm_struct via proc_mem_open and attach it to the file's private_data. The only non-refcount logic is error checking and assignment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure from proc_mem_open indicates the mm is inaccessible or invalid; retrying under same conditions will not change the outcome.",
+      "contract_summary": "This is a get-wrapper that acquires a reference (via mm_count) on an mm_struct and stores it in the file's private_data. The caller (VFS file operations) is responsible for later releasing the reference via a corresponding put operation (e.g., mmput or mem_close). The function returns 0 on success and a negative errno on failure; the caller must check the return value. On success, the file's private_data holds a valid mm_struct that must not be used after the reference is released."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "mm.mm_users",
+          "mm_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "mm.mm_count",
+          "mm_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "mm.mm_users",
+          "mm_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "mm.mm_count",
+          "mm_struct--atomic_t"
+        ]
+      ],
+      "reason": "proc_mem_open is a wrapper that increments mm_count (get) and decrements mm_users (put) on the returned mm_struct. The access paths mm.mm_users and mm.mm_count with type chain mm_struct--atomic_t are consistent with the function code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "return",
+        "0",
+        "mm.mm_users",
+        "mm_struct--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "mm.mm_count",
+        "mm_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure from proc_mem_open indicates the mm is inaccessible or invalid; retrying under same conditions will not change the outcome.",
+    "contract_summary": "This is a get-wrapper that acquires a reference (via mm_count) on an mm_struct and stores it in the file's private_data. The caller (VFS file operations) is responsible for later releasing the reference via a corresponding put operation (e.g., mmput or mem_close). The function returns 0 on success and a negative errno on failure; the caller must check the return value. On success, the file's private_data holds a valid mm_struct that must not be used after the reference is released."
+  }
+}

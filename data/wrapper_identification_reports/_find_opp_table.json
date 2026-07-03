@@ -1,0 +1,99 @@
+{
+  "function_name": "_find_opp_table",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "opp_table.kref.refcount",
+      "opp_table--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_find_opp_table_unlocked",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_find_opp_table_unlocked",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the device has no OPP table registered; retrying without the table being created is pointless.",
+  "contract_summary": "Get-wrapper that acquires a reference on an OPP table associated with the given device. The caller must check the return value: if non-NULL (or valid pointer, not ERR_PTR), the returned opp_table has an incremented refcount and must later be released via a corresponding put (e.g., opp_table_put). If the device is NULL, returns -EINVAL. If the device has no OPP table, the callee returns NULL or an error pointer; under no circumstances should the caller use the returned pointer without checking validity. The function is a simple find-and-get, transferring ownership of a reference to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find an OPP table for a device and acquire a reference on it via _find_opp_table_unlocked, which increments the refcount. Only additional logic is parameter validation and locking.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the device has no OPP table registered; retrying without the table being created is pointless.",
+      "contract_summary": "Get-wrapper that acquires a reference on an OPP table associated with the given device. The caller must check the return value: if non-NULL (or valid pointer, not ERR_PTR), the returned opp_table has an incremented refcount and must later be released via a corresponding put (e.g., opp_table_put). If the device is NULL, returns -EINVAL. If the device has no OPP table, the callee returns NULL or an error pointer; under no circumstances should the caller use the returned pointer without checking validity. The function is a simple find-and-get, transferring ownership of a reference to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function _find_opp_table returns the result of _find_opp_table_unlocked(dev), which is a get-type function that returns a pointer to struct opp_table and increments its reference count. The access path from the return value correctly traces through opp_table.kref.refcount, and the type chain opp_table--kref--refcount_t matches the callee information. The number of segments in the access path (3) equals the number of types in the chain (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "opp_table.kref.refcount",
+        "opp_table--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the device has no OPP table registered; retrying without the table being created is pointless.",
+    "contract_summary": "Get-wrapper that acquires a reference on an OPP table associated with the given device. The caller must check the return value: if non-NULL (or valid pointer, not ERR_PTR), the returned opp_table has an incremented refcount and must later be released via a corresponding put (e.g., opp_table_put). If the device is NULL, returns -EINVAL. If the device has no OPP table, the callee returns NULL or an error pointer; under no circumstances should the caller use the returned pointer without checking validity. The function is a simple find-and-get, transferring ownership of a reference to the caller."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "alloc_ctrl_skb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "skb.users.refs",
+      "sk_buff--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always returns a valid skb: if reuse is impossible, a new skb is allocated with __GFP_NOFAIL (never fails). There is no failure path from which to retry.",
+  "contract_summary": "Get-or-create wrapper for control skbs. On entry, if the provided skb is reusable (non-NULL, not shared, not cloned), the function trims it and increments its reference count via refcount_inc. Otherwise, a new skb is allocated with GFP_KERNEL | __GFP_NOFAIL (guaranteed success). The caller receives an skb with a valid reference; after use, the caller must call kfree_skb or equivalent to release the reference. This function does not transfer ownership of the original skb—if reuse occurs, the caller still holds the original reference, and the returned skb is the same pointer with an extra reference. The caller is responsible for eventually putting all references.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to provide an skb with an acquired reference to the caller. The logic either reuses an existing skb (incrementing its refcount) or allocates a new one (setting refcount to 1). The trimming and allocation are minimal preparatory steps; the core semantic is managing the skb's reference count to give a usable skb that the caller must eventually release.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always returns a valid skb: if reuse is impossible, a new skb is allocated with __GFP_NOFAIL (never fails). There is no failure path from which to retry.",
+      "contract_summary": "Get-or-create wrapper for control skbs. On entry, if the provided skb is reusable (non-NULL, not shared, not cloned), the function trims it and increments its reference count via refcount_inc. Otherwise, a new skb is allocated with GFP_KERNEL | __GFP_NOFAIL (guaranteed success). The caller receives an skb with a valid reference; after use, the caller must call kfree_skb or equivalent to release the reference. This function does not transfer ownership of the original skb—if reuse occurs, the caller still holds the original reference, and the returned skb is the same pointer with an extra reference. The caller is responsible for eventually putting all references."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "skb.users.refs",
+          "sk_buff--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "skb.users.refs",
+          "sk_buff--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc is called on &skb->users in the if branch, and skb (the critical variable) is returned. The access path 'skb.users.refs' traces from the return variable skb through field users (refcount_t) to refs (atomic_t), matching the type chain sk_buff--refcount_struct--atomic_t. The segment count is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "skb.users.refs",
+        "sk_buff--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always returns a valid skb: if reuse is impossible, a new skb is allocated with __GFP_NOFAIL (never fails). There is no failure path from which to retry.",
+    "contract_summary": "Get-or-create wrapper for control skbs. On entry, if the provided skb is reusable (non-NULL, not shared, not cloned), the function trims it and increments its reference count via refcount_inc. Otherwise, a new skb is allocated with GFP_KERNEL | __GFP_NOFAIL (guaranteed success). The caller receives an skb with a valid reference; after use, the caller must call kfree_skb or equivalent to release the reference. This function does not transfer ownership of the original skb—if reuse occurs, the caller still holds the original reference, and the returned skb is the same pointer with an extra reference. The caller is responsible for eventually putting all references."
+  }
+}

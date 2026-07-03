@@ -1,0 +1,143 @@
+{
+  "function_name": "c4iw_unregister_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dev.ibdev.dev.kobj.kref.refcount",
+      "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.ibdev.dev.kobj.kref.refcount",
+      "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "ib_unregister_device unconditionally executes; retrying after failure would risk double-put and use-after-free.",
+  "contract_summary": "This is a put wrapper for unregistering a c4iw device. It calls ib_unregister_device, which releases the device's internal reference and initiates teardown. After calling this function, the caller must not access the device pointer, as the object may be freed. No additional cleanup is required; the reference is consumed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only substantive action is calling ib_unregister_device, which manages the device's reference count. The pr_debug is negligible, making it a pure put wrapper for device unregistration.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "ib_unregister_device unconditionally executes; retrying after failure would risk double-put and use-after-free.",
+      "contract_summary": "This is a put wrapper for unregistering a c4iw device. It calls ib_unregister_device, which releases the device's internal reference and initiates teardown. After calling this function, the caller must not access the device pointer, as the object may be freed. No additional cleanup is required; the reference is consumed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.ibdev.dev.kobj.kref.refcount",
+          "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.ibdev.dev.kobj.kref.refcount",
+          "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.ibdev.dev.kobj.kref.refcount",
+          "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.ibdev.dev.kobj.kref.refcount",
+          "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "ib_unregister_device performs both get and put on the refcount of its parameter (dev->ibdev). The access path and type chain correctly trace from the function's parameter (dev) through ibdev, dev, kobj, kref to refcount. Segment counts match (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dev.ibdev.dev.kobj.kref.refcount",
+        "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.ibdev.dev.kobj.kref.refcount",
+        "c4iw_dev--ib_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "ib_unregister_device unconditionally executes; retrying after failure would risk double-put and use-after-free.",
+    "contract_summary": "This is a put wrapper for unregistering a c4iw device. It calls ib_unregister_device, which releases the device's internal reference and initiates teardown. After calling this function, the caller must not access the device pointer, as the object may be freed. No additional cleanup is required; the reference is consumed."
+  }
+}

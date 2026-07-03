@@ -1,0 +1,107 @@
+{
+  "function_name": "__rxe_lookup_mcg",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "mcg.ref_cnt.refcount",
+      "rxe_mcg--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Lookup failure returns NULL; the caller should handle absence by creating a new mcg or reporting an error rather than retrying the same lookup, as the tree content is not expected to change spontaneously for a missed entry.",
+  "contract_summary": "Acquire wrapper: looks up a multicast group (rxe_mcg) by MGID in the device's tree. If found, increments the kref reference count and returns the pointer to the caller, transferring one reference ownership. If not found, returns NULL without acquiring any reference. The caller must release the reference via a matching kref_put (or equivalent) when the object is no longer needed. This function does not lock the tree; callers must ensure proper synchronization (typically via the device's mcg_lock).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an rxe_mcg in a red-black tree and, if found, acquire a reference via kref_get. The tree search is purely the means to find the object; the only action beyond the lookup is the reference increment. Returns the object with an additional reference to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Lookup failure returns NULL; the caller should handle absence by creating a new mcg or reporting an error rather than retrying the same lookup, as the tree content is not expected to change spontaneously for a missed entry.",
+      "contract_summary": "Acquire wrapper: looks up a multicast group (rxe_mcg) by MGID in the device's tree. If found, increments the kref reference count and returns the pointer to the caller, transferring one reference ownership. If not found, returns NULL without acquiring any reference. The caller must release the reference via a matching kref_put (or equivalent) when the object is no longer needed. This function does not lock the tree; callers must ensure proper synchronization (typically via the device's mcg_lock)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mcg.ref_cnt.refcount",
+          "rxe_mcg--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mcg.ref_cnt.refcount",
+          "rxe_mcg--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get on &mcg->ref_cnt increments the refcount on the found mcg object, which is returned. The access path from the returned mcg pointer through ref_cnt to refcount is correct and matches the type chain rxe_mcg->kref->refcount_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "mcg.ref_cnt.refcount",
+        "rxe_mcg--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Lookup failure returns NULL; the caller should handle absence by creating a new mcg or reporting an error rather than retrying the same lookup, as the tree content is not expected to change spontaneously for a missed entry.",
+    "contract_summary": "Acquire wrapper: looks up a multicast group (rxe_mcg) by MGID in the device's tree. If found, increments the kref reference count and returns the pointer to the caller, transferring one reference ownership. If not found, returns NULL without acquiring any reference. The caller must release the reference via a matching kref_put (or equivalent) when the object is no longer needed. This function does not lock the tree; callers must ensure proper synchronization (typically via the device's mcg_lock)."
+  }
+}

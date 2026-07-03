@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_lookup_block_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "block_group.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "block_group_cache_tree_search",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "block_group_cache_tree_search",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "A NULL return means the block group does not exist at the given bytenr; retrying without changes will not create it.",
+  "contract_summary": "Acquires a reference on a block group identified by byte offset. Calls block_group_cache_tree_search with the increment flag set, which increments the refcount if found. Returns a pointer to the block group with an elevated reference count, or NULL if no matching block group exists. The caller must eventually decrement the reference count (e.g., via btrfs_put_block_group) and must check for NULL before using the pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function simply calls a 'get' callee that increments the refcount of a block group and returns the object. No other logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "A NULL return means the block group does not exist at the given bytenr; retrying without changes will not create it.",
+      "contract_summary": "Acquires a reference on a block group identified by byte offset. Calls block_group_cache_tree_search with the increment flag set, which increments the refcount if found. Returns a pointer to the block group with an elevated reference count, or NULL if no matching block group exists. The caller must eventually decrement the reference count (e.g., via btrfs_put_block_group) and must check for NULL before using the pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "block_group.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "block_group.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns the result of block_group_cache_tree_search, which is a pointer to btrfs_block_group with an acquired reference. The access path block_group.refs.refs correctly traces from the return value to the refcount field, and the type chain btrfs_block_group--refcount_t--atomic_t matches the struct definitions. Segment count (3) matches type count (3). The direction 'get' is consistent with the callee being a get function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "block_group.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "A NULL return means the block group does not exist at the given bytenr; retrying without changes will not create it.",
+    "contract_summary": "Acquires a reference on a block group identified by byte offset. Calls block_group_cache_tree_search with the increment flag set, which increments the refcount if found. Returns a pointer to the block group with an elevated reference count, or NULL if no matching block group exists. The caller must eventually decrement the reference count (e.g., via btrfs_put_block_group) and must check for NULL before using the pointer."
+  }
+}

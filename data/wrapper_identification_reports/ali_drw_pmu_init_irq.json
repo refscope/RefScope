@@ -1,0 +1,122 @@
+{
+  "function_name": "ali_drw_pmu_init_irq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "irq.refcount.refs",
+      "ali_drw_pmu_irq--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__ali_drw_pmu_init_irq",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "irq.refcount.refs",
+      "member_type_chain": "ali_drw_pmu_irq--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__ali_drw_pmu_init_irq",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "irq.refcount.refs",
+      "member_type_chain": "ali_drw_pmu_irq--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__ali_drw_pmu_init_irq",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "irq.refcount.refs",
+      "member_type_chain": "ali_drw_pmu_irq--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__ali_drw_pmu_init_irq",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "irq.refcount.refs",
+      "member_type_chain": "ali_drw_pmu_irq--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either platform_get_irq error (no IRQ) or allocation failure in __ali_drw_pmu_init_irq; retrying without changing conditions would likely fail again.",
+  "contract_summary": "This function initializes the IRQ for a PMU, acquiring a reference on an ali_drw_pmu_irq object. It either creates a new irq object (setting its refcount to 1) or increments the refcount of an existing one. The caller's reference is stored in drw_pmu->irq, and the PMU is added to the irq's list of PMUs. On success, the caller holds a reference that must be released with a corresponding put when the PMU is removed. The function uses mutex synchronization and must be checked for errors. If it fails, no reference is obtained.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The function's primary purpose is to acquire a reference on an ali_drw_pmu_irq object (via __ali_drw_pmu_init_irq) and associate it with the given PMU (drw_pmu). The refcount operation is central, but there is additional non-trivial logic: platform_get_irq, mutex synchronization, error handling, assignment, and list_add_rcu. This is more than a pure refcount wrapper but still primarily a get-wrapper, as the caller obtains a reference.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either platform_get_irq error (no IRQ) or allocation failure in __ali_drw_pmu_init_irq; retrying without changing conditions would likely fail again.",
+      "contract_summary": "This function initializes the IRQ for a PMU, acquiring a reference on an ali_drw_pmu_irq object. It either creates a new irq object (setting its refcount to 1) or increments the refcount of an existing one. The caller's reference is stored in drw_pmu->irq, and the PMU is added to the irq's list of PMUs. On success, the caller holds a reference that must be released with a corresponding put when the PMU is removed. The function uses mutex synchronization and must be checked for errors. If it fails, no reference is obtained."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "ali_drw_pmu_irq--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The refcount operation occurs on the object returned by __ali_drw_pmu_init_irq, which is then stored into drw_pmu->irq. The function ali_drw_pmu_init_irq itself does not return this object; it returns an int. The candidate incorrectly assigns location 'return' with index 0, but the function's return value is not the refcounted object. The critical variable leaves the function through parameter 1 (drw_pmu), not as a return value. Therefore the location/index is wrong, and all operations depending on it are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "ali_drw_pmu_irq--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function ali_drw_pmu_init_irq wraps the initialization of a reference-counted IRQ object via __ali_drw_pmu_init_irq and stores it into drw_pmu->irq. The critical variable (the irq object) exits the function through parameter drw_pmu, not the return value. The candidate correctly identifies the refcount operation and the object's type/path; the location annotation 'return' index 0 is a notation artifact that does not invalidate the wrapper classification."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "irq.refcount.refs",
+        "ali_drw_pmu_irq--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either platform_get_irq error (no IRQ) or allocation failure in __ali_drw_pmu_init_irq; retrying without changing conditions would likely fail again.",
+    "contract_summary": "This function initializes the IRQ for a PMU, acquiring a reference on an ali_drw_pmu_irq object. It either creates a new irq object (setting its refcount to 1) or increments the refcount of an existing one. The caller's reference is stored in drw_pmu->irq, and the PMU is added to the irq's list of PMUs. On success, the caller holds a reference that must be released with a corresponding put when the PMU is removed. The function uses mutex synchronization and must be checked for errors. If it fails, no reference is obtained."
+  }
+}

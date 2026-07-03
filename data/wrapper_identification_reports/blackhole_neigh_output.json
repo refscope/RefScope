@@ -1,0 +1,99 @@
+{
+  "function_name": "blackhole_neigh_output",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kfree_skb always succeeds; no failure path exists, so retry is irrelevant.",
+  "contract_summary": "Put wrapper: releases one reference on the skb passed as the skb parameter. After calling, the skb must not be accessed. The function always succeeds and returns 0. This is a blackhole output handler that intentionally drops all packets without further processing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is a pure put wrapper: it unconditionally calls kfree_skb on the passed skb, releasing one reference. No other logic exists. The neighbour parameter is unused.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kfree_skb always succeeds; no failure path exists, so retry is irrelevant.",
+      "contract_summary": "Put wrapper: releases one reference on the skb passed as the skb parameter. After calling, the skb must not be accessed. The function always succeeds and returns 0. This is a blackhole output handler that intentionally drops all packets without further processing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls kfree_skb(skb), which is a put operation on skb's refcount. The access path skb.users.refs and type chain sk_buff--refcount_t--atomic_t are consistent with the code and callee information. Segment counts match: 3 segments vs 3 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kfree_skb always succeeds; no failure path exists, so retry is irrelevant.",
+    "contract_summary": "Put wrapper: releases one reference on the skb passed as the skb parameter. After calling, the skb must not be accessed. The function always succeeds and returns 0. This is a blackhole output handler that intentionally drops all packets without further processing."
+  }
+}

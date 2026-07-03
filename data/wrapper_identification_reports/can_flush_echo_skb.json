@@ -1,0 +1,99 @@
+{
+  "function_name": "can_flush_echo_skb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.priv.echo_skb[0].users.refs",
+      "net_device--can_priv--sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and never fails per entry; retry is not applicable.",
+  "contract_summary": "This function releases (puts) all echo skbs owned by the CAN device's private echo buffer. It iterates the echo_skb array, frees each non-NULL skb via kfree_skb, sets the entry to NULL, and updates statistics. The caller must ensure that the device is in a state where these skbs are no longer needed (e.g., on device close or reset). After this function returns, all echo skbs are freed and the echo_skb array is cleared; the caller must not access any previously held skbs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release all echo skbs via kfree_skb (a put operation) for each non-NULL entry. The stats increment is incidental but directly related to the freeing. The function does not pass a reference-counted object to the caller; it consumes them.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and never fails per entry; retry is not applicable.",
+      "contract_summary": "This function releases (puts) all echo skbs owned by the CAN device's private echo buffer. It iterates the echo_skb array, frees each non-NULL skb via kfree_skb, sets the entry to NULL, and updates statistics. The caller must ensure that the device is in a state where these skbs are no longer needed (e.g., on device close or reset). After this function returns, all echo skbs are freed and the echo_skb array is cleared; the caller must not access any previously held skbs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.priv.echo_skb[0].users.refs",
+          "net_device--can_priv--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.priv.echo_skb[0].users.refs",
+          "net_device--can_priv--sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kfree_skb is called on priv->echo_skb[i] which is derived from parameter dev. The access path from dev to the refcount field is dev->priv->echo_skb[i]->users.refs, matching the candidate path. The type chain is consistent with struct definitions. The operation is a put on each skb in the array."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.priv.echo_skb[0].users.refs",
+        "net_device--can_priv--sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and never fails per entry; retry is not applicable.",
+    "contract_summary": "This function releases (puts) all echo skbs owned by the CAN device's private echo buffer. It iterates the echo_skb array, frees each non-NULL skb via kfree_skb, sets the entry to NULL, and updates statistics. The caller must ensure that the device is in a state where these skbs are no longer needed (e.g., on device close or reset). After this function returns, all echo skbs are freed and the echo_skb array is cleared; the caller must not access any previously held skbs."
+  }
+}

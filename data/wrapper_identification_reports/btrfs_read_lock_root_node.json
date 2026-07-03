@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_read_lock_root_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "eb.refs.refs",
+      "extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If the node changed during the operation (eb != root->node), the function retries; the caller should always retry until success because the root node may be updated asynchronously.",
+  "contract_summary": "Acquires a read-locked reference to the current root node of a btrfs filesystem. The function repeatedly fetches the root node (via btrfs_root_node, which increments the reference count), takes a read lock, and verifies the node hasn't been replaced. If the node changed, it unlocks and releases the reference, then retries. On success, returns a pointer to the extent_buffer with an elevated refcount and a read lock held. The caller is responsible for releasing the read lock via btrfs_tree_read_unlock and subsequently freeing the reference via free_extent_buffer. This wrapper ensures the caller always obtains a consistent snapshot of the root node under the read lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a locked reference to the root node; refcount ops (get via btrfs_root_node, put via free_extent_buffer) are essential but combined with read-locking and consistency check.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If the node changed during the operation (eb != root->node), the function retries; the caller should always retry until success because the root node may be updated asynchronously.",
+      "contract_summary": "Acquires a read-locked reference to the current root node of a btrfs filesystem. The function repeatedly fetches the root node (via btrfs_root_node, which increments the reference count), takes a read lock, and verifies the node hasn't been replaced. If the node changed, it unlocks and releases the reference, then retries. On success, returns a pointer to the extent_buffer with an elevated refcount and a read lock held. The caller is responsible for releasing the read lock via btrfs_tree_read_unlock and subsequently freeing the reference via free_extent_buffer. This wrapper ensures the caller always obtains a consistent snapshot of the root node under the read lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btrfs_root_node is called, which returns 'eb' with an incremented reference count (get operation). The access path eb.refs.refs and type chain extent_buffer--refcount_t--atomic_t match the callee information. The function returns this eb to the caller, so the get on return is consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "eb.refs.refs",
+        "extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If the node changed during the operation (eb != root->node), the function retries; the caller should always retry until success because the root node may be updated asynchronously.",
+    "contract_summary": "Acquires a read-locked reference to the current root node of a btrfs filesystem. The function repeatedly fetches the root node (via btrfs_root_node, which increments the reference count), takes a read lock, and verifies the node hasn't been replaced. If the node changed, it unlocks and releases the reference, then retries. On success, returns a pointer to the extent_buffer with an elevated refcount and a read lock held. The caller is responsible for releasing the read lock via btrfs_tree_read_unlock and subsequently freeing the reference via free_extent_buffer. This wrapper ensures the caller always obtains a consistent snapshot of the root node under the read lock."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "function_name": "__llc_lookup_established",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "rc.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function internally retries on refcount_inc_not_zero failure; a NULL return indicates the socket was not present, and retrying would likely produce the same result unless the hash table changes.",
+  "contract_summary": "This function performs an RCU-protected lookup of an LLC socket by local and remote addresses. Upon finding a matching socket, it conditionally acquires a reference via refcount_inc_not_zero to prevent use-after-free. If the reference is successfully taken, it returns the socket with an elevated refcount; otherwise it internally retries the lookup. The caller must check for NULL and must eventually call sock_put to release the reference. The function handles its own RCU locking, so the caller does not need to hold rcu_read_lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is RCU-protected socket lookup followed by conditional refcount increment via refcount_inc_not_zero; the returned socket is passed to caller with an elevated refcount. Lookup logic is necessary scaffolding for the get operation.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function internally retries on refcount_inc_not_zero failure; a NULL return indicates the socket was not present, and retrying would likely produce the same result unless the hash table changes.",
+      "contract_summary": "This function performs an RCU-protected lookup of an LLC socket by local and remote addresses. Upon finding a matching socket, it conditionally acquires a reference via refcount_inc_not_zero to prevent use-after-free. If the reference is successfully taken, it returns the socket with an elevated refcount; otherwise it internally retries the lookup. The caller must check for NULL and must eventually call sock_put to release the reference. The function handles its own RCU locking, so the caller does not need to hold rcu_read_lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rc.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rc.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code uses refcount_inc_not_zero on &rc->sk_refcnt, incrementing the refcount of the socket 'rc' before returning it. The access path from return value 'rc' through 'sk_refcnt' to 'refs' matches the callee's specification (parameter index 1, path r.refs). The type chain sock--refcount_t--atomic_t is consistent: sock has sk_refcnt of type refcount_t, which contains refs of type atomic_t. The segment count (3 segments, 3 types) matches. Therefore the candidate operation is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "rc.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function internally retries on refcount_inc_not_zero failure; a NULL return indicates the socket was not present, and retrying would likely produce the same result unless the hash table changes.",
+    "contract_summary": "This function performs an RCU-protected lookup of an LLC socket by local and remote addresses. Upon finding a matching socket, it conditionally acquires a reference via refcount_inc_not_zero to prevent use-after-free. If the reference is successfully taken, it returns the socket with an elevated refcount; otherwise it internally retries the lookup. The caller must check for NULL and must eventually call sock_put to release the reference. The function handles its own RCU locking, so the caller does not need to hold rcu_read_lock."
+  }
+}

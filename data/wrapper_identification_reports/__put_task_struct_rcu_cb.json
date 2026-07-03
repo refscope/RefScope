@@ -1,0 +1,275 @@
+{
+  "function_name": "__put_task_struct_rcu_cb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.signal.sigcnt.refs",
+      "task_struct--signal_struct--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.cred.usage",
+      "task_struct--cred--atomic_long_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.core_cookie.refcnt.refs",
+      "task_struct--sched_core_cookie--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.cached_requested_key.usage.refs",
+      "task_struct--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.real_cred.usage",
+      "task_struct--cred--atomic_long_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.signal.sigcnt.refs",
+      "member_type_chain": "task_struct--signal_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.core_cookie.refcnt.refs",
+      "member_type_chain": "task_struct--sched_core_cookie--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cached_requested_key.usage.refs",
+      "member_type_chain": "task_struct--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.real_cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.signal.sigcnt.refs",
+      "member_type_chain": "task_struct--signal_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.core_cookie.refcnt.refs",
+      "member_type_chain": "task_struct--sched_core_cookie--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cached_requested_key.usage.refs",
+      "member_type_chain": "task_struct--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__put_task_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.real_cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are irreversible; calling this function again on the same task would result in a double-free, so retry is never appropriate.",
+  "contract_summary": "RCU callback wrapper that performs the final put on a task_struct. This function is invoked after an RCU grace period has elapsed, ensuring that any RCU readers have completed before the task's reference count is decremented. It calls __put_task_struct, which releases references to multiple subsystems (signal struct, credentials, scheduler core cookie, key). After this function returns, the task_struct may be freed; the caller must not use the task afterwards. There is no error path; the operation always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the task_struct's reference count via __put_task_struct; it is an RCU callback that performs deferred release with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are irreversible; calling this function again on the same task would result in a double-free, so retry is never appropriate.",
+      "contract_summary": "RCU callback wrapper that performs the final put on a task_struct. This function is invoked after an RCU grace period has elapsed, ensuring that any RCU readers have completed before the task's reference count is decremented. It calls __put_task_struct, which releases references to multiple subsystems (signal struct, credentials, scheduler core cookie, key). After this function returns, the task_struct may be freed; the caller must not use the task afterwards. There is no error path; the operation always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.signal.sigcnt.refs",
+          "task_struct--signal_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.core_cookie.refcnt.refs",
+          "task_struct--sched_core_cookie--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.cached_requested_key.usage.refs",
+          "task_struct--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.real_cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.signal.sigcnt.refs",
+          "task_struct--signal_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.core_cookie.refcnt.refs",
+          "task_struct--sched_core_cookie--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.cached_requested_key.usage.refs",
+          "task_struct--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.real_cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ]
+      ],
+      "reason": "All candidate put operations are consistent. The function __put_task_struct_rcu_cb calls __put_task_struct(task) with the same task parameter, and the callee information confirms that __put_task_struct decrements refcounts on the specified member fields of the task_struct. The access paths and type chains match the expected struct hierarchy, and segment counts are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.signal.sigcnt.refs",
+        "task_struct--signal_struct--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.cred.usage",
+        "task_struct--cred--atomic_long_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.core_cookie.refcnt.refs",
+        "task_struct--sched_core_cookie--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.cached_requested_key.usage.refs",
+        "task_struct--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.real_cred.usage",
+        "task_struct--cred--atomic_long_t"
+      ]
+    ],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are irreversible; calling this function again on the same task would result in a double-free, so retry is never appropriate.",
+    "contract_summary": "RCU callback wrapper that performs the final put on a task_struct. This function is invoked after an RCU grace period has elapsed, ensuring that any RCU readers have completed before the task's reference count is decremented. It calls __put_task_struct, which releases references to multiple subsystems (signal struct, credentials, scheduler core cookie, key). After this function returns, the task_struct may be freed; the caller must not use the task afterwards. There is no error path; the operation always succeeds."
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "function_name": "audit_reset_context",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "unroll_tree_refs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.first_trees.c[0].refs",
+      "member_type_chain": "audit_context--audit_tree_refs--audit_chunk--atomic_long_t"
+    },
+    {
+      "callee_function_name": "unroll_tree_refs",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "p.c[0].refs",
+      "member_type_chain": "audit_tree_refs--audit_chunk--atomic_long_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "unroll_tree_refs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.first_trees.c[0].refs",
+      "member_type_chain": "audit_context--audit_tree_refs--audit_chunk--atomic_long_t"
+    },
+    {
+      "callee_function_name": "unroll_tree_refs",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "p.c[0].refs",
+      "member_type_chain": "audit_tree_refs--audit_chunk--atomic_long_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — the function is not a refcount wrapper; retry semantics are irrelevant.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of audit_reset_context is to reset an audit_context struct for reuse, clearing many fields and freeing auxiliary memory. While it does call unroll_tree_refs which is a put on tree references, this is just one step in a broader cleanup/initialization routine. The function does not manage refcounts as its main goal and does not pass a reference-counted object to the caller.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — the function is not a refcount wrapper; retry semantics are irrelevant.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — the function is not a refcount wrapper; retry semantics are irrelevant.",
+    "contract_summary": ""
+  }
+}

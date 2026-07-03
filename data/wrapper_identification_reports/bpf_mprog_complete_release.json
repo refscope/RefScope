@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_mprog_complete_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "entry.parent.ref.aux.refcnt",
+      "bpf_mprog_entry--bpf_mprog_fp--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function either releases the reference or is a no-op; there is no failure path to retry.",
+  "contract_summary": "This function releases a reference to a BPF program held in entry->parent->ref, then sets the pointer to NULL to prevent double-release. It is invoked after an mprog entry swap to drop the reference when there are no more inflight users. It is paired with bpf_mprog_mark_for_release() which sets the ref pointer before the swap. After calling this function, the caller must not access the released BPF program, as it may have been freed if the refcount reached zero.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release a BPF program reference (bpf_prog_put) and nullify the pointer, with no other business logic. It is a conditional put wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function either releases the reference or is a no-op; there is no failure path to retry.",
+      "contract_summary": "This function releases a reference to a BPF program held in entry->parent->ref, then sets the pointer to NULL to prevent double-release. It is invoked after an mprog entry swap to drop the reference when there are no more inflight users. It is paired with bpf_mprog_mark_for_release() which sets the ref pointer before the swap. After calling this function, the caller must not access the released BPF program, as it may have been freed if the refcount reached zero."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "entry.parent.ref.aux.refcnt",
+          "bpf_mprog_entry--bpf_mprog_fp--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "entry.parent.ref.aux.refcnt",
+          "bpf_mprog_entry--bpf_mprog_fp--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The put operation on entry->parent->ref via bpf_prog_put is correctly captured. The access path starts from the only parameter 'entry', and the type chain matches the callee information and kernel structs."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "entry.parent.ref.aux.refcnt",
+        "bpf_mprog_entry--bpf_mprog_fp--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function either releases the reference or is a no-op; there is no failure path to retry.",
+    "contract_summary": "This function releases a reference to a BPF program held in entry->parent->ref, then sets the pointer to NULL to prevent double-release. It is invoked after an mprog entry swap to drop the reference when there are no more inflight users. It is paired with bpf_mprog_mark_for_release() which sets the ref pointer before the swap. After calling this function, the caller must not access the released BPF program, as it may have been freed if the refcount reached zero."
+  }
+}

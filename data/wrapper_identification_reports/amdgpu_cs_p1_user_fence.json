@@ -1,0 +1,166 @@
+{
+  "function_name": "amdgpu_cs_p1_user_fence",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "gobj.refcount.refcount",
+      "drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "gobj.refcount.refcount",
+      "drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_ref",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "bo.tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_object_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_ref",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "bo.tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_object_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures are due to invalid input (size not PAGE_SIZE, offset out of range, or bo mapped to user) that will not change upon retry with the same parameters.",
+  "contract_summary": "This function acquires a reference to a user fence buffer object (identified by GEM handle) and stores it in p->uf_bo. It validates that the buffer is exactly one page, the offset leaves room for a 64-bit value, and the buffer is not already mapped to user space. On success, the caller owns a reference to p->uf_bo and must release it (e.g., via amdgpu_bo_unref) when done. On failure (-EINVAL), p->uf_bo may still hold a valid reference in some error paths; the caller must ensure proper cleanup.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference to a user fence buffer object (via lookup and amdgpu_bo_ref) and store it in the parser. The validation of size, offset, and usermm is secondary but still part of the function's logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures are due to invalid input (size not PAGE_SIZE, offset out of range, or bo mapped to user) that will not change upon retry with the same parameters.",
+      "contract_summary": "This function acquires a reference to a user fence buffer object (identified by GEM handle) and stores it in p->uf_bo. It validates that the buffer is exactly one page, the offset leaves room for a 64-bit value, and the buffer is not already mapped to user space. On success, the caller owns a reference to p->uf_bo and must release it (e.g., via amdgpu_bo_unref) when done. On failure (-EINVAL), p->uf_bo may still hold a valid reference in some error paths; the caller must ensure proper cleanup."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "uf_bo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "Operations 1 and 3 are consistent with the code. Operation 1: drm_gem_object_lookup returns gobj with a reference; path gobj.refcount.refcount and type chain correct. Operation 3: drm_gem_object_put takes gobj and puts its reference; path correct. Operation 2 is rejected because the access path 'uf_bo.tbo.base.refcount.refcount' incorrectly starts from 'uf_bo', which is not the return variable of amdgpu_bo_ref; the critical variable is the returned amdgpu_bo pointer, not the parser field."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "gobj.refcount.refcount",
+        "drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "gobj.refcount.refcount",
+        "drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures are due to invalid input (size not PAGE_SIZE, offset out of range, or bo mapped to user) that will not change upon retry with the same parameters.",
+    "contract_summary": "This function acquires a reference to a user fence buffer object (identified by GEM handle) and stores it in p->uf_bo. It validates that the buffer is exactly one page, the offset leaves room for a 64-bit value, and the buffer is not already mapped to user space. On success, the caller owns a reference to p->uf_bo and must release it (e.g., via amdgpu_bo_unref) when done. On failure (-EINVAL), p->uf_bo may still hold a valid reference in some error paths; the caller must ensure proper cleanup."
+  }
+}

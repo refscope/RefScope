@@ -1,0 +1,115 @@
+{
+  "function_name": "add_wrapper",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "w.ref_count.refcount.refs",
+      "wrapper_msg--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Allocation of kzalloc may fail due to temporary memory pressure; retrying after freeing memory could succeed.",
+  "contract_summary": "Set-wrapper that allocates a new wrapper_msg, initializes its kref to 1 (establishing the initial reference), adds it to the wrappers list, and returns the object to the caller. The caller owns the initial reference (refcount=1) and must later call kref_put (or a corresponding release function) to free the object when done. On memory allocation failure, returns NULL; the caller MUST check the return value for NULL and may retry if memory becomes available.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate and initialize a refcounted wrapper_msg object, set its refcount to 1 via kref_init, and add it to a list. The only other actions are trivial (allocation, list insertion, pointer assignment) and directly serve the object lifecycle; the refcount set is the core semantic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Allocation of kzalloc may fail due to temporary memory pressure; retrying after freeing memory could succeed.",
+      "contract_summary": "Set-wrapper that allocates a new wrapper_msg, initializes its kref to 1 (establishing the initial reference), adds it to the wrappers list, and returns the object to the caller. The caller owns the initial reference (refcount=1) and must later call kref_put (or a corresponding release function) to free the object when done. On memory allocation failure, returns NULL; the caller MUST check the return value for NULL and may retry if memory becomes available."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "w.ref_count.refcount.refs",
+          "wrapper_msg--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "w.ref_count.refcount.refs",
+          "wrapper_msg--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "kref_init initializes w->ref_count to 1, setting the refcount on the returned object. The access path and type chain match the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "w.ref_count.refcount.refs",
+        "wrapper_msg--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Allocation of kzalloc may fail due to temporary memory pressure; retrying after freeing memory could succeed.",
+    "contract_summary": "Set-wrapper that allocates a new wrapper_msg, initializes its kref to 1 (establishing the initial reference), adds it to the wrappers list, and returns the object to the caller. The caller owns the initial reference (refcount=1) and must later call kref_put (or a corresponding release function) to free the object when done. On memory allocation failure, returns NULL; the caller MUST check the return value for NULL and may retry if memory becomes available."
+  }
+}

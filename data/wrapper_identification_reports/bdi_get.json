@@ -1,0 +1,107 @@
+{
+  "function_name": "bdi_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bdi.refcnt.refcount",
+      "backing_dev_info--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get is unconditional and always succeeds; there is no failure path to retry.",
+  "contract_summary": "Acquire (get) wrapper that increments the reference count of a backing_dev_info object via kref_get. The caller is responsible for releasing the acquired reference by calling bdi_put (or equivalent) when done with the object. This operation does not fail and always returns the provided bdi pointer. The caller must ensure the object is alive before calling (e.g., by holding an existing reference).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to increment the refcount via kref_get and return the same bdi pointer; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get is unconditional and always succeeds; there is no failure path to retry.",
+      "contract_summary": "Acquire (get) wrapper that increments the reference count of a backing_dev_info object via kref_get. The caller is responsible for releasing the acquired reference by calling bdi_put (or equivalent) when done with the object. This operation does not fail and always returns the provided bdi pointer. The caller must ensure the object is alive before calling (e.g., by holding an existing reference)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bdi.refcnt.refcount",
+          "backing_dev_info--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bdi.refcnt.refcount",
+          "backing_dev_info--kref--refcount_t"
+        ]
+      ],
+      "reason": "bdi_get calls kref_get(&bdi->refcnt) and returns the same bdi pointer. The access path bdi.refcnt.refcount correctly traces from the return variable (bdi) to the refcount field via struct backing_dev_info->refcnt (kref) and then ->refcount (refcount_t). The type chain backing_dev_info--kref--refcount_t matches the callee's type chain and the segment count equals type count (3 each). Direction 'get' is consistent with kref_get."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bdi.refcnt.refcount",
+        "backing_dev_info--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get is unconditional and always succeeds; there is no failure path to retry.",
+    "contract_summary": "Acquire (get) wrapper that increments the reference count of a backing_dev_info object via kref_get. The caller is responsible for releasing the acquired reference by calling bdi_put (or equivalent) when done with the object. This operation does not fail and always returns the provided bdi pointer. The caller must ensure the object is alive before calling (e.g., by holding an existing reference)."
+  }
+}

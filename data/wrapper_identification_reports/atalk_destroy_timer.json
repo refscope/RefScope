@@ -1,0 +1,82 @@
+{
+  "function_name": "atalk_destroy_timer",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function either calls sock_put or reschedules the timer; there is no failure path for the caller to retry—the retry is built into the timer rescheduling.",
+  "contract_summary": "This is a deferred put wrapper invoked by a timer. It releases a reference on a socket (via sock_put) only when the socket no longer has outstanding allocations (sk_has_allocations returns false). If allocations remain, it reschedules the timer for a future attempt. After sock_put is called, the socket may be freed, and the caller must not use the socket again. The caller (timer subsystem) does not need to check the result; the timer will continue firing until the put is executed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally release a reference on the socket (via sock_put) when allocations are done, otherwise reschedule the timer. The only non-refcount logic is the allocation check and timer reset, which are intrinsic to the deferred release mechanism.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function either calls sock_put or reschedules the timer; there is no failure path for the caller to retry—the retry is built into the timer rescheduling.",
+      "contract_summary": "This is a deferred put wrapper invoked by a timer. It releases a reference on a socket (via sock_put) only when the socket no longer has outstanding allocations (sk_has_allocations returns false). If allocations remain, it reschedules the timer for a future attempt. After sock_put is called, the socket may be freed, and the caller must not use the socket again. The caller (timer subsystem) does not need to check the result; the timer will continue firing until the put is executed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable 'sk' is not a parameter or return value of atalk_destroy_timer; it is derived locally from the timer via container_of. The candidate incorrectly specifies location 'parameter' index '1', which does not correspond to any interface variable. Hence the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function atalk_destroy_timer is a timer callback that manages timer rescheduling and performs a sock_put only when no allocations remain. Its primary purpose is not reference-count management; it also includes timer manipulation logic. Furthermore, the critical variable (sk) is derived locally via container_of and is not passed as a parameter or return value. Therefore, the candidate operation with location 'parameter' is invalid, and the function is not a refcount wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function either calls sock_put or reschedules the timer; there is no failure path for the caller to retry—the retry is built into the timer rescheduling.",
+    "contract_summary": "This is a deferred put wrapper invoked by a timer. It releases a reference on a socket (via sock_put) only when the socket no longer has outstanding allocations (sk_has_allocations returns false). If allocations remain, it reschedules the timer for a future attempt. After sock_put is called, the socket may be freed, and the caller must not use the socket again. The caller (timer subsystem) does not need to check the result; the timer will continue firing until the put is executed."
+  }
+}

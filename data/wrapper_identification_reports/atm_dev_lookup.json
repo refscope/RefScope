@@ -1,0 +1,99 @@
+{
+  "function_name": "atm_dev_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.refcnt.refs",
+      "atm_dev--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__atm_dev_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.refcnt.refs",
+      "member_type_chain": "atm_dev--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__atm_dev_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.refcnt.refs",
+      "member_type_chain": "atm_dev--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Lookup failure (no device with that number) typically requires external creation; retrying without state change is futile.",
+  "contract_summary": "This is a get-wrapper that looks up an ATM device by number and returns it with an incremented refcount. If no device with the given number exists, it returns NULL and no reference is taken. The caller must check the return value and, upon success, must release the reference by calling the corresponding put function (e.g., atm_dev_put) when the device is no longer needed. The mutex is held only briefly during the lookup and refcount increment.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to acquire a reference on an atm_dev by number via __atm_dev_lookup, with only mutex lock/unlock overhead. No other logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Lookup failure (no device with that number) typically requires external creation; retrying without state change is futile.",
+      "contract_summary": "This is a get-wrapper that looks up an ATM device by number and returns it with an incremented refcount. If no device with the given number exists, it returns NULL and no reference is taken. The caller must check the return value and, upon success, must release the reference by calling the corresponding put function (e.g., atm_dev_put) when the device is no longer needed. The mutex is held only briefly during the lookup and refcount increment."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.refcnt.refs",
+          "atm_dev--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.refcnt.refs",
+          "atm_dev--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns the struct atm_dev obtained from __atm_dev_lookup, which is a get function that increments refcnt. The access path dev.refcnt.refs and type chain atm_dev--refcount_t--atomic_t are consistent with the code (dev is the return variable) and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.refcnt.refs",
+        "atm_dev--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Lookup failure (no device with that number) typically requires external creation; retrying without state change is futile.",
+    "contract_summary": "This is a get-wrapper that looks up an ATM device by number and returns it with an incremented refcount. If no device with the given number exists, it returns NULL and no reference is taken. The caller must check the return value and, upon success, must release the reference by calling the corresponding put function (e.g., atm_dev_put) when the device is no longer needed. The mutex is held only briefly during the lookup and refcount increment."
+  }
+}

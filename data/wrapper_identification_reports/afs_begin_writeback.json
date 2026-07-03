@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_begin_writeback",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "wreq.netfs_priv2.usage.refs",
+      "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "afs_get_writeback_key",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "wreq.netfs_priv2.usage.refs",
+      "member_type_chain": "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "afs_get_writeback_key",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "parameter",
+      "member_access_path": "wreq.netfs_priv2.usage.refs",
+      "member_type_chain": "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation itself never fails; the condition depends on the inode mode, which is immutable for a given request. Retrying would not change the outcome.",
+  "contract_summary": "This is a conditional get-wrapper: it acquires a reference on the AFS writeback key embedded in the netfs_io_request (wreq) only if the associated inode is a regular file. The caller is responsible for releasing this reference via a corresponding put function (e.g., afs_put_writeback_key) when done. If the inode is not a regular file, no reference is acquired and no put is needed. The function does not return any success indicator; callers must rely on the mode check themselves to decide whether a corresponding put is required.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on the writeback key via afs_get_writeback_key, which is a pure get operation. The only additional logic is a mode check to decide whether to take the reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation itself never fails; the condition depends on the inode mode, which is immutable for a given request. Retrying would not change the outcome.",
+      "contract_summary": "This is a conditional get-wrapper: it acquires a reference on the AFS writeback key embedded in the netfs_io_request (wreq) only if the associated inode is a regular file. The caller is responsible for releasing this reference via a corresponding put function (e.g., afs_put_writeback_key) when done. If the inode is not a regular file, no reference is acquired and no put is needed. The function does not return any success indicator; callers must rely on the mode check themselves to decide whether a corresponding put is required."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "wreq.netfs_priv2.usage.refs",
+          "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "wreq.netfs_priv2.usage.refs",
+          "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function afs_begin_writeback calls afs_get_writeback_key(wreq), which increments the refcount at wreq->netfs_priv2->usage.refs. The access path (starting from parameter 1) and type chain match the callee information and the code logic."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "wreq.netfs_priv2.usage.refs",
+        "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation itself never fails; the condition depends on the inode mode, which is immutable for a given request. Retrying would not change the outcome.",
+    "contract_summary": "This is a conditional get-wrapper: it acquires a reference on the AFS writeback key embedded in the netfs_io_request (wreq) only if the associated inode is a regular file. The caller is responsible for releasing this reference via a corresponding put function (e.g., afs_put_writeback_key) when done. If the inode is not a regular file, no reference is acquired and no put is needed. The function does not return any success indicator; callers must rely on the mode check themselves to decide whether a corresponding put is required."
+  }
+}

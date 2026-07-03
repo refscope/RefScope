@@ -1,0 +1,58 @@
+{
+  "function_name": "amdgpu_cs_p2_syncobj_timeline_signal",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_syncobj_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "syncobj.refcount.refcount",
+      "member_type_chain": "drm_syncobj--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_syncobj_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "syncobj.refcount.refcount",
+      "member_type_chain": "drm_syncobj--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failures (invalid handles, memory allocation) are likely persistent; retrying the same input will not succeed.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is parsing a CS chunk to build an array of syncobj post-dependencies, including validation, memory allocation, and error handling. The refcount increment via drm_syncobj_find is only one step inside broader business logic, making this a multi-step initialization function, not a refcount wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failures (invalid handles, memory allocation) are likely persistent; retrying the same input will not succeed.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failures (invalid handles, memory allocation) are likely persistent; retrying the same input will not succeed.",
+    "contract_summary": ""
+  }
+}

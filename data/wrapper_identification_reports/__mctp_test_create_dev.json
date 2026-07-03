@@ -1,0 +1,58 @@
+{
+  "function_name": "__mctp_test_create_dev",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__mctp_dev_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mdev.refs.refs",
+      "member_type_chain": "mctp_dev--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__mctp_dev_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mdev.refs.refs",
+      "member_type_chain": "mctp_dev--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to resource allocation or registration errors that are unlikely to be transient in this context.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to create and initialize a test network device (alloc_netdev, register_netdev, dev_open). The __mctp_dev_get call is one incidental step inside broader business logic. It is not primarily a reference-count wrapper.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to resource allocation or registration errors that are unlikely to be transient in this context.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to resource allocation or registration errors that are unlikely to be transient in this context.",
+    "contract_summary": ""
+  }
+}

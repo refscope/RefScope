@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_nf_link_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "link.bpf_nf_link.net.__ns.ns.__ns_ref.refs",
+      "bpf_link--bpf_nf_link--net--namespace--ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_net_track",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_net_track",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If cmpxchg fails, another release has already occurred; retrying would cause a double-release (use-after-free).",
+  "contract_summary": "Put wrapper for a bpf_nf_link's net namespace reference. The function decrements the net's reference count via put_net_track, and also unregisters the netfilter hook and disables defrag. The dead flag ensures these operations are performed only once, preventing double release. The caller must not call this function after the link is detached (the .detach callback already sets dead and performs release). The net namespace reference is owned by the bpf_nf_link and is released as part of the link's destruction.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the net namespace reference via put_net_track and perform associated cleanup (unregister hook, disable defrag). The dead flag ensures single execution.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If cmpxchg fails, another release has already occurred; retrying would cause a double-release (use-after-free).",
+      "contract_summary": "Put wrapper for a bpf_nf_link's net namespace reference. The function decrements the net's reference count via put_net_track, and also unregisters the netfilter hook and disables defrag. The dead flag ensures these operations are performed only once, preventing double release. The caller must not call this function after the link is detached (the .detach callback already sets dead and performs release). The net namespace reference is owned by the bpf_nf_link and is released as part of the link's destruction."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.bpf_nf_link.net.__ns.ns.__ns_ref.refs",
+          "bpf_link--bpf_nf_link--net--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.bpf_nf_link.net.__ns.ns.__ns_ref.refs",
+          "bpf_link--bpf_nf_link--net--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The candidate correctly traces the put_net_track call from the function's parameter (link) through container_of to bpf_nf_link, then to net, and follows the callee's specified access path (net.__ns.ns.__ns_ref.refs) and type chain. The member_access_path and member_type_chain segment counts match (7 each). The direction 'put' is consistent with the callee being a put function. No other operations are present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "link.bpf_nf_link.net.__ns.ns.__ns_ref.refs",
+        "bpf_link--bpf_nf_link--net--namespace--ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If cmpxchg fails, another release has already occurred; retrying would cause a double-release (use-after-free).",
+    "contract_summary": "Put wrapper for a bpf_nf_link's net namespace reference. The function decrements the net's reference count via put_net_track, and also unregisters the netfilter hook and disables defrag. The dead flag ensures these operations are performed only once, preventing double release. The caller must not call this function after the link is detached (the .detach callback already sets dead and performs release). The net namespace reference is owned by the bpf_nf_link and is released as part of the link's destruction."
+  }
+}

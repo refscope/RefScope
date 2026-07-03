@@ -1,0 +1,99 @@
+{
+  "function_name": "__vxlan_sock_release_prep",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vs.refcnt.refs",
+      "vxlan_sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If refcount did not reach zero, the object is still in use; retrying would cause a double-decrement and potential use-after-free.",
+  "contract_summary": "This function is a put wrapper that decrements the reference count of a vxlan_sock. If the last reference is released (refcount becomes zero), it performs final cleanup: removes the sock from the RCU hash list and notifies the UDP tunnel layer. The caller must hold RTNL lock. After calling, if the function returns true, the caller must not use the vxlan_sock pointer again; if it returns false, the caller still holds a reference and can continue using it. This function should only be called once per reference; multiple calls on the same reference are invalid.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to manage vxlan_sock reference count by decrementing and testing for zero; the cleanup operations (hlist_del_rcu, udp_tunnel_notify_del_rx_port) are intrinsic to the final release path when refcount reaches zero.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If refcount did not reach zero, the object is still in use; retrying would cause a double-decrement and potential use-after-free.",
+      "contract_summary": "This function is a put wrapper that decrements the reference count of a vxlan_sock. If the last reference is released (refcount becomes zero), it performs final cleanup: removes the sock from the RCU hash list and notifies the UDP tunnel layer. The caller must hold RTNL lock. After calling, if the function returns true, the caller must not use the vxlan_sock pointer again; if it returns false, the caller still holds a reference and can continue using it. This function should only be called once per reference; multiple calls on the same reference are invalid."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vs.refcnt.refs",
+          "vxlan_sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vs.refcnt.refs",
+          "vxlan_sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &vs->refcnt, which is a put operation. The critical variable is parameter vs. The access path vs.refcnt.refs and type chain vxlan_sock--refcount_t--atomic_t correctly trace from the parameter to the refcount field, matching the callee's expected path r.refs. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vs.refcnt.refs",
+        "vxlan_sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If refcount did not reach zero, the object is still in use; retrying would cause a double-decrement and potential use-after-free.",
+    "contract_summary": "This function is a put wrapper that decrements the reference count of a vxlan_sock. If the last reference is released (refcount becomes zero), it performs final cleanup: removes the sock from the RCU hash list and notifies the UDP tunnel layer. The caller must hold RTNL lock. After calling, if the function returns true, the caller must not use the vxlan_sock pointer again; if it returns false, the caller still holds a reference and can continue using it. This function should only be called once per reference; multiple calls on the same reference are invalid."
+  }
+}

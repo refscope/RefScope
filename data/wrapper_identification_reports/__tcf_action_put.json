@@ -1,0 +1,127 @@
+{
+  "function_name": "__tcf_action_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.tcfa_refcnt.refs",
+      "tc_action--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.tcfa_bindcnt",
+      "tc_action--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_mutex_lock",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_mutex_lock",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always occurs (cannot fail); the only conditional part is the cleanup path when refcount hits zero. Retrying would cause a double decrement, which is a bug.",
+  "contract_summary": "This is a put wrapper that releases one reference on a tc_action. It always decrements the refcount; if the count drops to zero, the action is removed from the IDR and fully cleaned up. If `bind` is true, the bind count is also decremented. The caller must not use the action after calling this function, as its reference is consumed. The return value (1 if freed, 0 otherwise) is informational but not required for correct reference counting; ignoring it does not cause a use-after-free as long as the caller does not reuse the pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of a tc_action via refcount_dec_and_mutex_lock, and if it reaches zero, perform cleanup (IDR removal, tcf_action_cleanup). The only non-refcount logic is the conditional decrement of the bind count, which is also lifecycle management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always occurs (cannot fail); the only conditional part is the cleanup path when refcount hits zero. Retrying would cause a double decrement, which is a bug.",
+      "contract_summary": "This is a put wrapper that releases one reference on a tc_action. It always decrements the refcount; if the count drops to zero, the action is removed from the IDR and fully cleaned up. If `bind` is true, the bind count is also decremented. The caller must not use the action after calling this function, as its reference is consumed. The return value (1 if freed, 0 otherwise) is informational but not required for correct reference counting; ignoring it does not cause a use-after-free as long as the caller does not reuse the pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.tcfa_refcnt.refs",
+          "tc_action--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.tcfa_bindcnt",
+          "tc_action--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.tcfa_refcnt.refs",
+          "tc_action--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.tcfa_bindcnt",
+          "tc_action--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are correctly extracted: (1) refcount_dec_and_mutex_lock on p->tcfa_refcnt.decrements the refcount, and (2) if bind is true, atomic_dec on p->tcfa_bindcnt. Both reference parameter 1 (struct tc_action *p). Access paths and type chains match the callee info and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.tcfa_refcnt.refs",
+        "tc_action--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.tcfa_bindcnt",
+        "tc_action--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always occurs (cannot fail); the only conditional part is the cleanup path when refcount hits zero. Retrying would cause a double decrement, which is a bug.",
+    "contract_summary": "This is a put wrapper that releases one reference on a tc_action. It always decrements the refcount; if the count drops to zero, the action is removed from the IDR and fully cleaned up. If `bind` is true, the bind count is also decremented. The caller must not use the action after calling this function, as its reference is consumed. The return value (1 if freed, 0 otherwise) is informational but not required for correct reference counting; ignoring it does not cause a use-after-free as long as the caller does not reuse the pointer."
+  }
+}

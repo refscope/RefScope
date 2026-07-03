@@ -1,0 +1,99 @@
+{
+  "function_name": "adc5_gen3_uninit_aux",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.dev.kobj.kref.refcount",
+      "auxiliary_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "auxiliary_device_uninit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "auxdev.dev.kobj.kref.refcount",
+      "member_type_chain": "auxiliary_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "auxiliary_device_uninit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "auxdev.dev.kobj.kref.refcount",
+      "member_type_chain": "auxiliary_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and always succeed; retrying would cause a double-put, which is a use-after-free bug.",
+  "contract_summary": "Releases a reference to an auxiliary device by calling auxiliary_device_uninit. After this call, the auxiliary device's reference count is decremented, and if it reaches zero, the device will be freed. The caller must not use the data pointer after this call. This function is a put wrapper used to clean up a reference obtained earlier.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of this function is to call auxiliary_device_uninit, which decrements the refcount of the auxiliary device. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and always succeed; retrying would cause a double-put, which is a use-after-free bug.",
+      "contract_summary": "Releases a reference to an auxiliary device by calling auxiliary_device_uninit. After this call, the auxiliary device's reference count is decremented, and if it reaches zero, the device will be freed. The caller must not use the data pointer after this call. This function is a put wrapper used to clean up a reference obtained earlier."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.dev.kobj.kref.refcount",
+          "auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.dev.kobj.kref.refcount",
+          "auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "auxiliary_device_uninit is a put operation on its input parameter. In the caller, 'data' is passed directly, so the access path starts from 'data'. The path data.dev.kobj.kref.refcount and type chain auxiliary_device--device--kobject--kref--refcount_t are consistent with the callee's description and the actual struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.dev.kobj.kref.refcount",
+        "auxiliary_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and always succeed; retrying would cause a double-put, which is a use-after-free bug.",
+    "contract_summary": "Releases a reference to an auxiliary device by calling auxiliary_device_uninit. After this call, the auxiliary device's reference count is decremented, and if it reaches zero, the device will be freed. The caller must not use the data pointer after this call. This function is a put wrapper used to clean up a reference obtained earlier."
+  }
+}

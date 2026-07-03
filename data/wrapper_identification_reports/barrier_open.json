@@ -1,0 +1,99 @@
+{
+  "function_name": "barrier_open",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "vma.vm_private_data.ref.refcount",
+      "vm_area_struct--drm_device--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_dev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_dev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "drm_dev_get unconditionally increments the refcount and never fails, so retry is not applicable.",
+  "contract_summary": "This wrapper is invoked when a VMA is opened (e.g., during mmap). It acquires a reference on the drm_device stored in vma->vm_private_data, ensuring the device remains alive while the VMA exists. The VMA subsystem must later call a corresponding put (e.g., drm_dev_put) when the VMA is closed to release the reference. This is a standard get-ref-on-open pattern, and the reference is owned by the VMA until its close handler.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function is a single call to drm_dev_get, which increments the refcount of the drm_device stored in vma->vm_private_data. No other logic exists, so it is a pure get-wrapper for the VMA open lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "drm_dev_get unconditionally increments the refcount and never fails, so retry is not applicable.",
+      "contract_summary": "This wrapper is invoked when a VMA is opened (e.g., during mmap). It acquires a reference on the drm_device stored in vma->vm_private_data, ensuring the device remains alive while the VMA exists. The VMA subsystem must later call a corresponding put (e.g., drm_dev_put) when the VMA is closed to release the reference. This is a standard get-ref-on-open pattern, and the reference is owned by the VMA until its close handler."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "vma.vm_private_data.ref.refcount",
+          "vm_area_struct--drm_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "vma.vm_private_data.ref.refcount",
+          "vm_area_struct--drm_device--kref--refcount_t"
+        ]
+      ],
+      "reason": "The critical variable is vma->vm_private_data, which is passed to drm_dev_get. The member_access_path from parameter vma through vm_private_data.ref.refcount matches the callee's dev.ref.refcount. Type chain and segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "vma.vm_private_data.ref.refcount",
+        "vm_area_struct--drm_device--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "drm_dev_get unconditionally increments the refcount and never fails, so retry is not applicable.",
+    "contract_summary": "This wrapper is invoked when a VMA is opened (e.g., during mmap). It acquires a reference on the drm_device stored in vma->vm_private_data, ensuring the device remains alive while the VMA exists. The VMA subsystem must later call a corresponding put (e.g., drm_dev_put) when the VMA is closed to release the reference. This is a standard get-ref-on-open pattern, and the reference is owned by the VMA until its close handler."
+  }
+}

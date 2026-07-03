@@ -1,0 +1,122 @@
+{
+  "function_name": "bpf_mprog_tuple_relative",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "tuple.prog.aux.refcnt",
+      "bpf_tuple--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_mprog_prog",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    },
+    {
+      "callee_function_name": "bpf_mprog_prog",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_mprog_prog",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    },
+    {
+      "callee_function_name": "bpf_mprog_prog",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure from callee (e.g., invalid id/fd) indicates a permanent error; retrying with the same arguments will not succeed.",
+  "contract_summary": "This wrapper acquires a reference to either a BPF program or a BPF link and stores it in the provided `bpf_tuple` structure. The caller must release the reference by calling `bpf_prog_put` or `bpf_link_put` when done with the tuple. If no id/fd is provided and the link flag is not set, the tuple is zeroed and no reference is acquired (success). On error (negative return), no reference is held and the tuple should not be used. The function is used to populate mprog array entries, where the returned reference is temporarily borrowed until the array operation completes.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a BPF program or link (via set/get semantics) and store it in the output tuple; the only unrelated logic is clearing the tuple and dispatching based on flags/id_or_fd, which is minimal boilerplate.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure from callee (e.g., invalid id/fd) indicates a permanent error; retrying with the same arguments will not succeed.",
+      "contract_summary": "This wrapper acquires a reference to either a BPF program or a BPF link and stores it in the provided `bpf_tuple` structure. The caller must release the reference by calling `bpf_prog_put` or `bpf_link_put` when done with the tuple. If no id/fd is provided and the link flag is not set, the tuple is zeroed and no reference is acquired (success). On error (negative return), no reference is held and the tuple should not be used. The function is used to populate mprog array entries, where the returned reference is temporarily borrowed until the array operation completes."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "tuple.link.refcnt",
+          "bpf_tuple--bpf_link--atomic64_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "tuple.prog.aux.refcnt",
+          "bpf_tuple--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "tuple.prog.aux.refcnt",
+          "bpf_tuple--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The second candidate is consistent: bpf_mprog_prog is called which, per callee info, performs a get on prog.aux.refcnt. The resulting reference is stored in tuple->prog, so the operation logically belongs to the tuple parameter. Access path segments and type chain match. The first candidate (tuple.link.refcnt) lacks callee info for bpf_mprog_link and thus cannot be validated; it is removed."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "tuple.prog.aux.refcnt",
+        "bpf_tuple--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure from callee (e.g., invalid id/fd) indicates a permanent error; retrying with the same arguments will not succeed.",
+    "contract_summary": "This wrapper acquires a reference to either a BPF program or a BPF link and stores it in the provided `bpf_tuple` structure. The caller must release the reference by calling `bpf_prog_put` or `bpf_link_put` when done with the tuple. If no id/fd is provided and the link flag is not set, the tuple is zeroed and no reference is acquired (success). On error (negative return), no reference is held and the tuple should not be used. The function is used to populate mprog array entries, where the returned reference is temporarily borrowed until the array operation completes."
+  }
+}

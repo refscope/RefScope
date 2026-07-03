@@ -1,0 +1,155 @@
+{
+  "function_name": "batadv_gw_get_selected_orig",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_gw_get_selected_gw_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_gw_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_gw_get_selected_gw_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "gw_node.refcount.refcount.refs",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_gw_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_gw_get_selected_gw_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) typically indicates no selected gateway or the orig_node being freed; immediate retry is unlikely to succeed without a change in gateway selection.",
+  "contract_summary": "Acquires a reference (via kref_get_unless_zero) to the orig_node of the currently selected gateway node, if available. Returns the orig_node with an elevated reference count, or NULL if no selected gateway exists or the orig_node is being freed. The caller must check the return value and, if non-NULL, release the reference via batadv_orig_node_put when done. This function internally obtains and releases a temporary reference on the gateway node.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the orig_node of the selected gateway, releasing the gw_node reference after extracting the orig_node. Non-refcount logic is limited to pointer checks and RCU lock/unlock.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) typically indicates no selected gateway or the orig_node being freed; immediate retry is unlikely to succeed without a change in gateway selection.",
+      "contract_summary": "Acquires a reference (via kref_get_unless_zero) to the orig_node of the currently selected gateway node, if available. Returns the orig_node with an elevated reference count, or NULL if no selected gateway exists or the orig_node is being freed. The caller must check the return value and, if non-NULL, release the reference via batadv_orig_node_put when done. This function internally obtains and releases a temporary reference on the gateway node."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation corresponds to kref_get_unless_zero(&orig_node->refcount) on the returned orig_node. The access path orig_node.refcount.refcount and type chain batadv_orig_node--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) typically indicates no selected gateway or the orig_node being freed; immediate retry is unlikely to succeed without a change in gateway selection.",
+    "contract_summary": "Acquires a reference (via kref_get_unless_zero) to the orig_node of the currently selected gateway node, if available. Returns the orig_node with an elevated reference count, or NULL if no selected gateway exists or the orig_node is being freed. The caller must check the return value and, if non-NULL, release the reference via batadv_orig_node_put when done. This function internally obtains and releases a temporary reference on the gateway node."
+  }
+}

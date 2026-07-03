@@ -1,0 +1,99 @@
+{
+  "function_name": "bcmgenet_mii_of_find_mdio",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "mdio_dn.kobj.kref.refcount",
+      "device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_get_compatible_child",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "child.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_get_compatible_child",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "child.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when the MDIO node is not found in the device tree; that is a configuration issue and retrying will not change the outcome.",
+  "contract_summary": "This function acquires a reference to the MDIO bus device node by calling of_get_compatible_child with a version-specific compatible string. It returns the node pointer with an incremented reference count. The caller must call of_node_put to release the reference when done. The function also caches the result in priv->mdio_dn, which should be released via of_node_put before being reassigned or on driver removal. On failure (node not found or memory allocation error), it returns NULL and logs an error.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference to the MDIO device tree node via of_get_compatible_child (a refcount-get operation) and return it. The only non-refcount logic is error handling and storing the node in priv->mdio_dn, which are minimal side effects.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when the MDIO node is not found in the device tree; that is a configuration issue and retrying will not change the outcome.",
+      "contract_summary": "This function acquires a reference to the MDIO bus device node by calling of_get_compatible_child with a version-specific compatible string. It returns the node pointer with an incremented reference count. The caller must call of_node_put to release the reference when done. The function also caches the result in priv->mdio_dn, which should be released via of_node_put before being reassigned or on driver removal. On failure (node not found or memory allocation error), it returns NULL and logs an error."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mdio_dn.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mdio_dn.kobj.kref.refcount",
+          "device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "of_get_compatible_child is a get function for its return, which is stored in priv->mdio_dn and returned. The access path mdio_dn.kobj.kref.refcount (starting from the returned pointer) and type chain device_node--kobject--kref--refcount_t match the callee info exactly."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "mdio_dn.kobj.kref.refcount",
+        "device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when the MDIO node is not found in the device tree; that is a configuration issue and retrying will not change the outcome.",
+    "contract_summary": "This function acquires a reference to the MDIO bus device node by calling of_get_compatible_child with a version-specific compatible string. It returns the node pointer with an incremented reference count. The caller must call of_node_put to release the reference when done. The function also caches the result in priv->mdio_dn, which should be released via of_node_put before being reassigned or on driver removal. On failure (node not found or memory allocation error), it returns NULL and logs an error."
+  }
+}

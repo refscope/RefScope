@@ -1,0 +1,106 @@
+{
+  "function_name": "blkcg_unpin_online",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "blkcg.online_pin.refs",
+      "cgroup_subsys_state--blkcg--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement is unconditional and assumed valid; no failure mode that can be retried.",
+  "contract_summary": "Put wrapper that decrements the 'online_pin' refcount on a blkcg. When the refcount reaches zero, it destroys the blkcg's blkgs and recursively unpins the parent. The caller must have previously acquired a pin (e.g., via blkcg_pin_online). After calling, the caller must not rely on any state protected by that pin, as the function may free the blkcg's internal structures. No return value; caller must ensure the pin was valid.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the online_pin refcount on a blkcg and conditionally destroy blkgs when the count hits zero, iterating up the parent chain. This is a classic put wrapper with cleanup on last reference release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement is unconditional and assumed valid; no failure mode that can be retried.",
+      "contract_summary": "Put wrapper that decrements the 'online_pin' refcount on a blkcg. When the refcount reaches zero, it destroys the blkcg's blkgs and recursively unpins the parent. The caller must have previously acquired a pin (e.g., via blkcg_pin_online). After calling, the caller must not rely on any state protected by that pin, as the function may free the blkcg's internal structures. No return value; caller must ensure the pin was valid."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "blkcg_css.online_pin.refs",
+          "cgroup_subsys_state--blkcg--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate access path 'blkcg_css.online_pin.refs' is incorrect: blkcg_css is of type 'struct cgroup_subsys_state', which does not have an 'online_pin' field. The refcount_dec_and_test operates on blkcg->online_pin after converting the parameter via css_to_blkcg(), so the path should start from the blkcg pointer (derived from parameter) rather than directly from blkcg_css. Additionally, the segment count (3) does not match the type chain count (4) as required for consistency."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "blkcg.online_pin.refs",
+          "cgroup_subsys_state--blkcg--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a refcount put wrapper. It decrements the online_pin refcount of the blkcg derived from the input css parameter. The candidate path was incorrect because it omitted the css_to_blkcg conversion; the correct access path starts from the derived blkcg. The critical variable (blkcg) is passed indirectly via the parameter and its refcount is modified. Purity is high as the primary purpose is refcount management."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "blkcg.online_pin.refs",
+        "cgroup_subsys_state--blkcg--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement is unconditional and assumed valid; no failure mode that can be retried.",
+    "contract_summary": "Put wrapper that decrements the 'online_pin' refcount on a blkcg. When the refcount reaches zero, it destroys the blkcg's blkgs and recursively unpins the parent. The caller must have previously acquired a pin (e.g., via blkcg_pin_online). After calling, the caller must not rely on any state protected by that pin, as the function may free the blkcg's internal structures. No return value; caller must ensure the pin was valid."
+  }
+}

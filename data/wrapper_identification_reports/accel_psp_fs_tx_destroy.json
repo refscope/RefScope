@@ -1,0 +1,58 @@
+{
+  "function_name": "accel_psp_fs_tx_destroy",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mlx5_destroy_flow_group",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fg.node.refcount.refs",
+      "member_type_chain": "mlx5_flow_group--fs_node--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mlx5_destroy_flow_group",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fg.node.refcount.refs",
+      "member_type_chain": "mlx5_flow_group--fs_node--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "As a destroy/cleanup function, retrying after failure could lead to double-free or undefined behavior; the function returns void and does not indicate success/failure.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to destroy a set of hardware flow table resources (rules, group, table) by calling multiple cleanup functions. Although mlx5_destroy_flow_group performs a refcount put, this is just one step within a broader cleanup sequence. The function does not focus on reference-count management alone.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "As a destroy/cleanup function, retrying after failure could lead to double-free or undefined behavior; the function returns void and does not indicate success/failure.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "As a destroy/cleanup function, retrying after failure could lead to double-free or undefined behavior; the function returns void and does not indicate success/failure.",
+    "contract_summary": ""
+  }
+}

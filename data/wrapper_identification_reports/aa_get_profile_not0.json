@@ -1,0 +1,115 @@
+{
+  "function_name": "aa_get_profile_not0",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "p.label.count.refcount.refs",
+      "aa_profile--aa_label--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Retry would not revive a dead/dying object; failure indicates refcount is zero (object being freed) or p is NULL.",
+  "contract_summary": "This is a get-wrapper that conditionally acquires a reference on an aa_profile object. It returns NULL if the object is NULL or if its reference count has already reached zero (object is dying). The caller must check the return value; if non-NULL, the caller owns a new reference and must later release it with a corresponding put function (e.g., aa_put_profile). If NULL, the object is no longer alive and must not be used. This function does not transfer pre-existing ownership; it is an acquire operation for a live object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on an aa_profile object via kref_get_unless_zero, returning the object if successful or NULL otherwise. The only additional logic is a NULL check.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Retry would not revive a dead/dying object; failure indicates refcount is zero (object being freed) or p is NULL.",
+      "contract_summary": "This is a get-wrapper that conditionally acquires a reference on an aa_profile object. It returns NULL if the object is NULL or if its reference count has already reached zero (object is dying). The caller must check the return value; if non-NULL, the caller owns a new reference and must later release it with a corresponding put function (e.g., aa_put_profile). If NULL, the object is no longer alive and must not be used. This function does not transfer pre-existing ownership; it is an acquire operation for a live object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.label.count.refcount.refs",
+          "aa_profile--aa_label--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.label.count.refcount.refs",
+          "aa_profile--aa_label--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns p after successfully incrementing its refcount via kref_get_unless_zero on p->label.count.count. The access path from the returned p to the atomic field is p.label.count.refcount.refs, matching the callee's path and type chain. The segment count (5) equals the type chain count (5)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "p.label.count.refcount.refs",
+        "aa_profile--aa_label--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Retry would not revive a dead/dying object; failure indicates refcount is zero (object being freed) or p is NULL.",
+    "contract_summary": "This is a get-wrapper that conditionally acquires a reference on an aa_profile object. It returns NULL if the object is NULL or if its reference count has already reached zero (object is dying). The caller must check the return value; if non-NULL, the caller owns a new reference and must later release it with a corresponding put function (e.g., aa_put_profile). If NULL, the object is no longer alive and must not be used. This function does not transfer pre-existing ownership; it is an acquire operation for a live object."
+  }
+}

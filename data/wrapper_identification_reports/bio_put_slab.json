@@ -1,0 +1,86 @@
+{
+  "function_name": "bio_put_slab",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount",
+      "member_type_chain": "kmem_cache--int"
+    },
+    {
+      "callee_function_name": "kmem_cache_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.kobj.kref.refcount",
+      "member_type_chain": "kmem_cache--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the slab is not found (WARN triggered), it indicates a double-free or corruption; no retry can fix that. If the refcount reaches zero, the slab is destroyed successfully; no retry needed.",
+  "contract_summary": "This is a release (put) wrapper for a bio slab. It decrements the reference count of the slab descriptor (`bslab->slab_ref`) under a mutex. When the reference count reaches zero, it destroys the underlying kmem_cache and frees the slab descriptor. Callers must have previously obtained a reference via a get operation (e.g., during allocation) and must not use the slab or any bio from it after calling this function. The function is idempotent on failure (if the slab is missing, it warns but does not crash). The mutex ensures serialization of slab lifecycle operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of a bio_slab and conditionally destroy it when the last reference is released; the only additional logic is minimal error checking (WARN) and mutex protection.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the slab is not found (WARN triggered), it indicates a double-free or corruption; no retry can fix that. If the refcount reaches zero, the slab is destroyed successfully; no retry needed.",
+      "contract_summary": "This is a release (put) wrapper for a bio slab. It decrements the reference count of the slab descriptor (`bslab->slab_ref`) under a mutex. When the reference count reaches zero, it destroys the underlying kmem_cache and frees the slab descriptor. Callers must have previously obtained a reference via a get operation (e.g., during allocation) and must not use the slab or any bio from it after calling this function. The function is idempotent on failure (if the slab is missing, it warns but does not crash). The mutex ensures serialization of slab lifecycle operations."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "struct bio_slab"
+      ],
+      "reason": "Need the full definition of struct bio_slab to determine the type of slab_ref (the field being decremented) and to construct the correct member_type_chain for the refcount operation."
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function bio_put_slab calls kmem_cache_destroy(bslab->slab), which according to the callee information is a put function on the kmem_cache's refcount (via s.refcount or s.kobj.kref.refcount). The critical object for this operation is the kmem_cache pointed to by bs->bio_slab (via parameter bs). This put operation should have been extracted but is missing from the candidate list. Moreover, the direct decrement of bslab->slab_ref is a custom integer decrement, not a standard kernel refcount API call. Therefore, the empty list is inconsistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the slab is not found (WARN triggered), it indicates a double-free or corruption; no retry can fix that. If the refcount reaches zero, the slab is destroyed successfully; no retry needed.",
+    "contract_summary": "This is a release (put) wrapper for a bio slab. It decrements the reference count of the slab descriptor (`bslab->slab_ref`) under a mutex. When the reference count reaches zero, it destroys the underlying kmem_cache and frees the slab descriptor. Callers must have previously obtained a reference via a get operation (e.g., during allocation) and must not use the slab or any bio from it after calling this function. The function is idempotent on failure (if the slab is missing, it warns but does not crash). The mutex ensures serialization of slab lifecycle operations."
+  }
+}

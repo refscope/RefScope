@@ -1,0 +1,194 @@
+{
+  "function_name": "btrfs_get_fs_root_commit_root",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "path.nodes[i].refs.refs",
+      "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_global_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lookup_fs_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_global_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lookup_fs_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the root cannot be found (e.g., corruption), the failure is permanent; retrying will not change the result.",
+  "contract_summary": "This function acquires a reference on the btrfs_root corresponding to the given objectid. It looks up the root through multiple mechanisms: global roots, cached fs roots, or reading from disk. The caller receives a pointer with an elevated reference count and must release it via btrfs_put_root when done. If the root cannot be found (e.g., corruption), the function returns NULL or an error pointer, and the caller must not use it. The function also releases the provided path in all cases.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a btrfs_root and return it to the caller, using three different lookup strategies. The only non-refcount logic is the path release, which is a necessary cleanup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the root cannot be found (e.g., corruption), the failure is permanent; retrying will not change the result.",
+      "contract_summary": "This function acquires a reference on the btrfs_root corresponding to the given objectid. It looks up the root through multiple mechanisms: global roots, cached fs roots, or reading from disk. The caller receives a pointer with an elevated reference count and must release it via btrfs_put_root when done. If the root cannot be found (e.g., corruption), the function returns NULL or an error pointer, and the caller must not use it. The function also releases the provided path in all cases."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "path.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "path.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Two get operations from btrfs_get_global_root and btrfs_lookup_fs_root on the returned root, and one put operation from btrfs_release_path on the path parameter. The set operation is not supported by any refcount_set in the function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "path.nodes[i].refs.refs",
+        "btrfs_path--extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the root cannot be found (e.g., corruption), the failure is permanent; retrying will not change the result.",
+    "contract_summary": "This function acquires a reference on the btrfs_root corresponding to the given objectid. It looks up the root through multiple mechanisms: global roots, cached fs roots, or reading from disk. The caller receives a pointer with an elevated reference count and must release it via btrfs_put_root when done. If the root cannot be found (e.g., corruption), the function returns NULL or an error pointer, and the caller must not use it. The function also releases the provided path in all cases."
+  }
+}

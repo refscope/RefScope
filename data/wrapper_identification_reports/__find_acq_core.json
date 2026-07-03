@@ -1,0 +1,58 @@
+{
+  "function_name": "__find_acq_core",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xfrm_state_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xfrm_state_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "xfrm_state_hold always succeeds when called; failure modes are from missing state or creation conditions, not refcount operations.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to find or create an XFRM state in ACQ state, which involves hash table lookup, allocation, extensive field initialization, list insertion, and timer setup. The refcount increments (xfrm_state_hold) are incidental steps within the broader business logic, not the core purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "xfrm_state_hold always succeeds when called; failure modes are from missing state or creation conditions, not refcount operations.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "xfrm_state_hold always succeeds when called; failure modes are from missing state or creation conditions, not refcount operations.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "function_name": "amdgpu_sync_get_fence",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "f.refcount.refcount",
+      "dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If NULL is returned (all fences signaled), the caller may retry later when new fences are added to the sync object.",
+  "contract_summary": "This function retrieves an unsignaled dma_fence from the amdgpu_sync object and transfers its ownership to the caller. The caller receives a new reference to the fence and must call dma_fence_put to release it. If no unsignaled fence exists, the function returns NULL and no reference is transferred. The function also removes and frees the corresponding sync entry; the caller must not use the sync entry after the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to extract an unsignaled dma_fence from the sync object, transferring a reference to the caller. Additional logic includes hash table iteration, entry removal, slab cache free, and signaling check, but all in service of the get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If NULL is returned (all fences signaled), the caller may retry later when new fences are added to the sync object.",
+      "contract_summary": "This function retrieves an unsignaled dma_fence from the amdgpu_sync object and transfers its ownership to the caller. The caller receives a new reference to the fence and must call dma_fence_put to release it. If no unsignaled fence exists, the function returns NULL and no reference is transferred. The function also removes and frees the corresponding sync entry; the caller must not use the sync entry after the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "f.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate list contains a 'put' operation with location 'return', index '0'. However, in the function, dma_fence_put(f) is called only on signaled fence objects that are not returned (the function returns f if not signaled, otherwise puts f and continues to return NULL). Thus, the put operation does not act on the return value; it acts on a local variable. The location is incorrect, so the operation is unsupported."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "f.refcount.refcount",
+          "dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function amdgpu_sync_get_fence is a helper that pops a fence from the sync hash and either returns it with its reference transferred to the caller (if unsignaled) or drops the reference (if signaled). The critical variable is the fence pointer f, which is returned directly when unsignaled, making this a get wrapper on the return path. The candidate put operation was incorrectly attributed to the return value; the actual put occurs only on local signaled fences and does not affect the return. Therefore the correct operation is a get on the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "f.refcount.refcount",
+        "dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If NULL is returned (all fences signaled), the caller may retry later when new fences are added to the sync object.",
+    "contract_summary": "This function retrieves an unsignaled dma_fence from the amdgpu_sync object and transfers its ownership to the caller. The caller receives a new reference to the fence and must call dma_fence_put to release it. If no unsignaled fence exists, the function returns NULL and no reference is transferred. The function also removes and frees the corresponding sync entry; the caller must not use the sync entry after the call."
+  }
+}

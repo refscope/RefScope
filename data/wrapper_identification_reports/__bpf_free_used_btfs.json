@@ -1,0 +1,134 @@
+{
+  "function_name": "__bpf_free_used_btfs",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "used_btfs[i].module.refcnt",
+      "btf_mod_pair *--btf_mod_pair--module *--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "used_btfs[i].btf.refcnt.refs",
+      "btf_mod_pair *--btf_mod_pair--btf *--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and do not fail under normal circumstances; retrying would risk double-release.",
+  "contract_summary": "This function is a put-wrapper that releases references to a batch of BTF objects and their associated modules. It iterates over the given array and calls btf_put() and module_put() for each entry, safely dropping the references. After this call, the caller must not use the supplied BTF or module pointers as their underlying objects may be freed or have their refcounts reduced. The function does not return an error; it assumes all refcounts are valid. It is typically used in cleanup paths to free a list of used BTF-module pairs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references to BTF and module objects by calling btf_put and module_put on each element of the array. No other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and do not fail under normal circumstances; retrying would risk double-release.",
+      "contract_summary": "This function is a put-wrapper that releases references to a batch of BTF objects and their associated modules. It iterates over the given array and calls btf_put() and module_put() for each entry, safely dropping the references. After this call, the caller must not use the supplied BTF or module pointers as their underlying objects may be freed or have their refcounts reduced. The function does not return an error; it assumes all refcounts are valid. It is typically used in cleanup paths to free a list of used BTF-module pairs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "used_btfs[i].module.refcnt",
+          "struct btf_mod_pair *--struct btf_mod_pair--struct module *--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "used_btfs[i].btf.refcnt.refs",
+          "struct btf_mod_pair *--struct btf_mod_pair--struct btf *--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Both candidate operations fail the segment count check (step 8): Operation 1 has 3 path segments but 4 types in the chain; Operation 2 has 4 path segments but 5 types. Additionally, operation 1 (module_put) lacks supporting callee information to verify its path/type chain, while operation 2's path and chain are inconsistent with the implicit pointer dereferences required by the code. Thus no operations are validated."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "used_btfs[i].module.refcnt",
+          "struct btf_mod_pair *--struct btf_mod_pair--struct module *--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "used_btfs[i].btf.refcnt.refs",
+          "struct btf_mod_pair *--struct btf_mod_pair--struct btf *--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __bpf_free_used_btfs is a pure put wrapper: it loops over the array pointed to by parameter 1 and calls module_put and btf_put on each element, decrementing reference counts. Despite the check's rejection due to path/type segment count mismatches and missing callee info for module_put, the extraction correctly identifies the two put operations. The function does not pass a critical variable to the caller (void return, no output parameter), so passes_critical_variable is false. The purity is high as the entire function focuses on reference count release."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "used_btfs[i].module.refcnt",
+        "struct btf_mod_pair *--struct btf_mod_pair--struct module *--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "used_btfs[i].btf.refcnt.refs",
+        "struct btf_mod_pair *--struct btf_mod_pair--struct btf *--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and do not fail under normal circumstances; retrying would risk double-release.",
+    "contract_summary": "This function is a put-wrapper that releases references to a batch of BTF objects and their associated modules. It iterates over the given array and calls btf_put() and module_put() for each entry, safely dropping the references. After this call, the caller must not use the supplied BTF or module pointers as their underlying objects may be freed or have their refcounts reduced. The function does not return an error; it assumes all refcounts are valid. It is typically used in cleanup paths to free a list of used BTF-module pairs."
+  }
+}

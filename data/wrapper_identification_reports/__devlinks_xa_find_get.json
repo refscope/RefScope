@@ -1,0 +1,115 @@
+{
+  "function_name": "__devlinks_xa_find_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "devlink.refcount.refs",
+      "devlink--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devlink_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "devlink_try_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devlink_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "devlink_try_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "devlink.refcount.refs",
+      "member_type_chain": "devlink--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function already internally retries on failure (try_get fails or net mismatch). When it returns NULL, the search space is exhausted; external retry would be pointless without a change in the registered devlinks set.",
+  "contract_summary": "get wrapper for the devlink global xarray: iterates over indices from *indexp to end, looking for a DEVLINK_REGISTERED entry. For each candidate, attempts to acquire a reference via devlink_try_get and checks that the devlink's net namespace matches the provided net. If either fails, the index is advanced and the search continues. On success, returns the devlink with an acquired reference; the caller must release it via devlink_put. On failure (no matching entry found in the range), returns NULL. The function is typically used in iteration macros (e.g., for_each_devlink) where the caller is responsible for releasing the reference on each iteration step.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to locate a devlink in the xarray, acquire a reference via devlink_try_get, and conditionally return it after verifying net namespace. The iterator and net_eq check are integral parts of the get operation, not independent business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function already internally retries on failure (try_get fails or net mismatch). When it returns NULL, the search space is exhausted; external retry would be pointless without a change in the registered devlinks set.",
+      "contract_summary": "get wrapper for the devlink global xarray: iterates over indices from *indexp to end, looking for a DEVLINK_REGISTERED entry. For each candidate, attempts to acquire a reference via devlink_try_get and checks that the devlink's net namespace matches the provided net. If either fails, the index is advanced and the search continues. On success, returns the devlink with an acquired reference; the caller must release it via devlink_put. On failure (no matching entry found in the range), returns NULL. The function is typically used in iteration macros (e.g., for_each_devlink) where the caller is responsible for releasing the reference on each iteration step."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "devlink.refcount.refs",
+          "devlink--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "devlink.refcount.refs",
+          "devlink--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "devlink_try_get acquires a reference on the devlink that is returned (if not NULL). The access path devlink.refcount.refs and type chain devlink--refcount_t--atomic_t are consistent with the callee information for devlink_try_get (get on return index 0). The function returns a devlink with a held reference when net matches, so the operation correctly describes the reference count change exposed to the caller."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "devlink.refcount.refs",
+        "devlink--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function already internally retries on failure (try_get fails or net mismatch). When it returns NULL, the search space is exhausted; external retry would be pointless without a change in the registered devlinks set.",
+    "contract_summary": "get wrapper for the devlink global xarray: iterates over indices from *indexp to end, looking for a DEVLINK_REGISTERED entry. For each candidate, attempts to acquire a reference via devlink_try_get and checks that the devlink's net namespace matches the provided net. If either fails, the index is advanced and the search continues. On success, returns the devlink with an acquired reference; the caller must release it via devlink_put. On failure (no matching entry found in the range), returns NULL. The function is typically used in iteration macros (e.g., for_each_devlink) where the caller is responsible for releasing the reference on each iteration step."
+  }
+}

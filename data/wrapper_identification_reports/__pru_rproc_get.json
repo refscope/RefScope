@@ -1,0 +1,115 @@
+{
+  "function_name": "__pru_rproc_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "rproc.dev.kobj.kref.refcount",
+      "rproc--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rproc_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rproc.dev.kobj.kref.refcount",
+      "member_type_chain": "rproc--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rproc_get_by_phandle",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rproc.dev.kobj.kref.refcount",
+      "member_type_chain": "rproc--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rproc_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rproc.dev.kobj.kref.refcount",
+      "member_type_chain": "rproc--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "rproc_get_by_phandle",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rproc.dev.kobj.kref.refcount",
+      "member_type_chain": "rproc--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure with -EPROBE_DEFER indicates the PRU rproc is not yet available (transient); caller should retry later. Other errors (-ENODEV) are permanent and should not be retried.",
+  "contract_summary": "Acquires a reference-counted PRU rproc object from a device tree node. On success, returns an `rproc` pointer with an incremented reference count (via `rproc_get_by_phandle`). The caller becomes owner of this reference and must release it with `rproc_put()` when done. If the phandle is not yet available, returns `-EPROBE_DEFER` (the caller should retry later). If the phandle resolves to a non-PRU rproc, the reference is released and `-ENODEV` is returned. No locks or RCU protection are required; normal device tree lifecycle applies.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference-counted PRU rproc via phandle lookup. The validation (checking parent device) is minimal and directly tied to ensuring the correct type; the refcount operation is the core semantics.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure with -EPROBE_DEFER indicates the PRU rproc is not yet available (transient); caller should retry later. Other errors (-ENODEV) are permanent and should not be retried.",
+      "contract_summary": "Acquires a reference-counted PRU rproc object from a device tree node. On success, returns an `rproc` pointer with an incremented reference count (via `rproc_get_by_phandle`). The caller becomes owner of this reference and must release it with `rproc_put()` when done. If the phandle is not yet available, returns `-EPROBE_DEFER` (the caller should retry later). If the phandle resolves to a non-PRU rproc, the reference is released and `-ENODEV` is returned. No locks or RCU protection are required; normal device tree lifecycle applies."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rproc.dev.kobj.kref.refcount",
+          "rproc--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rproc.dev.kobj.kref.refcount",
+          "rproc--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "rproc_get_by_phandle increments refcount on the returned rproc. The access path rproc.dev.kobj.kref.refcount correctly traces from the return value (rproc) to the refcount field, and the type chain matches the struct hierarchy. Segment counts match: 5 segments and 5 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "rproc.dev.kobj.kref.refcount",
+        "rproc--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure with -EPROBE_DEFER indicates the PRU rproc is not yet available (transient); caller should retry later. Other errors (-ENODEV) are permanent and should not be retried.",
+    "contract_summary": "Acquires a reference-counted PRU rproc object from a device tree node. On success, returns an `rproc` pointer with an incremented reference count (via `rproc_get_by_phandle`). The caller becomes owner of this reference and must release it with `rproc_put()` when done. If the phandle is not yet available, returns `-EPROBE_DEFER` (the caller should retry later). If the phandle resolves to a non-PRU rproc, the reference is released and `-ENODEV` is returned. No locks or RCU protection are required; normal device tree lifecycle applies."
+  }
+}

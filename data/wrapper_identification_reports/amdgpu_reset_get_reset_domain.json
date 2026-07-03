@@ -1,0 +1,115 @@
+{
+  "function_name": "amdgpu_reset_get_reset_domain",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "domain.refcount.refcount.refs",
+      "amdgpu_reset_domain--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the refcount was zero and the object is being destroyed; retrying will not revive it.",
+  "contract_summary": "This wrapper conditionally acquires a reference on an amdgpu_reset_domain object by incrementing its kref count, but only if the object is still alive (refcount non-zero). Returns true if the reference was acquired; the caller must later call kref_put (or the corresponding release function) to drop the reference. On failure (false), the object is being freed or already freed and must not be used. This is a get-wrapper that transfers ownership of a reference to the caller on success.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to conditionally acquire a reference on the amdgpu_reset_domain via kref_get_unless_zero and return a boolean indicating success. No other logic is present.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the refcount was zero and the object is being destroyed; retrying will not revive it.",
+      "contract_summary": "This wrapper conditionally acquires a reference on an amdgpu_reset_domain object by incrementing its kref count, but only if the object is still alive (refcount non-zero). Returns true if the reference was acquired; the caller must later call kref_put (or the corresponding release function) to drop the reference. On failure (false), the object is being freed or already freed and must not be used. This is a get-wrapper that transfers ownership of a reference to the caller on success."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "domain.refcount.refcount.refs",
+          "amdgpu_reset_domain--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "domain.refcount.refcount.refs",
+          "amdgpu_reset_domain--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation is consistent: kref_get_unless_zero is called on &domain->refcount, which follows the access path domain->refcount (kref) -> refcount (refcount_t) -> refs (atomic_t). The parameter index 1 is correct, and the segment count matches the type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "domain.refcount.refcount.refs",
+        "amdgpu_reset_domain--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the refcount was zero and the object is being destroyed; retrying will not revive it.",
+    "contract_summary": "This wrapper conditionally acquires a reference on an amdgpu_reset_domain object by incrementing its kref count, but only if the object is still alive (refcount non-zero). Returns true if the reference was acquired; the caller must later call kref_put (or the corresponding release function) to drop the reference. On failure (false), the object is being freed or already freed and must not be used. This is a get-wrapper that transfers ownership of a reference to the caller on success."
+  }
+}

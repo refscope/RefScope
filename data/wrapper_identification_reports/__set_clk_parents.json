@@ -1,0 +1,74 @@
+{
+  "function_name": "__set_clk_parents",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_clk_get_from_provider",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "clk.core.ref.refcount",
+      "member_type_chain": "clk--clk_core--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_clk_get_from_provider",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "clk.core.ref.refcount",
+      "member_type_chain": "clk--clk_core--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure typically indicates a probe deferral or permanent error (invalid DT, missing clock provider) that cannot be fixed by retrying the same operation; the caller should propagate the error and attempt later if -EPROBE_DEFER.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to configure clock parent assignments from device tree properties, not to manage reference counts. The function iterates over assigned-clock-parents and assigned-clocks, gets clock objects, calls clk_set_parent, and then releases references. The refcount operations (clk_get/put) are incidental to the core logic of setting up clock hierarchy.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure typically indicates a probe deferral or permanent error (invalid DT, missing clock provider) that cannot be fixed by retrying the same operation; the caller should propagate the error and attempt later if -EPROBE_DEFER.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure typically indicates a probe deferral or permanent error (invalid DT, missing clock provider) that cannot be fixed by retrying the same operation; the caller should propagate the error and attempt later if -EPROBE_DEFER.",
+    "contract_summary": ""
+  }
+}

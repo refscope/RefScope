@@ -1,0 +1,99 @@
+{
+  "function_name": "audit_find_parent",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "parent.mark.refcnt.refs",
+      "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fsnotify_find_inode_mark",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fsnotify_find_inode_mark",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mark.refcnt.refs",
+      "member_type_chain": "fsnotify_mark--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure (NULL return) means the inode is not yet watched; the caller may retry if a watch is expected to be created later.",
+  "contract_summary": "Find-and-get wrapper: returns a pointer to an audit_parent with an acquired reference (via fsnotify_find_inode_mark). The caller is responsible for releasing the reference with a corresponding put (e.g., audit_put_parent) when the parent is no longer needed. The function only succeeds if the inode already has an associated audit watch; if no watch exists, NULL is returned and no reference is taken.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an audit_parent via its fsnotify_mark and acquire a reference on it; no additional logic besides the container_of conversion.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure (NULL return) means the inode is not yet watched; the caller may retry if a watch is expected to be created later.",
+      "contract_summary": "Find-and-get wrapper: returns a pointer to an audit_parent with an acquired reference (via fsnotify_find_inode_mark). The caller is responsible for releasing the reference with a corresponding put (e.g., audit_put_parent) when the parent is no longer needed. The function only succeeds if the inode already has an associated audit watch; if no watch exists, NULL is returned and no reference is taken."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "parent.mark.refcnt.refs",
+          "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "parent.mark.refcnt.refs",
+          "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "fsnotify_find_inode_mark increments the refcount on the returned fsnotify_mark via mark.refcnt.refs. The function returns an audit_parent pointer that contains that mark via container_of. The access path from return value to refcount field is parent.mark.refcnt.refs with type chain audit_parent--fsnotify_mark--refcount_struct--atomic_t, which matches the callee's get operation on index 0 and the code structure."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "parent.mark.refcnt.refs",
+        "audit_parent--fsnotify_mark--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure (NULL return) means the inode is not yet watched; the caller may retry if a watch is expected to be created later.",
+    "contract_summary": "Find-and-get wrapper: returns a pointer to an audit_parent with an acquired reference (via fsnotify_find_inode_mark). The caller is responsible for releasing the reference with a corresponding put (e.g., audit_put_parent) when the parent is no longer needed. The function only succeeds if the inode already has an associated audit watch; if no watch exists, NULL is returned and no reference is taken."
+  }
+}

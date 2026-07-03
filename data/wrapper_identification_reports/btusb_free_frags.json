@@ -1,0 +1,155 @@
+{
+  "function_name": "btusb_free_frags",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.evt_skb.users.refs",
+      "btusb_data--sk_buff--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.acl_skb.users.refs",
+      "btusb_data--sk_buff--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.sco_skb.users.refs",
+      "btusb_data--sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_irq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_irq",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final and cannot be retried; after releasing a reference the object may be freed. Calling again on the same pointer would be a use-after-free risk if non-NULL, or a no-op if NULL.",
+  "contract_summary": "This function releases the driver's references to three skb objects (evt, acl, sco) by calling dev_kfree_skb_irq on each, and then sets their pointers to NULL. It is a cleanup wrapper used during error handling or teardown to ensure these skbs are properly freed and not reused. The caller must not use these skb pointers after this function returns. The function holds the rxlock during the operation to ensure thread safety. After calling btusb_free_frags, the driver no longer owns these skbs—they are handed back to the networking stack.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on three skb objects (evt_skb, acl_skb, sco_skb) by calling dev_kfree_skb_irq (a put function) on each, and setting the pointers to NULL. The only additional logic is spinlock management for synchronization. No other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final and cannot be retried; after releasing a reference the object may be freed. Calling again on the same pointer would be a use-after-free risk if non-NULL, or a no-op if NULL.",
+      "contract_summary": "This function releases the driver's references to three skb objects (evt, acl, sco) by calling dev_kfree_skb_irq on each, and then sets their pointers to NULL. It is a cleanup wrapper used during error handling or teardown to ensure these skbs are properly freed and not reused. The caller must not use these skb pointers after this function returns. The function holds the rxlock during the operation to ensure thread safety. After calling btusb_free_frags, the driver no longer owns these skbs—they are handed back to the networking stack."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.evt_skb.users.refs",
+          "btusb_data--sk_buff--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.acl_skb.users.refs",
+          "btusb_data--sk_buff--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.sco_skb.users.refs",
+          "btusb_data--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.evt_skb.users.refs",
+          "btusb_data--sk_buff--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.acl_skb.users.refs",
+          "btusb_data--sk_buff--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.sco_skb.users.refs",
+          "btusb_data--sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb_irq is a put function on its skb parameter. In btusb_free_frags, it is called on data->evt_skb, data->acl_skb, data->sco_skb. The access path from parameter 1 (data) through the respective field to users.refs is correct, and the type chain btusb_data--sk_buff--refcount_t--atomic_t matches the struct definitions. All segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.evt_skb.users.refs",
+        "btusb_data--sk_buff--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.acl_skb.users.refs",
+        "btusb_data--sk_buff--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.sco_skb.users.refs",
+        "btusb_data--sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final and cannot be retried; after releasing a reference the object may be freed. Calling again on the same pointer would be a use-after-free risk if non-NULL, or a no-op if NULL.",
+    "contract_summary": "This function releases the driver's references to three skb objects (evt, acl, sco) by calling dev_kfree_skb_irq on each, and then sets their pointers to NULL. It is a cleanup wrapper used during error handling or teardown to ensure these skbs are properly freed and not reused. The caller must not use these skb pointers after this function returns. The function holds the rxlock during the operation to ensure thread safety. After calling btusb_free_frags, the driver no longer owns these skbs—they are handed back to the networking stack."
+  }
+}

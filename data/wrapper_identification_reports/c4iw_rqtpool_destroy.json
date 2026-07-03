@@ -1,0 +1,107 @@
+{
+  "function_name": "c4iw_rqtpool_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "rdev.rqt_kref.refcount",
+      "c4iw_rdev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put is unconditional and cannot fail; retrying would cause a double-put (use-after-free risk) and is never appropriate.",
+  "contract_summary": "Release-wrapper for the rqt_kref reference count in the c4iw_rdev structure. Decrements the reference counter via kref_put; when the count reaches zero, the destroy_rqtpool callback is invoked to free the underlying RQT pool resources. After this call, the caller must not access rdev (or its rqt pool) without first acquiring a new reference. This function must be paired with a prior get or kref_init operation. The operation is unconditional and returns void; no return value check is needed by the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call kref_put on the rqt_kref field, decrementing the reference count and triggering cleanup on last reference release. It contains no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put is unconditional and cannot fail; retrying would cause a double-put (use-after-free risk) and is never appropriate.",
+      "contract_summary": "Release-wrapper for the rqt_kref reference count in the c4iw_rdev structure. Decrements the reference counter via kref_put; when the count reaches zero, the destroy_rqtpool callback is invoked to free the underlying RQT pool resources. After this call, the caller must not access rdev (or its rqt pool) without first acquiring a new reference. This function must be paired with a prior get or kref_init operation. The operation is unconditional and returns void; no return value check is needed by the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rdev.rqt_kref.refcount",
+          "c4iw_rdev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rdev.rqt_kref.refcount",
+          "c4iw_rdev--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put on rdev->rqt_kref, access path from parameter rdev through rqt_kref to refcount field, type chain consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "rdev.rqt_kref.refcount",
+        "c4iw_rdev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put is unconditional and cannot fail; retrying would cause a double-put (use-after-free risk) and is never appropriate.",
+    "contract_summary": "Release-wrapper for the rqt_kref reference count in the c4iw_rdev structure. Decrements the reference counter via kref_put; when the count reaches zero, the destroy_rqtpool callback is invoked to free the underlying RQT pool resources. After this call, the caller must not access rdev (or its rqt pool) without first acquiring a new reference. This function must be paired with a prior get or kref_init operation. The operation is unconditional and returns void; no return value check is needed by the caller."
+  }
+}

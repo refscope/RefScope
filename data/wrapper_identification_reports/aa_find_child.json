@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_find_child",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "profile.label.count.count",
+      "aa_profile--aa_label--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_profile_not0",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.label.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_get_profile_not0",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_profile_not0",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function internally retries on transient refcount failure; if it returns NULL, the child is not present or is being freed, and retrying by the caller would be unlikely to succeed.",
+  "contract_summary": "aa_find_child searches for a child profile under a parent and atomically acquires a reference if the profile exists and its refcount is non-zero. The function internally retries in a loop if the refcount is zero (object dying). On success, the caller receives a profile with an elevated refcount and must release it with aa_put_profile. On failure (NULL), the child does not exist or has been freed. RCU read lock is held internally, so the caller does not need to worry about RCU protection.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a child profile by name and acquire a reference via aa_get_profile_not0, retrying on failure. The RCU lock and loop are infrastructure for the refcount operation.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function internally retries on transient refcount failure; if it returns NULL, the child is not present or is being freed, and retrying by the caller would be unlikely to succeed.",
+      "contract_summary": "aa_find_child searches for a child profile under a parent and atomically acquires a reference if the profile exists and its refcount is non-zero. The function internally retries in a loop if the refcount is zero (object dying). On success, the caller receives a profile with an elevated refcount and must release it with aa_put_profile. On failure (NULL), the child does not exist or has been freed. RCU read lock is held internally, so the caller does not need to worry about RCU protection."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count",
+          "aa_profile--aa_label--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "profile.label.count.count",
+          "aa_profile--aa_label--kref--refcount_t"
+        ]
+      ],
+      "reason": "aa_get_profile_not0 is called on the profile returned from __find_child; the critical variable is the return value 'profile'. The access path 'profile.label.count.count' matches the callee's path from its parameter, and the type chain aa_profile--aa_label--kref--refcount_t has 4 types matching 4 path segments. The operation is a get, and the caller is expected to release the reference."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "profile.label.count.count",
+        "aa_profile--aa_label--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function internally retries on transient refcount failure; if it returns NULL, the child is not present or is being freed, and retrying by the caller would be unlikely to succeed.",
+    "contract_summary": "aa_find_child searches for a child profile under a parent and atomically acquires a reference if the profile exists and its refcount is non-zero. The function internally retries in a loop if the refcount is zero (object dying). On success, the caller receives a profile with an elevated refcount and must release it with aa_put_profile. On failure (NULL), the child does not exist or has been freed. RCU read lock is held internally, so the caller does not need to worry about RCU protection."
+  }
+}

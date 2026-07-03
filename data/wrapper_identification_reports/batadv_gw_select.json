@@ -1,0 +1,143 @@
+{
+  "function_name": "batadv_gw_select",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      2,
+      "new_gw_node.refcount.refcount",
+      "batadv_gw_node--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      1,
+      "bat_priv.gw.curr_gw.refcount.refcount",
+      "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_gw_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "gw_node.refcount.refcount",
+      "member_type_chain": "batadv_gw_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get always succeeds when called on a valid object; the non-NULL check is a precondition. If new_gw_node is NULL, the get is skipped, which is a valid no-op. No retry needed.",
+  "contract_summary": "Updates bat_priv->gw.curr_gw to a new gateway node, properly managing reference counts. On entry, if new_gw_node is non-NULL, its reference count is incremented to account for the new pointer. The old pointer is replaced via RCU and its reference is decremented. The caller must hold a reference to new_gw_node before calling (e.g., from a find or create operation) and may release that reference after the call if no longer needed. The operation is serialized by bat_priv->gw.list_lock, but the RCU replacement allows lock-free readers. After this call, the caller must not use the old pointer without proper care.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to update the current gateway pointer with proper reference management: acquire a reference on the new node and release the old one. No significant business logic beyond the pointer swap and spinlock.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get always succeeds when called on a valid object; the non-NULL check is a precondition. If new_gw_node is NULL, the get is skipped, which is a valid no-op. No retry needed.",
+      "contract_summary": "Updates bat_priv->gw.curr_gw to a new gateway node, properly managing reference counts. On entry, if new_gw_node is non-NULL, its reference count is incremented to account for the new pointer. The old pointer is replaced via RCU and its reference is decremented. The caller must hold a reference to new_gw_node before calling (e.g., from a find or create operation) and may release that reference after the call if no longer needed. The operation is serialized by bat_priv->gw.list_lock, but the RCU replacement allows lock-free readers. After this call, the caller must not use the old pointer without proper care."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          2,
+          "new_gw_node.refcount.refcount",
+          "batadv_gw_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          1,
+          "bat_priv.gw.curr_gw.refcount.refcount",
+          "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          2,
+          "new_gw_node.refcount.refcount",
+          "batadv_gw_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          1,
+          "bat_priv.gw.curr_gw.refcount.refcount",
+          "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The 'get' operation on parameter 2 is directly verified by the code: `kref_get(&new_gw_node->refcount)`. The access path `new_gw_node.refcount.refcount` and type chain `batadv_gw_node--kref--refcount_t` (3 segments = 3 types) are consistent. The 'put' operation corresponds to `batadv_gw_node_put(curr_gw_node)`, where `curr_gw_node` is the old value of `bat_priv->gw.curr_gw` obtained via `rcu_replace_pointer`. The access path `bat_priv.gw.curr_gw.refcount.refcount` starts from the parameter (`bat_priv`), follows the struct members to the refcount field, and the type chain `batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t` (5 segments = 5 types) is consistent with the structure definitions. The put correctly decrements the reference count of the replaced node. Both operations are valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        2,
+        "new_gw_node.refcount.refcount",
+        "batadv_gw_node--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        1,
+        "bat_priv.gw.curr_gw.refcount.refcount",
+        "batadv_priv--batadv_priv_gw--batadv_gw_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get always succeeds when called on a valid object; the non-NULL check is a precondition. If new_gw_node is NULL, the get is skipped, which is a valid no-op. No retry needed.",
+    "contract_summary": "Updates bat_priv->gw.curr_gw to a new gateway node, properly managing reference counts. On entry, if new_gw_node is non-NULL, its reference count is incremented to account for the new pointer. The old pointer is replaced via RCU and its reference is decremented. The caller must hold a reference to new_gw_node before calling (e.g., from a find or create operation) and may release that reference after the call if no longer needed. The operation is serialized by bat_priv->gw.list_lock, but the RCU replacement allows lock-free readers. After this call, the caller must not use the old pointer without proper care."
+  }
+}

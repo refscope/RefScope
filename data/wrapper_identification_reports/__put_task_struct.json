@@ -1,0 +1,275 @@
+{
+  "function_name": "__put_task_struct",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tsk.signal.sigcnt.refs",
+      "task_struct--signal_struct--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tsk.cached_requested_key.usage.refs",
+      "task_struct--key--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tsk.cred.usage",
+      "task_struct--cred--atomic_long_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tsk.real_cred.usage",
+      "task_struct--cred--atomic_long_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "tsk.core_cookie.refcnt.refs",
+      "task_struct--sched_core_cookie--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_signal_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sig.sigcnt.refs",
+      "member_type_chain": "signal_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "exit_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cached_requested_key.usage.refs",
+      "member_type_chain": "task_struct--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "sched_core_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.core_cookie.refcnt.refs",
+      "member_type_chain": "task_struct--sched_core_cookie--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "exit_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "exit_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.real_cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_signal_struct",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sig.sigcnt.refs",
+      "member_type_chain": "signal_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "exit_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cached_requested_key.usage.refs",
+      "member_type_chain": "task_struct--key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "sched_core_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.core_cookie.refcnt.refs",
+      "member_type_chain": "task_struct--sched_core_cookie--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "exit_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    },
+    {
+      "callee_function_name": "exit_creds",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tsk.real_cred.usage",
+      "member_type_chain": "task_struct--cred--atomic_long_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is the final put on a task_struct; after it executes, the object is freed. Retry would cause a use-after-free.",
+  "contract_summary": "This is the internal put wrapper for task_struct, called when the last reference (tsk->usage) reaches zero. It releases all subresource references (signal_struct, creds, sched_core, etc.) and finally frees the task_struct memory. After this function returns, the caller must not access the task_struct. It should only be invoked via put_task_struct, which manages the main refcount. The function is unconditional and always succeeds (assuming the WARN_ON conditions are satisfied).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release a task_struct when its main refcount reaches zero. All logic consists of WARN_ON validation and cascaded refcount decrements (signal, creds, cgroup, etc.) followed by free_task. There is no business logic outside of reference management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is the final put on a task_struct; after it executes, the object is freed. Retry would cause a use-after-free.",
+      "contract_summary": "This is the internal put wrapper for task_struct, called when the last reference (tsk->usage) reaches zero. It releases all subresource references (signal_struct, creds, sched_core, etc.) and finally frees the task_struct memory. After this function returns, the caller must not access the task_struct. It should only be invoked via put_task_struct, which manages the main refcount. The function is unconditional and always succeeds (assuming the WARN_ON conditions are satisfied)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.signal.sigcnt.refs",
+          "task_struct--signal_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.cached_requested_key.usage.refs",
+          "task_struct--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.real_cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.core_cookie.refcnt.refs",
+          "task_struct--sched_core_cookie--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.signal.sigcnt.refs",
+          "task_struct--signal_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.cached_requested_key.usage.refs",
+          "task_struct--key--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.real_cred.usage",
+          "task_struct--cred--atomic_long_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "tsk.core_cookie.refcnt.refs",
+          "task_struct--sched_core_cookie--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All candidate operations correspond to actual callee calls in __put_task_struct: put_signal_struct(tsk->signal), exit_creds(tsk) (affecting multiple cred and key fields), and sched_core_free(tsk). The access paths and type chains match the callee information, segment counts are consistent, and the starting point parameter 1 (tsk) is correct as the object whose members are being released."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tsk.signal.sigcnt.refs",
+        "task_struct--signal_struct--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tsk.cached_requested_key.usage.refs",
+        "task_struct--key--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tsk.cred.usage",
+        "task_struct--cred--atomic_long_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tsk.real_cred.usage",
+        "task_struct--cred--atomic_long_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "tsk.core_cookie.refcnt.refs",
+        "task_struct--sched_core_cookie--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is the final put on a task_struct; after it executes, the object is freed. Retry would cause a use-after-free.",
+    "contract_summary": "This is the internal put wrapper for task_struct, called when the last reference (tsk->usage) reaches zero. It releases all subresource references (signal_struct, creds, sched_core, etc.) and finally frees the task_struct memory. After this function returns, the caller must not access the task_struct. It should only be invoked via put_task_struct, which manages the main refcount. The function is unconditional and always succeeds (assuming the WARN_ON conditions are satisfied)."
+  }
+}

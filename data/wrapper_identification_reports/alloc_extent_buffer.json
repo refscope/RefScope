@@ -1,0 +1,98 @@
+{
+  "function_name": "alloc_extent_buffer",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "check_buffer_tree_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "find_extent_buffer",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "check_buffer_tree_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure typically indicates no memory or raced with another allocation - retrying with same conditions would likely fail again.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "alloc_extent_buffer performs extensive buffer allocation and setup logic (alignment checks, folio allocation, filemap attachment, tree insertion) beyond simple refcount management. The refcount operations (refcount_inc_not_zero, refcount_dec_and_test, check_buffer_tree_ref) are embedded within a complex control flow that handles allocation, deduplication, and error recovery. The primary purpose is to allocate and return a fully initialized extent buffer, not just manage its reference count.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure typically indicates no memory or raced with another allocation - retrying with same conditions would likely fail again.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure typically indicates no memory or raced with another allocation - retrying with same conditions would likely fail again.",
+    "contract_summary": ""
+  }
+}

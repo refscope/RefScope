@@ -1,0 +1,122 @@
+{
+  "function_name": "__find_bmc_guid",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dev..usecount.refcount.refs",
+      "device--bmc_device--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If kref_get_unless_zero fails (returns 0), it means the device is already being freed (refcount zero) – retrying will not revive it.",
+  "contract_summary": "Callback used with device_find_child to locate a BMC device by GUID and acquire a reference on it. If a matching device is found and its kref is still positive, kref_get_unless_zero increments the reference count and the callback returns 1, causing the find function to return the device with an elevated reference count. The caller must eventually release this reference with a kref_put (or similar). If the device is being freed (usecount zero), no reference is taken and the callback returns 0, causing the find function to continue scanning. This is a typical get-via-lookup pattern.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a BMC device matching a GUID and acquire a reference on it via kref_get_unless_zero. The only non-refcount logic is device type and GUID comparison, which is minimal and directly supports the lookup.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If kref_get_unless_zero fails (returns 0), it means the device is already being freed (refcount zero) – retrying will not revive it.",
+      "contract_summary": "Callback used with device_find_child to locate a BMC device by GUID and acquire a reference on it. If a matching device is found and its kref is still positive, kref_get_unless_zero increments the reference count and the callback returns 1, causing the find function to return the device with an elevated reference count. The caller must eventually release this reference with a kref_put (or similar). If the device is being freed (usecount zero), no reference is taken and the callback returns 0, causing the find function to continue scanning. This is a typical get-via-lookup pattern."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev..usecount.refcount.refs",
+          "device--bmc_device--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path from parameter 'dev' to the refcount field 'usecount' requires a container_of operation (via to_bmc_device), which is not represented as a simple field access. The path 'dev..usecount.refcount.refs' is ambiguous and not a valid trace from the interface variable. Additionally, the double dot segment is non-standard. Therefore, the extraction is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev..usecount.refcount.refs",
+          "device--bmc_device--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __find_bmc_guid is a pure reference-count wrapper. It matches a device by GUID and, on success, takes a reference via kref_get_unless_zero on the bmc_device's usecount. The critical variable (bmc_device) is derived from parameter 1 (dev) via to_bmc_device, and is passed back to the caller via the outer find function's return value. Despite the non-standard path notation (double dot indicating container_of), the extraction correctly identifies the get operation on the refcount. The check's rejection due to path ambiguity is overruled because the wrapper classification is unambiguous and the operation is factually correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dev..usecount.refcount.refs",
+        "device--bmc_device--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If kref_get_unless_zero fails (returns 0), it means the device is already being freed (refcount zero) – retrying will not revive it.",
+    "contract_summary": "Callback used with device_find_child to locate a BMC device by GUID and acquire a reference on it. If a matching device is found and its kref is still positive, kref_get_unless_zero increments the reference count and the callback returns 1, causing the find function to return the device with an elevated reference count. The caller must eventually release this reference with a kref_put (or similar). If the device is being freed (usecount zero), no reference is taken and the callback returns 0, causing the find function to continue scanning. This is a typical get-via-lookup pattern."
+  }
+}

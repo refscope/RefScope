@@ -1,0 +1,99 @@
+{
+  "function_name": "asoc_sdw_rt711_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "card.drvdata.headset_codec_dev.kobj.kref.refcount",
+      "snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device always succeeds and if the device pointer is NULL, the function is a no-op; no failure to retry.",
+  "contract_summary": "Cleanup wrapper for the headset codec device used in SoundWire machine driver cards. It removes any software node associated with the device and then drops the reference count on the device via put_device. The function should be called exactly once during card teardown and handles a NULL device pointer gracefully (no-op). After calling this function, the caller must not use ctx->headset_codec_dev again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "The function's primary purpose is to release a device reference (put_device) as part of cleanup, which is a reference-count put operation. It also removes a software node, adding minor non-refcount logic, but the core action is the put.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device always succeeds and if the device pointer is NULL, the function is a no-op; no failure to retry.",
+      "contract_summary": "Cleanup wrapper for the headset codec device used in SoundWire machine driver cards. It removes any software node associated with the device and then drops the reference count on the device via put_device. The function should be called exactly once during card teardown and handles a NULL device pointer gracefully (no-op). After calling this function, the caller must not use ctx->headset_codec_dev again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.drvdata.headset_codec_dev.kobj.kref.refcount",
+          "snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "card.drvdata.headset_codec_dev.kobj.kref.refcount",
+          "snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls put_device on ctx->headset_codec_dev. The critical variable for the refcount operation is headset_codec_dev, which is obtained via card->drvdata. Starting from parameter 1 (card), the access path card.drvdata.headset_codec_dev.kobj.kref.refcount correctly traces to the refcount field. The type chain snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t matches the structure hierarchy. Segment counts match (6 each). The callee confirms put_device is a put function, so direction is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "card.drvdata.headset_codec_dev.kobj.kref.refcount",
+        "snd_soc_card--asoc_sdw_mc_private--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device always succeeds and if the device pointer is NULL, the function is a no-op; no failure to retry.",
+    "contract_summary": "Cleanup wrapper for the headset codec device used in SoundWire machine driver cards. It removes any software node associated with the device and then drops the reference count on the device via put_device. The function should be called exactly once during card teardown and handles a NULL device pointer gracefully (no-op). After calling this function, the caller must not use ctx->headset_codec_dev again."
+  }
+}

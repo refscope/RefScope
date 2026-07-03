@@ -1,0 +1,99 @@
+{
+  "function_name": "byt_serial_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "lpss.dma_param.dma_dev.kobj.kref.refcount",
+      "lpss8250--dw_dma_slave--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put_device is unconditional and always decrements the refcount; once called, the reference is released permanently; retrying would cause a double-put with use-after-free risk.",
+  "contract_summary": "Put wrapper: releases a reference on the DMA device (param->dma_dev) that was previously acquired in byt_serial_setup via pci_get_slot. After calling this function, the caller must not use the device pointer unless another reference is held. This function is part of the cleanup/exit path and should be called exactly once for each reference acquired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the DMA device obtained earlier via pci_get_slot; the only non-refcount logic is accessing the device pointer from the lpss structure.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put_device is unconditional and always decrements the refcount; once called, the reference is released permanently; retrying would cause a double-put with use-after-free risk.",
+      "contract_summary": "Put wrapper: releases a reference on the DMA device (param->dma_dev) that was previously acquired in byt_serial_setup via pci_get_slot. After calling this function, the caller must not use the device pointer unless another reference is held. This function is part of the cleanup/exit path and should be called exactly once for each reference acquired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "lpss.dma_param.dma_dev.kobj.kref.refcount",
+          "lpss8250--dw_dma_slave--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "lpss.dma_param.dma_dev.kobj.kref.refcount",
+          "lpss8250--dw_dma_slave--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put_device call on param->dma_dev matches the extraction: it is a put operation on the refcount at path lpss.dma_param.dma_dev.kobj.kref.refcount. The type chain from lpss8250 to refcount_t is consistent with the actual struct hierarchy, and segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "lpss.dma_param.dma_dev.kobj.kref.refcount",
+        "lpss8250--dw_dma_slave--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put_device is unconditional and always decrements the refcount; once called, the reference is released permanently; retrying would cause a double-put with use-after-free risk.",
+    "contract_summary": "Put wrapper: releases a reference on the DMA device (param->dma_dev) that was previously acquired in byt_serial_setup via pci_get_slot. After calling this function, the caller must not use the device pointer unless another reference is held. This function is part of the cleanup/exit path and should be called exactly once for each reference acquired."
+  }
+}

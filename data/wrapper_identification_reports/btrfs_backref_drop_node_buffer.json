@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_backref_drop_node_buffer",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "node.eb.refs.refs",
+      "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations should never be retried; after dropping the reference the object may be freed, and retrying would cause a double-put (use-after-free).",
+  "contract_summary": "This is a put wrapper that drops the backref node's reference on its extent buffer. It unlocks the buffer (if needed) and calls free_extent_buffer, which decrements the refcount and may free the buffer when it reaches zero. After calling this function, the caller must not use node->eb. It is safe to call when node->eb is NULL (no-op). This function is typically invoked when finishing processing of a backref node.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the extent buffer (node->eb) via free_extent_buffer, after unlocking it; the only side effect is setting node->eb to NULL. There is no other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations should never be retried; after dropping the reference the object may be freed, and retrying would cause a double-put (use-after-free).",
+      "contract_summary": "This is a put wrapper that drops the backref node's reference on its extent buffer. It unlocks the buffer (if needed) and calls free_extent_buffer, which decrements the refcount and may free the buffer when it reaches zero. After calling this function, the caller must not use node->eb. It is safe to call when node->eb is NULL (no-op). This function is typically invoked when finishing processing of a backref node."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "node.eb.refs.refs",
+          "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "node.eb.refs.refs",
+          "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls free_extent_buffer(node->eb), which is a put operation on the extent_buffer. The access path node.eb.refs.refs correctly traces from the function parameter node through the eb field to the refcount field refs.refs. The segment count matches the type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "node.eb.refs.refs",
+        "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations should never be retried; after dropping the reference the object may be freed, and retrying would cause a double-put (use-after-free).",
+    "contract_summary": "This is a put wrapper that drops the backref node's reference on its extent buffer. It unlocks the buffer (if needed) and calls free_extent_buffer, which decrements the refcount and may free the buffer when it reaches zero. After calling this function, the caller must not use node->eb. It is safe to call when node->eb is NULL (no-op). This function is typically invoked when finishing processing of a backref node."
+  }
+}

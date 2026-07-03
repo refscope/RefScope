@@ -1,0 +1,82 @@
+{
+  "function_name": "afs_evict_symlink",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "afs_put_symlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "symlink.ref.refs",
+      "member_type_chain": "afs_symlink--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "afs_put_symlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "symlink.ref.refs",
+      "member_type_chain": "afs_symlink--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation never fails; the condition checks only whether the pointer is NULL, which is not a failure scenario.",
+  "contract_summary": "This is a put wrapper that releases the reference on the symlink attached to an afs_vnode. It uses rcu_replace_pointer to atomically clear the vnode's symlink field (with RCU semantics) and then calls afs_put_symlink to decrement the refcount and free the symlink if the reference count reaches zero. After this call, the symlink pointer must not be used. The operation is safe to call even if the symlink is already NULL (no-op).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the symlink object (afs_symlink) by calling afs_put_symlink after clearing the pointer. There is no additional business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation never fails; the condition checks only whether the pointer is NULL, which is not a failure scenario.",
+      "contract_summary": "This is a put wrapper that releases the reference on the symlink attached to an afs_vnode. It uses rcu_replace_pointer to atomically clear the vnode's symlink field (with RCU semantics) and then calls afs_put_symlink to decrement the refcount and free the symlink if the reference count reaches zero. After this call, the symlink pointer must not be used. The operation is safe to call even if the symlink is already NULL (no-op)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vnode.symlink.symlink.ref.refs",
+          "afs_vnode--afs_symlink--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable for the put operation is 'old' (struct afs_symlink*), not 'vnode' (struct afs_vnode*). The member_access_path 'vnode.symlink.symlink.ref.refs' incorrectly starts from vnode and includes extra dereferences, and the type chain 'afs_vnode--afs_symlink--refcount_t--atomic_t' incorrectly includes afs_vnode. The path should start from the parameter of afs_put_symlink, which is 'old'. Additionally, the segment count mismatch (5 segments vs 4 types) indicates an incomplete/inconsistent path."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function is a refcount wrapper (put) but the extracted candidate is incorrect. The critical variable is 'old' (struct afs_symlink*), not 'vnode'. The path 'vnode.symlink.symlink.ref.refs' and type chain 'afs_vnode--afs_symlink--refcount_t--atomic_t' are malformed and do not start from the correct argument to afs_put_symlink. Since the only candidate is invalid, ResultList is empty."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation never fails; the condition checks only whether the pointer is NULL, which is not a failure scenario.",
+    "contract_summary": "This is a put wrapper that releases the reference on the symlink attached to an afs_vnode. It uses rcu_replace_pointer to atomically clear the vnode's symlink field (with RCU semantics) and then calls afs_put_symlink to decrement the refcount and free the symlink if the reference count reaches zero. After this call, the symlink pointer must not be used. The operation is safe to call even if the symlink is already NULL (no-op)."
+  }
+}

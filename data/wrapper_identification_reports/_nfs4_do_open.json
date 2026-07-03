@@ -1,0 +1,74 @@
+{
+  "function_name": "_nfs4_do_open",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nfs4_opendata_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.kref.refcount",
+      "member_type_chain": "nfs4_opendata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "nfs4_get_open_state",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "owner.so_count",
+      "member_type_chain": "nfs4_state_owner--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nfs4_opendata_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.kref.refcount",
+      "member_type_chain": "nfs4_opendata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "nfs4_get_open_state",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "owner.so_count",
+      "member_type_chain": "nfs4_state_owner--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to perform an NFS open operation (allocate, negotiate, handle exclusive creates, etc.). Refcount management (getting/putting state owner, open state, opendata) is only a supporting infrastructure detail; the function contains substantial non-refcount logic, including lease recovery, delegation handling, attribute setting, and path-specific branching.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

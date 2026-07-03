@@ -1,0 +1,74 @@
+{
+  "function_name": "alloc_begin_idr_uobject",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "alloc_uobj",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "uobj.ref.refcount.refs",
+      "member_type_chain": "ib_uobject--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "uverbs_uobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobject.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "alloc_uobj",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "uobj.ref.refcount.refs",
+      "member_type_chain": "ib_uobject--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "uverbs_uobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "uobject.ref.refcount",
+      "member_type_chain": "ib_uobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Errors (idr_add, cgroup charge) are not typically transient; retrying is unlikely to succeed without external changes.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is allocation and registration (idr insertion, cgroup charge) of a new uobject, with reference-count initialization/decrement as a secondary side effect. It is not focused on refcount management alone.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Errors (idr_add, cgroup charge) are not typically transient; retrying is unlikely to succeed without external changes.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Errors (idr_add, cgroup charge) are not typically transient; retrying is unlikely to succeed without external changes.",
+    "contract_summary": ""
+  }
+}

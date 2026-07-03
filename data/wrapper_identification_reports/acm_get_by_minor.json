@@ -1,0 +1,107 @@
+{
+  "function_name": "acm_get_by_minor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "acm.port.kref.refcount",
+      "acm--tty_port--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tty_port_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "port.kref.refcount.refs",
+      "member_type_chain": "tty_port--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tty_port_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "port.kref.refcount",
+      "member_type_chain": "tty_port--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tty_port_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "port.kref.refcount",
+      "member_type_chain": "tty_port--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the device is not found or has been disconnected — both conditions are permanent; retrying will not make the device reappear.",
+  "contract_summary": "Lookup-and-get wrapper: acquires a reference on the tty_port of the acm device identified by minor number, but only if the device exists and is not disconnected. The caller MUST check the return value: a non-NULL pointer carries an additional reference that must be released via tty_port_put when no longer needed. A NULL return means the device is absent or gone — the caller must not use the pointer. The function handles all internal locking and disconnect detection to guarantee safe access.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an acm device by minor and acquire a reference on its tty_port; the only non-refcount logic is the idr lookup and disconnect check, which are prerequisites for the get operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the device is not found or has been disconnected — both conditions are permanent; retrying will not make the device reappear.",
+      "contract_summary": "Lookup-and-get wrapper: acquires a reference on the tty_port of the acm device identified by minor number, but only if the device exists and is not disconnected. The caller MUST check the return value: a non-NULL pointer carries an additional reference that must be released via tty_port_put when no longer needed. A NULL return means the device is absent or gone — the caller must not use the pointer. The function handles all internal locking and disconnect detection to guarantee safe access."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "acm.port.kref.refcount",
+          "acm--tty_port--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "acm.port.kref.refcount",
+          "acm--tty_port--kref--refcount_t"
+        ]
+      ],
+      "reason": "tty_port_get(&acm->port) increments the kref of acm->port, and acm is returned to the caller. The access path acm.port.kref.refcount correctly starts from the returned acm variable, matching the callee's path port.kref.refcount with prefix acm. Type chain acm--tty_port--kref--refcount_t is consistent in segment count (4) and types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "acm.port.kref.refcount",
+        "acm--tty_port--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the device is not found or has been disconnected — both conditions are permanent; retrying will not make the device reappear.",
+    "contract_summary": "Lookup-and-get wrapper: acquires a reference on the tty_port of the acm device identified by minor number, but only if the device exists and is not disconnected. The caller MUST check the return value: a non-NULL pointer carries an additional reference that must be released via tty_port_put when no longer needed. A NULL return means the device is absent or gone — the caller must not use the pointer. The function handles all internal locking and disconnect detection to guarantee safe access."
+  }
+}

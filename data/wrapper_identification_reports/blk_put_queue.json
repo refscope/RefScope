@@ -1,0 +1,99 @@
+{
+  "function_name": "blk_put_queue",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "q.refs.refs",
+      "request_queue--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always succeeds; retrying is meaningless and would cause a double-put risk.",
+  "contract_summary": "Put wrapper: decrements the reference count of the request_queue. If the refcount drops to zero, the queue is freed (via blk_free_queue). After calling this function, the caller must not access the queue object as it may be deallocated. The caller is expected to have previously acquired a reference (e.g., via blk_get_queue) that this put releases.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to decrement the refcount of the request_queue and free it upon reaching zero. No other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always succeeds; retrying is meaningless and would cause a double-put risk.",
+      "contract_summary": "Put wrapper: decrements the reference count of the request_queue. If the refcount drops to zero, the queue is freed (via blk_free_queue). After calling this function, the caller must not access the queue object as it may be deallocated. The caller is expected to have previously acquired a reference (e.g., via blk_get_queue) that this put releases."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "q.refs.refs",
+          "request_queue--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "q.refs.refs",
+          "request_queue--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &q->refs, which is a put operation on q->refs. The access path q.refs.refs correctly traces from the parameter q to the atomic_t inside refcount_t, and the type chain request_queue--refcount_t--atomic_t is consistent with struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "q.refs.refs",
+        "request_queue--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always succeeds; retrying is meaningless and would cause a double-put risk.",
+    "contract_summary": "Put wrapper: decrements the reference count of the request_queue. If the refcount drops to zero, the queue is freed (via blk_free_queue). After calling this function, the caller must not access the queue object as it may be deallocated. The caller is expected to have previously acquired a reference (e.g., via blk_get_queue) that this put releases."
+  }
+}

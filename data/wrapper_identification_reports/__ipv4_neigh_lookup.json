@@ -1,0 +1,99 @@
+{
+  "function_name": "__ipv4_neigh_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "n.refcnt.refs",
+      "neighbour--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure of refcount_inc_not_zero means the neighbour's refcount is zero (object dying/dead); retrying will not change the outcome because the object is gone.",
+  "contract_summary": "RCU-protected get-wrapper: looks up a neighbour entry by device and key, and if found, attempts to acquire a reference via refcount_inc_not_zero. Returns non-NULL only if the object is live and the reference was successfully incremented. The caller must check the return value; if non-NULL, the caller owns a reference and must release it with a corresponding neighbour_put (e.g., neigh_release). If NULL is returned, the neighbour entry does not exist or is being destroyed — no reference is acquired and the caller should not use a stale pointer. The RCU read lock is held only during the lookup and refcount attempt.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a neighbour entry and conditionally acquire a reference via refcount_inc_not_zero; the only non-refcount logic is the RCU lock/unlock which is merely infrastructure for the refcount operation.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure of refcount_inc_not_zero means the neighbour's refcount is zero (object dying/dead); retrying will not change the outcome because the object is gone.",
+      "contract_summary": "RCU-protected get-wrapper: looks up a neighbour entry by device and key, and if found, attempts to acquire a reference via refcount_inc_not_zero. Returns non-NULL only if the object is live and the reference was successfully incremented. The caller must check the return value; if non-NULL, the caller owns a reference and must release it with a corresponding neighbour_put (e.g., neigh_release). If NULL is returned, the neighbour entry does not exist or is being destroyed — no reference is acquired and the caller should not use a stale pointer. The RCU read lock is held only during the lookup and refcount attempt."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "n.refcnt.refs",
+          "neighbour--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc_not_zero operates on n->refcnt, which is the refcount field of the returned neighbour pointer n. Access path n.refcnt.refs correctly traces from the return variable to the atomic_t member. The type chain neighbour--refcount_t--atomic_t matches the struct definitions, and the segment counts (3) are equal. The operation is a get on the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "n.refcnt.refs",
+        "neighbour--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure of refcount_inc_not_zero means the neighbour's refcount is zero (object dying/dead); retrying will not change the outcome because the object is gone.",
+    "contract_summary": "RCU-protected get-wrapper: looks up a neighbour entry by device and key, and if found, attempts to acquire a reference via refcount_inc_not_zero. Returns non-NULL only if the object is live and the reference was successfully incremented. The caller must check the return value; if non-NULL, the caller owns a reference and must release it with a corresponding neighbour_put (e.g., neigh_release). If NULL is returned, the neighbour entry does not exist or is being destroyed — no reference is acquired and the caller should not use a stale pointer. The RCU read lock is held only during the lookup and refcount attempt."
+  }
+}

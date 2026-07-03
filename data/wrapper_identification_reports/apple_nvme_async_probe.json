@@ -1,0 +1,99 @@
+{
+  "function_name": "apple_nvme_async_probe",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.ctrl.device.kobj.kref.refcount",
+      "apple_nvme--nvme_ctrl--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nvme_put_ctrl",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctrl.device.kobj.kref.refcount",
+      "member_type_chain": "nvme_ctrl--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nvme_put_ctrl",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctrl.device.kobj.kref.refcount",
+      "member_type_chain": "nvme_ctrl--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final and should not be retried; failure indicates a bug.",
+  "contract_summary": "This function is an asynchronous probe completion helper for Apple NVMe controllers. It flushes the reset and scan workqueues to ensure any pending operations are completed, then releases a reference on the controller via nvme_put_ctrl. After this call, the controller reference must not be used again. This function is intended to be called as the final step of an async probe, transferring ownership of the reference from the probe context to the module's reference counting.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a reference on the NVMe controller via nvme_put_ctrl after flushing necessary workqueues. The flush operations are non-refcount but directly support safe release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final and should not be retried; failure indicates a bug.",
+      "contract_summary": "This function is an asynchronous probe completion helper for Apple NVMe controllers. It flushes the reset and scan workqueues to ensure any pending operations are completed, then releases a reference on the controller via nvme_put_ctrl. After this call, the controller reference must not be used again. This function is intended to be called as the final step of an async probe, transferring ownership of the reference from the probe context to the module's reference counting."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.ctrl.device.kobj.kref.refcount",
+          "apple_nvme--nvme_ctrl--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.ctrl.device.kobj.kref.refcount",
+          "apple_nvme--nvme_ctrl--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The nvme_put_ctrl call decrements refcount on &anv->ctrl. The access path from function parameter data to the refcount is data.ctrl.device.kobj.kref.refcount, and the type chain matches the actual struct nesting. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.ctrl.device.kobj.kref.refcount",
+        "apple_nvme--nvme_ctrl--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final and should not be retried; failure indicates a bug.",
+    "contract_summary": "This function is an asynchronous probe completion helper for Apple NVMe controllers. It flushes the reset and scan workqueues to ensure any pending operations are completed, then releases a reference on the controller via nvme_put_ctrl. After this call, the controller reference must not be used again. This function is intended to be called as the final step of an async probe, transferring ownership of the reference from the probe context to the module's reference counting."
+  }
+}

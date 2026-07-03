@@ -1,0 +1,143 @@
+{
+  "function_name": "__dev_map_entry_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "rcu.container.dev.dev_refcnt.refs",
+      "rcu_head--bpf_dtab_netdev--net_device--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "rcu.container.xdp_prog.aux.refcnt",
+      "rcu_head--bpf_dtab_netdev--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations never fail; calling this function more than once would be a double-free.",
+  "contract_summary": "This is an RCU callback that finalizes the cleanup of a dev map entry. It releases the dev reference via dev_put and, if present, releases the xdp_prog reference via bpf_prog_put. After both references are released, it frees the bpf_dtab_netdev structure. The caller (RCU infrastructure) ensures this function is called after a grace period. After returning, the object is freed and must not be accessed again. The function must be called exactly once per entry; calling it a second time would be a use-after-free.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on a net_device and optional xdp_prog, then free the bpf_dtab_netdev structure. The only non-refcount logic is the kfree, which is the standard final step of a put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations never fail; calling this function more than once would be a double-free.",
+      "contract_summary": "This is an RCU callback that finalizes the cleanup of a dev map entry. It releases the dev reference via dev_put and, if present, releases the xdp_prog reference via bpf_prog_put. After both references are released, it frees the bpf_dtab_netdev structure. The caller (RCU infrastructure) ensures this function is called after a grace period. After returning, the object is freed and must not be accessed again. The function must be called exactly once per entry; calling it a second time would be a use-after-free."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rcu.container.dev.dev_refcnt.refs",
+          "rcu_head--bpf_dtab_netdev--net_device--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "rcu.container.xdp_prog.aux.refcnt",
+          "rcu_head--bpf_dtab_netdev--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rcu.container.dev.dev_refcnt.refs",
+          "rcu_head--bpf_dtab_netdev--net_device--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "rcu.container.xdp_prog.aux.refcnt",
+          "rcu_head--bpf_dtab_netdev--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "Both operations correctly trace from parameter rcu through container_of to the refcount fields accessed by dev_put and bpf_prog_put. Access paths and type chains are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "rcu.container.dev.dev_refcnt.refs",
+        "rcu_head--bpf_dtab_netdev--net_device--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "rcu.container.xdp_prog.aux.refcnt",
+        "rcu_head--bpf_dtab_netdev--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations never fail; calling this function more than once would be a double-free.",
+    "contract_summary": "This is an RCU callback that finalizes the cleanup of a dev map entry. It releases the dev reference via dev_put and, if present, releases the xdp_prog reference via bpf_prog_put. After both references are released, it frees the bpf_dtab_netdev structure. The caller (RCU infrastructure) ensures this function is called after a grace period. After returning, the object is freed and must not be accessed again. The function must be called exactly once per entry; calling it a second time would be a use-after-free."
+  }
+}

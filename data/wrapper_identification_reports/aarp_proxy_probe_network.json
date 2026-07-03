@@ -1,0 +1,90 @@
+{
+  "function_name": "aarp_proxy_probe_network",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aarp_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.refcnt.refs",
+      "member_type_chain": "aarp_entry--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aarp_entry_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.refcnt.refs",
+      "member_type_chain": "aarp_entry--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aarp_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "a.refcnt.refs",
+      "member_type_chain": "aarp_entry--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aarp_entry_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.refcnt.refs",
+      "member_type_chain": "aarp_entry--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aarp_entry_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "a.refcnt.refs",
+      "member_type_chain": "aarp_entry--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aarp_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "a.refcnt.refs",
+      "member_type_chain": "aarp_entry--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the entry fails to be created (ENOMEM), retrying without memory changes would fail; if the probe fails (EADDRINUSE), retrying the same address will still be in use. Retry is not relevant for a non-wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to perform network probing for proxy AARP addresses, involving allocation, insertion into a global list, sending multiple probe frames with delays, and status checking. The aarp_entry_get and aarp_entry_put calls are incidental refcount operations within broader business logic, making it not a reference-count wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the entry fails to be created (ENOMEM), retrying without memory changes would fail; if the probe fails (EADDRINUSE), retrying the same address will still be in use. Retry is not relevant for a non-wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the entry fails to be created (ENOMEM), retrying without memory changes would fail; if the probe fails (EADDRINUSE), retrying the same address will still be in use. Retry is not relevant for a non-wrapper.",
+    "contract_summary": ""
+  }
+}

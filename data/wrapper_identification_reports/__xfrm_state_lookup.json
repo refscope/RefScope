@@ -1,0 +1,99 @@
+{
+  "function_name": "__xfrm_state_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "x.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xfrm_state_hold_rcu",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xfrm_state_hold_rcu",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the state is not found, retrying with the same parameters will not succeed unless the state is added externally; if the state is found but dying (refcount already zero), the object is gone permanently and retry is pointless.",
+  "contract_summary": "Lookup-and-get wrapper: searches an xfrm_state hash table for a state matching the given parameters (family, spi, proto, daddr, mark). If found, increments the state's reference count via xfrm_state_hold_rcu and returns the state. The caller gains a reference and must later call xfrm_state_put() to release it. Returns NULL if no matching state exists or if the state is being destroyed. The caller must check the return value. The lookup is performed under RCU read-side protection, so the caller does not need to hold any lock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an xfrm_state by key and conditionally acquire a reference (via xfrm_state_hold_rcu) to return to the caller. The only non-refcount logic is the hash calculation and comparisons to find the matching entry, which are integral to the lookup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the state is not found, retrying with the same parameters will not succeed unless the state is added externally; if the state is found but dying (refcount already zero), the object is gone permanently and retry is pointless.",
+      "contract_summary": "Lookup-and-get wrapper: searches an xfrm_state hash table for a state matching the given parameters (family, spi, proto, daddr, mark). If found, increments the state's reference count via xfrm_state_hold_rcu and returns the state. The caller gains a reference and must later call xfrm_state_put() to release it. Returns NULL if no matching state exists or if the state is being destroyed. The caller must check the return value. The lookup is performed under RCU read-side protection, so the caller does not need to hold any lock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls xfrm_state_hold_rcu on a matching xfrm_state and returns that object. The access path 'x.refcnt.refs' correctly traces from the returned pointer to the refcount field, matching the callee's member-access path and type chain. Segment counts are consistent (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "x.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the state is not found, retrying with the same parameters will not succeed unless the state is added externally; if the state is found but dying (refcount already zero), the object is gone permanently and retry is pointless.",
+    "contract_summary": "Lookup-and-get wrapper: searches an xfrm_state hash table for a state matching the given parameters (family, spi, proto, daddr, mark). If found, increments the state's reference count via xfrm_state_hold_rcu and returns the state. The caller gains a reference and must later call xfrm_state_put() to release it. Returns NULL if no matching state exists or if the state is being destroyed. The caller must check the return value. The lookup is performed under RCU read-side protection, so the caller does not need to hold any lock."
+  }
+}

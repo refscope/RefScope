@@ -1,0 +1,58 @@
+{
+  "function_name": "_opp_table_alloc_required_tables",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_find_table_of_opp_np",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_find_table_of_opp_np",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to allocate and initialize required OPP tables (arrays, parsing, error handling) within an OPP table; the refcount acquisition via _find_table_of_opp_np is a sub-step but not the main focus.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

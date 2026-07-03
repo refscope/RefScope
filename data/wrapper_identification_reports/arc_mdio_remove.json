@@ -1,0 +1,99 @@
+{
+  "function_name": "arc_mdio_remove",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "priv.bus.dev.kobj.kref.refcount",
+      "arc_emac_priv--mii_bus--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation is unconditional and always succeeds; retrying would cause double unregister/free.",
+  "contract_summary": "This is a put wrapper that releases the MDIO bus associated with the arc EMAC private structure. It calls mdiobus_unregister to disable the bus, then mdiobus_free to decrement the reference count and free the bus if the count reaches zero. Finally, it sets priv->bus to NULL to prevent use-after-free. The caller must ensure that priv->bus is valid (non-NULL) before calling this function, and must not access the bus afterward. This function does not return any error indication; it always succeeds if called correctly.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the MDIO bus via unregister and free (put) calls, with only a null assignment afterward. No other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation is unconditional and always succeeds; retrying would cause double unregister/free.",
+      "contract_summary": "This is a put wrapper that releases the MDIO bus associated with the arc EMAC private structure. It calls mdiobus_unregister to disable the bus, then mdiobus_free to decrement the reference count and free the bus if the count reaches zero. Finally, it sets priv->bus to NULL to prevent use-after-free. The caller must ensure that priv->bus is valid (non-NULL) before calling this function, and must not access the bus afterward. This function does not return any error indication; it always succeeds if called correctly."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv.bus.dev.kobj.kref.refcount",
+          "arc_emac_priv--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "priv.bus.dev.kobj.kref.refcount",
+          "arc_emac_priv--mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "mdiobus_free(priv->bus) performs a put on bus->dev.kobj.kref.refcount, traced from caller's parameter priv through field bus. Access path and type chain are consistent with callee info and segment counts match (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "priv.bus.dev.kobj.kref.refcount",
+        "arc_emac_priv--mii_bus--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation is unconditional and always succeeds; retrying would cause double unregister/free.",
+    "contract_summary": "This is a put wrapper that releases the MDIO bus associated with the arc EMAC private structure. It calls mdiobus_unregister to disable the bus, then mdiobus_free to decrement the reference count and free the bus if the count reaches zero. Finally, it sets priv->bus to NULL to prevent use-after-free. The caller must ensure that priv->bus is valid (non-NULL) before calling this function, and must not access the bus afterward. This function does not return any error indication; it always succeeds if called correctly."
+  }
+}

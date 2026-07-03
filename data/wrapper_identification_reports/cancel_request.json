@@ -1,0 +1,74 @@
+{
+  "function_name": "cancel_request",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ceph_osdc_put_request",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.r_kref.refcount",
+      "member_type_chain": "ceph_osd_request--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "cancel_map_check",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.r_kref.refcount",
+      "member_type_chain": "ceph_osd_request--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ceph_osdc_put_request",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.r_kref.refcount",
+      "member_type_chain": "ceph_osd_request--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "cancel_map_check",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "req.r_kref.refcount",
+      "member_type_chain": "ceph_osd_request--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a refcount wrapper; the function always runs and does not return a value indicating success/failure.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to cancel an OSD request, which involves multiple steps (cancel_map_check, finish_request, complete_all) besides releasing references. The two put calls are part of the teardown but not the sole or primary focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a refcount wrapper; the function always runs and does not return a value indicating success/failure.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a refcount wrapper; the function always runs and does not return a value indicating success/failure.",
+    "contract_summary": ""
+  }
+}

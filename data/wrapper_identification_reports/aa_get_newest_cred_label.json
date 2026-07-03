@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_get_newest_cred_label",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the returned label is NULL, the input cred is invalid or missing the label; retrying with the same cred will not change the outcome.",
+  "contract_summary": "Acquires a reference on the newest aa_label associated with the given cred by calling aa_get_newest_label. The caller receives a pointer to the label with an elevated refcount and must later release it via aa_put_label. The wrapper assumes the cred label is valid; if it is NULL, the function returns NULL without acquiring a reference. The caller must check the return value before using the label.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely extracts an aa_label from a cred and calls aa_get_newest_label to increment its refcount, with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the returned label is NULL, the input cred is invalid or missing the label; retrying with the same cred will not change the outcome.",
+      "contract_summary": "Acquires a reference on the newest aa_label associated with the given cred by calling aa_get_newest_label. The caller receives a pointer to the label with an elevated refcount and must later release it via aa_put_label. The wrapper assumes the cred label is valid; if it is NULL, the function returns NULL without acquiring a reference. The caller must check the return value before using the label."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the result of aa_get_newest_label(cred_label(cred)), which performs a get on the label. The access path from the returned label pointer to the refcount field is label.count.count.refcount, matching the callee's type chain aa_label--aa_count--kref--refcount_t. Segment counts match: path has 4 segments, type chain has 4 types. The location 'return' index 0 is correct as the critical variable is the returned label."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the returned label is NULL, the input cred is invalid or missing the label; retrying with the same cred will not change the outcome.",
+    "contract_summary": "Acquires a reference on the newest aa_label associated with the given cred by calling aa_get_newest_label. The caller receives a pointer to the label with an elevated refcount and must later release it via aa_put_label. The wrapper assumes the cred label is valid; if it is NULL, the function returns NULL without acquiring a reference. The caller must check the return value before using the label."
+  }
+}

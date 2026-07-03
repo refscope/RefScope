@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_device_wb_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.wb.wb_obj.tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_wb--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If wb_obj is NULL, there is nothing to free; if non-NULL, the free always succeeds. Retrying is not applicable because the object is either absent or has been freed.",
+  "contract_summary": "Release wrapper for the write-back (wb) buffer object. Checks if wb_obj is non-NULL, then frees the underlying buffer object (including GPU address and CPU mapping) via amdgpu_bo_free_kernel, and sets the wb_obj pointer to NULL. Caller must not access wb after this call. This function is the destruction side of the wb lifecycle; it does not require any preceding get or set — it simply cleans up if the object exists. No reference is returned to the caller, so there is no ownership transfer. This is a finalization routine, typically called during device teardown.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the wb buffer object via amdgpu_bo_free_kernel, which is a put function for the object's refcount. After the call, the wb pointer is set to NULL, preventing further use. No other business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If wb_obj is NULL, there is nothing to free; if non-NULL, the free always succeeds. Retrying is not applicable because the object is either absent or has been freed.",
+      "contract_summary": "Release wrapper for the write-back (wb) buffer object. Checks if wb_obj is non-NULL, then frees the underlying buffer object (including GPU address and CPU mapping) via amdgpu_bo_free_kernel, and sets the wb_obj pointer to NULL. Caller must not access wb after this call. This function is the destruction side of the wb lifecycle; it does not require any preceding get or set — it simply cleans up if the object exists. No reference is returned to the caller, so there is no ownership transfer. This is a finalization routine, typically called during device teardown."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.wb.wb_obj.tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_wb--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.wb.wb_obj.tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_wb--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "amdgpu_bo_free_kernel is a put function for its first argument (&adev->wb.wb_obj). The access path from adev through wb, wb_obj, tbo, base, refcount, refcount correctly matches the callee's type chain. The number of segments (7) equals the number of types (7), confirming completeness."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.wb.wb_obj.tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_wb--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If wb_obj is NULL, there is nothing to free; if non-NULL, the free always succeeds. Retrying is not applicable because the object is either absent or has been freed.",
+    "contract_summary": "Release wrapper for the write-back (wb) buffer object. Checks if wb_obj is non-NULL, then frees the underlying buffer object (including GPU address and CPU mapping) via amdgpu_bo_free_kernel, and sets the wb_obj pointer to NULL. Caller must not access wb after this call. This function is the destruction side of the wb lifecycle; it does not require any preceding get or set — it simply cleans up if the object exists. No reference is returned to the caller, so there is no ownership transfer. This is a finalization routine, typically called during device teardown."
+  }
+}

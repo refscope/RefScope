@@ -1,0 +1,99 @@
+{
+  "function_name": "__get_device_from_cb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.dev.kobj.kref.refcount",
+      "nfc_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nfc_get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "nfc_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nfc_get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "nfc_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (EINVAL for missing attribute or ENODEV for nonexistent device) indicates either a malformed request or a device that may not reappear; retrying without changing the input won't succeed and is not standard practice.",
+  "contract_summary": "Get-wrapper: acquires a reference on the NFC device identified by the device index from the netlink callback's dump info attributes. Returns the device pointer with an elevated refcount on success, or ERR_PTR(-EINVAL) if the attribute is missing, or ERR_PTR(-ENODEV) if no device exists with that index. The caller must check the return value for errors and, on success, must eventually release the reference by calling nfc_put_device(). This wrapper is typically used in netlink dump iterators where the device index is provided per callback invocation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole operational purpose beyond basic error validation is to call nfc_get_device() which acquires a reference on the NFC device. The two error checks (attribute presence, device existence) are standard validation for a get wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (EINVAL for missing attribute or ENODEV for nonexistent device) indicates either a malformed request or a device that may not reappear; retrying without changing the input won't succeed and is not standard practice.",
+      "contract_summary": "Get-wrapper: acquires a reference on the NFC device identified by the device index from the netlink callback's dump info attributes. Returns the device pointer with an elevated refcount on success, or ERR_PTR(-EINVAL) if the attribute is missing, or ERR_PTR(-ENODEV) if no device exists with that index. The caller must check the return value for errors and, on success, must eventually release the reference by calling nfc_put_device(). This wrapper is typically used in netlink dump iterators where the device index is provided per callback invocation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.dev.kobj.kref.refcount",
+          "nfc_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.dev.kobj.kref.refcount",
+          "nfc_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The candidate operation correctly identifies that nfc_get_device returns a reference-counted pointer, with access path dev.dev.kobj.kref.refcount and type chain nfc_dev--device--kobject--kref--refcount_t, consistent with callee info and actual usage in the function. The critical variable is the return value dev. No other refcount operations present."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.dev.kobj.kref.refcount",
+        "nfc_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (EINVAL for missing attribute or ENODEV for nonexistent device) indicates either a malformed request or a device that may not reappear; retrying without changing the input won't succeed and is not standard practice.",
+    "contract_summary": "Get-wrapper: acquires a reference on the NFC device identified by the device index from the netlink callback's dump info attributes. Returns the device pointer with an elevated refcount on success, or ERR_PTR(-EINVAL) if the attribute is missing, or ERR_PTR(-ENODEV) if no device exists with that index. The caller must check the return value for errors and, on success, must eventually release the reference by calling nfc_put_device(). This wrapper is typically used in netlink dump iterators where the device index is provided per callback invocation."
+  }
+}

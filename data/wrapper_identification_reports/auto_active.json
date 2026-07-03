@@ -1,0 +1,88 @@
+{
+  "function_name": "auto_active",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ref.ref.refcount",
+      "auto_active--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation never fails and always succeeds; retry is neither needed nor meaningful.",
+  "contract_summary": "Unconditional get-wrapper: this function acquires a reference on the `i915_active` object pointed to by `ref`. The caller is responsible for later releasing that reference with a corresponding `i915_active_put`. The function always succeeds and returns 0, so the caller does not need to check the return value. No special locking or RCU requirements are imposed by this wrapper.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on an `i915_active` object by calling `i915_active_get`. No other logic exists; returns 0 unconditionally.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation never fails and always succeeds; retry is neither needed nor meaningful.",
+      "contract_summary": "Unconditional get-wrapper: this function acquires a reference on the `i915_active` object pointed to by `ref`. The caller is responsible for later releasing that reference with a corresponding `i915_active_put`. The function always succeeds and returns 0, so the caller does not need to check the return value. No special locking or RCU requirements are imposed by this wrapper."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.ref.refcount",
+          "auto_active--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The type chain 'auto_active--kref--refcount_t' is inconsistent: the function parameter is of type 'struct i915_active', not 'auto_active'. The access path 'ref.ref.refcount' starting from parameter 1 is plausible, but the type chain does not match the actual parameter type. Therefore, the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ref.ref.refcount",
+          "auto_active--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a minimal wrapper that exclusively increments the reference count on the provided i915_active object via i915_active_get(). The critical variable is the function parameter ref, which is passed to the caller with an incremented reference. The check's rejection based on type chain naming inconsistency is technical; the operation 'get' on parameter 1 with access path ref.ref.refcount is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ref.ref.refcount",
+        "auto_active--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 0,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation never fails and always succeeds; retry is neither needed nor meaningful.",
+    "contract_summary": "Unconditional get-wrapper: this function acquires a reference on the `i915_active` object pointed to by `ref`. The caller is responsible for later releasing that reference with a corresponding `i915_active_put`. The function always succeeds and returns 0, so the caller does not need to check the return value. No special locking or RCU requirements are imposed by this wrapper."
+  }
+}

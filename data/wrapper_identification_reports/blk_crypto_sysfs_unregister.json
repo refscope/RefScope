@@ -1,0 +1,99 @@
+{
+  "function_name": "blk_crypto_sysfs_unregister",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "disk.queue.crypto_kobject.kref.refcount",
+      "gendisk--request_queue--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kobject_put is unconditional and never fails; there is no error case to retry.",
+  "contract_summary": "This function is a put wrapper that releases a reference on the crypto_kobject embedded in the queue of the given gendisk. It decrements the kobject's reference count via kobject_put, and if the count reaches zero, the kobject and its associated resources are freed. The caller must have previously acquired a reference (e.g., from blk_crypto_sysfs_register or similar) and must not access the crypto_kobject after calling this function. No locking requirements are imposed on the caller; the kobject subsystem handles internal synchronization.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function consists of a single call to kobject_put on the crypto_kobject. No other logic is present, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kobject_put is unconditional and never fails; there is no error case to retry.",
+      "contract_summary": "This function is a put wrapper that releases a reference on the crypto_kobject embedded in the queue of the given gendisk. It decrements the kobject's reference count via kobject_put, and if the count reaches zero, the kobject and its associated resources are freed. The caller must have previously acquired a reference (e.g., from blk_crypto_sysfs_register or similar) and must not access the crypto_kobject after calling this function. No locking requirements are imposed on the caller; the kobject subsystem handles internal synchronization."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "disk.queue.crypto_kobject.kref.refcount",
+          "gendisk--request_queue--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "disk.queue.crypto_kobject.kref.refcount",
+          "gendisk--request_queue--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "kobject_put is called on disk->queue->crypto_kobject, which is a put operation. The access path 'disk.queue.crypto_kobject.kref.refcount' correctly traces from the function parameter 'disk' (gendisk) through queue (request_queue) and crypto_kobject (kobject) to the kref.refcount field. The type chain matches the actual struct definitions, and segment counts are equal (5 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "disk.queue.crypto_kobject.kref.refcount",
+        "gendisk--request_queue--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kobject_put is unconditional and never fails; there is no error case to retry.",
+    "contract_summary": "This function is a put wrapper that releases a reference on the crypto_kobject embedded in the queue of the given gendisk. It decrements the kobject's reference count via kobject_put, and if the count reaches zero, the kobject and its associated resources are freed. The caller must have previously acquired a reference (e.g., from blk_crypto_sysfs_register or similar) and must not access the crypto_kobject after calling this function. No locking requirements are imposed on the caller; the kobject subsystem handles internal synchronization."
+  }
+}

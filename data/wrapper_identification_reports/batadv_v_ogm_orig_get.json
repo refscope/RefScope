@@ -1,0 +1,215 @@
+{
+  "function_name": "batadv_v_ogm_orig_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ],
+    [
+      "put",
+      "return",
+      "0",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ],
+    [
+      "put",
+      "return",
+      "0",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure is due to memory allocation or hash insertion failure; these are transient conditions that may resolve on retry.",
+  "contract_summary": "This function is a get-or-create wrapper for an orig_node identified by 'addr'. It first tries to find an existing node via batadv_orig_hash_find and returns it with an incremented reference. If not found, it allocates a new node, acquires an additional reference for the caller, and inserts it into the hash. On success, the caller receives a valid orig_node pointer with a reference that must be released via batadv_orig_node_put. On failure (allocation or hash insertion), the function cleans up and returns NULL; callers should check the return value and may retry on transient failures.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to return a reference-counted orig_node to the caller, either by incrementing the refcount of an existing node or by creating a new node and acquiring a reference for the caller. The only overhead beyond refcount management is the hash insertion, which is integral to the lifecycle of the new node.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure is due to memory allocation or hash insertion failure; these are transient conditions that may resolve on retry.",
+      "contract_summary": "This function is a get-or-create wrapper for an orig_node identified by 'addr'. It first tries to find an existing node via batadv_orig_hash_find and returns it with an incremented reference. If not found, it allocates a new node, acquires an additional reference for the caller, and inserts it into the hash. On success, the caller receives a valid orig_node pointer with a reference that must be released via batadv_orig_node_put. On failure (allocation or hash insertion), the function cleans up and returns NULL; callers should check the return value and may retry on transient failures."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "All operations are consistent with the function code. Two get operations: one from batadv_orig_hash_find (implicit) and one from explicit kref_get. Two put operations from batadv_orig_node_put in the error path. Access path and type chain correctly trace from the return value (orig_node) through its refcount field to the underlying refcount_t, matching the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ],
+      [
+        "put",
+        "return",
+        "0",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ],
+      [
+        "put",
+        "return",
+        "0",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure is due to memory allocation or hash insertion failure; these are transient conditions that may resolve on retry.",
+    "contract_summary": "This function is a get-or-create wrapper for an orig_node identified by 'addr'. It first tries to find an existing node via batadv_orig_hash_find and returns it with an incremented reference. If not found, it allocates a new node, acquires an additional reference for the caller, and inserts it into the hash. On success, the caller receives a valid orig_node pointer with a reference that must be released via batadv_orig_node_put. On failure (allocation or hash insertion), the function cleans up and returns NULL; callers should check the return value and may retry on transient failures."
+  }
+}

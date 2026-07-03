@@ -1,0 +1,106 @@
+{
+  "function_name": "_regulator_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "regulator.rdev.dev.kobj.kref.refcount",
+      "regulator--regulator_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final; after the function completes, the regulator pointer is invalid. Retrying would be a use-after-free. If the pointer is NULL, the call is a harmless no-op.",
+  "contract_summary": "Release wrapper for a regulator object: must be called after regulator_disable (WARN_ON if enable_count nonzero). It destroys the regulator structure, releases the module reference, and decrements the device reference. After this call, the regulator pointer must not be used. The caller must hold the regulator_list_mutex. This is the 'put' side of the regulator lifecycle; the matching 'get' is regulator_get.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a regulator by calling destroy_regulator (which reduces internal refcount/frees), module_put, and put_device. The WARN_ON and lockdep_assert are validation checks, not core business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final; after the function completes, the regulator pointer is invalid. Retrying would be a use-after-free. If the pointer is NULL, the call is a harmless no-op.",
+      "contract_summary": "Release wrapper for a regulator object: must be called after regulator_disable (WARN_ON if enable_count nonzero). It destroys the regulator structure, releases the module reference, and decrements the device reference. After this call, the regulator pointer must not be used. The caller must hold the regulator_list_mutex. This is the 'put' side of the regulator lifecycle; the matching 'get' is regulator_get."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "regulator.rdev.dev.kobj.kref.refcount",
+          "regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "regulator.rdev.owner.refcnt",
+          "regulator--regulator_dev--module--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "regulator.rdev.dev.kobj.kref.refcount",
+          "regulator--regulator_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put_device call matches the callee info (put, parameter 1, path dev.kobj.kref.refcount). The candidate's path prepends regulator.rdev. which correctly traces from the function parameter regulator to the device's refcount. Segment count (6 segments) matches type chain (6 types). The second candidate for module_put is rejected because no callee info is provided for module_put, so it cannot be validated."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "regulator.rdev.dev.kobj.kref.refcount",
+        "regulator--regulator_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final; after the function completes, the regulator pointer is invalid. Retrying would be a use-after-free. If the pointer is NULL, the call is a harmless no-op.",
+    "contract_summary": "Release wrapper for a regulator object: must be called after regulator_disable (WARN_ON if enable_count nonzero). It destroys the regulator structure, releases the module reference, and decrements the device reference. After this call, the regulator pointer must not be used. The caller must hold the regulator_list_mutex. This is the 'put' side of the regulator lifecycle; the matching 'get' is regulator_get."
+  }
+}

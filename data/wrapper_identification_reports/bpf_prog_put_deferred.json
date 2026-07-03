@@ -1,0 +1,187 @@
+{
+  "function_name": "bpf_prog_put_deferred",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "work._container.prog.aux.mod.refcnt",
+      "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--module--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "work._container.prog.aux.btf.refcnt.refs",
+      "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "work._container.prog.aux.attach_btf.refcnt.refs",
+      "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.mod.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--module--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.attach_btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.mod.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--module--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "__bpf_prog_put_noref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.attach_btf.refcnt.refs",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes; if the refcount reaches zero the object is freed; retrying would cause a use-after-free.",
+  "contract_summary": "Deferred put wrapper for BPF programs. Called from a workqueue when the last external reference is released (via bpf_prog_put). It performs final cleanup: triggers a perf event for program unload, an audit event, frees the program's ID, and then decrements the core reference counts (module, BTF, attach BTF) via __bpf_prog_put_noref. This function is the final release path; after it runs, the program object may be freed. It does not return a reference or transfer ownership — it consumes the reference that was held by the work item. The caller must not use the program after scheduling this work.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a BPF program's references (put). It calls __bpf_prog_put_noref to decrement refcounts, but also includes non-refcount cleanup steps (perf event, audit, freeing ID). Thus it is a put wrapper with some associated logistics.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes; if the refcount reaches zero the object is freed; retrying would cause a use-after-free.",
+      "contract_summary": "Deferred put wrapper for BPF programs. Called from a workqueue when the last external reference is released (via bpf_prog_put). It performs final cleanup: triggers a perf event for program unload, an audit event, frees the program's ID, and then decrements the core reference counts (module, BTF, attach BTF) via __bpf_prog_put_noref. This function is the final release path; after it runs, the program object may be freed. It does not return a reference or transfer ownership — it consumes the reference that was held by the work item. The caller must not use the program after scheduling this work."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "work._container.prog.aux.mod.refcnt",
+          "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--module--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "work._container.prog.aux.btf.refcnt.refs",
+          "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "work._container.prog.aux.attach_btf.refcnt.refs",
+          "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "work._container.prog.aux.mod.refcnt",
+          "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--module--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "work._container.prog.aux.btf.refcnt.refs",
+          "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "work._container.prog.aux.attach_btf.refcnt.refs",
+          "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All three operations are consistent: the callee __bpf_prog_put_noref acts as a put on its first parameter prog, which is derived from the caller's parameter 1 (work) via container_of and aux->prog. The access paths trace from work through _container (representing container_of) to aux, then to prog, then to the respective refcount fields (mod.refcnt, btf.refcnt.refs, attach_btf.refcnt.refs). The segment counts and type chains match. The direction 'put' is correct as per callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "work._container.prog.aux.mod.refcnt",
+        "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--module--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "work._container.prog.aux.btf.refcnt.refs",
+        "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "work._container.prog.aux.attach_btf.refcnt.refs",
+        "work_struct--bpf_prog_aux--bpf_prog--bpf_prog_aux--btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes; if the refcount reaches zero the object is freed; retrying would cause a use-after-free.",
+    "contract_summary": "Deferred put wrapper for BPF programs. Called from a workqueue when the last external reference is released (via bpf_prog_put). It performs final cleanup: triggers a perf event for program unload, an audit event, frees the program's ID, and then decrements the core reference counts (module, BTF, attach BTF) via __bpf_prog_put_noref. This function is the final release path; after it runs, the program object may be freed. It does not return a reference or transfer ownership — it consumes the reference that was held by the work item. The caller must not use the program after scheduling this work."
+  }
+}

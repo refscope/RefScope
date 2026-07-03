@@ -1,0 +1,58 @@
+{
+  "function_name": "attach_eb_folio_to_filemap",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "grab_extent_buffer",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "exists.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "grab_extent_buffer",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "exists.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Function returns -EAGAIN when folio size mismatch, indicating a transient condition that may be resolved on retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to attach a folio to the filemap for a btrfs extent buffer, involving page cache insert/lock, reuse logic, and freeing old folios. refcount operations (grab_extent_buffer, btrfs_folio_inc_eb_refs) are incidental steps within a larger workflow of page cache management.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Function returns -EAGAIN when folio size mismatch, indicating a transient condition that may be resolved on retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Function returns -EAGAIN when folio size mismatch, indicating a transient condition that may be resolved on retry.",
+    "contract_summary": ""
+  }
+}

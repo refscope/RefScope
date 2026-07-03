@@ -1,0 +1,99 @@
+{
+  "function_name": "__drm_atomic_helper_colorop_destroy_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.data.base.refcount.refcount",
+      "drm_colorop_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations release a reference; if the refcount reaches zero the object is freed. Retrying would constitute a double-put (use-after-free) and is never valid.",
+  "contract_summary": "This is a pure put-wrapper that releases a reference to the `data` property blob stored in a drm_colorop_state. It is typically called during state destruction (e.g., in __drm_atomic_helper_colorop_destroy_state). After calling this function, the state's data pointer must not be used unless a new reference is acquired. The underlying drm_property_blob_put safely handles NULL pointers (it is a no-op on NULL), so the caller may call this even if state->data is NULL. This function transfers the caller's ownership of the blob reference back to the refcount system; the caller must have previously acquired a reference (e.g., via drm_property_blob_get) to avoid a refcount underflow. No return value — the operation is unconditional and always safe to call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the reference count of the property blob stored in state->data by calling drm_property_blob_put. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations release a reference; if the refcount reaches zero the object is freed. Retrying would constitute a double-put (use-after-free) and is never valid.",
+      "contract_summary": "This is a pure put-wrapper that releases a reference to the `data` property blob stored in a drm_colorop_state. It is typically called during state destruction (e.g., in __drm_atomic_helper_colorop_destroy_state). After calling this function, the state's data pointer must not be used unless a new reference is acquired. The underlying drm_property_blob_put safely handles NULL pointers (it is a no-op on NULL), so the caller may call this even if state->data is NULL. This function transfers the caller's ownership of the blob reference back to the refcount system; the caller must have previously acquired a reference (e.g., via drm_property_blob_get) to avoid a refcount underflow. No return value — the operation is unconditional and always safe to call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.data.base.refcount.refcount",
+          "drm_colorop_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.data.base.refcount.refcount",
+          "drm_colorop_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "drm_property_blob_put is called on state->data, which is a put operation. The access path from parameter 1 (state) through .data, .base, .refcount, .refcount matches the type chain and the callee's expected path. The segment counts (5) are equal, and the operation direction is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.data.base.refcount.refcount",
+        "drm_colorop_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations release a reference; if the refcount reaches zero the object is freed. Retrying would constitute a double-put (use-after-free) and is never valid.",
+    "contract_summary": "This is a pure put-wrapper that releases a reference to the `data` property blob stored in a drm_colorop_state. It is typically called during state destruction (e.g., in __drm_atomic_helper_colorop_destroy_state). After calling this function, the state's data pointer must not be used unless a new reference is acquired. The underlying drm_property_blob_put safely handles NULL pointers (it is a no-op on NULL), so the caller may call this even if state->data is NULL. This function transfers the caller's ownership of the blob reference back to the refcount system; the caller must have previously acquired a reference (e.g., via drm_property_blob_get) to avoid a refcount underflow. No return value — the operation is unconditional and always safe to call."
+  }
+}

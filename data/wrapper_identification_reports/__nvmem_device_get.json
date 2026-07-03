@@ -1,0 +1,130 @@
+{
+  "function_name": "__nvmem_device_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "nvmem.refcnt.refcount",
+      "nvmem_device--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure with -EPROBE_DEFER indicates the device is not yet available; a retry later (e.g., after deferred probe) may succeed. Failure with -EINVAL from try_module_get is unlikely to change, but retry is harmless.",
+  "contract_summary": "Get-wrapper: looks up an nvmem_device by matching data, then acquires a module reference (try_module_get) and increments the kref (kref_get). The caller receives a pointer with an extra reference and must release it via nvmem_device_put (or similar) when done. The bus lookup also holds a temporary device reference that is released by the kref_get path. On failure (device not found or module unloadable), returns an ERR_PTR; the caller should check with IS_ERR and may retry on -EPROBE_DEFER. The wrapper does not handle any internal cleanup beyond releasing the bus lookup reference on error.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to locate an nvmem device and acquire references (module refcount and kref). The bus lookup and error handling are minimal scaffolding around the reference management. The function is a classic get-wrapper that returns a pointer with an acquired reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure with -EPROBE_DEFER indicates the device is not yet available; a retry later (e.g., after deferred probe) may succeed. Failure with -EINVAL from try_module_get is unlikely to change, but retry is harmless.",
+      "contract_summary": "Get-wrapper: looks up an nvmem_device by matching data, then acquires a module reference (try_module_get) and increments the kref (kref_get). The caller receives a pointer with an extra reference and must release it via nvmem_device_put (or similar) when done. The bus lookup also holds a temporary device reference that is released by the kref_get path. On failure (device not found or module unloadable), returns an ERR_PTR; the caller should check with IS_ERR and may retry on -EPROBE_DEFER. The wrapper does not handle any internal cleanup beyond releasing the bus lookup reference on error."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "nvmem.refcnt.refcount",
+          "nvmem_device--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "nvmem.owner.refcnt",
+          "nvmem_device--module--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "nvmem.refcnt.refcount",
+          "nvmem_device--kref--refcount_t"
+        ]
+      ],
+      "reason": "The kref_get(&nvmem->refcnt) call increments the kref.refcount inside nvmem->refcnt. The access path from the return value nvmem (nvmem.refcnt.refcount) matches the 3-segment path and 3-type chain nvmem_device--kref--refcount_t, consistent with the callee info for kref_get. The second operation for try_module_get is not supported by the provided callee information (no callee info for try_module_get) and thus cannot be validated; it is omitted."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "nvmem.refcnt.refcount",
+        "nvmem_device--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure with -EPROBE_DEFER indicates the device is not yet available; a retry later (e.g., after deferred probe) may succeed. Failure with -EINVAL from try_module_get is unlikely to change, but retry is harmless.",
+    "contract_summary": "Get-wrapper: looks up an nvmem_device by matching data, then acquires a module reference (try_module_get) and increments the kref (kref_get). The caller receives a pointer with an extra reference and must release it via nvmem_device_put (or similar) when done. The bus lookup also holds a temporary device reference that is released by the kref_get path. On failure (device not found or module unloadable), returns an ERR_PTR; the caller should check with IS_ERR and may retry on -EPROBE_DEFER. The wrapper does not handle any internal cleanup beyond releasing the bus lookup reference on error."
+  }
+}

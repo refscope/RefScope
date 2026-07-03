@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_get_new_fs_root",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_root_ref",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_root_ref",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure may be due to resource exhaustion or invalid arguments; retry is not expected to succeed under the same conditions.",
+  "contract_summary": "Acquires a reference (get) to a btrfs_root for a given filesystem and object ID, potentially creating the root if it does not exist (indicated by the 'true' argument). The returned pointer is a reference-counted object; the caller must later release the reference by calling btrfs_put_root. On failure, returns NULL; the caller must check the return value and handle errors accordingly.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function is a thin wrapper around btrfs_get_root_ref that solely acquires a reference to a btrfs_root; it performs no other logic.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure may be due to resource exhaustion or invalid arguments; retry is not expected to succeed under the same conditions.",
+      "contract_summary": "Acquires a reference (get) to a btrfs_root for a given filesystem and object ID, potentially creating the root if it does not exist (indicated by the 'true' argument). The returned pointer is a reference-counted object; the caller must later release the reference by calling btrfs_put_root. On failure, returns NULL; the caller must check the return value and handle errors accordingly."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation matches the callee btrfs_get_root_ref, which returns a btrfs_root with an acquired reference. The access path root.refs.refs and type chain btrfs_root--refcount_t--atomic_t correctly trace from the return value to the refcount field. Segment counts match: path has 3 segments, chain has 3 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure may be due to resource exhaustion or invalid arguments; retry is not expected to succeed under the same conditions.",
+    "contract_summary": "Acquires a reference (get) to a btrfs_root for a given filesystem and object ID, potentially creating the root if it does not exist (indicated by the 'true' argument). The returned pointer is a reference-counted object; the caller must later release the reference by calling btrfs_put_root. On failure, returns NULL; the caller must check the return value and handle errors accordingly."
+  }
+}

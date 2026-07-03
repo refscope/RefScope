@@ -1,0 +1,99 @@
+{
+  "function_name": "__free_engines",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "e.engines[count].ref.refcount",
+      "i915_gem_engines--intel_context--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "intel_context_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "intel_context_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ref.refcount",
+      "member_type_chain": "intel_context--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are irreversible; once a reference is dropped, retrying would cause use-after-free or double-free.",
+  "contract_summary": "This function is a put-wrapper and destructor for an i915_gem_engines object. It iterates over the engines array, calling intel_context_put on each non-NULL entry to release their references, then frees the engines structure itself with kfree. There is no return value; after calling this function, the caller must not access the engines object or any of its engine contexts. The function correctly handles NULL pointers in the array. It is typically invoked when the last reference to the engines object is being dropped, completing the lifecycle of the engines container and its contexts.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on engine contexts (via intel_context_put) and free the engines container (via kfree). No significant non-refcount logic present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are irreversible; once a reference is dropped, retrying would cause use-after-free or double-free.",
+      "contract_summary": "This function is a put-wrapper and destructor for an i915_gem_engines object. It iterates over the engines array, calling intel_context_put on each non-NULL entry to release their references, then frees the engines structure itself with kfree. There is no return value; after calling this function, the caller must not access the engines object or any of its engine contexts. The function correctly handles NULL pointers in the array. It is typically invoked when the last reference to the engines object is being dropped, completing the lifecycle of the engines container and its contexts."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "e.engines[count].ref.refcount",
+          "i915_gem_engines--intel_context--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "e.engines[count].ref.refcount",
+          "i915_gem_engines--intel_context--kref--refcount_t"
+        ]
+      ],
+      "reason": "The candidate correctly identifies that intel_context_put is a put operation on the intel_context obtained via e->engines[count]. The access path starts from parameter e (index 1) of __free_engines, follows engines[count] to the intel_context, then ref.refcount as per callee info. The segment count (4) matches the type chain (4 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "e.engines[count].ref.refcount",
+        "i915_gem_engines--intel_context--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are irreversible; once a reference is dropped, retrying would cause use-after-free or double-free.",
+    "contract_summary": "This function is a put-wrapper and destructor for an i915_gem_engines object. It iterates over the engines array, calling intel_context_put on each non-NULL entry to release their references, then frees the engines structure itself with kfree. There is no return value; after calling this function, the caller must not access the engines object or any of its engine contexts. The function correctly handles NULL pointers in the array. It is typically invoked when the last reference to the engines object is being dropped, completing the lifecycle of the engines container and its contexts."
+  }
+}

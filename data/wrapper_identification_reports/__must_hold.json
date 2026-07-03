@@ -1,0 +1,186 @@
+{
+  "function_name": "__must_hold",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "io_worker_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "worker.ref.refs",
+      "member_type_chain": "io_worker--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "pnfs_layout_add_bulk_destroy_list",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "inode.nfs_inode.layout.plh_refcount.refs",
+      "member_type_chain": "inode--nfs_inode--pnfs_layout_hdr--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "class_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "config_item_get_unless_zero",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "item.ci_kref.refcount",
+      "member_type_chain": "config_item--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "io_worker_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "worker.ref.refs",
+      "member_type_chain": "io_worker--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "config_item_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "item.ci_kref.refcount",
+      "member_type_chain": "config_item--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "config_item_get_unless_zero",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "item.ci_kref.refcount.refs",
+      "member_type_chain": "config_item--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "nfsd_file_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nf.nf_ref.refs",
+      "member_type_chain": "nfsd_file--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "io_worker_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "worker.ref.refs",
+      "member_type_chain": "io_worker--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nfsd_file_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nf.nf_ref.refs",
+      "member_type_chain": "nfsd_file--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "config_item_get_unless_zero",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "item.ci_kref.refcount",
+      "member_type_chain": "config_item--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function implements DRBD UUID comparison logic for state negotiation, with no refcount get/put/set operations. It does not manage reference counts at all.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

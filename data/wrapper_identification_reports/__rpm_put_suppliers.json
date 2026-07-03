@@ -1,0 +1,99 @@
+{
+  "function_name": "__rpm_put_suppliers",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "link",
+      "link.rpm_active.refs",
+      "device_link--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pm_runtime_release_supplier",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "link.rpm_active.refs",
+      "member_type_chain": "device_link--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pm_runtime_release_supplier",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "link.rpm_active.refs",
+      "member_type_chain": "device_link--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put operation that unconditionally releases references; retrying would double-release, leading to use-after-free.",
+  "contract_summary": "Releases runtime PM references to all suppliers of a device, optionally requesting idle on each supplier. This function is typically called during device runtime suspend or when the device no longer requires its suppliers. Each supplier's reference count (rpm_active) is decremented via pm_runtime_release_supplier. The caller must hold the device links RCU lock (as indicated by the rcu list traversal). After calling this function, the device's supplier references are released; the caller must not use the suppliers without re-acquiring references. The function has no return value and always processes all suppliers.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release runtime PM references to all suppliers of a device (via pm_runtime_release_supplier). The optional pm_request_idle is a minor follow-up action. The function's sole logic is iterating the supplier list and performing these two operations on each link, making it a reference-count put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put operation that unconditionally releases references; retrying would double-release, leading to use-after-free.",
+      "contract_summary": "Releases runtime PM references to all suppliers of a device, optionally requesting idle on each supplier. This function is typically called during device runtime suspend or when the device no longer requires its suppliers. Each supplier's reference count (rpm_active) is decremented via pm_runtime_release_supplier. The caller must hold the device links RCU lock (as indicated by the rcu list traversal). After calling this function, the device's supplier references are released; the caller must not use the suppliers without re-acquiring references. The function has no return value and always processes all suppliers."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "link",
+          "link.rpm_active.refs",
+          "device_link--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "link",
+          "link.rpm_active.refs",
+          "device_link--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __rpm_put_suppliers calls pm_runtime_release_supplier(link) on each supplier link. According to callee info, this is a put operation on link->rpm_active.refs. The access path 'link.rpm_active.refs' correctly traces from the local variable 'link' to the refcount field, with type chain device_link -> refcount_t -> atomic_t matching the callee's type chain. The segment count (3) equals the type chain count (3). The operation is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "link",
+        "link.rpm_active.refs",
+        "device_link--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put operation that unconditionally releases references; retrying would double-release, leading to use-after-free.",
+    "contract_summary": "Releases runtime PM references to all suppliers of a device, optionally requesting idle on each supplier. This function is typically called during device runtime suspend or when the device no longer requires its suppliers. Each supplier's reference count (rpm_active) is decremented via pm_runtime_release_supplier. The caller must hold the device links RCU lock (as indicated by the rcu list traversal). After calling this function, the device's supplier references are released; the caller must not use the suppliers without re-acquiring references. The function has no return value and always processes all suppliers."
+  }
+}

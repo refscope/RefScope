@@ -1,0 +1,74 @@
+{
+  "function_name": "btrfs_lock_and_flush_ordered_range",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_put_ordered_extent",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "entry.refs.refs",
+      "member_type_chain": "btrfs_ordered_extent--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lookup_ordered_range",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "entry.refs.refs",
+      "member_type_chain": "btrfs_ordered_extent--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the function's purpose is synchronization, not refcount management, so retry semantics are not applicable in the context of a wrapper classification.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of the function is to synchronize I/O by waiting for outstanding ordered extents in a given range, using a loop that locks the extent, looks up ordered ranges, and starts them. The refcount operations (btrfs_put_ordered_extent and refcount_dec on the extent state) are incidental to that synchronization logic, not the main goal. The function is a synchronization primitive, not a get/put/set wrapper for a reference-counted object.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the function's purpose is synchronization, not refcount management, so retry semantics are not applicable in the context of a wrapper classification.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the function's purpose is synchronization, not refcount management, so retry semantics are not applicable in the context of a wrapper classification.",
+    "contract_summary": ""
+  }
+}

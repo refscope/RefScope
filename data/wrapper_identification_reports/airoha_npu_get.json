@@ -1,0 +1,131 @@
+{
+  "function_name": "airoha_npu_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "global",
+      "THIS_MODULE",
+      "THIS_MODULE.refcnt",
+      "module--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "platform_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_device_by_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "platform_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "of_find_device_by_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates device not found, missing device node, or module not loaded; conditions may be permanent, so retry is not guaranteed to succeed and is not part of the wrapper contract.",
+  "contract_summary": "This function acquires a reference to the NPU device for a consumer. It looks up the NPU device by phandle, obtains the platform device, increments the module reference count, attaches a device link from consumer to supplier, and returns the NPU private data. The caller obtains a valid pointer to an airoha_npu structure with the supplier device and module pinned. The caller must eventually call a matching put function (presumably airoha_npu_put) to release the module reference and device link. On error, ERR_PTR is returned and no references are held.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference to the NPU device for a consumer, including module pinning and device link creation. The function's main logic is to locate, reference, and return the NPU private data; DT parsing and link creation serve this get-wrapper purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates device not found, missing device node, or module not loaded; conditions may be permanent, so retry is not guaranteed to succeed and is not part of the wrapper contract.",
+      "contract_summary": "This function acquires a reference to the NPU device for a consumer. It looks up the NPU device by phandle, obtains the platform device, increments the module reference count, attaches a device link from consumer to supplier, and returns the NPU private data. The caller obtains a valid pointer to an airoha_npu structure with the supplier device and module pinned. The caller must eventually call a matching put function (presumably airoha_npu_put) to release the module reference and device link. On error, ERR_PTR is returned and no references are held."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "THIS_MODULE",
+          "THIS_MODULE.refcnt",
+          "module--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "THIS_MODULE",
+          "THIS_MODULE.refcnt",
+          "module--atomic_t"
+        ]
+      ],
+      "reason": "try_module_get(THIS_MODULE) increments the module's reference count (THIS_MODULE.refcnt). The global variable THIS_MODULE is of type struct module, which has an atomic_t refcnt field. The access path and type chain are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "global",
+        "THIS_MODULE",
+        "THIS_MODULE.refcnt",
+        "module--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates device not found, missing device node, or module not loaded; conditions may be permanent, so retry is not guaranteed to succeed and is not part of the wrapper contract.",
+    "contract_summary": "This function acquires a reference to the NPU device for a consumer. It looks up the NPU device by phandle, obtains the platform device, increments the module reference count, attaches a device link from consumer to supplier, and returns the NPU private data. The caller obtains a valid pointer to an airoha_npu structure with the supplier device and module pinned. The caller must eventually call a matching put function (presumably airoha_npu_put) to release the module reference and device link. On error, ERR_PTR is returned and no references are held."
+  }
+}

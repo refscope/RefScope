@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_neigh_node_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "res.refcount.refcount",
+      "batadv_neigh_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL) means either no matching node exists or the node is already being freed; retrying without a change in state would not succeed.",
+  "contract_summary": "batadv_neigh_node_get is a lookup-and-acquire wrapper: it searches the orig_node's neigh_list under RCU protection for a neighbor matching the given address and incoming interface. If found and still alive (refcount non-zero), it increments the reference count via kref_get_unless_zero and returns the node with an elevated reference. The caller must check for NULL (indicating no match or dying object) and must later release the reference with batadv_neigh_node_put. The RCU read lock is held only during the lookup; the returned pointer remains valid due to the taken reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a batadv_neigh_node by address and interface, then acquire a reference via kref_get_unless_zero. The lookup logic is minimal and integral to selecting the correct object to reference-count.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL) means either no matching node exists or the node is already being freed; retrying without a change in state would not succeed.",
+      "contract_summary": "batadv_neigh_node_get is a lookup-and-acquire wrapper: it searches the orig_node's neigh_list under RCU protection for a neighbor matching the given address and incoming interface. If found and still alive (refcount non-zero), it increments the reference count via kref_get_unless_zero and returns the node with an elevated reference. The caller must check for NULL (indicating no match or dying object) and must later release the reference with batadv_neigh_node_put. The RCU read lock is held only during the lookup; the returned pointer remains valid due to the taken reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "res.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "res.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function performs a 'get' operation via kref_get_unless_zero() on a batadv_neigh_node found in the list and returns it. The critical variable is the return value 'res'. The access path 'res.refcount.refcount' correctly traces from the return variable to the kref's refcount field, consistent with the callee's type chain 'batadv_neigh_node--kref--refcount_t'. The segment count (3) matches the type chain count (3), and the location/index is appropriate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "res.refcount.refcount",
+        "batadv_neigh_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL) means either no matching node exists or the node is already being freed; retrying without a change in state would not succeed.",
+    "contract_summary": "batadv_neigh_node_get is a lookup-and-acquire wrapper: it searches the orig_node's neigh_list under RCU protection for a neighbor matching the given address and incoming interface. If found and still alive (refcount non-zero), it increments the reference count via kref_get_unless_zero and returns the node with an elevated reference. The caller must check for NULL (indicating no match or dying object) and must later release the reference with batadv_neigh_node_put. The RCU read lock is held only during the lookup; the returned pointer remains valid due to the taken reference."
+  }
+}

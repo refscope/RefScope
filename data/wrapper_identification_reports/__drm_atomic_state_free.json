@@ -1,0 +1,82 @@
+{
+  "function_name": "__drm_atomic_state_free",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put-release callback invoked exactly once when the refcount hits zero; retrying would be a double-free.",
+  "contract_summary": "__drm_atomic_state_free is the release function for the kref in struct drm_atomic_state. It is called by kref_put when the last reference is dropped. The function clears the atomic state, frees it via the device-specific or default release path, and finally drops the reference to the drm_device. Callers must not use the state after kref_put triggers this release; ownership of the state and device reference is transferred entirely to this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to serve as the kref release callback for drm_atomic_state; it frees the state and drops the device reference when the refcount reaches zero. No other business logic is mixed in.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put-release callback invoked exactly once when the refcount hits zero; retrying would be a double-free.",
+      "contract_summary": "__drm_atomic_state_free is the release function for the kref in struct drm_atomic_state. It is called by kref_put when the last reference is dropped. The function clears the atomic state, frees it via the device-specific or default release path, and finally drops the reference to the drm_device. Callers must not use the state after kref_put triggers this release; ownership of the state and device reference is transferred entirely to this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.container.dev.ref.refcount",
+          "kref--drm_atomic_state--drm_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'ref.container.dev.ref.refcount' contains 'container', which is not a valid C struct field; it is an artifact of container_of. Furthermore, the refcount operation (drm_dev_put) acts on 'dev', a local variable derived from the parameter 'ref', so the critical variable is not the function parameter. The location/index does not correctly identify the object whose refcount is modified."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "This function is a kref release callback, not a reference-count wrapper/helper. Its primary purpose is to free the drm_atomic_state object and perform cleanup, including a put on the device. The candidate operation (put on dev) acts on a local variable derived via container_of, not a parameter or return value; the access path 'ref.container.dev.ref.refcount' is invalid because 'container' is not a C struct field. The function does not return the critical variable and is not designed as a get/put interface for the caller. Therefore, it is not a wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put-release callback invoked exactly once when the refcount hits zero; retrying would be a double-free.",
+    "contract_summary": "__drm_atomic_state_free is the release function for the kref in struct drm_atomic_state. It is called by kref_put when the last reference is dropped. The function clears the atomic state, frees it via the device-specific or default release path, and finally drops the reference to the drm_device. Callers must not use the state after kref_put triggers this release; ownership of the state and device reference is transferred entirely to this function."
+  }
+}

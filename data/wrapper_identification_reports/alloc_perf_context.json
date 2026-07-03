@@ -1,0 +1,58 @@
+{
+  "function_name": "alloc_perf_context",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_task_struct",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_task_struct",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "t.usage.refs",
+      "member_type_chain": "task_struct--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation failure; retrying might succeed later if memory becomes available, but this is not a refcount operation retry scenario.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "The primary purpose is allocation and initialization of a perf_event_context, not refcount management. The get_task_struct call is an incidental step within broader object creation logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation failure; retrying might succeed later if memory becomes available, but this is not a refcount operation retry scenario.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "medium",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation failure; retrying might succeed later if memory becomes available, but this is not a refcount operation retry scenario.",
+    "contract_summary": ""
+  }
+}

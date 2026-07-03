@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_async_refcount_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cb.refcnt.refs",
+      "bpf_async_cb--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always decrements the refcount; if the caller calls it without holding a reference, that is a use-after-free bug, not a transient failure. Retrying would be a double-put.",
+  "contract_summary": "This function drops one reference on a bpf_async_cb object. If the decrement makes the refcount reach zero (i.e., this is the last reference), it schedules the object's freeing via either irq_work (if IRQs are disabled) or call_rcu_tasks_trace (if IRQs are enabled). After this call, the caller must not access the cb unless it holds another valid reference. The cleanup path is chosen based on interrupt context to avoid potential deadlocks. This is a standard release wrapper (put) that transfers ownership of the object's lifecycle termination to a deferred work or RCU callback.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of a bpf_async_cb and, if it reaches zero, trigger deferred cleanup via either irq_work or call_rcu_tasks_trace. No extraneous business logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always decrements the refcount; if the caller calls it without holding a reference, that is a use-after-free bug, not a transient failure. Retrying would be a double-put.",
+      "contract_summary": "This function drops one reference on a bpf_async_cb object. If the decrement makes the refcount reach zero (i.e., this is the last reference), it schedules the object's freeing via either irq_work (if IRQs are disabled) or call_rcu_tasks_trace (if IRQs are enabled). After this call, the caller must not access the cb unless it holds another valid reference. The cleanup path is chosen based on interrupt context to avoid potential deadlocks. This is a standard release wrapper (put) that transfers ownership of the object's lifecycle termination to a deferred work or RCU callback."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cb.refcnt.refs",
+          "bpf_async_cb--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cb.refcnt.refs",
+          "bpf_async_cb--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &cb->refcnt, performing a put operation. The access path from parameter cb to the atomic variable is cb.refcnt.refs, consistent with the type chain bpf_async_cb--refcount_t--atomic_t. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cb.refcnt.refs",
+        "bpf_async_cb--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always decrements the refcount; if the caller calls it without holding a reference, that is a use-after-free bug, not a transient failure. Retrying would be a double-put.",
+    "contract_summary": "This function drops one reference on a bpf_async_cb object. If the decrement makes the refcount reach zero (i.e., this is the last reference), it schedules the object's freeing via either irq_work (if IRQs are disabled) or call_rcu_tasks_trace (if IRQs are enabled). After this call, the caller must not access the cb unless it holds another valid reference. The cleanup path is chosen based on interrupt context to avoid potential deadlocks. This is a standard release wrapper (put) that transfers ownership of the object's lifecycle termination to a deferred work or RCU callback."
+  }
+}

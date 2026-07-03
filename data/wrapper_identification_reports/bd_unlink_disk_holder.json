@@ -1,0 +1,82 @@
+{
+  "function_name": "bd_unlink_disk_holder",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the holder is not found (WARN_ON_ONCE), it indicates a programming error, not a transient condition; retrying is pointless. The decrement itself always succeeds when the path is taken.",
+  "contract_summary": "Put wrapper for a bd_holder_disk reference. Decrements the reference count; if it reaches zero, performs full cleanup: removes symlinks from slave_dir and holder_dir, puts the holder directory kobject, removes the holder from the list, and frees the holder structure. The caller must have previously acquired a reference via bd_link_disk_holder or an equivalent get operation. After calling this function, the caller must not use the holder further, and no additional puts should be issued because the holder may be freed. The function silently ignores a missing holder (warning only).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of a bd_holder_disk and clean up when it reaches zero; the only extra logic is the expected cleanup actions (symlink removal, kobject_put, list removal, kfree), which are part of the release lifecycle.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the holder is not found (WARN_ON_ONCE), it indicates a programming error, not a transient condition; retrying is pointless. The decrement itself always succeeds when the path is taken.",
+      "contract_summary": "Put wrapper for a bd_holder_disk reference. Decrements the reference count; if it reaches zero, performs full cleanup: removes symlinks from slave_dir and holder_dir, puts the holder directory kobject, removes the holder from the list, and frees the holder structure. The caller must have previously acquired a reference via bd_link_disk_holder or an equivalent get operation. After calling this function, the caller must not use the holder further, and no additional puts should be issued because the holder may be freed. The function silently ignores a missing holder (warning only)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bdev.bd_holder_dir.kref.refcount",
+          "block_device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation claims a put on bdev.bd_holder_dir.kref.refcount, but the actual kobject_put argument in the code is holder->holder_dir, not bdev->bd_holder_dir. The critical variable is not from the function's parameter or return; it's a local variable. The access path does not match the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The extracted operation claims a put on bdev.bd_holder_dir.kref.refcount, but the actual kobject_put in the code operates on holder->holder_dir, a local variable not directly linked to the parameter. The candidate path is factually incorrect. Additionally, the function includes multiple side effects (symlink removal, list deletion, free) beyond reference counting, so it does not qualify as a focused refcount wrapper/helper. The judge's classification as a wrapper is overruled."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the holder is not found (WARN_ON_ONCE), it indicates a programming error, not a transient condition; retrying is pointless. The decrement itself always succeeds when the path is taken.",
+    "contract_summary": "Put wrapper for a bd_holder_disk reference. Decrements the reference count; if it reaches zero, performs full cleanup: removes symlinks from slave_dir and holder_dir, puts the holder directory kobject, removes the holder from the list, and frees the holder structure. The caller must have previously acquired a reference via bd_link_disk_holder or an equivalent get operation. After calling this function, the caller must not use the holder further, and no additional puts should be issued because the holder may be freed. The function silently ignores a missing holder (warning only)."
+  }
+}

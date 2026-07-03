@@ -1,0 +1,127 @@
+{
+  "function_name": "__nfp_cpp_area_acquire",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "area.refcount",
+      "nfp_cpp_area--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "area.kref.refcount",
+      "nfp_cpp_area--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nfp_cpp_area_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "area.kref.refcount",
+      "member_type_chain": "nfp_cpp_area--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nfp_cpp_area_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "area.kref.refcount",
+      "member_type_chain": "nfp_cpp_area--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure due to hardware acquire being temporarily unavailable; caller can retry the entire acquisition later.",
+  "contract_summary": "Acquire-wrapper: increments the area's reference count (atomic_t) and, if this is the first reference, acquires the area from hardware (blocking until available or interrupted). On success, also takes a kref reference via nfp_cpp_area_get, giving the caller a valid reference. Caller must eventually release the reference with a corresponding put (likely nfp_cpp_area_release). On failure (hardware acquire fails), the atomic_t is decremented and an error is returned; the caller may retry the acquisition. The function may sleep due to wait_event_interruptible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference to the nfp_cpp_area (via atomic_inc and kref_get) and perform a hardware-level acquire on first use. The non-refcount logic (waitqueue, hardware try) is incidental but significant.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure due to hardware acquire being temporarily unavailable; caller can retry the entire acquisition later.",
+      "contract_summary": "Acquire-wrapper: increments the area's reference count (atomic_t) and, if this is the first reference, acquires the area from hardware (blocking until available or interrupted). On success, also takes a kref reference via nfp_cpp_area_get, giving the caller a valid reference. Caller must eventually release the reference with a corresponding put (likely nfp_cpp_area_release). On failure (hardware acquire fails), the atomic_t is decremented and an error is returned; the caller may retry the acquisition. The function may sleep due to wait_event_interruptible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "area.refcount",
+          "nfp_cpp_area--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "area.kref.refcount",
+          "nfp_cpp_area--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "area.refcount",
+          "nfp_cpp_area--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "area.kref.refcount",
+          "nfp_cpp_area--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are get operations on the parameter 'area'. The first corresponds to the direct atomic_inc_return(&area->refcount) which increments an atomic_t counter; the access path 'area.refcount' and type chain 'nfp_cpp_area--atomic_t' match. The second corresponds to the call to nfp_cpp_area_get(area), which according to callee info increments area->kref.refcount (refcount_t); the path 'area.kref.refcount' and type chain 'nfp_cpp_area--kref--refcount_t' are consistent. Both paths start from the correct critical variable (parameter 1) and segment counts are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "area.refcount",
+        "nfp_cpp_area--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "area.kref.refcount",
+        "nfp_cpp_area--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure due to hardware acquire being temporarily unavailable; caller can retry the entire acquisition later.",
+    "contract_summary": "Acquire-wrapper: increments the area's reference count (atomic_t) and, if this is the first reference, acquires the area from hardware (blocking until available or interrupted). On success, also takes a kref reference via nfp_cpp_area_get, giving the caller a valid reference. Caller must eventually release the reference with a corresponding put (likely nfp_cpp_area_release). On failure (hardware acquire fails), the atomic_t is decremented and an error is returned; the caller may retry the acquisition. The function may sleep due to wait_event_interruptible."
+  }
+}

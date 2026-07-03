@@ -1,0 +1,275 @@
+{
+  "function_name": "ast_crtc_atomic_destroy_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.gamma_lut.base.refcount.refcount",
+      "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.degamma_lut.base.refcount.refcount",
+      "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.mode_blob.base.refcount.refcount",
+      "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.commit.ref.refcount",
+      "drm_crtc_state--drm_crtc_commit--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "state.ctm.base.refcount.refcount",
+      "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.mode_blob.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.gamma_lut.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.degamma_lut.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.commit.ref.refcount",
+      "member_type_chain": "drm_crtc_state--drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.ctm.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.degamma_lut.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.mode_blob.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.gamma_lut.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.commit.ref.refcount",
+      "member_type_chain": "drm_crtc_state--drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_crtc_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.ctm.base.refcount.refcount",
+      "member_type_chain": "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and does not fail; the kfree and helper are always called.",
+  "contract_summary": "This function destroys a CRTC atomic state by first releasing all reference-counted subobjects (gamma_lut, degamma_lut, mode_blob, commit, ctm) via __drm_atomic_helper_crtc_destroy_state, then freeing the driver-specific state structure (ast_crtc_state). After this call, the state pointer is invalid and must not be used. The caller must ensure that the state is no longer referenced before calling this function, and no further operations should be performed on the state after destruction.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to destroy a CRTC atomic state by releasing references on sub-objects via the helper and then freeing the state structure. The only non-refcount logic is the final kfree.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and does not fail; the kfree and helper are always called.",
+      "contract_summary": "This function destroys a CRTC atomic state by first releasing all reference-counted subobjects (gamma_lut, degamma_lut, mode_blob, commit, ctm) via __drm_atomic_helper_crtc_destroy_state, then freeing the driver-specific state structure (ast_crtc_state). After this call, the state pointer is invalid and must not be used. The caller must ensure that the state is no longer referenced before calling this function, and no further operations should be performed on the state after destruction."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.gamma_lut.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.degamma_lut.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.mode_blob.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.commit.ref.refcount",
+          "drm_crtc_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.ctm.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.gamma_lut.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.degamma_lut.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.mode_blob.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.commit.ref.refcount",
+          "drm_crtc_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "state.ctm.base.refcount.refcount",
+          "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "All five put operations from the callee __drm_atomic_helper_crtc_destroy_state are correctly attributed to the caller's parameter state (index 1) with consistent access paths and type chains. The function passes &ast_state->base, which is the same object as the incoming state parameter, and the callee decrements the refcounts on the specified members. The segment counts in each path match the type counts in the chains."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.gamma_lut.base.refcount.refcount",
+        "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.degamma_lut.base.refcount.refcount",
+        "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.mode_blob.base.refcount.refcount",
+        "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.commit.ref.refcount",
+        "drm_crtc_state--drm_crtc_commit--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "state.ctm.base.refcount.refcount",
+        "drm_crtc_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and does not fail; the kfree and helper are always called.",
+    "contract_summary": "This function destroys a CRTC atomic state by first releasing all reference-counted subobjects (gamma_lut, degamma_lut, mode_blob, commit, ctm) via __drm_atomic_helper_crtc_destroy_state, then freeing the driver-specific state structure (ast_crtc_state). After this call, the state pointer is invalid and must not be used. The caller must ensure that the state is no longer referenced before calling this function, and no further operations should be performed on the state after destruction."
+  }
+}

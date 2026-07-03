@@ -1,0 +1,99 @@
+{
+  "function_name": "amd_node_get_func",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pdev.dev.kobj.kref.refcount",
+      "pci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "pci_get_domain_bus_and_slot",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "pci_get_domain_bus_and_slot",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.dev.kobj.kref.refcount",
+      "member_type_chain": "pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "pci_get_domain_bus_and_slot returns NULL if no device exists; retrying without a change in hardware configuration will yield the same result.",
+  "contract_summary": "This function acquires a reference on the PCI device corresponding to the given node and function number. The caller receives a pci_dev pointer with an incremented reference count and must call pci_dev_put() when done. NULL is returned if node is out of range or no device exists at that location. The function does not modify any global state beyond the reference count increment.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference-counted PCI device via pci_get_domain_bus_and_slot, with only a bounds check on node. No other business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "pci_get_domain_bus_and_slot returns NULL if no device exists; retrying without a change in hardware configuration will yield the same result.",
+      "contract_summary": "This function acquires a reference on the PCI device corresponding to the given node and function number. The caller receives a pci_dev pointer with an incremented reference count and must call pci_dev_put() when done. NULL is returned if node is out of range or no device exists at that location. The function does not modify any global state beyond the reference count increment."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pdev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the result of pci_get_domain_bus_and_slot, which increments the refcount on the pci_dev. The critical variable is the return value, and the access path pdev.dev.kobj.kref.refcount correctly traces from the returned pci_dev pointer through its dev, kobj, kref fields to the refcount_t. The type chain pci_dev--device--kobject--kref--refcount_t matches the path segments (5 each) and the actual struct definitions. The 'get' direction is consistent with the callee's get semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pdev.dev.kobj.kref.refcount",
+        "pci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "pci_get_domain_bus_and_slot returns NULL if no device exists; retrying without a change in hardware configuration will yield the same result.",
+    "contract_summary": "This function acquires a reference on the PCI device corresponding to the given node and function number. The caller receives a pci_dev pointer with an incremented reference count and must call pci_dev_put() when done. NULL is returned if node is out of range or no device exists at that location. The function does not modify any global state beyond the reference count increment."
+  }
+}

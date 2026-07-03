@@ -1,0 +1,115 @@
+{
+  "function_name": "__debugfs_file_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dentry.d_fsdata.active_users.refs",
+      "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the file is unlinked or the refcount is zero (object being destroyed); retrying is pointless.",
+  "contract_summary": "Get-wrapper: acquires a reference on the debugfs file's internal reference-counted fsd structure, ensuring the file is alive and its file operations are properly initialized. If the fsd does not exist, it is created with an initial refcount of 1, then refcount is incremented for the caller. The caller must subsequently call debugfs_file_put (or equivalent) to release the reference. Success implies the dentry's d_fsdata is valid and the file is not being removed. Failure returns -EIO if the file is unlinked or its refcount is zero, meaning the file is dead.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference on the debugfs file's internal data (fsd) via refcount_inc_not_zero, lazily creating it if necessary. Includes initialization of operations, locks, and completion, which is part of the get lifecycle.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the file is unlinked or the refcount is zero (object being destroyed); retrying is pointless.",
+      "contract_summary": "Get-wrapper: acquires a reference on the debugfs file's internal reference-counted fsd structure, ensuring the file is alive and its file operations are properly initialized. If the fsd does not exist, it is created with an initial refcount of 1, then refcount is incremented for the caller. The caller must subsequently call debugfs_file_put (or equivalent) to release the reference. Success implies the dentry's d_fsdata is valid and the file is not being removed. Failure returns -EIO if the file is unlinked or its refcount is zero, meaning the file is dead."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dentry.d_fsdata.active_users.refs",
+          "dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dentry.d_fsdata.active_users.refs",
+          "dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The get operation refcount_inc_not_zero is called on &fsd->active_users, where fsd is derived from dentry->d_fsdata. The access path dentry.d_fsdata.active_users.refs correctly traces from the function parameter dentry through the void pointer d_fsdata to the active_users refcount_t field and its inner refs atomic_t. The type chain matches the struct hierarchy. The callee information confirms refcount_inc_not_zero as a get operation on the refs member. Access path segment count (4) equals type chain count (4)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dentry.d_fsdata.active_users.refs",
+        "dentry--debugfs_fsdata--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the file is unlinked or the refcount is zero (object being destroyed); retrying is pointless.",
+    "contract_summary": "Get-wrapper: acquires a reference on the debugfs file's internal reference-counted fsd structure, ensuring the file is alive and its file operations are properly initialized. If the fsd does not exist, it is created with an initial refcount of 1, then refcount is incremented for the caller. The caller must subsequently call debugfs_file_put (or equivalent) to release the reference. Success implies the dentry's d_fsdata is valid and the file is not being removed. Failure returns -EIO if the file is unlinked or its refcount is zero, meaning the file is dead."
+  }
+}

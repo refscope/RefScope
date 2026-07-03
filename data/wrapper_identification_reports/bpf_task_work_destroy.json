@@ -1,0 +1,105 @@
+{
+  "function_name": "bpf_task_work_destroy",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_task_work_ctx_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.task.rcu_users.refs",
+      "member_type_chain": "bpf_task_work_ctx--task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_task_work_ctx_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.prog.aux.refcnt",
+      "member_type_chain": "bpf_task_work_ctx--bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_task_work_ctx_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.task.rcu_users.refs",
+      "member_type_chain": "bpf_task_work_ctx--task_struct--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_task_work_ctx_reset",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.prog.aux.refcnt",
+      "member_type_chain": "bpf_task_work_ctx--bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function always succeeds; there is no failure path. No retry needed.",
+  "contract_summary": "This function destroys a bpf_task_work_ctx by releasing the reference counts on its embedded task and bpf_prog via bpf_task_work_ctx_reset, and then scheduling the context for RCU freeing with kfree_rcu. It is a put wrapper: the caller must not use the context after calling this function. The function is typically invoked from an irq_work or RCU callback and completes the lifecycle of the context.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Put wrapper: decrements refcounts on associated task and bpf_prog via bpf_task_work_ctx_reset, then frees the context. Entire purpose is lifecycle management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function always succeeds; there is no failure path. No retry needed.",
+      "contract_summary": "This function destroys a bpf_task_work_ctx by releasing the reference counts on its embedded task and bpf_prog via bpf_task_work_ctx_reset, and then scheduling the context for RCU freeing with kfree_rcu. It is a put wrapper: the caller must not use the context after calling this function. The function is typically invoked from an irq_work or RCU callback and completes the lifecycle of the context."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "ctx.task.rcu_users.refs",
+          "bpf_task_work_ctx--task_struct--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "ctx.prog.aux.refcnt",
+          "bpf_task_work_ctx--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operations incorrectly use location 'return' with index '0', but the function returns void. The refcount put operations are performed on the 'ctx' object, which is derived from the input parameter 'irq_work' via container_of, not on a return value. The access paths start from 'ctx', which is not a parameter or return of the function. The critical variable at the function interface is the parameter 'irq_work', and the path from it to the refcount fields would require a container_of step, which is not represented. Additionally, the path does not start from the correct interface variable. Therefore, the operations are inconsistent and must be rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function bpf_task_work_destroy takes an irq_work pointer and derives the bpf_task_work_ctx via container_of. The refcount puts are performed on ctx, which is not a parameter or return value of the function. The function does not return the object or pass it out through parameters; it is a destructor callback. Therefore, it does not qualify as a reference-count wrapper/helper despite the judge's initial classification."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function always succeeds; there is no failure path. No retry needed.",
+    "contract_summary": "This function destroys a bpf_task_work_ctx by releasing the reference counts on its embedded task and bpf_prog via bpf_task_work_ctx_reset, and then scheduling the context for RCU freeing with kfree_rcu. It is a put wrapper: the caller must not use the context after calling this function. The function is typically invoked from an irq_work or RCU callback and completes the lifecycle of the context."
+  }
+}

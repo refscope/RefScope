@@ -1,0 +1,143 @@
+{
+  "function_name": "__dmc620_pmu_get_irq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "irq.refcount.refs",
+      "dmc620_pmu_irq--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "irq.refcount.refs",
+      "dmc620_pmu_irq--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is from allocation or IRQ registration errors, not from refcount operations; simple retry without addressing the root cause is unlikely to succeed.",
+  "contract_summary": "This is a get-or-create wrapper for dmc620_pmu_irq objects. It looks up an existing irq by irq_num; if found with a positive refcount, it acquires an additional reference via refcount_inc_not_zero. Otherwise, it allocates a new irq, sets its refcount to 1, registers the interrupt handler, sets CPU affinity, and adds it to a global list. The caller receives a pointer (or ERR_PTR on failure) and must eventually release the reference by calling the corresponding put function (e.g., __dmc620_pmu_put_irq). The function handles error recovery by freeing resources on failure paths.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a dmc620_pmu_irq object either by incrementing an existing one (refcount_inc_not_zero) or creating a new one with refcount_set(1); all other logic (IRQ request, affinity, hotplug) is necessary initialization for the creation path, but the core is refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is from allocation or IRQ registration errors, not from refcount operations; simple retry without addressing the root cause is unlikely to succeed.",
+      "contract_summary": "This is a get-or-create wrapper for dmc620_pmu_irq objects. It looks up an existing irq by irq_num; if found with a positive refcount, it acquires an additional reference via refcount_inc_not_zero. Otherwise, it allocates a new irq, sets its refcount to 1, registers the interrupt handler, sets CPU affinity, and adds it to a global list. The caller receives a pointer (or ERR_PTR on failure) and must eventually release the reference by calling the corresponding put function (e.g., __dmc620_pmu_put_irq). The function handles error recovery by freeing resources on failure paths."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "dmc620_pmu_irq--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "dmc620_pmu_irq--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "dmc620_pmu_irq--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "dmc620_pmu_irq--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both refcount_inc_not_zero (get) and refcount_set (set) operate on the returned irq structure. The access path irq.refcount.refs correctly traces from the return variable through the refcount field to the underlying atomic_t. The type chain matches the struct definition. Segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "irq.refcount.refs",
+        "dmc620_pmu_irq--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "irq.refcount.refs",
+        "dmc620_pmu_irq--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is from allocation or IRQ registration errors, not from refcount operations; simple retry without addressing the root cause is unlikely to succeed.",
+    "contract_summary": "This is a get-or-create wrapper for dmc620_pmu_irq objects. It looks up an existing irq by irq_num; if found with a positive refcount, it acquires an additional reference via refcount_inc_not_zero. Otherwise, it allocates a new irq, sets its refcount to 1, registers the interrupt handler, sets CPU affinity, and adds it to a global list. The caller receives a pointer (or ERR_PTR on failure) and must eventually release the reference by calling the corresponding put function (e.g., __dmc620_pmu_put_irq). The function handles error recovery by freeing resources on failure paths."
+  }
+}

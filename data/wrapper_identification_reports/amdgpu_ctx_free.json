@@ -1,0 +1,90 @@
+{
+  "function_name": "amdgpu_ctx_free",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the id is invalid, the same id will remain invalid; no transient condition exists. If valid, the operation always succeeds.",
+  "contract_summary": "Release wrapper for amdgpu_ctx objects. It removes the context from the manager's IDR (preventing future lookups) and drops one reference via kref_put. If the reference count reaches zero, the context is freed via amdgpu_ctx_do_release. Returns 0 on success or -EINVAL if the id does not exist. Caller should check the return value if the id's validity is uncertain. After this call, the context must not be used again without acquiring a new reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on an amdgpu_ctx object by removing it from the IDR (to prevent further access) and then calling kref_put. The IDR removal is integral to the release process, not separate business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the id is invalid, the same id will remain invalid; no transient condition exists. If valid, the operation always succeeds.",
+      "contract_summary": "Release wrapper for amdgpu_ctx objects. It removes the context from the manager's IDR (preventing future lookups) and drops one reference via kref_put. If the reference count reaches zero, the context is freed via amdgpu_ctx_do_release. Returns 0 on success or -EINVAL if the id does not exist. Caller should check the return value if the id's validity is uncertain. After this call, the context must not be used again without acquiring a new reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "ctx.refcount.refcount",
+          "amdgpu_ctx--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable (ctx) is not part of the function interface (neither parameter nor return value). The candidate incorrectly associates the refcount operation with the return value, which is an int, not ctx. No valid operation exists."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The critical variable ctx is not part of the function interface (neither parameter nor return value). The function performs a kref_put on a local variable retrieved via idr_remove, and returns an int error code. Since the refcount object does not flow out to the caller, the function cannot be classified as a refcount wrapper/helper. The check stage correctly rejected all candidates."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the id is invalid, the same id will remain invalid; no transient condition exists. If valid, the operation always succeeds.",
+    "contract_summary": "Release wrapper for amdgpu_ctx objects. It removes the context from the manager's IDR (preventing future lookups) and drops one reference via kref_put. If the reference count reaches zero, the context is freed via amdgpu_ctx_do_release. Returns 0 on success or -EINVAL if the id does not exist. Caller should check the return value if the id's validity is uncertain. After this call, the context must not be used again without acquiring a new reference."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_netlink_get_meshif",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "return.dev_refcnt.refs",
+      "net_device--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_netlink_get_meshif_from_ifindex",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mesh_iface.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_netlink_get_meshif_from_ifindex",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mesh_iface.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when the ifindex is zero (invalid attribute) or the device lookup fails; neither condition is transient, so retrying would not succeed.",
+  "contract_summary": "Acquires a reference on a net_device identified by the BATADV_ATTR_MESH_IFINDEX attribute in a netlink callback. Returns the net_device pointer with an elevated refcount on success, or an ERR_PTR on failure. The caller must release the reference with dev_put() when done. The function does not require any locks to be held by the caller, but the caller must ensure the netlink callback context remains valid (skb and nlh).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a net_device with an elevated reference count from an ifindex via batadv_netlink_get_meshif_from_ifindex. The function performs only minimal validation (ifindex check) before calling the actual get operation, making it a focused get-wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when the ifindex is zero (invalid attribute) or the device lookup fails; neither condition is transient, so retrying would not succeed.",
+      "contract_summary": "Acquires a reference on a net_device identified by the BATADV_ATTR_MESH_IFINDEX attribute in a netlink callback. Returns the net_device pointer with an elevated refcount on success, or an ERR_PTR on failure. The caller must release the reference with dev_put() when done. The function does not require any locks to be held by the caller, but the caller must ensure the netlink callback context remains valid (skb and nlh)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The candidate correctly identifies that batadv_netlink_get_meshif_from_ifindex returns a net_device with an incremented refcount. The access path from the return value to the refcount field is return.dev_refcnt.refs, and the type chain net_device--refcount_struct--atomic_t matches the callee information. The segment counts are consistent (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "return.dev_refcnt.refs",
+        "net_device--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when the ifindex is zero (invalid attribute) or the device lookup fails; neither condition is transient, so retrying would not succeed.",
+    "contract_summary": "Acquires a reference on a net_device identified by the BATADV_ATTR_MESH_IFINDEX attribute in a netlink callback. Returns the net_device pointer with an elevated refcount on success, or an ERR_PTR on failure. The caller must release the reference with dev_put() when done. The function does not require any locks to be held by the caller, but the caller must ensure the netlink callback context remains valid (skb and nlh)."
+  }
+}

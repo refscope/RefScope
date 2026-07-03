@@ -1,0 +1,82 @@
+{
+  "function_name": "bnx2i_process_nopin_local_cmpl",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__iscsi_put_task",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "task.refcount.refs",
+      "member_type_chain": "iscsi_task--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__iscsi_put_task",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "task.refcount.refs",
+      "member_type_chain": "iscsi_task--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put only occurs if the task lookup succeeds; if the task is not found (NULL), the reference is already gone and retrying would not change the outcome.",
+  "contract_summary": "Put wrapper that releases a reference on the iscsi_task associated with a NOP-In completion. It looks up the task via iscsi_itt_to_task under the session back_lock and, if found, calls __iscsi_put_task to decrement its reference count. The caller must ensure the session back_lock is not already held (the function acquires/releases it). After this call, the task pointer is effectively invalid and must not be used, as its refcount may drop to zero and free the task. This function is called from the completion handler to clean up the local NOP-In response.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on an iscsi_task obtained from the completion queue entry; the only non-refcount logic is the lock/unlock and ITT-to-task lookup.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put only occurs if the task lookup succeeds; if the task is not found (NULL), the reference is already gone and retrying would not change the outcome.",
+      "contract_summary": "Put wrapper that releases a reference on the iscsi_task associated with a NOP-In completion. It looks up the task via iscsi_itt_to_task under the session back_lock and, if found, calls __iscsi_put_task to decrement its reference count. The caller must ensure the session back_lock is not already held (the function acquires/releases it). After this call, the task pointer is effectively invalid and must not be used, as its refcount may drop to zero and free the task. This function is called from the completion handler to clean up the local NOP-In response."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "task.refcount.refs",
+          "iscsi_task--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation specifies location 'return' with index '0', but the function returns void. The critical variable 'task' is a local variable obtained inside the function, not exposed as a parameter or return value of bnx2i_process_nopin_local_cmpl. Therefore, the extracted location is incorrect, and no refcount operation at the function interface exists."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function processes a NOP-In completion; it obtains a local task via iscsi_itt_to_task and calls __iscsi_put_task to release a reference. The critical variable (task) is not exposed through parameters or return value – it is purely internal. Therefore, this is not a reference-count wrapper/helper at the function interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put only occurs if the task lookup succeeds; if the task is not found (NULL), the reference is already gone and retrying would not change the outcome.",
+    "contract_summary": "Put wrapper that releases a reference on the iscsi_task associated with a NOP-In completion. It looks up the task via iscsi_itt_to_task under the session back_lock and, if found, calls __iscsi_put_task to decrement its reference count. The caller must ensure the session back_lock is not already held (the function acquires/releases it). After this call, the task pointer is effectively invalid and must not be used, as its refcount may drop to zero and free the task. This function is called from the completion handler to clean up the local NOP-In response."
+  }
+}

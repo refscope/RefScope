@@ -1,0 +1,99 @@
+{
+  "function_name": "_scsih_sas_device_remove",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sas_device.s.refcount",
+      "_sas_device--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sas_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount.refcount",
+      "member_type_chain": "_sas_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sas_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.refcount.refcount",
+      "member_type_chain": "_sas_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If the list is empty the device is already removed, so retrying will not change anything and could cause a double-put.",
+  "contract_summary": "This function removes a _sas_device from the ioc's sas_device list and drops the list's reference on the device via sas_device_put. It is idempotent: calling it twice on the same device is safe (the second call finds an empty list and does nothing). After this function returns, the caller must not use the device pointer without acquiring a new reference. The function assumes the caller holds or ensures appropriate locking (spinlock around list access) to serialize removal.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to remove the _sas_device from the list and release the reference held by the list via sas_device_put. Logging and enclosure info display are ancillary.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If the list is empty the device is already removed, so retrying will not change anything and could cause a double-put.",
+      "contract_summary": "This function removes a _sas_device from the ioc's sas_device list and drops the list's reference on the device via sas_device_put. It is idempotent: calling it twice on the same device is safe (the second call finds an empty list and does nothing). After this function returns, the caller must not use the device pointer without acquiring a new reference. The function assumes the caller holds or ensures appropriate locking (spinlock around list access) to serialize removal."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sas_device.s.refcount",
+          "_sas_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sas_device.s.refcount",
+          "_sas_device--kref--refcount_t"
+        ]
+      ],
+      "reason": "sas_device_put is called on sas_device (parameter 1). The access path sas_device.s.refcount correctly traces from the parameter through the s field (struct kref) to the refcount_t member, matching the type chain _sas_device--kref--refcount_t. The put operation is consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sas_device.s.refcount",
+        "_sas_device--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If the list is empty the device is already removed, so retrying will not change anything and could cause a double-put.",
+    "contract_summary": "This function removes a _sas_device from the ioc's sas_device list and drops the list's reference on the device via sas_device_put. It is idempotent: calling it twice on the same device is safe (the second call finds an empty list and does nothing). After this function returns, the caller must not use the device pointer without acquiring a new reference. The function assumes the caller holds or ensures appropriate locking (spinlock around list access) to serialize removal."
+  }
+}

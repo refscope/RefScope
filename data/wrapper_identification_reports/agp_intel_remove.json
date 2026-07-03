@@ -1,0 +1,90 @@
+{
+  "function_name": "agp_intel_remove",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "intel_gmch_remove",
+      "get_or_put": "put",
+      "index": "intel_private",
+      "location": "global",
+      "member_access_path": "intel_private.bridge_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "intel_gtt_private--pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_gmch_remove",
+      "get_or_put": "put",
+      "index": "intel_private",
+      "location": "global",
+      "member_access_path": "intel_private.refcount",
+      "member_type_chain": "intel_gtt_private--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_gmch_remove",
+      "get_or_put": "put",
+      "index": "intel_private",
+      "location": "global",
+      "member_access_path": "intel_private.pcidev.dev.kobj.kref.refcount",
+      "member_type_chain": "intel_gtt_private--pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "intel_gmch_remove",
+      "get_or_put": "put",
+      "index": "intel_private",
+      "location": "global",
+      "member_access_path": "intel_private.bridge_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "intel_gtt_private--pci_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_gmch_remove",
+      "get_or_put": "put",
+      "index": "intel_private",
+      "location": "global",
+      "member_access_path": "intel_private.refcount",
+      "member_type_chain": "intel_gtt_private--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_gmch_remove",
+      "get_or_put": "put",
+      "index": "intel_private",
+      "location": "global",
+      "member_access_path": "intel_private.pcidev.dev.kobj.kref.refcount",
+      "member_type_chain": "intel_gtt_private--pci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Remove functions are unconditional and do not fail; retry is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is PCI device removal, not single-refcount management. The function performs multiple reference-count puts (intel_gmch_remove, agp_remove_bridge's module_put, agp_put_bridge) intermixed with cleanup logic (list_del, agp_backend_cleanup). The refcount operations are incidental parts of a broader teardown sequence, not the focused goal of the function.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Remove functions are unconditional and do not fail; retry is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Remove functions are unconditional and do not fail; retry is not applicable.",
+    "contract_summary": ""
+  }
+}

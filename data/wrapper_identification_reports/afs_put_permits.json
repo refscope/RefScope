@@ -1,0 +1,99 @@
+{
+  "function_name": "afs_put_permits",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "permits.usage.refs",
+      "afs_permits--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount_dec_and_test is atomic and definitive; once the refcount reaches zero, the object is freed. Retrying is meaningless and would lead to use-after-free.",
+  "contract_summary": "This is a put wrapper for afs_permits objects. It decrements the usage refcount. If the count reaches zero, it removes the object from the global hash table (under afs_permits_lock) and schedules an RCU callback to free the object. Caller must not use the permits pointer after calling this function, as the object may be freed asynchronously. The caller must have previously acquired a reference via a get operation or initial creation. No return value; the caller should not retry upon suspicion of failure.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the refcount on afs_permits and, on reaching zero, perform cleanup (hash removal and RCU free). Minimal non-refcount logic (hash manipulation and RCU scheduling) is intrinsic to the release lifecycle.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount_dec_and_test is atomic and definitive; once the refcount reaches zero, the object is freed. Retrying is meaningless and would lead to use-after-free.",
+      "contract_summary": "This is a put wrapper for afs_permits objects. It decrements the usage refcount. If the count reaches zero, it removes the object from the global hash table (under afs_permits_lock) and schedules an RCU callback to free the object. Caller must not use the permits pointer after calling this function, as the object may be freed asynchronously. The caller must have previously acquired a reference via a get operation or initial creation. No return value; the caller should not retry upon suspicion of failure."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "permits.usage.refs",
+          "afs_permits--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "permits.usage.refs",
+          "afs_permits--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&permits->usage) is a put operation on permits->usage. The critical variable is parameter 1 (permits). The access path permits.usage.refs and type chain afs_permits--refcount_t--atomic_t are consistent with the callee's r.refs and refcount_t--atomic_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "permits.usage.refs",
+        "afs_permits--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount_dec_and_test is atomic and definitive; once the refcount reaches zero, the object is freed. Retrying is meaningless and would lead to use-after-free.",
+    "contract_summary": "This is a put wrapper for afs_permits objects. It decrements the usage refcount. If the count reaches zero, it removes the object from the global hash table (under afs_permits_lock) and schedules an RCU callback to free the object. Caller must not use the permits pointer after calling this function, as the object may be freed asynchronously. The caller must have previously acquired a reference via a get operation or initial creation. No return value; the caller should not retry upon suspicion of failure."
+  }
+}

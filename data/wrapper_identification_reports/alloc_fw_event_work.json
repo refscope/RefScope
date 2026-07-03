@@ -1,0 +1,115 @@
+{
+  "function_name": "alloc_fw_event_work",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "fw_event.refcount.refcount.refs",
+      "fw_event_work--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount set (kref_init) is unconditional and always succeeds after allocation; retry is not applicable to the refcount operation itself.",
+  "contract_summary": "set-wrapper: allocates and initializes a new fw_event_work with an initial reference count of 1. The caller receives ownership of the object and must call kref_put (typically via a dedicated release function) to release the reference when the event is no longer needed. If allocation fails, returns NULL - caller must check the return value. The kref_init establishes the first reference; the caller is responsible for the final put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate an fw_event_work and initialize its kref refcount to 1 via kref_init. No non-refcount logic aside from allocation, which is necessary to create the object.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount set (kref_init) is unconditional and always succeeds after allocation; retry is not applicable to the refcount operation itself.",
+      "contract_summary": "set-wrapper: allocates and initializes a new fw_event_work with an initial reference count of 1. The caller receives ownership of the object and must call kref_put (typically via a dedicated release function) to release the reference when the event is no longer needed. If allocation fails, returns NULL - caller must check the return value. The kref_init establishes the first reference; the caller is responsible for the final put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "fw_event.refcount.refcount.refs",
+          "fw_event_work--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "fw_event.refcount.refcount.refs",
+          "fw_event_work--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The operation matches: kref_init sets the refcount of the allocated struct, the return value is the critical variable, and the access path from the returned object to the atomic refs field is consistent with the callee's member path and type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "fw_event.refcount.refcount.refs",
+        "fw_event_work--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount set (kref_init) is unconditional and always succeeds after allocation; retry is not applicable to the refcount operation itself.",
+    "contract_summary": "set-wrapper: allocates and initializes a new fw_event_work with an initial reference count of 1. The caller receives ownership of the object and must call kref_put (typically via a dedicated release function) to release the reference when the event is no longer needed. If allocation fails, returns NULL - caller must check the return value. The kref_init establishes the first reference; the caller is responsible for the final put."
+  }
+}

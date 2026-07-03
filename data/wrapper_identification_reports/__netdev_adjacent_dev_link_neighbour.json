@@ -1,0 +1,99 @@
+{
+  "function_name": "__netdev_adjacent_dev_link_neighbour",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "upper_dev.dev_refcnt.refs",
+      "net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__netdev_adjacent_dev_link_lists",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "upper_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__netdev_adjacent_dev_link_lists",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "upper_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the underlying put operation fails (e.g., object already freed), retrying would either be a double-put or futile; the error indicates a state that cannot be recovered by retry.",
+  "contract_summary": "This function is a put-wrapper that decrements the reference count of the upper_dev network device by calling __netdev_adjacent_dev_link_lists. It removes an adjacency link from the neighbor lists. The caller must have previously acquired a reference on upper_dev (e.g., via a corresponding get) and must not use upper_dev after this call returns a failure. On success, the reference is released; on failure, the caller should handle the error appropriately without further use of upper_dev.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call __netdev_adjacent_dev_link_lists which, according to provided callee information, is a put function that decrements the refcount of upper_dev. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the underlying put operation fails (e.g., object already freed), retrying would either be a double-put or futile; the error indicates a state that cannot be recovered by retry.",
+      "contract_summary": "This function is a put-wrapper that decrements the reference count of the upper_dev network device by calling __netdev_adjacent_dev_link_lists. It removes an adjacency link from the neighbor lists. The caller must have previously acquired a reference on upper_dev (e.g., via a corresponding get) and must not use upper_dev after this call returns a failure. On success, the reference is released; on failure, the caller should handle the error appropriately without further use of upper_dev."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "upper_dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "upper_dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The callee __netdev_adjacent_dev_link_lists decrements a reference count on its parameter 2, which in the caller is parameter 2 (upper_dev). The access path upper_dev.dev_refcnt.refs and type chain net_device--refcount_t--atomic_t are consistent with the struct definition, and segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "upper_dev.dev_refcnt.refs",
+        "net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the underlying put operation fails (e.g., object already freed), retrying would either be a double-put or futile; the error indicates a state that cannot be recovered by retry.",
+    "contract_summary": "This function is a put-wrapper that decrements the reference count of the upper_dev network device by calling __netdev_adjacent_dev_link_lists. It removes an adjacency link from the neighbor lists. The caller must have previously acquired a reference on upper_dev (e.g., via a corresponding get) and must not use upper_dev after this call returns a failure. On success, the reference is released; on failure, the caller should handle the error appropriately without further use of upper_dev."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "ar5523_tx_work_locked",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No retry needed because the function is not a get/put wrapper; the refcount operations on error paths are one-time cleanup actions.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of ar5523_tx_work_locked is to process pending TX frames, allocate and submit URBs, and handle errors; reference-count operations like usb_free_urb and ar5523_data_tx_pkt_put are only invoked in error handling and are not the main focus.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No retry needed because the function is not a get/put wrapper; the refcount operations on error paths are one-time cleanup actions.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No retry needed because the function is not a get/put wrapper; the refcount operations on error paths are one-time cleanup actions.",
+    "contract_summary": ""
+  }
+}

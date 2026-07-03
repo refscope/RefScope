@@ -1,0 +1,58 @@
+{
+  "function_name": "__lookup_free_space_inode",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure of the B-tree search (ENOENT) or inode lookup is due to persistent on-disk state; retrying without changing the offset or root will not succeed.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to look up a free space inode via a B-tree search and extract its key, not merely to manage a reference count. It includes substantial non-refcount logic: btrfs_search_slot, key extraction, path management, NOFS flag preservation, and mapping flag adjustment. The call to btrfs_iget_path (which acquires a reference) is only one step in a broader lookup procedure.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure of the B-tree search (ENOENT) or inode lookup is due to persistent on-disk state; retrying without changing the offset or root will not succeed.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure of the B-tree search (ENOENT) or inode lookup is due to persistent on-disk state; retrying without changing the offset or root will not succeed.",
+    "contract_summary": ""
+  }
+}

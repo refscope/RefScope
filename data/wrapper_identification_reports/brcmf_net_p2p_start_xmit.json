@@ -1,0 +1,99 @@
+{
+  "function_name": "brcmf_net_p2p_start_xmit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional when skb is non-NULL and always succeeds; the caller cannot retry because the skb is freed and pointer is gone.",
+  "contract_summary": "This is a net_device start_xmit handler that unconditionally consumes and releases the skb via dev_kfree_skb_any (a refcount put). The caller (networking stack) passes ownership of the skb to this function, and after return the skb must not be used. This is a dummy transmit operation that always succeeds (returns NETDEV_TX_OK) and never fails; no retry is possible or necessary.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function body is a conditional call to dev_kfree_skb_any (a refcount put on skb). It releases the skb reference passed by the caller, with no other logic. This is a pure put wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional when skb is non-NULL and always succeeds; the caller cannot retry because the skb is freed and pointer is gone.",
+      "contract_summary": "This is a net_device start_xmit handler that unconditionally consumes and releases the skb via dev_kfree_skb_any (a refcount put). The caller (networking stack) passes ownership of the skb to this function, and after return the skb must not be used. This is a dummy transmit operation that always succeeds (returns NETDEV_TX_OK) and never fails; no retry is possible or necessary."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb_any(skb) is called on the skb parameter, which is a put operation on skb's users refcount. The access path and type chain are consistent with the callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional when skb is non-NULL and always succeeds; the caller cannot retry because the skb is freed and pointer is gone.",
+    "contract_summary": "This is a net_device start_xmit handler that unconditionally consumes and releases the skb via dev_kfree_skb_any (a refcount put). The caller (networking stack) passes ownership of the skb to this function, and after return the skb must not be used. This is a dummy transmit operation that always succeeds (returns NETDEV_TX_OK) and never fails; no retry is possible or necessary."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_iter_unix_put_batch",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "iter.batch[0].sk_refcnt.refs",
+      "bpf_unix_iter_state--sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "sock_put is a void function that unconditionally decrements the socket refcount. There is no failure case or condition to retry.",
+  "contract_summary": "Batch put wrapper: releases ownership of a set of socket references stored in iter->batch[iter->cur_sk ... iter->end_sk). The function increments iter->cur_sk as it processes each socket. After this call, the caller must not use any of those socket pointers again, as their references have been released and the sockets may have been freed. This function is typically used to clean up the batch array after iterating over sockets in a BPF iterator. No return value or error handling is provided; all entries are assumed valid and eligible for sock_put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release references on a batch of sockets by calling sock_put on each. There is no other logic—just a loop over the batch.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "sock_put is a void function that unconditionally decrements the socket refcount. There is no failure case or condition to retry.",
+      "contract_summary": "Batch put wrapper: releases ownership of a set of socket references stored in iter->batch[iter->cur_sk ... iter->end_sk). The function increments iter->cur_sk as it processes each socket. After this call, the caller must not use any of those socket pointers again, as their references have been released and the sockets may have been freed. This function is typically used to clean up the batch array after iterating over sockets in a BPF iterator. No return value or error handling is provided; all entries are assumed valid and eligible for sock_put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "iter.batch[0].sk_refcnt.refs",
+          "bpf_unix_iter_state--sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "iter.batch[0].sk_refcnt.refs",
+          "bpf_unix_iter_state--sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls sock_put on each element of iter->batch, decrementing the refcount. The access path iter.batch[0].sk_refcnt.refs correctly starts from the parameter iter and reaches the refcount field via the batch array and sk_refcnt. The type chain and segment count are consistent with the callee information and code structure."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "iter.batch[0].sk_refcnt.refs",
+        "bpf_unix_iter_state--sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "sock_put is a void function that unconditionally decrements the socket refcount. There is no failure case or condition to retry.",
+    "contract_summary": "Batch put wrapper: releases ownership of a set of socket references stored in iter->batch[iter->cur_sk ... iter->end_sk). The function increments iter->cur_sk as it processes each socket. After this call, the caller must not use any of those socket pointers again, as their references have been released and the sockets may have been freed. This function is typically used to clean up the batch array after iterating over sockets in a BPF iterator. No return value or error handling is provided; all entries are assumed valid and eligible for sock_put."
+  }
+}

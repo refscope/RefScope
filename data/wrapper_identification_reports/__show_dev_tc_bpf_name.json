@@ -1,0 +1,58 @@
+{
+  "function_name": "__show_dev_tc_bpf_name",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_get_fd_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_get_fd_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure of bpf_prog_get_fd_by_id indicates the program with the given id does not exist or is inaccessible, which is not transient under normal circumstances; retrying with the same id would also fail.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to retrieve the name of a BPF program given its ID, not to manage reference counts. It temporarily acquires and releases a file descriptor (and thus a refcount) internally, but does not expose any reference-counted object to the caller. The refcount operation is incidental to the main goal of string extraction.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure of bpf_prog_get_fd_by_id indicates the program with the given id does not exist or is inaccessible, which is not transient under normal circumstances; retrying with the same id would also fail.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure of bpf_prog_get_fd_by_id indicates the program with the given id does not exist or is inaccessible, which is not transient under normal circumstances; retrying with the same id would also fail.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__lapb_remove_cb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "lapb.refcnt.refs",
+      "lapb_cb--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "lapb_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lapb.refcnt.refs",
+      "member_type_chain": "lapb_cb--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "lapb_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "lapb.refcnt.refs",
+      "member_type_chain": "lapb_cb--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operation is unconditional once node is in list; if not in list it's a no-op; retry would not change outcome.",
+  "contract_summary": "Removes the lapb_cb from its list (if linked) and releases the reference count that the list held via lapb_put. After this call, the lapb_cb may be freed if the reference count reaches zero; the caller must not access the lapb_cb afterward. If the lapb_cb is not in a list (node.next NULL), the function is a no-op. This is a put wrapper that also performs the necessary list deletion before releasing the reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to drop a reference on lapb_cb (via lapb_put) after removing it from its list; list removal is necessary but secondary to the refcount operation.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operation is unconditional once node is in list; if not in list it's a no-op; retry would not change outcome.",
+      "contract_summary": "Removes the lapb_cb from its list (if linked) and releases the reference count that the list held via lapb_put. After this call, the lapb_cb may be freed if the reference count reaches zero; the caller must not access the lapb_cb afterward. If the lapb_cb is not in a list (node.next NULL), the function is a no-op. This is a put wrapper that also performs the necessary list deletion before releasing the reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "lapb.refcnt.refs",
+          "lapb_cb--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "lapb.refcnt.refs",
+          "lapb_cb--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "lapb_put(lapb) is called on parameter 1; access path 'lapb.refcnt.refs' matches lapb->refcnt.refs; type chain 'lapb_cb--refcount_t--atomic_t' and segment counts (3 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "lapb.refcnt.refs",
+        "lapb_cb--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operation is unconditional once node is in list; if not in list it's a no-op; retry would not change outcome.",
+    "contract_summary": "Removes the lapb_cb from its list (if linked) and releases the reference count that the list held via lapb_put. After this call, the lapb_cb may be freed if the reference count reaches zero; the caller must not access the lapb_cb afterward. If the lapb_cb is not in a list (node.next NULL), the function is a no-op. This is a put wrapper that also performs the necessary list deletion before releasing the reference."
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "function_name": "_cifsFileInfo_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cifs_file.count",
+      "cifsFileInfo--unsigned_int"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cifs_file.tlink.tl_tcon.tc_count",
+      "cifsFileInfo--tcon_link--cifs_tcon--int"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "cifs_file.tlink.tl_count",
+      "cifsFileInfo--tcon_link--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "cifsFileInfo_put_final",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cifs_file.tlink.tl_tcon.tc_count",
+      "member_type_chain": "cifsFileInfo--tcon_link--cifs_tcon--int"
+    },
+    {
+      "callee_function_name": "cifsFileInfo_put_final",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cifs_file.tlink.tl_count",
+      "member_type_chain": "cifsFileInfo--tcon_link--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "cifsFileInfo_put_final",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cifs_file.tlink.tl_tcon.tc_count",
+      "member_type_chain": "cifsFileInfo--tcon_link--cifs_tcon--int"
+    },
+    {
+      "callee_function_name": "cifsFileInfo_put_final",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cifs_file.tlink.tl_count",
+      "member_type_chain": "cifsFileInfo--tcon_link--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount decrement always occurs; there is no failure mode that would benefit from retry. If the count reaches zero, the object proceeds to destruction, and retrying is meaningless.",
+  "contract_summary": "This function is a put wrapper for struct cifsFileInfo. It decrements the file's reference count and, if the count reaches zero, performs final cleanup: removing the file from lists, decrementing the number of local opens, optionally closing the server handle (with fallback to workqueue if close fails or is deferred), handling oplock break cancellation, and ultimately calling cifsFileInfo_put_final to release the underlying tcon_link and cifs_tcon references. The caller must not use the cifsFileInfo object after calling this function. If offload is set and server close is not offloaded, the final put may be scheduled on a workqueue; otherwise it is called synchronously. This function does not return a value and its refcount decrement is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release a reference on a cifsFileInfo object; the early return when count >0 is a pure refcount operation, and the remaining code performs final cleanup (close server handle, handle oplock break, offload work) which is part of the put contract for this object. Although cleanup includes significant logic, it is inherent to the put operation.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount decrement always occurs; there is no failure mode that would benefit from retry. If the count reaches zero, the object proceeds to destruction, and retrying is meaningless.",
+      "contract_summary": "This function is a put wrapper for struct cifsFileInfo. It decrements the file's reference count and, if the count reaches zero, performs final cleanup: removing the file from lists, decrementing the number of local opens, optionally closing the server handle (with fallback to workqueue if close fails or is deferred), handling oplock break cancellation, and ultimately calling cifsFileInfo_put_final to release the underlying tcon_link and cifs_tcon references. The caller must not use the cifsFileInfo object after calling this function. If offload is set and server close is not offloaded, the final put may be scheduled on a workqueue; otherwise it is called synchronously. This function does not return a value and its refcount decrement is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cifs_file.count",
+          "cifsFileInfo--unsigned_int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cifs_file.tlink.tl_tcon.tc_count",
+          "cifsFileInfo--tcon_link--cifs_tcon--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cifs_file.tlink.tl_count",
+          "cifsFileInfo--tcon_link--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cifs_file.count",
+          "cifsFileInfo--unsigned_int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cifs_file.tlink.tl_tcon.tc_count",
+          "cifsFileInfo--tcon_link--cifs_tcon--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "cifs_file.tlink.tl_count",
+          "cifsFileInfo--tcon_link--atomic_t"
+        ]
+      ],
+      "reason": "The function directly decrements cifs_file->count (put on count). It also calls cifsFileInfo_put_final which performs puts on cifs_file.tlink.tl_tcon.tc_count and cifs_file.tlink.tl_count as per callee info. All access paths and type chains are consistent with parameter 1."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cifs_file.count",
+        "cifsFileInfo--unsigned_int"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cifs_file.tlink.tl_tcon.tc_count",
+        "cifsFileInfo--tcon_link--cifs_tcon--int"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "cifs_file.tlink.tl_count",
+        "cifsFileInfo--tcon_link--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount decrement always occurs; there is no failure mode that would benefit from retry. If the count reaches zero, the object proceeds to destruction, and retrying is meaningless.",
+    "contract_summary": "This function is a put wrapper for struct cifsFileInfo. It decrements the file's reference count and, if the count reaches zero, performs final cleanup: removing the file from lists, decrementing the number of local opens, optionally closing the server handle (with fallback to workqueue if close fails or is deferred), handling oplock break cancellation, and ultimately calling cifsFileInfo_put_final to release the underlying tcon_link and cifs_tcon references. The caller must not use the cifsFileInfo object after calling this function. If offload is set and server close is not offloaded, the final put may be scheduled on a workqueue; otherwise it is called synchronously. This function does not return a value and its refcount decrement is unconditional."
+  }
+}

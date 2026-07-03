@@ -1,0 +1,99 @@
+{
+  "function_name": "__find_cxl_port",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "cxl_port.dev.kobj.kref.refcount",
+      "cxl_port--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Failure to find a matching device is not permanent; the device may appear later (e.g., after hotplug), so the caller may retry if appropriate.",
+  "contract_summary": "Get-wrapper that looks up a CXL port device by its downstream port (dport_dev) and returns it with an incremented reference count. The caller MUST check the return value for NULL. If successful, the caller is responsible for releasing the reference by putting the returned cxl_port via the appropriate put_device or cxl_port_put function. The wrapper does not create a new object; it only acquires a reference to an existing one. The lookup depends on the bus's device registration state; a NULL return means no matching device was found at that moment.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to a cxl_port device via bus_find_device and return it to the caller. The only non-refcount logic is a trivial NULL check on ctx->dport_dev.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Failure to find a matching device is not permanent; the device may appear later (e.g., after hotplug), so the caller may retry if appropriate.",
+      "contract_summary": "Get-wrapper that looks up a CXL port device by its downstream port (dport_dev) and returns it with an incremented reference count. The caller MUST check the return value for NULL. If successful, the caller is responsible for releasing the reference by putting the returned cxl_port via the appropriate put_device or cxl_port_put function. The wrapper does not create a new object; it only acquires a reference to an existing one. The lookup depends on the bus's device registration state; a NULL return means no matching device was found at that moment."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "cxl_port.dev.kobj.kref.refcount",
+          "cxl_port--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "cxl_port.dev.kobj.kref.refcount",
+          "cxl_port--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation 'get' is correct; bus_find_device increments the refcount on the returned device. The access path cxl_port.dev.kobj.kref.refcount traces from the return value (cxl_port) to the refcount field via the embedded device, matching the callee's member-access path. The type chain cxl_port--device--kobject--kref--refcount_t is consistent with struct definitions. Segment count (5) matches."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "cxl_port.dev.kobj.kref.refcount",
+        "cxl_port--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Failure to find a matching device is not permanent; the device may appear later (e.g., after hotplug), so the caller may retry if appropriate.",
+    "contract_summary": "Get-wrapper that looks up a CXL port device by its downstream port (dport_dev) and returns it with an incremented reference count. The caller MUST check the return value for NULL. If successful, the caller is responsible for releasing the reference by putting the returned cxl_port via the appropriate put_device or cxl_port_put function. The wrapper does not create a new object; it only acquires a reference to an existing one. The lookup depends on the bus's device registration state; a NULL return means no matching device was found at that moment."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_inc_nocow_writers",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bg.nocow_writers",
+      "btrfs_block_group--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_lookup_block_group",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "block_group.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_lookup_block_group",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "block_group.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure due to block group being read-only is likely persistent for the operation; retrying without waiting for the RO condition to change would not succeed.",
+  "contract_summary": "This function acquires a nocow_writers reference on a block group, conditionally incrementing the nocow_writers counter if the block group is not read-only. It returns the block group with an additional reference (from btrfs_lookup_block_group) that must be released via btrfs_dec_nocow_writers() when done. If the block group is read-only, it returns NULL after dropping the block group reference. Callers must check the return value and only call btrfs_dec_nocow_writers on non-NULL returns. The operation is protected by the block group's spinlock.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally increment the nocow_writers atomic counter on a block group and return the block group with an acquired reference; the lock and RO check are necessary preconditions for the refcount operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure due to block group being read-only is likely persistent for the operation; retrying without waiting for the RO condition to change would not succeed.",
+      "contract_summary": "This function acquires a nocow_writers reference on a block group, conditionally incrementing the nocow_writers counter if the block group is not read-only. It returns the block group with an additional reference (from btrfs_lookup_block_group) that must be released via btrfs_dec_nocow_writers() when done. If the block group is read-only, it returns NULL after dropping the block group reference. Callers must check the return value and only call btrfs_dec_nocow_writers on non-NULL returns. The operation is protected by the block group's spinlock."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bg.nocow_writers",
+          "btrfs_block_group--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bg.nocow_writers",
+          "btrfs_block_group--atomic_t"
+        ]
+      ],
+      "reason": "The atomic_inc on bg->nocow_writers increments the reference count of the returned block group object. The access path bg.nocow_writers from the return variable is correct, and the type chain btrfs_block_group--atomic_t matches the struct definition. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bg.nocow_writers",
+        "btrfs_block_group--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure due to block group being read-only is likely persistent for the operation; retrying without waiting for the RO condition to change would not succeed.",
+    "contract_summary": "This function acquires a nocow_writers reference on a block group, conditionally incrementing the nocow_writers counter if the block group is not read-only. It returns the block group with an additional reference (from btrfs_lookup_block_group) that must be released via btrfs_dec_nocow_writers() when done. If the block group is read-only, it returns NULL after dropping the block group reference. Callers must check the return value and only call btrfs_dec_nocow_writers on non-NULL returns. The operation is protected by the block group's spinlock."
+  }
+}

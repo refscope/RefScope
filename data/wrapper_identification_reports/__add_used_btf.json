@@ -1,0 +1,99 @@
+{
+  "function_name": "__add_used_btf",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "btf.refcnt.refs",
+      "btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failures are caused by permanent conditions (duplicate, max limit, module gone) that retrying the same BTF will not resolve.",
+  "contract_summary": "This function takes ownership of a BTF reference from the caller and registers it into the verifier environment's used BTFs array. On success, the environment holds the reference and the caller must not use the BTF pointer further. On failure (duplicate, capacity exceeded, module lookup failure), the reference is still consumed (released via btf_put) and an error code is returned. The caller must check the return value; regardless of the return, the caller's reference is always invalidated after the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to manage a BTF reference by either storing it (consuming caller's reference) or dropping it on duplicates/error; validation of duplicates and capacity is directly part of refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failures are caused by permanent conditions (duplicate, max limit, module gone) that retrying the same BTF will not resolve.",
+      "contract_summary": "This function takes ownership of a BTF reference from the caller and registers it into the verifier environment's used BTFs array. On success, the environment holds the reference and the caller must not use the BTF pointer further. On failure (duplicate, capacity exceeded, module lookup failure), the reference is still consumed (released via btf_put) and an error code is returned. The caller must check the return value; regardless of the return, the caller's reference is always invalidated after the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "btf.refcnt.refs",
+          "btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "btf.refcnt.refs",
+          "btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btf_put(btf) is called on the parameter btf at the ret_put label. The access path btf.refcnt.refs and type chain btf--refcount_t--atomic_t exactly match the callee information and the code (btf is a struct btf containing a refcount_t field refcnt, which holds an atomic_t refs)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "btf.refcnt.refs",
+        "btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failures are caused by permanent conditions (duplicate, max limit, module gone) that retrying the same BTF will not resolve.",
+    "contract_summary": "This function takes ownership of a BTF reference from the caller and registers it into the verifier environment's used BTFs array. On success, the environment holds the reference and the caller must not use the BTF pointer further. On failure (duplicate, capacity exceeded, module lookup failure), the reference is still consumed (released via btf_put) and an error code is returned. The caller must check the return value; regardless of the return, the caller's reference is always invalidated after the call."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__sctp_rcv_lookup_endpoint",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ep.base.refcnt.refs",
+      "sctp_endpoint--sctp_ep_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sctp_endpoint_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ep.base.refcnt.refs",
+      "member_type_chain": "sctp_endpoint--sctp_ep_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sctp_endpoint_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ep.base.refcnt.refs",
+      "member_type_chain": "sctp_endpoint--sctp_ep_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The hold operation is unconditional and always succeeds; no failure path exists that would require retrying.",
+  "contract_summary": "Acquires a reference on an SCTP endpoint by incrementing its refcount. The endpoint is looked up in the per-net hashtable by laddr and lport, with fallback to the control socket's endpoint if no match is found. The caller receives a referenced endpoint pointer and must release it with a corresponding sctp_endpoint_put when done. The function holds the hash bucket read lock during the lookup and reference acquisition, ensuring proper synchronization. Note: if the returned endpoint originated from the control socket, the caller also obtains a reference that must be released; the control socket endpoint is not a singleton that escapes refcounting.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an SCTP endpoint and acquire a reference via sctp_endpoint_hold. All non-refcount logic (hash chain iteration, reuseport selection) serves to locate the endpoint to be held. The function always returns an endpoint with an incremented reference count.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The hold operation is unconditional and always succeeds; no failure path exists that would require retrying.",
+      "contract_summary": "Acquires a reference on an SCTP endpoint by incrementing its refcount. The endpoint is looked up in the per-net hashtable by laddr and lport, with fallback to the control socket's endpoint if no match is found. The caller receives a referenced endpoint pointer and must release it with a corresponding sctp_endpoint_put when done. The function holds the hash bucket read lock during the lookup and reference acquisition, ensuring proper synchronization. Note: if the returned endpoint originated from the control socket, the caller also obtains a reference that must be released; the control socket endpoint is not a singleton that escapes refcounting."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ep.base.refcnt.refs",
+          "sctp_endpoint--sctp_ep_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ep.base.refcnt.refs",
+          "sctp_endpoint--sctp_ep_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "sctp_endpoint_hold(ep) is called on ep before returning, and the access path ep.base.refcnt.refs matches the callee info. The type chain is consistent: sctp_endpoint->sctp_ep_common->refcount_t->atomic_t. Segment count (4) matches type chain count (4). The return value is the held ep, so location 'return' index '0' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ep.base.refcnt.refs",
+        "sctp_endpoint--sctp_ep_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The hold operation is unconditional and always succeeds; no failure path exists that would require retrying.",
+    "contract_summary": "Acquires a reference on an SCTP endpoint by incrementing its refcount. The endpoint is looked up in the per-net hashtable by laddr and lport, with fallback to the control socket's endpoint if no match is found. The caller receives a referenced endpoint pointer and must release it with a corresponding sctp_endpoint_put when done. The function holds the hash bucket read lock during the lookup and reference acquisition, ensuring proper synchronization. Note: if the returned endpoint originated from the control socket, the caller also obtains a reference that must be released; the control socket endpoint is not a singleton that escapes refcounting."
+  }
+}

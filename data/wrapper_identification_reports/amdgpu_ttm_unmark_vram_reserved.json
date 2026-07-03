@@ -1,0 +1,106 @@
+{
+  "function_name": "amdgpu_ttm_unmark_vram_reserved",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "0",
+      "adev.mman.resv_region[id].bo.tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function frees a BO; if the BO pointer is NULL it's a no-op. A put operation on a already freed object would be a use-after-free bug, so retry is not applicable.",
+  "contract_summary": "Releases a VRAM reservation by calling amdgpu_bo_free_kernel on the associated BO, which decrements its refcount and potentially frees it. The reservation struct is zeroed after the call. This is a put wrapper: the caller must ensure that the reservation has been previously marked (e.g., by amdgpu_ttm_mark_vram_reserved) and must not access the reservation after this call. The function is safe to call on already-cleared reservations (NULL BO pointer results in a no-op).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a VRAM reservation BO via amdgpu_bo_free_kernel (a put function), and zero out the reservation struct. No other significant logic besides null and bounds checks.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function frees a BO; if the BO pointer is NULL it's a no-op. A put operation on a already freed object would be a use-after-free bug, so retry is not applicable.",
+      "contract_summary": "Releases a VRAM reservation by calling amdgpu_bo_free_kernel on the associated BO, which decrements its refcount and potentially frees it. The reservation struct is zeroed after the call. This is a put wrapper: the caller must ensure that the reservation has been previously marked (e.g., by amdgpu_ttm_mark_vram_reserved) and must not access the reservation after this call. The function is safe to call on already-cleared reservations (NULL BO pointer results in a no-op)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.mman.resv_region[id].bo.tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_mman--amdgpu_vram_resv--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable is the `bo` field inside `resv` derived from parameter `adev` (parameter 0), but the candidate incorrectly labels the location as 'parameter', '1' (which is `id`). The access path starts from `adev`, not from `id`, so the location index is wrong. According to the rule, if the critical variable index is wrong, all operations depending on it are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "0",
+          "adev.mman.resv_region[id].bo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The check was overly strict: the candidate operation correctly identified the access path and direction ('put') but used the wrong parameter index (1 instead of 0). The critical variable (bo's refcount) is derived from adev (parameter 0), not from id. The function is a focused put wrapper that frees a bo and clears the vram reservation state. Correcting the parameter index resolves the conflict."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "0",
+        "adev.mman.resv_region[id].bo.tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function frees a BO; if the BO pointer is NULL it's a no-op. A put operation on a already freed object would be a use-after-free bug, so retry is not applicable.",
+    "contract_summary": "Releases a VRAM reservation by calling amdgpu_bo_free_kernel on the associated BO, which decrements its refcount and potentially frees it. The reservation struct is zeroed after the call. This is a put wrapper: the caller must ensure that the reservation has been previously marked (e.g., by amdgpu_ttm_mark_vram_reserved) and must not access the reservation after this call. The function is safe to call on already-cleared reservations (NULL BO pointer results in a no-op)."
+  }
+}

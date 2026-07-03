@@ -1,0 +1,58 @@
+{
+  "function_name": "__i915_gem_object_lock",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_gem_object_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_gem_object_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "On EDEADLK the caller should retry after handling the deadlock; on other errors retry may be appropriate if transient.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is dma_resv lock acquisition with ww context, not reference-count management. The refcount increment (i915_gem_object_get) is incidental to the lock operation, occurring only on certain paths.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "On EDEADLK the caller should retry after handling the deadlock; on other errors retry may be appropriate if transient.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "On EDEADLK the caller should retry after handling the deadlock; on other errors retry may be appropriate if transient.",
+    "contract_summary": ""
+  }
+}

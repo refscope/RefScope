@@ -1,0 +1,122 @@
+{
+  "function_name": "amdxdna_gem_prime_export",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "gobj.refcount.refcount",
+      "drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "exp_info.priv.refcount.refcount",
+      "member_type_chain": "dma_buf_export_info--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "exp_info.priv.refcount.refcount",
+      "member_type_chain": "dma_buf_export_info--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure due to private_buffer is permanent; failure from drm_gem_dmabuf_export (e.g., memory allocation) is not indicated as retryable by the wrapper and typically not retried by callers.",
+  "contract_summary": "This function exports a DRM GEM object as a dma-buf. It either acquires an additional reference on an already-exported dma_buf (via get_dma_buf) or creates a new export (via drm_gem_dmabuf_export, which initializes the refcount of the GEM object and device). The caller receives a dma_buf with one reference and must call dma_buf_put when done. The function fails with -EOPNOTSUPP if the buffer is marked private (not exportable). Caller must check the return value for errors.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to manage dma-buf reference: either bump refcount on existing dma_buf via get_dma_buf, or create a new one via drm_gem_dmabuf_export (which initializes refcounts). The only minor non-refcount logic is the early private_buffer check and exp_info setup, which are necessary scaffolding.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure due to private_buffer is permanent; failure from drm_gem_dmabuf_export (e.g., memory allocation) is not indicated as retryable by the wrapper and typically not retried by callers.",
+      "contract_summary": "This function exports a DRM GEM object as a dma-buf. It either acquires an additional reference on an already-exported dma_buf (via get_dma_buf) or creates a new export (via drm_gem_dmabuf_export, which initializes the refcount of the GEM object and device). The caller receives a dma_buf with one reference and must call dma_buf_put when done. The function fails with -EOPNOTSUPP if the buffer is marked private (not exportable). Caller must check the return value for errors."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "gobj.dev.ref.refcount",
+          "drm_gem_object--drm_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "gobj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first candidate correctly captures the refcount increment on the gem object (gobj) via drm_gem_dmabuf_export. The second candidate incorrectly uses parameter 1 (gobj) as the starting object for a refcount on the drm_device; the critical variable for that get operation is the device itself (gobj->dev), which is not a direct interface of amdxdna_gem_prime_export, so it is rejected."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "gobj.refcount.refcount",
+        "drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure due to private_buffer is permanent; failure from drm_gem_dmabuf_export (e.g., memory allocation) is not indicated as retryable by the wrapper and typically not retried by callers.",
+    "contract_summary": "This function exports a DRM GEM object as a dma-buf. It either acquires an additional reference on an already-exported dma_buf (via get_dma_buf) or creates a new export (via drm_gem_dmabuf_export, which initializes the refcount of the GEM object and device). The caller receives a dma_buf with one reference and must call dma_buf_put when done. The function fails with -EOPNOTSUPP if the buffer is marked private (not exportable). Caller must check the return value for errors."
+  }
+}

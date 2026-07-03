@@ -1,0 +1,107 @@
+{
+  "function_name": "amdgpu_ctx_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ctx.refcount.refcount",
+      "amdgpu_ctx--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL return) means the ID was not found in the IDR. The object may have been freed or never existed; retrying with the same ID will not change the result.",
+  "contract_summary": "This get-wrapper acquires a reference on an amdgpu_ctx by its ID. The caller must later call amdgpu_ctx_put to release the reference. The function returns NULL if the ID is not found, indicating the context does not exist or has been removed. The lookup is protected by a mutex, ensuring thread safety.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an amdgpu_ctx by ID and increment its reference count via kref_get. The only non-refcount logic is the IDR lookup, which is necessary to find the object. This is a classic get-wrapper pattern.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL return) means the ID was not found in the IDR. The object may have been freed or never existed; retrying with the same ID will not change the result.",
+      "contract_summary": "This get-wrapper acquires a reference on an amdgpu_ctx by its ID. The caller must later call amdgpu_ctx_put to release the reference. The function returns NULL if the ID is not found, indicating the context does not exist or has been removed. The lookup is protected by a mutex, ensuring thread safety."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ctx.refcount.refcount",
+          "amdgpu_ctx--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ctx.refcount.refcount",
+          "amdgpu_ctx--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&ctx->refcount) is called when ctx is found; ctx is returned. The access path from return value ctx to the refcount field is ctx.refcount (struct kref) then .refcount (refcount_t), matching the path 'ctx.refcount.refcount' and type chain 'amdgpu_ctx--kref--refcount_t'. Segment count matches."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ctx.refcount.refcount",
+        "amdgpu_ctx--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL return) means the ID was not found in the IDR. The object may have been freed or never existed; retrying with the same ID will not change the result.",
+    "contract_summary": "This get-wrapper acquires a reference on an amdgpu_ctx by its ID. The caller must later call amdgpu_ctx_put to release the reference. The function returns NULL if the ID is not found, indicating the context does not exist or has been removed. The lookup is protected by a mutex, ensuring thread safety."
+  }
+}

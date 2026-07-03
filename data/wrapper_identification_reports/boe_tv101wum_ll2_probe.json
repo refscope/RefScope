@@ -1,0 +1,74 @@
+{
+  "function_name": "boe_tv101wum_ll2_probe",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "devm_regulator_bulk_get_const",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "*out_consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_panel_of_backlight",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "backlight.dev.kobj.kref.refcount",
+      "member_type_chain": "backlight_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "devm_regulator_bulk_get_const",
+      "get_or_put": "get",
+      "index": "4",
+      "location": "parameter",
+      "member_access_path": "*out_consumers.consumer.rdev.dev.kobj.kref.refcount",
+      "member_type_chain": "regulator_bulk_data--regulator--regulator_dev--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_panel_of_backlight",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "backlight.dev.kobj.kref.refcount",
+      "member_type_chain": "backlight_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — the function is not a refcount wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a MIPI DSI panel probe that performs multiple initialization steps (allocating panel context, getting regulators, GPIO, setting up DSI, getting backlight, adding panel, attaching to DSI host). The refcount operations are incidental side effects of resource management functions (devm_ and drm_ calls), not the primary purpose. No critical variable is passed to the caller; the function returns an int error code. It is not a refcount get/put/set wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — the function is not a refcount wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — the function is not a refcount wrapper.",
+    "contract_summary": ""
+  }
+}

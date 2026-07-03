@@ -1,0 +1,138 @@
+{
+  "function_name": "btrfs_next_block_group",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cache.refs.refs",
+      "btrfs_block_group--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_lookup_first_block_group",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_lookup_first_block_group",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_block_group",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_block_group",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cache.refs.refs",
+      "member_type_chain": "btrfs_block_group--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Returning NULL means no next block group exists at that point in the tree under the current snapshot; retrying without changes to the tree will produce the same result.",
+  "contract_summary": "Iterator-step wrapper that releases the reference on the current btrfs_block_group (the 'cache' parameter) and returns the next block group with an acquired reference. The caller must eventually call btrfs_put_block_group() on the returned pointer to release the reference. If the original block group was removed from the tree, the function performs a full-position search (via btrfs_lookup_first_block_group) rather than an rb_next walk. The caller must not use the previous block group after calling this function, as its reference has been dropped. Designed for use in loops: typically start with btrfs_first_block_group() and then call btrfs_next_block_group() until NULL. The function internally acquires and releases a read lock on block_group_cache_lock to ensure safe tree traversal.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to advance an iterator over block groups while managing references: always puts the current block group and gets the next one (or does a full lookup if removed). Traversal logic (RB tree lookups, condition checks) is integral to the iteration but refcount acquire/release is the core contract.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Returning NULL means no next block group exists at that point in the tree under the current snapshot; retrying without changes to the tree will produce the same result.",
+      "contract_summary": "Iterator-step wrapper that releases the reference on the current btrfs_block_group (the 'cache' parameter) and returns the next block group with an acquired reference. The caller must eventually call btrfs_put_block_group() on the returned pointer to release the reference. If the original block group was removed from the tree, the function performs a full-position search (via btrfs_lookup_first_block_group) rather than an rb_next walk. The caller must not use the previous block group after calling this function, as its reference has been dropped. Designed for use in loops: typically start with btrfs_first_block_group() and then call btrfs_next_block_group() until NULL. The function internally acquires and releases a read lock on block_group_cache_lock to ensure safe tree traversal."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cache.refs.refs",
+          "btrfs_block_group--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The put operation on parameter 1 is validated as btrfs_put_block_group is called on the input cache. The get operation on return is rejected because its access path 'cache.refs.refs' does not correctly trace from the return value to the refcount field for all return paths (in the if branch, the return value is from btrfs_lookup_first_block_group and is not stored in the local variable cache), leading to an inconsistent path."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cache.refs.refs",
+        "btrfs_block_group--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Returning NULL means no next block group exists at that point in the tree under the current snapshot; retrying without changes to the tree will produce the same result.",
+    "contract_summary": "Iterator-step wrapper that releases the reference on the current btrfs_block_group (the 'cache' parameter) and returns the next block group with an acquired reference. The caller must eventually call btrfs_put_block_group() on the returned pointer to release the reference. If the original block group was removed from the tree, the function performs a full-position search (via btrfs_lookup_first_block_group) rather than an rb_next walk. The caller must not use the previous block group after calling this function, as its reference has been dropped. Designed for use in loops: typically start with btrfs_first_block_group() and then call btrfs_next_block_group() until NULL. The function internally acquires and releases a read lock on block_group_cache_lock to ensure safe tree traversal."
+  }
+}

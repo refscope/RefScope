@@ -1,0 +1,122 @@
+{
+  "function_name": "_of_clear_opp",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "opp.required_opps[i].kref.refcount",
+      "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "_of_opp_free_required_opps",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "opp.required_opps[i].kref.refcount",
+      "member_type_chain": "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "_of_opp_free_required_opps",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "opp.required_opps[i].kref.refcount",
+      "member_type_chain": "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are intended to be called exactly once; retrying would cause double-release and potential use-after-free.",
+  "contract_summary": "This function releases the reference-counted resources associated with a dev_pm_opp: it puts the device node (opp->np) and frees the required OPPs (via _of_opp_free_required_opps). It is a cleanup wrapper called when clearing an OPP's device tree data. After calling this function, the caller must not access the released resources (opp->np and the required OPPs). The function does not release the opp structure itself, only its sub-resources.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release two refcounted resources (device node and required OPPs) associated with a dev_pm_opp; no other logic involved.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are intended to be called exactly once; retrying would cause double-release and potential use-after-free.",
+      "contract_summary": "This function releases the reference-counted resources associated with a dev_pm_opp: it puts the device node (opp->np) and frees the required OPPs (via _of_opp_free_required_opps). It is a cleanup wrapper called when clearing an OPP's device tree data. After calling this function, the caller must not access the released resources (opp->np and the required OPPs). The function does not release the opp structure itself, only its sub-resources."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "opp.required_opps[i].kref.refcount",
+          "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "opp.np.node.kobj.kref.refcount",
+          "dev_pm_opp--device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "opp.required_opps[i].kref.refcount",
+          "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first operation from _of_opp_free_required_opps is correctly traced: the call passes opp (parameter 2) and accesses opp->required_opps[i]->kref.refcount; the access path and type chain (4 segments, 4 types) match. The second operation from of_node_put is inconsistent: the provided path 'opp.np.node.kobj.kref.refcount' includes an extra 'node' field not present in the actual structure (should be 'opp.np.kobj.kref.refcount'), and the segment count (6) does not match the type chain count (5). Therefore only the first candidate is valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "opp.required_opps[i].kref.refcount",
+        "dev_pm_opp--dev_pm_opp--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are intended to be called exactly once; retrying would cause double-release and potential use-after-free.",
+    "contract_summary": "This function releases the reference-counted resources associated with a dev_pm_opp: it puts the device node (opp->np) and frees the required OPPs (via _of_opp_free_required_opps). It is a cleanup wrapper called when clearing an OPP's device tree data. After calling this function, the caller must not access the released resources (opp->np and the required OPPs). The function does not release the opp structure itself, only its sub-resources."
+  }
+}

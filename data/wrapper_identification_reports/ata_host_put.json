@@ -1,0 +1,107 @@
+{
+  "function_name": "ata_host_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "host.kref.refcount",
+      "ata_host--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always succeeds; retrying would cause a double-put use-after-free.",
+  "contract_summary": "This is a release (put) wrapper for struct ata_host. It decrements the kref reference count and, when it reaches zero, calls ata_host_release to free the host. The caller must have previously obtained a reference via a get operation (e.g., ata_host_get or scsi_host_get). After calling ata_host_put, the caller must not use the host pointer. This is an unconditional release; no failure path exists.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the kref reference count of the ata_host via kref_put, with no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always succeeds; retrying would cause a double-put use-after-free.",
+      "contract_summary": "This is a release (put) wrapper for struct ata_host. It decrements the kref reference count and, when it reaches zero, calls ata_host_release to free the host. The caller must have previously obtained a reference via a get operation (e.g., ata_host_get or scsi_host_get). After calling ata_host_put, the caller must not use the host pointer. This is an unconditional release; no failure path exists."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "host.kref.refcount",
+          "ata_host--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "host.kref.refcount",
+          "ata_host--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls kref_put(&host->kref, ...) which matches the callee information: put operation on parameter index 1 (host->kref). The access path host.kref.refcount and type chain ata_host--kref--refcount_t are consistent with the code and struct definitions. Segment counts match: path has 3 segments, chain has 3 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "host.kref.refcount",
+        "ata_host--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always succeeds; retrying would cause a double-put use-after-free.",
+    "contract_summary": "This is a release (put) wrapper for struct ata_host. It decrements the kref reference count and, when it reaches zero, calls ata_host_release to free the host. The caller must have previously obtained a reference via a get operation (e.g., ata_host_get or scsi_host_get). After calling ata_host_put, the caller must not use the host pointer. This is an unconditional release; no failure path exists."
+  }
+}

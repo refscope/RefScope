@@ -1,0 +1,99 @@
+{
+  "function_name": "blk_mq_ctx_sysfs_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "kobj.container.ctxs.kobj.kref.refcount",
+      "kobject--blk_mq_ctx--blk_mq_ctxs--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kobject_put is unconditional and always executes; failure scenario (double-put) is a bug, not a retryable condition.",
+  "contract_summary": "This function is the release callback for a blk_mq_ctx kobject. It decrements the reference count of the containing ctxs kobject, ensuring that ctxs is not freed until all its contexts have been released. The caller (kobject core) invokes this only when the context's kobject refcount reaches zero; after this call, the context object must not be accessed again. The put operation is unconditional and does not return a value to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on ctxs->kobj via kobject_put when a blk_mq_ctx kobject is freed. No other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kobject_put is unconditional and always executes; failure scenario (double-put) is a bug, not a retryable condition.",
+      "contract_summary": "This function is the release callback for a blk_mq_ctx kobject. It decrements the reference count of the containing ctxs kobject, ensuring that ctxs is not freed until all its contexts have been released. The caller (kobject core) invokes this only when the context's kobject refcount reaches zero; after this call, the context object must not be accessed again. The put operation is unconditional and does not return a value to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kobj.container.ctxs.kobj.kref.refcount",
+          "kobject--blk_mq_ctx--blk_mq_ctxs--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kobj.container.ctxs.kobj.kref.refcount",
+          "kobject--blk_mq_ctx--blk_mq_ctxs--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls kobject_put on &ctx->ctxs->kobj. The parameter kobj is used to derive ctx via container_of, then ctx->ctxs, then ctxs->kobj. The access path from the function parameter to the refcount correctly traces through the container and fields, and the type chain matches the structures involved. kobject_put performs a decrement, so direction 'put' is correct. The number of path segments (6) equals the number of types in the chain (6), satisfying the segment count check."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "kobj.container.ctxs.kobj.kref.refcount",
+        "kobject--blk_mq_ctx--blk_mq_ctxs--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kobject_put is unconditional and always executes; failure scenario (double-put) is a bug, not a retryable condition.",
+    "contract_summary": "This function is the release callback for a blk_mq_ctx kobject. It decrements the reference count of the containing ctxs kobject, ensuring that ctxs is not freed until all its contexts have been released. The caller (kobject core) invokes this only when the context's kobject refcount reaches zero; after this call, the context object must not be accessed again. The put operation is unconditional and does not return a value to the caller."
+  }
+}

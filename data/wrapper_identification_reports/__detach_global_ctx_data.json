@@ -1,0 +1,99 @@
+{
+  "function_name": "__detach_global_ctx_data",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.perf_ctx_data.refcount.refs",
+      "task_struct--perf_ctx_data--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "detach_task_ctx_data",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.perf_ctx_data.refcount.refs",
+      "member_type_chain": "task_struct--perf_ctx_data--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "detach_task_ctx_data",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.perf_ctx_data.refcount.refs",
+      "member_type_chain": "task_struct--perf_ctx_data--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional once the condition (cd exists and is global) is satisfied; retrying would lead to double-put or no-op since the flag is cleared.",
+  "contract_summary": "This function is a batch put wrapper that releases the reference held by each thread's global perf_ctx_data. It iterates over all process threads under an RCU read lock, clears the global flag, and calls detach_task_ctx_data (which decrements the refcount). After this function, all references to global context data are released; callers must ensure no other concurrent access to these objects. The function is typically called during subsystem teardown/probe cleanup.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to iterate over all threads and release (put) references on perf_ctx_data that are marked global. The only non-refcount logic is clearing the global flag to prevent double release.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional once the condition (cd exists and is global) is satisfied; retrying would lead to double-put or no-op since the flag is cleared.",
+      "contract_summary": "This function is a batch put wrapper that releases the reference held by each thread's global perf_ctx_data. It iterates over all process threads under an RCU read lock, clears the global flag, and calls detach_task_ctx_data (which decrements the refcount). After this function, all references to global context data are released; callers must ensure no other concurrent access to these objects. The function is typically called during subsystem teardown/probe cleanup."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.perf_ctx_data.refcount.refs",
+          "task_struct--perf_ctx_data--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.perf_ctx_data.refcount.refs",
+          "task_struct--perf_ctx_data--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "detach_task_ctx_data(p) acts as a put on p's perf_ctx_data refcount, the access path from parameter p through perf_ctx_data.refcount.refs matches the callee info, and segment count equals type count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.perf_ctx_data.refcount.refs",
+        "task_struct--perf_ctx_data--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional once the condition (cd exists and is global) is satisfied; retrying would lead to double-put or no-op since the flag is cleared.",
+    "contract_summary": "This function is a batch put wrapper that releases the reference held by each thread's global perf_ctx_data. It iterates over all process threads under an RCU read lock, clears the global flag, and calls detach_task_ctx_data (which decrements the refcount). After this function, all references to global context data are released; callers must ensure no other concurrent access to these objects. The function is typically called during subsystem teardown/probe cleanup."
+  }
+}

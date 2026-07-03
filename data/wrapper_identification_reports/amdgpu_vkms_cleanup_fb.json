@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_vkms_cleanup_fb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "rbo.tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function does not return an error indicator; on internal failure (e.g., reservation) it silently returns. The put itself is unconditional when reached and never fails.",
+  "contract_summary": "Release the buffer object associated with a framebuffer during plane state cleanup. This function unpins the bo and then drops one reference via amdgpu_bo_unref. The caller must provide a valid drm_plane_state with a non-NULL fb. After calling, the bo may be freed if its reference count reaches zero. The function does not transfer ownership; it releases ownership. Callers must not use the bo after this call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the buffer object used by the framebuffer: it unpins the bo then drops a reference via amdgpu_bo_unref. All other steps are necessary preparation for the put operation.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function does not return an error indicator; on internal failure (e.g., reservation) it silently returns. The put itself is unconditional when reached and never fails.",
+      "contract_summary": "Release the buffer object associated with a framebuffer during plane state cleanup. This function unpins the bo and then drops one reference via amdgpu_bo_unref. The caller must provide a valid drm_plane_state with a non-NULL fb. After calling, the bo may be freed if its reference count reaches zero. The function does not transfer ownership; it releases ownership. Callers must not use the bo after this call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rbo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rbo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The amdgpu_bo_unref call is a put on the rbo object (parameter index 1). The access path correctly traces from rbo through its tbo (ttm_buffer_object), base (drm_gem_object), refcount (kref), and refcount (refcount_t). The type chain matches the struct definitions and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "rbo.tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function does not return an error indicator; on internal failure (e.g., reservation) it silently returns. The put itself is unconditional when reached and never fails.",
+    "contract_summary": "Release the buffer object associated with a framebuffer during plane state cleanup. This function unpins the bo and then drops one reference via amdgpu_bo_unref. The caller must provide a valid drm_plane_state with a non-NULL fb. After calling, the bo may be freed if its reference count reaches zero. The function does not transfer ownership; it releases ownership. Callers must not use the bo after this call."
+  }
+}

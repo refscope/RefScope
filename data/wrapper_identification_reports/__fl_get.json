@@ -1,0 +1,99 @@
+{
+  "function_name": "__fl_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "f.refcnt.refs",
+      "cls_fl_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the object is either absent or its refcount is already zero (object dying); retrying will not revive the object.",
+  "contract_summary": "RCU-protected get-wrapper that looks up a cls_fl_filter by handle and acquires a reference if the filter exists and its refcount is non-zero. Returns a pointer to the filter with an elevated refcount on success, or NULL on failure. The caller is responsible for releasing the reference with a corresponding put (e.g., fl_filter_put) when done. The caller may use the returned pointer without further RCU protection because the refcount guarantees the object's liveness.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a filter by handle and conditionally acquire a reference via refcount_inc_not_zero, returning the filter or NULL.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the object is either absent or its refcount is already zero (object dying); retrying will not revive the object.",
+      "contract_summary": "RCU-protected get-wrapper that looks up a cls_fl_filter by handle and acquires a reference if the filter exists and its refcount is non-zero. Returns a pointer to the filter with an elevated refcount on success, or NULL on failure. The caller is responsible for releasing the reference with a corresponding put (e.g., fl_filter_put) when done. The caller may use the returned pointer without further RCU protection because the refcount guarantees the object's liveness."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "f.refcnt.refs",
+          "cls_fl_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "f.refcnt.refs",
+          "cls_fl_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc_not_zero(&f->refcnt) operates on the returned pointer f. The access path f.refcnt.refs matches the callee's r.refs path, and the type chain cls_fl_filter--refcount_t--atomic_t is consistent. Location (return, index 0) is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "f.refcnt.refs",
+        "cls_fl_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the object is either absent or its refcount is already zero (object dying); retrying will not revive the object.",
+    "contract_summary": "RCU-protected get-wrapper that looks up a cls_fl_filter by handle and acquires a reference if the filter exists and its refcount is non-zero. Returns a pointer to the filter with an elevated refcount on success, or NULL on failure. The caller is responsible for releasing the reference with a corresponding put (e.g., fl_filter_put) when done. The caller may use the returned pointer without further RCU protection because the refcount guarantees the object's liveness."
+  }
+}

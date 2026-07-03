@@ -1,0 +1,138 @@
+{
+  "function_name": "apparmor_sk_alloc_security",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "label.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__begin_current_label_crit_section",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__begin_current_label_crit_section",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__end_current_label_crit_section",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation is unconditional and always succeeds; there is no failure path to retry.",
+  "contract_summary": "This function is called during socket allocation to initialize the AppArmor label field of a socket's security context. It takes a reference on the current task's label (via aa_get_label) and stores it in ctx->label, and initializes ctx->peer and ctx->peer_lastupdate to NULL. The caller is not given direct ownership of the label, but the socket's context now holds a reference that must be released later (typically via apparmor_sk_free_security). The function is unconditional and always returns 0; no error checking is required. The internal critical section ensures proper refcount accounting without leaving a dangling reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to set up the AppArmor security context for a new socket, which involves acquiring a reference on the current task's label and storing it in the socket's context. Only negligible non-refcount logic exists (setting peer/peer_lastupdate to NULL).",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation is unconditional and always succeeds; there is no failure path to retry.",
+      "contract_summary": "This function is called during socket allocation to initialize the AppArmor label field of a socket's security context. It takes a reference on the current task's label (via aa_get_label) and stores it in ctx->label, and initializes ctx->peer and ctx->peer_lastupdate to NULL. The caller is not given direct ownership of the label, but the socket's context now holds a reference that must be released later (typically via apparmor_sk_free_security). The function is unconditional and always returns 0; no error checking is required. The internal critical section ensures proper refcount accounting without leaving a dangling reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation claims a get on the return value (index 0), but the function returns an int (0), not a label. The actual refcount gets occur on the local variable 'label', which is then stored into ctx->label, not returned to the caller. Therefore the location and index are incorrect; the operation is not supported by the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "label.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function apparmor_sk_alloc_security obtains the current label, takes a reference via aa_get_label, stores it into ctx->label (part of the sock structure), and then releases the temporary reference. The critical variable (label) is passed to the caller through the socket parameter 'sk' as the caller can access ctx->label. Although the function returns an int (0), the primary output is the label reference stored in the socket context, similar to Example 1 where the critical variable was passed via a parameter. Therefore, the candidate get operation on return index 0 is correct despite the int return, as it captures the refcount increment on the label that becomes visible to the caller."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "label.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation is unconditional and always succeeds; there is no failure path to retry.",
+    "contract_summary": "This function is called during socket allocation to initialize the AppArmor label field of a socket's security context. It takes a reference on the current task's label (via aa_get_label) and stores it in ctx->label, and initializes ctx->peer and ctx->peer_lastupdate to NULL. The caller is not given direct ownership of the label, but the socket's context now holds a reference that must be released later (typically via apparmor_sk_free_security). The function is unconditional and always returns 0; no error checking is required. The internal critical section ensures proper refcount accounting without leaving a dangling reference."
+  }
+}

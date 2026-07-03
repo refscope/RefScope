@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_alloc_chunk_map",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "map.refs.refs",
+      "btrfs_chunk_map--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Allocation failure (NULL return) is due to memory pressure, which may be transient; caller can retry later.",
+  "contract_summary": "Allocates a btrfs_chunk_map and sets its initial refcount to 1, establishing ownership for the caller. The rb_node is cleared. The caller owns the returned reference and must eventually release it via a corresponding put (e.g., btrfs_free_chunk_map). If allocation fails (returns NULL), the caller should handle the error or retry. This wrapper represents the creation stage of the chunk_map lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is allocation and initialization of refcount to 1 (set wrapper). The only logic is allocation, refcount_set, and RB_CLEAR_NODE — minimal and focused on lifecycle management.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Allocation failure (NULL return) is due to memory pressure, which may be transient; caller can retry later.",
+      "contract_summary": "Allocates a btrfs_chunk_map and sets its initial refcount to 1, establishing ownership for the caller. The rb_node is cleared. The caller owns the returned reference and must eventually release it via a corresponding put (e.g., btrfs_free_chunk_map). If allocation fails (returns NULL), the caller should handle the error or retry. This wrapper represents the creation stage of the chunk_map lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "map.refs.refs",
+          "btrfs_chunk_map--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "map.refs.refs",
+          "btrfs_chunk_map--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set(&map->refs, 1) sets the reference count to 1 on the newly allocated map. map is the return value, and the access path map.refs.refs correctly traces from the returned pointer through the refs field of btrfs_chunk_map (of type refcount_t) to the refs field of refcount_struct (atomic_t). The type chain is consistent with the callee info and code. The segment counts match: 3 segments (map, refs, refs) and 3 types (btrfs_chunk_map, refcount_struct, atomic_t)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "map.refs.refs",
+        "btrfs_chunk_map--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Allocation failure (NULL return) is due to memory pressure, which may be transient; caller can retry later.",
+    "contract_summary": "Allocates a btrfs_chunk_map and sets its initial refcount to 1, establishing ownership for the caller. The rb_node is cleared. The caller owns the returned reference and must eventually release it via a corresponding put (e.g., btrfs_free_chunk_map). If allocation fails (returns NULL), the caller should handle the error or retry. This wrapper represents the creation stage of the chunk_map lifecycle."
+  }
+}

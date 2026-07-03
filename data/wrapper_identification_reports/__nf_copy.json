@@ -1,0 +1,99 @@
+{
+  "function_name": "__nf_copy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "src._nfct.use.refs",
+      "sk_buff--nf_conntrack--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nf_conntrack_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nfct.use.refs",
+      "member_type_chain": "nf_conntrack--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nf_conntrack_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nfct.use.refs",
+      "member_type_chain": "nf_conntrack--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "nf_conntrack_get is an unconditional atomic increment that never fails; retry is irrelevant.",
+  "contract_summary": "This function copies the Netfilter connection tracking reference from source skb to destination skb, incrementing the reference count on the conntrack entry. The destination skb acquires its own reference; the caller must later call nf_conntrack_put on the destination's conntrack when done. Optionally copies the nf_trace flag if the 'copy' parameter is true. The function never fails and does not return a value; the caller does not need to check success.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to copy the conntrack reference from src to dst and increment its refcount; the only additional logic is an optional unconditional trace flag copy.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "nf_conntrack_get is an unconditional atomic increment that never fails; retry is irrelevant.",
+      "contract_summary": "This function copies the Netfilter connection tracking reference from source skb to destination skb, incrementing the reference count on the conntrack entry. The destination skb acquires its own reference; the caller must later call nf_conntrack_put on the destination's conntrack when done. Optionally copies the nf_trace flag if the 'copy' parameter is true. The function never fails and does not return a value; the caller does not need to check success."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "src._nfct.use.refs",
+          "sk_buff--nf_conntrack--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "src._nfct.use.refs",
+          "sk_buff--nf_conntrack--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The code calls nf_conntrack_get(skb_nfct(src)), which increments the refcount on the nf_conntrack object pointed to by src->_nfct. The access path src._nfct.use.refs correctly traces from parameter src to the refcount field via fields _nfct (pointer to nf_conntrack), use (refcount_struct), and refs (atomic_t). The type chain sk_buff->nf_conntrack->refcount_struct->atomic_t matches the actual struct definitions. The location 'parameter' index 2 (src) is appropriate as the refcount operation acts on an object derived from src."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "src._nfct.use.refs",
+        "sk_buff--nf_conntrack--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "nf_conntrack_get is an unconditional atomic increment that never fails; retry is irrelevant.",
+    "contract_summary": "This function copies the Netfilter connection tracking reference from source skb to destination skb, incrementing the reference count on the conntrack entry. The destination skb acquires its own reference; the caller must later call nf_conntrack_put on the destination's conntrack when done. Optionally copies the nf_trace flag if the 'copy' parameter is true. The function never fails and does not return a value; the caller does not need to check success."
+  }
+}

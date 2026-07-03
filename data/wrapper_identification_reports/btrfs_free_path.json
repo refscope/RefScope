@@ -1,0 +1,82 @@
+{
+  "function_name": "btrfs_free_path",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+  "contract_summary": "This function is a cleanup wrapper that calls btrfs_release_path to decrement reference counts on all extent buffers in the path, then frees the btrfs_path structure. It is intended to be used with the __free attribute for automatic cleanup on scope exit. The caller must ensure the path is valid and has been initialized. After calling this function, the path pointer is invalid and must not be used.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references held by the btrfs_path (via btrfs_release_path) and free the path structure. This is a cleanup/put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+      "contract_summary": "This function is a cleanup wrapper that calls btrfs_release_path to decrement reference counts on all extent buffers in the path, then frees the btrfs_path structure. It is intended to be used with the __free attribute for automatic cleanup on scope exit. The caller must ensure the path is valid and has been initialized. After calling this function, the path pointer is invalid and must not be used."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "path.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function code for btrfs_free_path is not provided; only macro definitions and other functions are shown. The callee information refers to btrfs_release_path, not btrfs_free_path, so the extracted operation cannot be validated against the function code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The provided code snippet does not contain the actual implementation of btrfs_free_path; it only shows macro definitions (DEFINE_FREE) and other functions (btrfs_del_items, btrfs_del_item). Therefore, the function cannot be classified as a reference-count wrapper/helper. The check stage's rejection of candidates is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+    "contract_summary": "This function is a cleanup wrapper that calls btrfs_release_path to decrement reference counts on all extent buffers in the path, then frees the btrfs_path structure. It is intended to be used with the __free attribute for automatic cleanup on scope exit. The caller must ensure the path is valid and has been initialized. After calling this function, the path pointer is invalid and must not be used."
+  }
+}

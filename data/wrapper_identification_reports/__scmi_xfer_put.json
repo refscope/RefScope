@@ -1,0 +1,99 @@
+{
+  "function_name": "__scmi_xfer_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "xfer.users.refs",
+      "scmi_xfer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always succeeds (no failure); retrying would cause a double-put (use-after-free).",
+  "contract_summary": "This is a put wrapper that releases a reference on a scmi_xfer. When the last reference is dropped (refcount reaches zero), the transfer is cleaned up: pending state is removed, the token is cleared, the transfer is unhashed, and it is returned to the free list for reuse. The caller must not use the xfer after calling this function, as the reference is released and the object may be recycled. No return value to check; the operation is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the refcount of a scmi_xfer and, if it reaches zero, recycle the transfer object (cleanup and return to free list). The additional bookkeeping (hash removal, debug counter) is standard put-side cleanup.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always succeeds (no failure); retrying would cause a double-put (use-after-free).",
+      "contract_summary": "This is a put wrapper that releases a reference on a scmi_xfer. When the last reference is dropped (refcount reaches zero), the transfer is cleaned up: pending state is removed, the token is cleared, the transfer is unhashed, and it is returned to the free list for reuse. The caller must not use the xfer after calling this function, as the reference is released and the object may be recycled. No return value to check; the operation is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "xfer.users.refs",
+          "scmi_xfer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "xfer.users.refs",
+          "scmi_xfer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&xfer->users) is a put operation on xfer->users, consistent with parameter 2 (xfer). Access path xfer.users.refs and type chain scmi_xfer--refcount_t--atomic_t match the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "xfer.users.refs",
+        "scmi_xfer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always succeeds (no failure); retrying would cause a double-put (use-after-free).",
+    "contract_summary": "This is a put wrapper that releases a reference on a scmi_xfer. When the last reference is dropped (refcount reaches zero), the transfer is cleaned up: pending state is removed, the token is cleared, the transfer is unhashed, and it is returned to the free list for reuse. The caller must not use the xfer after calling this function, as the reference is released and the object may be recycled. No return value to check; the operation is unconditional."
+  }
+}

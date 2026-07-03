@@ -1,0 +1,106 @@
+{
+  "function_name": "apparmor_cred_prepare",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "old.security.l.count.count.refcount",
+      "cred--aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation always succeeds (returns 0); no failure path exists.",
+  "contract_summary": "Get-wrapper: acquires a reference on the AppArmor label from the old cred (via aa_get_newest_label) and assigns it to the new cred. The caller obtains a new reference that must eventually be released by calling aa_put_label (or through the cred-free path). This is used during credential preparation (e.g., clone/fork) to share the same label with an additional reference. The function unconditionally succeeds and returns 0.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on the label from the old cred and assign it to the new cred via aa_get_newest_label; no other significant logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation always succeeds (returns 0); no failure path exists.",
+      "contract_summary": "Get-wrapper: acquires a reference on the AppArmor label from the old cred (via aa_get_newest_label) and assigns it to the new cred. The caller obtains a new reference that must eventually be released by calling aa_put_label (or through the cred-free path). This is used during credential preparation (e.g., clone/fork) to share the same label with an additional reference. The function unconditionally succeeds and returns 0."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "old.security.l.count.count.refcount",
+          "cred--aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'old.security.l.count.count.refcount' has 6 segments but the type chain 'cred--aa_label--aa_count--kref--refcount_t' has only 5 types, violating the rule that segment and type counts must be equal. Additionally, the location 'parameter 2' is not the critical variable directly involved in the refcount operation; the get operation acts on a derived label pointer, making the indirect path questionable."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "old.security.l.count.count.refcount",
+          "cred--aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function apparmor_cred_prepare is a pure reference-count wrapper. It obtains a reference on the AppArmor label from old credentials via aa_get_newest_label and assigns it to new credentials. The get operation is on the label's refcount, accessed via old->security->l (label pointer) and its nested count fields. Although the check pointed out a mismatch between path segments and type chain length, the path correctly identifies the refcount field of the label derived from old. The function has no other business logic, making it a high-purity get wrapper. The operation is correctly classified as 'get' on parameter 2's derived label, and the label flows through the function to parameter 1 (new) as the critical variable."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "old.security.l.count.count.refcount",
+        "cred--aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation always succeeds (returns 0); no failure path exists.",
+    "contract_summary": "Get-wrapper: acquires a reference on the AppArmor label from the old cred (via aa_get_newest_label) and assigns it to the new cred. The caller obtains a new reference that must eventually be released by calling aa_put_label (or through the cred-free path). This is used during credential preparation (e.g., clone/fork) to share the same label with an additional reference. The function unconditionally succeeds and returns 0."
+  }
+}

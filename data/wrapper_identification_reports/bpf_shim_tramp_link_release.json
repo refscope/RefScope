@@ -1,0 +1,82 @@
+{
+  "function_name": "bpf_shim_tramp_link_release",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_trampoline_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tr.refcnt.refs",
+      "member_type_chain": "bpf_trampoline--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_trampoline_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tr.refcnt.refs",
+      "member_type_chain": "bpf_trampoline--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If trampoline is NULL, no operation is needed; otherwise the put either succeeds or the refcount hits zero and the trampoline is freed — retry is impossible or would be a use-after-free.",
+  "contract_summary": "Put wrapper for bpf_trampoline reference count, invoked as part of bpf_shim_tramp_link release. It unlinks the program from the trampoline and then drops the link's reference via bpf_trampoline_put. If the trampoline pointer is NULL, the function is a no-op. After this call, the caller must not access the link or trampoline. This function is the release side of the trampoline's reference-count lifecycle; the initial reference was acquired during link creation. No additional caller obligations beyond standard bpf_link release semantics.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to a bpf_trampoline via bpf_trampoline_put; the accompanying unlink is tightly coupled cleanup for the link release.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If trampoline is NULL, no operation is needed; otherwise the put either succeeds or the refcount hits zero and the trampoline is freed — retry is impossible or would be a use-after-free.",
+      "contract_summary": "Put wrapper for bpf_trampoline reference count, invoked as part of bpf_shim_tramp_link release. It unlinks the program from the trampoline and then drops the link's reference via bpf_trampoline_put. If the trampoline pointer is NULL, the function is a no-op. After this call, the caller must not access the link or trampoline. This function is the release side of the trampoline's reference-count lifecycle; the initial reference was acquired during link creation. No additional caller obligations beyond standard bpf_link release semantics."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.trampoline.refcnt.refs",
+          "bpf_shim_tramp_link--bpf_trampoline--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate extraction's access path 'link.trampoline.refcnt.refs' starts from parameter 'link' but the member 'trampoline' does not exist in 'struct bpf_link'. The actual object passed to bpf_trampoline_put is 'shim_link->trampoline' derived via container_of. The path incorrectly assumes a direct member chain without accounting for the container_of conversion, and the type chain starts with 'bpf_shim_tramp_link' while the path segment 'link' has type 'struct bpf_link', causing a type mismatch. Therefore, the operation is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function is a release callback for a bpf_link, which extracts a trampoline via container_of and then calls bpf_trampoline_put on it. However, the referenced object (bpf_trampoline) is not passed as a parameter or returned; it is an internal member accessed through a container_of conversion. The candidate extraction incorrectly assumed a direct member path from the link parameter, but struct bpf_link has no 'trampoline' member. Additionally, the function's primary role is to clean up the link rather than to serve as a wrapper for managing the trampoline's refcount in a way that exposes the critical variable to the caller. Hence, the judge classification as a wrapper is overruled; the function is not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If trampoline is NULL, no operation is needed; otherwise the put either succeeds or the refcount hits zero and the trampoline is freed — retry is impossible or would be a use-after-free.",
+    "contract_summary": "Put wrapper for bpf_trampoline reference count, invoked as part of bpf_shim_tramp_link release. It unlinks the program from the trampoline and then drops the link's reference via bpf_trampoline_put. If the trampoline pointer is NULL, the function is a no-op. After this call, the caller must not access the link or trampoline. This function is the release side of the trampoline's reference-count lifecycle; the initial reference was acquired during link creation. No additional caller obligations beyond standard bpf_link release semantics."
+  }
+}

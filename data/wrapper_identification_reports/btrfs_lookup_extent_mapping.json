@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_lookup_extent_mapping",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "em.refs.refs",
+      "extent_map--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "lookup_extent_mapping",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "lookup_extent_mapping",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "em.refs.refs",
+      "member_type_chain": "extent_map--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means no extent mapping covers the given range; retrying with same parameters will also fail unless the tree is modified concurrently, which would require different handling.",
+  "contract_summary": "Acquires a reference on an extent_map found by range in the extent_map_tree. Returns a pointer with an elevated refcount; caller must call free_extent_map() to release the reference. Returns NULL if no mapping covers the range. The caller must check the return value before use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Function directly returns result of lookup_extent_mapping with true flag, which acquires a reference on the returned extent_map. No additional logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means no extent mapping covers the given range; retrying with same parameters will also fail unless the tree is modified concurrently, which would require different handling.",
+      "contract_summary": "Acquires a reference on an extent_map found by range in the extent_map_tree. Returns a pointer with an elevated refcount; caller must call free_extent_map() to release the reference. Returns NULL if no mapping covers the range. The caller must check the return value before use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "em.refs.refs",
+          "extent_map--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "em.refs.refs",
+          "extent_map--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The callee lookup_extent_mapping returns a pointer to an extent_map with its refcount incremented. btrfs_lookup_extent_mapping directly returns that pointer, so the get operation on the return value (index 0) is consistent. The access path 'em.refs.refs' and type chain 'extent_map--refcount_struct--atomic_t' match the callee information and have equal segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "em.refs.refs",
+        "extent_map--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means no extent mapping covers the given range; retrying with same parameters will also fail unless the tree is modified concurrently, which would require different handling.",
+    "contract_summary": "Acquires a reference on an extent_map found by range in the extent_map_tree. Returns a pointer with an elevated refcount; caller must call free_extent_map() to release the reference. Returns NULL if no mapping covers the range. The caller must check the return value before use."
+  }
+}

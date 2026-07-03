@@ -1,0 +1,115 @@
+{
+  "function_name": "__drm_mode_object_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "obj.refcount.refcount.refs",
+      "drm_mode_object--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails when the refcount is zero, meaning the object is already dead or dying; retrying cannot revive it.",
+  "contract_summary": "This function performs a thread-safe lookup of a DRM mode object by ID and type, acquiring a reference (kref_get_unless_zero) on the object if it is still alive. The caller receives a pointer to the object with an incremented refcount, and must release that reference via drm_mode_object_put() when done. If the object's refcount has already dropped to zero (object is being freed), the function returns NULL — the caller must check for NULL and not use the object. The function also verifies the object's type and that the caller holds a valid lease; if these checks fail, NULL is returned without acquiring a reference. The mutex held during lookup ensures consistency.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a drm_mode_object by ID and acquire a reference via kref_get_unless_zero, with minimal validation (type, lease) that are intrinsic to the lookup process.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails when the refcount is zero, meaning the object is already dead or dying; retrying cannot revive it.",
+      "contract_summary": "This function performs a thread-safe lookup of a DRM mode object by ID and type, acquiring a reference (kref_get_unless_zero) on the object if it is still alive. The caller receives a pointer to the object with an incremented refcount, and must release that reference via drm_mode_object_put() when done. If the object's refcount has already dropped to zero (object is being freed), the function returns NULL — the caller must check for NULL and not use the object. The function also verifies the object's type and that the caller holds a valid lease; if these checks fail, NULL is returned without acquiring a reference. The mutex held during lookup ensures consistency."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "obj.refcount.refcount.refs",
+          "drm_mode_object--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "obj.refcount.refcount.refs",
+          "drm_mode_object--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero(&obj->refcount) operates on obj->refcount (a kref), with access path drm_mode_object.refcount (kref).refcount (refcount_t).refs (atomic_t). The critical variable is the returned obj pointer (location return, index 0). The path segments and type chain match the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "obj.refcount.refcount.refs",
+        "drm_mode_object--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails when the refcount is zero, meaning the object is already dead or dying; retrying cannot revive it.",
+    "contract_summary": "This function performs a thread-safe lookup of a DRM mode object by ID and type, acquiring a reference (kref_get_unless_zero) on the object if it is still alive. The caller receives a pointer to the object with an incremented refcount, and must release that reference via drm_mode_object_put() when done. If the object's refcount has already dropped to zero (object is being freed), the function returns NULL — the caller must check for NULL and not use the object. The function also verifies the object's type and that the caller holds a valid lease; if these checks fail, NULL is returned without acquiring a reference. The mutex held during lookup ensures consistency."
+  }
+}

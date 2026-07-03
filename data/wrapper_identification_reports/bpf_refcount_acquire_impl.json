@@ -1,0 +1,52 @@
+{
+  "function_name": "bpf_refcount_acquire_impl",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Assuming the kptr is valid, the increment always succeeds; if the pointer is NULL or invalid, the operation is undefined and retrying does not help.",
+  "contract_summary": "Generic acquire wrapper for BPF refcounted kptrs. Increments the embedded reference count of the provided kptr and returns the same pointer. The caller obtains an additional reference and must release it with the corresponding type-specific release function (e.g., bpf_task_release) when done. This function does not transfer ownership permanently; it only adds a reference that must be eventually removed to avoid leaks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is named bpf_refcount_acquire_impl, indicating a generic acquire operation for refcounted BPF kptrs. The macro bpf_refcount_acquire delegates to it with meta=NULL. This matches the pattern of other acquire functions (bpf_task_acquire, etc.) and its sole purpose is to increment the reference count and return the pointer. No non-refcount logic is visible from the declaration.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Assuming the kptr is valid, the increment always succeeds; if the pointer is NULL or invalid, the operation is undefined and retrying does not help.",
+      "contract_summary": "Generic acquire wrapper for BPF refcounted kptrs. Increments the embedded reference count of the provided kptr and returns the same pointer. The caller obtains an additional reference and must release it with the corresponding type-specific release function (e.g., bpf_task_release) when done. This function does not transfer ownership permanently; it only adds a reference that must be eventually removed to avoid leaks."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "bpf_refcount_acquire_impl"
+      ],
+      "reason": "Need the implementation of bpf_refcount_acquire_impl to trace the refcount operation and identify the critical variable and member access path."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No candidate operations to validate; the ResultList is empty."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 0,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Assuming the kptr is valid, the increment always succeeds; if the pointer is NULL or invalid, the operation is undefined and retrying does not help.",
+    "contract_summary": "Generic acquire wrapper for BPF refcounted kptrs. Increments the embedded reference count of the provided kptr and returns the same pointer. The caller obtains an additional reference and must release it with the corresponding type-specific release function (e.g., bpf_task_release) when done. This function does not transfer ownership permanently; it only adds a reference that must be eventually removed to avoid leaks."
+  }
+}

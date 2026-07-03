@@ -1,0 +1,74 @@
+{
+  "function_name": "__mlx5_lag_dev_add_mdev",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mlx5_ldev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ldev.ref.refcount",
+      "member_type_chain": "mlx5_lag--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "mlx5_ldev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ldev.ref.refcount",
+      "member_type_chain": "mlx5_lag--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mlx5_ldev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ldev.ref.refcount",
+      "member_type_chain": "mlx5_lag--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "mlx5_ldev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ldev.ref.refcount",
+      "member_type_chain": "mlx5_lag--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "The function returns -EAGAIN when mode_changes_in_progress is true, indicating a transient condition that may resolve on retry. Other failures (e.g., allocation) are permanent.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to add a device to a lag (link aggregation) structure, involving allocation, lookup, locking, and mode state checks. The refcount operations (mlx5_ldev_get/put) are incidental steps within this broader business logic, not the function's main responsibility.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "The function returns -EAGAIN when mode_changes_in_progress is true, indicating a transient condition that may resolve on retry. Other failures (e.g., allocation) are permanent.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "The function returns -EAGAIN when mode_changes_in_progress is true, indicating a transient condition that may resolve on retry. Other failures (e.g., allocation) are permanent.",
+    "contract_summary": ""
+  }
+}

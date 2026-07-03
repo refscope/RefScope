@@ -1,0 +1,143 @@
+{
+  "function_name": "btrfs_backref_drop_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "node.eb.refs.refs",
+      "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "node.root.refs.refs",
+      "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_backref_drop_node_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_free_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_backref_drop_node_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.eb.refs.refs",
+      "member_type_chain": "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_backref_free_node",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "node.root.refs.refs",
+      "member_type_chain": "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation cannot be retried; it is a one-time release.",
+  "contract_summary": "This function drops a backref node by releasing its reference to the extent buffer (via btrfs_backref_drop_node_buffer) and root (via btrfs_backref_free_node), removing it from the cache's list and rb tree, and freeing the node. After calling this function, the node must not be used. The caller must have exclusive ownership of the node (ensuring its 'upper' list is empty). This is a cleanup operation that is part of backref cache maintenance, and no return value is provided.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to release references held by a backref node (extent buffer and root) and clean up its data structure membership. The function is a put wrapper for the node and its associated references.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation cannot be retried; it is a one-time release.",
+      "contract_summary": "This function drops a backref node by releasing its reference to the extent buffer (via btrfs_backref_drop_node_buffer) and root (via btrfs_backref_free_node), removing it from the cache's list and rb tree, and freeing the node. After calling this function, the node must not be used. The caller must have exclusive ownership of the node (ensuring its 'upper' list is empty). This is a cleanup operation that is part of backref cache maintenance, and no return value is provided."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "node.eb.refs.refs",
+          "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "node.root.refs.refs",
+          "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "node.eb.refs.refs",
+          "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "node.root.refs.refs",
+          "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are supported by the code: btrfs_backref_drop_node_buffer(node) puts ref on node->eb.refs, and btrfs_backref_free_node(node) puts ref on node->root.refs. The access paths and type chains match the callee info and have correct segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "node.eb.refs.refs",
+        "btrfs_backref_node--extent_buffer--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "node.root.refs.refs",
+        "btrfs_backref_node--btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation cannot be retried; it is a one-time release.",
+    "contract_summary": "This function drops a backref node by releasing its reference to the extent buffer (via btrfs_backref_drop_node_buffer) and root (via btrfs_backref_free_node), removing it from the cache's list and rb tree, and freeing the node. After calling this function, the node must not be used. The caller must have exclusive ownership of the node (ensuring its 'upper' list is empty). This is a cleanup operation that is part of backref cache maintenance, and no return value is provided."
+  }
+}

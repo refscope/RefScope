@@ -1,0 +1,58 @@
+{
+  "function_name": "adsp_probe",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "qcom_q6v5_deinit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "q6v5.qmp.dev.kobj.kref.refcount",
+      "member_type_chain": "qcom_q6v5--qmp--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "qcom_q6v5_deinit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "q6v5.qmp.dev.kobj.kref.refcount",
+      "member_type_chain": "qcom_q6v5--qmp--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — function failure indicates unrecoverable probe error; retrying the probe (e.g., via deferred probe) is a core driver mechanism, not related to refcount retries.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is device probe: allocates and initializes a remoteproc, clocks, power domains, resets, and multiple subdevices. Refcount operations (e.g., in qcom_q6v5_deinit) appear only on error cleanup, not as the core logic. The function does not return a refcounted object or acquire a reference for the caller.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — function failure indicates unrecoverable probe error; retrying the probe (e.g., via deferred probe) is a core driver mechanism, not related to refcount retries.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — function failure indicates unrecoverable probe error; retrying the probe (e.g., via deferred probe) is a core driver mechanism, not related to refcount retries.",
+    "contract_summary": ""
+  }
+}

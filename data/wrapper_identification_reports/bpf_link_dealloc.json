@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_link_dealloc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "link.prog.aux.refcnt",
+      "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Decrements a reference count and frees memory; if the refcount was already zero it indicates a double-free bug, so retry is pointless.",
+  "contract_summary": "This function is the final release for a bpf_link object: it releases the reference on the underlying BPF program (if any) via bpf_prog_put, and then frees the link's memory by calling the appropriate deallocation callback. This function must only be called when the link's reference count has dropped to zero and the link is no longer reachable. After this call, the link pointer is invalid and must not be used. There is no return value; the caller is responsible for ensuring that no other references to the link exist before invoking this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the BPF program reference and deallocate the bpf_link structure; it is a put/deallocation wrapper with minimal additional logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Decrements a reference count and frees memory; if the refcount was already zero it indicates a double-free bug, so retry is pointless.",
+      "contract_summary": "This function is the final release for a bpf_link object: it releases the reference on the underlying BPF program (if any) via bpf_prog_put, and then frees the link's memory by calling the appropriate deallocation callback. This function must only be called when the link's reference count has dropped to zero and the link is no longer reachable. After this call, the link pointer is invalid and must not be used. There is no return value; the caller is responsible for ensuring that no other references to the link exist before invoking this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.prog.aux.refcnt",
+          "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "link.prog.aux.refcnt",
+          "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "bpf_prog_put is called on link->prog, which is a field of the input parameter. The access path link.prog.aux.refcnt correctly traces from the function parameter to the refcount field. The type chain matches the structure hierarchy (bpf_link -> bpf_prog -> bpf_prog_aux -> atomic64_t). The number of segments in the access path (4) matches the number of types in the type chain (4), satisfying the segment count check."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "link.prog.aux.refcnt",
+        "bpf_link--bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Decrements a reference count and frees memory; if the refcount was already zero it indicates a double-free bug, so retry is pointless.",
+    "contract_summary": "This function is the final release for a bpf_link object: it releases the reference on the underlying BPF program (if any) via bpf_prog_put, and then frees the link's memory by calling the appropriate deallocation callback. This function must only be called when the link's reference count has dropped to zero and the link is no longer reachable. After this call, the link pointer is invalid and must not be used. There is no return value; the caller is responsible for ensuring that no other references to the link exist before invoking this function."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "function_name": "aa_label_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "label.vec[i].label.count.count",
+      "aa_label--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "label.proxy.count.count",
+      "aa_label--aa_proxy--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path exists; the function unconditionally releases resources and poisons pointers. Retry is meaningless after destruction.",
+  "contract_summary": "Destructor for an aa_label: releases the label's hname string (via aa_put_str), decrements reference counts on all profiles in its vector (via aa_put_profile), clears and releases the proxy object (via aa_put_proxy), and frees the secid. After this call, the label must not be used again. The caller is responsible for ensuring that the label's reference count has already reached zero and that no other references exist. This function is the 'put' side of the lifecycle and is typically called from a kref_put or equivalent last-put callback.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all internally held references (profiles, proxy, secid) as part of the label's reference-count lifecycle. It is the destructor invoked when the label's refcount reaches zero.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path exists; the function unconditionally releases resources and poisons pointers. Retry is meaningless after destruction.",
+      "contract_summary": "Destructor for an aa_label: releases the label's hname string (via aa_put_str), decrements reference counts on all profiles in its vector (via aa_put_profile), clears and releases the proxy object (via aa_put_proxy), and frees the secid. After this call, the label must not be used again. The caller is responsible for ensuring that the label's reference count has already reached zero and that no other references exist. This function is the 'put' side of the lifecycle and is typically called from a kref_put or equivalent last-put callback."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "label.vec[i].label.count.count",
+          "aa_label--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "label.proxy.count.count",
+          "aa_label--aa_proxy--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "label.vec[i].label.count.count",
+          "aa_label--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "label.proxy.count.count",
+          "aa_label--aa_proxy--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both put operations are correctly identified based on the function code. aa_put_profile is invoked on each profile obtained from label->vec[i] inside the loop, and aa_put_proxy is invoked on label->proxy after nullifying the back pointer. The candidate access paths and type chains consistently trace from the function parameter (label) to the actual refcount fields as per callee information, and the segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "label.vec[i].label.count.count",
+        "aa_label--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "label.proxy.count.count",
+        "aa_label--aa_proxy--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path exists; the function unconditionally releases resources and poisons pointers. Retry is meaningless after destruction.",
+    "contract_summary": "Destructor for an aa_label: releases the label's hname string (via aa_put_str), decrements reference counts on all profiles in its vector (via aa_put_profile), clears and releases the proxy object (via aa_put_proxy), and frees the secid. After this call, the label must not be used again. The caller is responsible for ensuring that the label's reference count has already reached zero and that no other references exist. This function is the 'put' side of the lifecycle and is typically called from a kref_put or equivalent last-put callback."
+  }
+}

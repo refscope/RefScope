@@ -1,0 +1,223 @@
+{
+  "function_name": "amdgpu_get_xgmi_hive",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hive.kobj.kref.refcount",
+      "amdgpu_hive_info--kobject--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "hive.kobj.kref.refcount",
+      "amdgpu_hive_info--kobject--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "adev.reset_domain.refcount.refcount",
+      "amdgpu_device--amdgpu_reset_domain--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_reset_get_reset_domain",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "domain.refcount.refcount",
+      "member_type_chain": "amdgpu_reset_domain--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_reset_get_reset_domain",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "domain.refcount.refcount.refs",
+      "member_type_chain": "amdgpu_reset_domain--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kobject_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_reset_get_reset_domain",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "domain.refcount.refcount",
+      "member_type_chain": "amdgpu_reset_domain--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kobject_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure typically due to missing hive_id (non-transient) or memory allocation errors (unlikely to succeed on immediate retry). Retrying would not help.",
+  "contract_summary": "Get-or-create wrapper for the XGMI hive object. Returns a pointer to struct amdgpu_hive_info with an acquired reference (via kobject_get). If the hive already exists (attached to adev->hive or found in global list), the existing hive's reference is incremented. Otherwise, a new hive is allocated, initialized (including kobject, reset domain, and list), and returned with a new reference. On failure (no XGMI hive_id or allocation error), returns NULL. The caller must check the return value and must later release the reference by calling kobject_put on the returned hive's kobj when done. The function does not transfer ownership of the reset domain reference (it is held internally).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to obtain a reference to an XGMI hive (via kobject_get) either by returning an existing hive or creating a new one. However, the function contains significant non-refcount logic: allocation, kobject initialization, reset domain setup, list initialization, and error handling, which makes purity low.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure typically due to missing hive_id (non-transient) or memory allocation errors (unlikely to succeed on immediate retry). Retrying would not help.",
+      "contract_summary": "Get-or-create wrapper for the XGMI hive object. Returns a pointer to struct amdgpu_hive_info with an acquired reference (via kobject_get). If the hive already exists (attached to adev->hive or found in global list), the existing hive's reference is incremented. Otherwise, a new hive is allocated, initialized (including kobject, reset domain, and list), and returned with a new reference. On failure (no XGMI hive_id or allocation error), returns NULL. The caller must check the return value and must later release the reference by calling kobject_put on the returned hive's kobj when done. The function does not transfer ownership of the reset domain reference (it is held internally)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "hive.reset_domain.refcount.refcount",
+          "amdgpu_hive_info--amdgpu_reset_domain--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "adev.reset_domain.refcount.refcount",
+          "amdgpu_device--amdgpu_reset_domain--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hive.kobj.kref.refcount",
+          "amdgpu_hive_info--kobject--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "adev.reset_domain.refcount.refcount",
+          "amdgpu_device--amdgpu_reset_domain--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code performs kobject_get on the returned hive's kobj in two paths (early return if adev->hive is set, and at pro_end) and calls amdgpu_reset_get_reset_domain on adev->reset_domain in the else branch. The access paths and type chains are consistent. The set and put operations on the return value are not supported by the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "low",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hive.kobj.kref.refcount",
+        "amdgpu_hive_info--kobject--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "hive.kobj.kref.refcount",
+        "amdgpu_hive_info--kobject--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "adev.reset_domain.refcount.refcount",
+        "amdgpu_device--amdgpu_reset_domain--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure typically due to missing hive_id (non-transient) or memory allocation errors (unlikely to succeed on immediate retry). Retrying would not help.",
+    "contract_summary": "Get-or-create wrapper for the XGMI hive object. Returns a pointer to struct amdgpu_hive_info with an acquired reference (via kobject_get). If the hive already exists (attached to adev->hive or found in global list), the existing hive's reference is incremented. Otherwise, a new hive is allocated, initialized (including kobject, reset domain, and list), and returned with a new reference. On failure (no XGMI hive_id or allocation error), returns NULL. The caller must check the return value and must later release the reference by calling kobject_put on the returned hive's kobj when done. The function does not transfer ownership of the reset domain reference (it is held internally)."
+  }
+}

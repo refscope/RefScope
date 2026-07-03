@@ -1,0 +1,99 @@
+{
+  "function_name": "bus_find_device_by_devt",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no device matches the dev_t, the device does not exist; retrying without any change in conditions is unlikely to succeed and typical usage does not retry.",
+  "contract_summary": "Provides a get-wrapper that finds a device by its dev_t and returns it with an incremented reference count. The caller owns the returned reference and must release it via put_device() when done. Returns NULL if no matching device is found; the caller must check the return value. This function is a convenience wrapper around bus_find_device with a specific match function. The refcount increment is conditional on finding a device; no reference is acquired if NULL is returned.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls bus_find_device with a specific match function and passes &devt. Its only purpose is to find a device by dev_t and return it with an elevated refcount; no other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no device matches the dev_t, the device does not exist; retrying without any change in conditions is unlikely to succeed and typical usage does not retry.",
+      "contract_summary": "Provides a get-wrapper that finds a device by its dev_t and returns it with an incremented reference count. The caller owns the returned reference and must release it via put_device() when done. Returns NULL if no matching device is found; the caller must check the return value. This function is a convenience wrapper around bus_find_device with a specific match function. The refcount increment is conditional on finding a device; no reference is acquired if NULL is returned."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "bus_find_device returns a struct device with incremented refcount. The access path dev.kobj.kref.refcount from the return value matches the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no device matches the dev_t, the device does not exist; retrying without any change in conditions is unlikely to succeed and typical usage does not retry.",
+    "contract_summary": "Provides a get-wrapper that finds a device by its dev_t and returns it with an incremented reference count. The caller owns the returned reference and must release it via put_device() when done. Returns NULL if no matching device is found; the caller must check the return value. This function is a convenience wrapper around bus_find_device with a specific match function. The refcount increment is conditional on finding a device; no reference is acquired if NULL is returned."
+  }
+}

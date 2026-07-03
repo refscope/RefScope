@@ -1,0 +1,106 @@
+{
+  "function_name": "__nd_attach_ndns",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "attach.dev.kobj.kref.refcount",
+      "nd_namespace_common--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the namespace is already claimed; retrying without a prior detach will also fail because the claim remains.",
+  "contract_summary": "Attach-wrapper: claims a namespace by setting attach->claim to the device and storing the pointer in *_ndns, while also incrementing the device reference count via get_device. On success, the caller receives a valid pointer to the namespace device with an elevated refcount and must eventually release the reference (e.g., via put_device). The operation fails if the namespace is already claimed (attach->claim is non-NULL), and no reference is taken. Callers must check the boolean return to determine success; retry is only meaningful after the existing claim is cleared.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to attach a namespace to a device by claiming it and taking a device reference via get_device. The only non-refcount logic is the claim check/assignment and pointer storage, which are minimal and directly tied to the attach semantics.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the namespace is already claimed; retrying without a prior detach will also fail because the claim remains.",
+      "contract_summary": "Attach-wrapper: claims a namespace by setting attach->claim to the device and storing the pointer in *_ndns, while also incrementing the device reference count via get_device. On success, the caller receives a valid pointer to the namespace device with an elevated refcount and must eventually release the reference (e.g., via put_device). The operation fails if the namespace is already claimed (attach->claim is non-NULL), and no reference is taken. Callers must check the boolean return to determine success; retry is only meaningful after the existing claim is cleared."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "attach.dev.kobj.kref.refcount",
+          "nd_namespace_common--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The location index is incorrect: parameter 2 is '_ndns', but the get_device operates on 'attach->dev' where 'attach' is parameter 1 (index 1). The candidate incorrectly assigns parameter index 2, so the operation is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "attach.dev.kobj.kref.refcount",
+          "nd_namespace_common--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The candidate incorrectly assigned parameter index 2 (which is _ndns) to the get_device operation that actually operates on attach->dev (parameter 1). The function is a reference-count wrapper because it takes a reference on the namespace's device as part of the attach logic, and the critical variable (attach) is passed back to the caller via *_ndns. The extraction's access path and type chain are correct; only the parameter index needs correction."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "attach.dev.kobj.kref.refcount",
+        "nd_namespace_common--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the namespace is already claimed; retrying without a prior detach will also fail because the claim remains.",
+    "contract_summary": "Attach-wrapper: claims a namespace by setting attach->claim to the device and storing the pointer in *_ndns, while also incrementing the device reference count via get_device. On success, the caller receives a valid pointer to the namespace device with an elevated refcount and must eventually release the reference (e.g., via put_device). The operation fails if the namespace is already claimed (attach->claim is non-NULL), and no reference is taken. Callers must check the boolean return to determine success; retry is only meaningful after the existing claim is cleared."
+  }
+}

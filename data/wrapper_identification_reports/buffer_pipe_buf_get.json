@@ -1,0 +1,115 @@
+{
+  "function_name": "buffer_pipe_buf_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "buf.private.refcount.refs",
+      "pipe_buffer--buffer_ref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates refcount is saturated (near INT_MAX/2), which is a pathological state that will not be resolved by retrying without a corresponding put by another context.",
+  "contract_summary": "Conditional get wrapper: increments the refcount on a buffer_ref associated with a pipe_buffer, but only if the refcount is not dangerously high (above INT_MAX/2). Returns true on success, false on failure. The caller must check the return value and, on success, must later call a corresponding put (e.g., buffer_pipe_buf_put) to release the reference. This function prevents refcount overflow and is typically used when acquiring a reference for temporary use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally increment the refcount of a buffer_ref via refcount_inc, with a safety check against overflow. No other significant logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates refcount is saturated (near INT_MAX/2), which is a pathological state that will not be resolved by retrying without a corresponding put by another context.",
+      "contract_summary": "Conditional get wrapper: increments the refcount on a buffer_ref associated with a pipe_buffer, but only if the refcount is not dangerously high (above INT_MAX/2). Returns true on success, false on failure. The caller must check the return value and, on success, must later call a corresponding put (e.g., buffer_pipe_buf_put) to release the reference. This function prevents refcount overflow and is typically used when acquiring a reference for temporary use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "buf.private.refcount.refs",
+          "pipe_buffer--buffer_ref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "buf.private.refcount.refs",
+          "pipe_buffer--buffer_ref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation traces from parameter 2 (buf) through the private pointer to buffer_ref, then to the refcount field (refcount_t) and its refs (atomic_t). The path segments and type chain have equal count (4 each) and match the actual code and callee info for refcount_inc. The location is correct because the buffer_ref object is accessed via buf->private and its refcount is incremented."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "buf.private.refcount.refs",
+        "pipe_buffer--buffer_ref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates refcount is saturated (near INT_MAX/2), which is a pathological state that will not be resolved by retrying without a corresponding put by another context.",
+    "contract_summary": "Conditional get wrapper: increments the refcount on a buffer_ref associated with a pipe_buffer, but only if the refcount is not dangerously high (above INT_MAX/2). Returns true on success, false on failure. The caller must check the return value and, on success, must later call a corresponding put (e.g., buffer_pipe_buf_put) to release the reference. This function prevents refcount overflow and is typically used when acquiring a reference for temporary use."
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "function_name": "afs_get_link",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "symlink.ref.refs",
+      "afs_symlink--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Some failure modes (e.g., -ECHILD from RCU pathwalk, transient validation failures) are recoverable; the caller (VFS) typically retries without RCU or after a delay.",
+  "contract_summary": "get-wrapper for symlink contents: acquires a reference on the afs_symlink object (if not in RCU pathwalk) and returns the symlink content string. The reference is held via a delayed_call callback (afs_put_link) that the VFS must invoke when done. In RCU pathwalk mode, no reference is taken and the content is returned with a NULL callback. The caller must check for ERR_PTR returns and must call the delayed_call to release the reference when appropriate. Validation and reading are performed as needed to ensure the symlink is current.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to return the symlink content with a held reference on the symlink object; though validation, reading, and locking are included, the refcount increment and delayed_call cleanup are central to the function's contract.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Some failure modes (e.g., -ECHILD from RCU pathwalk, transient validation failures) are recoverable; the caller (VFS) typically retries without RCU or after a delay.",
+      "contract_summary": "get-wrapper for symlink contents: acquires a reference on the afs_symlink object (if not in RCU pathwalk) and returns the symlink content string. The reference is held via a delayed_call callback (afs_put_link) that the VFS must invoke when done. In RCU pathwalk mode, no reference is taken and the content is returned with a NULL callback. The caller must check for ERR_PTR returns and must call the delayed_call to release the reference when appropriate. Validation and reading are performed as needed to ensure the symlink is current."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "symlink.ref.refs",
+          "afs_symlink--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation uses location 'return' with index 0, but the function returns symlink->content (a const char*), not the symlink object itself. The refcount_inc is on a local symlink pointer that is not the return value; therefore the critical variable is incorrect. The operation is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "symlink.ref.refs",
+          "afs_symlink--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a reference-count get wrapper for the symlink object. Although the return value is symlink->content (const char*), the symlink object itself is passed to the caller via the delayed callback mechanism (set_delayed_call with afs_put_link). The refcount_inc on symlink is the get operation, and the symlink is the critical variable that flows out. The checker incorrectly rejected based on the literal return type; the extraction is semantically correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "symlink.ref.refs",
+        "afs_symlink--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Some failure modes (e.g., -ECHILD from RCU pathwalk, transient validation failures) are recoverable; the caller (VFS) typically retries without RCU or after a delay.",
+    "contract_summary": "get-wrapper for symlink contents: acquires a reference on the afs_symlink object (if not in RCU pathwalk) and returns the symlink content string. The reference is held via a delayed_call callback (afs_put_link) that the VFS must invoke when done. In RCU pathwalk mode, no reference is taken and the content is returned with a NULL callback. The caller must check for ERR_PTR returns and must call the delayed_call to release the reference when appropriate. Validation and reading are performed as needed to ensure the symlink is current."
+  }
+}

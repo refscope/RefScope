@@ -1,0 +1,106 @@
+{
+  "function_name": "apparmor_init",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_teardown_dfa_engine",
+      "get_or_put": "put",
+      "index": "nulldfa",
+      "location": "global",
+      "member_access_path": "nulldfa.count.refcount",
+      "member_type_chain": "aa_dfa--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_teardown_dfa_engine",
+      "get_or_put": "put",
+      "index": "nullpdb",
+      "location": "global",
+      "member_access_path": "nullpdb.count.refcount",
+      "member_type_chain": "aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_root_ns",
+      "get_or_put": "put",
+      "index": "kernel_t",
+      "location": "global",
+      "member_access_path": "kernel_t.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_teardown_dfa_engine",
+      "get_or_put": "put",
+      "index": "stacksplitdfa",
+      "location": "global",
+      "member_access_path": "stacksplitdfa.count.refcount",
+      "member_type_chain": "aa_dfa--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_teardown_dfa_engine",
+      "get_or_put": "put",
+      "index": "nulldfa",
+      "location": "global",
+      "member_access_path": "nulldfa.count.refcount",
+      "member_type_chain": "aa_dfa--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_teardown_dfa_engine",
+      "get_or_put": "put",
+      "index": "nullpdb",
+      "location": "global",
+      "member_access_path": "nullpdb.count.refcount",
+      "member_type_chain": "aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_root_ns",
+      "get_or_put": "put",
+      "index": "kernel_t",
+      "location": "global",
+      "member_access_path": "kernel_t.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_teardown_dfa_engine",
+      "get_or_put": "put",
+      "index": "stacksplitdfa",
+      "location": "global",
+      "member_access_path": "stacksplitdfa.count.refcount",
+      "member_type_chain": "aa_dfa--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a comprehensive initialization routine for AppArmor LSM, performing multiple setup steps (DFA engine, namespace, sysctls, buffers, init context). Although some callee functions are put wrappers, the primary purpose is system initialization, not reference-count management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry is not applicable.",
+    "contract_summary": ""
+  }
+}

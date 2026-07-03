@@ -1,0 +1,90 @@
+{
+  "function_name": "batadv_send_skb_to_orig",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_find_router",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_find_router",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a refcount wrapper – package sending errors are non-retryable or require different handling.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to send a packet to an origin node, involving fragmentation decision and sending via unicast. Refcount management (get via batadv_find_router and put via batadv_neigh_node_put) is incidental to the packet sending logic, not the core purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a refcount wrapper – package sending errors are non-retryable or require different handling.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a refcount wrapper – package sending errors are non-retryable or require different handling.",
+    "contract_summary": ""
+  }
+}

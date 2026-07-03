@@ -1,0 +1,107 @@
+{
+  "function_name": "__init_node_memory_type",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "memtype.kref.refcount",
+      "memory_dev_type--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The kref_get only executes when map_count transitions from 0 to 1. If not executed because map_count was already >0, the reference is already held; no retry is needed. If map_count drops to 0 and then another addition occurs, the path will execute again. No failure case exists.",
+  "contract_summary": "This function initializes or increments the kernel reference count (kref) of a memory_dev_type for a given NUMA node. When a device of that type is first added to the node (map_count transitions from 0 to 1), it acquires a single kref on the memtype, ensuring the memory type remains alive while at least one device of that type is present on the node. Subsequent additions of the same type to the same node do not increment the kref again; only one reference is held per node per type. The caller must later decrement the kref (via kref_put or similar) when the last device of that type on the node is removed (map_count goes from 1 to 0). The function does not return the reference to the caller; the reference is owned by the per-node array. However, the caller can indirectly affect the lifetime via map_count. The node_memory_types array must be properly synchronized.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Almost entirely manages the kref reference count of a memory_dev_type per NUMA node, with minimal setup logic (init node pointer). The kref_get is the primary operation.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The kref_get only executes when map_count transitions from 0 to 1. If not executed because map_count was already >0, the reference is already held; no retry is needed. If map_count drops to 0 and then another addition occurs, the path will execute again. No failure case exists.",
+      "contract_summary": "This function initializes or increments the kernel reference count (kref) of a memory_dev_type for a given NUMA node. When a device of that type is first added to the node (map_count transitions from 0 to 1), it acquires a single kref on the memtype, ensuring the memory type remains alive while at least one device of that type is present on the node. Subsequent additions of the same type to the same node do not increment the kref again; only one reference is held per node per type. The caller must later decrement the kref (via kref_put or similar) when the last device of that type on the node is removed (map_count goes from 1 to 0). The function does not return the reference to the caller; the reference is owned by the per-node array. However, the caller can indirectly affect the lifetime via map_count. The node_memory_types array must be properly synchronized."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "memtype.kref.refcount",
+          "memory_dev_type--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "memtype.kref.refcount",
+          "memory_dev_type--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &memtype->kref, which is the second parameter. The access path memtype.kref.refcount and type chain memory_dev_type--kref--refcount_t match the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "memtype.kref.refcount",
+        "memory_dev_type--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The kref_get only executes when map_count transitions from 0 to 1. If not executed because map_count was already >0, the reference is already held; no retry is needed. If map_count drops to 0 and then another addition occurs, the path will execute again. No failure case exists.",
+    "contract_summary": "This function initializes or increments the kernel reference count (kref) of a memory_dev_type for a given NUMA node. When a device of that type is first added to the node (map_count transitions from 0 to 1), it acquires a single kref on the memtype, ensuring the memory type remains alive while at least one device of that type is present on the node. Subsequent additions of the same type to the same node do not increment the kref again; only one reference is held per node per type. The caller must later decrement the kref (via kref_put or similar) when the last device of that type on the node is removed (map_count goes from 1 to 0). The function does not return the reference to the caller; the reference is owned by the per-node array. However, the caller can indirectly affect the lifetime via map_count. The node_memory_types array must be properly synchronized."
+  }
+}

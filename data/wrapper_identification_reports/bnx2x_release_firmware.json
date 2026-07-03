@@ -1,0 +1,99 @@
+{
+  "function_name": "bnx2x_release_firmware",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bp.firmware.priv.ref.refcount",
+      "bnx2x--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put is unconditional and always executed; there is no failure path from release_firmware that would benefit from retry. The kfrees also always succeed.",
+  "contract_summary": "Cleanup wrapper that releases a firmware reference obtained via request_firmware (or similar). It decrements the firmware's kref refcount via release_firmware, freeing the firmware if the reference count reaches zero. Additionally, it frees three private metadata buffers (init_ops_offsets, init_ops, init_data) that were allocated alongside the firmware. After this call, bp->firmware is set to NULL, and the caller must not use the firmware or the freed buffers. This function is typically called during driver shutdown or firmware unloading. The caller must ensure the firmware was previously loaded and that no other code holds references that could lead to use-after-free after this call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the firmware reference via release_firmware (a kref put), along with freeing associated allocated metadata (init_ops_offsets, init_ops, init_data). The refcount operation is the central action, and the kfrees are tightly coupled cleanup that complete the release lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put is unconditional and always executed; there is no failure path from release_firmware that would benefit from retry. The kfrees also always succeed.",
+      "contract_summary": "Cleanup wrapper that releases a firmware reference obtained via request_firmware (or similar). It decrements the firmware's kref refcount via release_firmware, freeing the firmware if the reference count reaches zero. Additionally, it frees three private metadata buffers (init_ops_offsets, init_ops, init_data) that were allocated alongside the firmware. After this call, bp->firmware is set to NULL, and the caller must not use the firmware or the freed buffers. This function is typically called during driver shutdown or firmware unloading. The caller must ensure the firmware was previously loaded and that no other code holds references that could lead to use-after-free after this call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp.firmware.priv.ref.refcount",
+          "bnx2x--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp.firmware.priv.ref.refcount",
+          "bnx2x--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "release_firmware is a put on its first parameter; the actual argument is bp->firmware, and the access path bp.firmware.priv.ref.refcount correctly traces from the wrapper parameter bp to the refcount field. The type chain bnx2x--firmware--fw_priv--kref--refcount_t matches the callee info, and segment counts are equal (5 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bp.firmware.priv.ref.refcount",
+        "bnx2x--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put is unconditional and always executed; there is no failure path from release_firmware that would benefit from retry. The kfrees also always succeed.",
+    "contract_summary": "Cleanup wrapper that releases a firmware reference obtained via request_firmware (or similar). It decrements the firmware's kref refcount via release_firmware, freeing the firmware if the reference count reaches zero. Additionally, it frees three private metadata buffers (init_ops_offsets, init_ops, init_data) that were allocated alongside the firmware. After this call, bp->firmware is set to NULL, and the caller must not use the firmware or the freed buffers. This function is typically called during driver shutdown or firmware unloading. The caller must ensure the firmware was previously loaded and that no other code holds references that could lead to use-after-free after this call."
+  }
+}

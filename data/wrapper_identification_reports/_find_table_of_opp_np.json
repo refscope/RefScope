@@ -1,0 +1,115 @@
+{
+  "function_name": "_find_table_of_opp_np",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "opp_table.kref.refcount",
+      "opp_table--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_get_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "np.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_pm_opp_get_opp_table_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_get_parent",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "np.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_pm_opp_get_opp_table_ref",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "opp_table.kref.refcount",
+      "member_type_chain": "opp_table--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the opp_table was not found for the given node (parent missing or not in list); the condition depends on static device tree structure, retrying without changing inputs is pointless.",
+  "contract_summary": "Get-wrapper: looks up an opp_table by its device node parent and returns the table with an incremented reference count via dev_pm_opp_get_opp_table_ref. The caller owns the returned reference and must pair it with a dev_pm_opp_put_opp_table_ref() when done. On failure (invalid node or table not found), returns ERR_PTR(-ENODEV). The function uses __free(device_node) for automatic cleanup of the parent node reference, so no manual put is needed for that. The opp_table_node->np pointer is used for matching but the parent node's reference is released automatically.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an opp_table by device node and acquire a reference via dev_pm_opp_get_opp_table_ref; the only non-refcount logic is the parent node lookup and list traversal, which are incidental to finding the correct object.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the opp_table was not found for the given node (parent missing or not in list); the condition depends on static device tree structure, retrying without changing inputs is pointless.",
+      "contract_summary": "Get-wrapper: looks up an opp_table by its device node parent and returns the table with an incremented reference count via dev_pm_opp_get_opp_table_ref. The caller owns the returned reference and must pair it with a dev_pm_opp_put_opp_table_ref() when done. On failure (invalid node or table not found), returns ERR_PTR(-ENODEV). The function uses __free(device_node) for automatic cleanup of the parent node reference, so no manual put is needed for that. The opp_table_node->np pointer is used for matching but the parent node's reference is released automatically."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "opp_table.kref.refcount",
+          "opp_table--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the opp_table after acquiring a reference via dev_pm_opp_get_opp_table_ref(opp_table). The access path from the return value (opp_table pointer) to its refcount field is opp_table.kref.refcount, which matches the callee information. The type chain opp_table--kref--refcount_t has three types, equal to the three segments in the path, and is consistent with struct definitions (struct opp_table contains struct kref, which contains refcount_t)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "opp_table.kref.refcount",
+        "opp_table--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the opp_table was not found for the given node (parent missing or not in list); the condition depends on static device tree structure, retrying without changing inputs is pointless.",
+    "contract_summary": "Get-wrapper: looks up an opp_table by its device node parent and returns the table with an incremented reference count via dev_pm_opp_get_opp_table_ref. The caller owns the returned reference and must pair it with a dev_pm_opp_put_opp_table_ref() when done. On failure (invalid node or table not found), returns ERR_PTR(-ENODEV). The function uses __free(device_node) for automatic cleanup of the parent node reference, so no manual put is needed for that. The opp_table_node->np pointer is used for matching but the parent node's reference is released automatically."
+  }
+}

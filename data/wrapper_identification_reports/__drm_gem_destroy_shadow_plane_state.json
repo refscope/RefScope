@@ -1,0 +1,231 @@
+{
+  "function_name": "__drm_gem_destroy_shadow_plane_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "shadow_plane_state.base.fb.base.refcount.refcount",
+      "drm_shadow_plane_state--drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "shadow_plane_state.base.commit.ref.refcount",
+      "drm_shadow_plane_state--drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "shadow_plane_state.base.fb_damage_clips.base.refcount.refcount",
+      "drm_shadow_plane_state--drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "shadow_plane_state.base.fence.refcount.refcount",
+      "drm_shadow_plane_state--drm_plane_state--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.commit.ref.refcount",
+      "member_type_chain": "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb_damage_clips.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fence.refcount.refcount",
+      "member_type_chain": "drm_plane_state--dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.commit.ref.refcount",
+      "member_type_chain": "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb_damage_clips.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fence.refcount.refcount",
+      "member_type_chain": "drm_plane_state--dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrappers release references; retrying would cause double-put (use-after-free). Failure is undefined behavior, not a retryable condition.",
+  "contract_summary": "This function releases all references held by a `drm_shadow_plane_state`, freeing the format conversion state and decrementing the krefs on the embedded framebuffer, commit, damage clips blob, and fence. After calling, the shadow plane state must not be accessed or dereferenced, and no further puts should be attempted on it. The call is unconditional—it always destroys the state. The caller must no longer use the passed pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release (put) the refcounted resources embedded in drm_shadow_plane_state: format conversion state, framebuffer, commit, damage clips, and fence. The function contains only cleanup calls, no additional logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrappers release references; retrying would cause double-put (use-after-free). Failure is undefined behavior, not a retryable condition.",
+      "contract_summary": "This function releases all references held by a `drm_shadow_plane_state`, freeing the format conversion state and decrementing the krefs on the embedded framebuffer, commit, damage clips blob, and fence. After calling, the shadow plane state must not be accessed or dereferenced, and no further puts should be attempted on it. The call is unconditional—it always destroys the state. The caller must no longer use the passed pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.fb.base.refcount.refcount",
+          "drm_shadow_plane_state--drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.commit.ref.refcount",
+          "drm_shadow_plane_state--drm_plane_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.fb_damage_clips.base.refcount.refcount",
+          "drm_shadow_plane_state--drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.fence.refcount.refcount",
+          "drm_shadow_plane_state--drm_plane_state--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.fb.base.refcount.refcount",
+          "drm_shadow_plane_state--drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.commit.ref.refcount",
+          "drm_shadow_plane_state--drm_plane_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.fb_damage_clips.base.refcount.refcount",
+          "drm_shadow_plane_state--drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "shadow_plane_state.base.fence.refcount.refcount",
+          "drm_shadow_plane_state--drm_plane_state--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls __drm_atomic_helper_plane_destroy_state(&shadow_plane_state->base), which performs put operations on the specified refcount fields (fb, commit, fb_damage_clips, fence). The provided access paths correctly start from the function parameter (shadow_plane_state) and trace through the 'base' member to each field. The number of segments in each path matches the number of types in the corresponding type chain, confirming consistency."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "shadow_plane_state.base.fb.base.refcount.refcount",
+        "drm_shadow_plane_state--drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "shadow_plane_state.base.commit.ref.refcount",
+        "drm_shadow_plane_state--drm_plane_state--drm_crtc_commit--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "shadow_plane_state.base.fb_damage_clips.base.refcount.refcount",
+        "drm_shadow_plane_state--drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "shadow_plane_state.base.fence.refcount.refcount",
+        "drm_shadow_plane_state--drm_plane_state--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrappers release references; retrying would cause double-put (use-after-free). Failure is undefined behavior, not a retryable condition.",
+    "contract_summary": "This function releases all references held by a `drm_shadow_plane_state`, freeing the format conversion state and decrementing the krefs on the embedded framebuffer, commit, damage clips blob, and fence. After calling, the shadow plane state must not be accessed or dereferenced, and no further puts should be attempted on it. The call is unconditional—it always destroys the state. The caller must no longer use the passed pointer."
+  }
+}

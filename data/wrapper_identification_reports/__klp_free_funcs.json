@@ -1,0 +1,82 @@
+{
+  "function_name": "__klp_free_funcs",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kobject_put is unconditional on the chosen path; failure would mean a double-free scenario (refcount already zero) where retrying is dangerous.",
+  "contract_summary": "This is a release (put) wrapper that decrements the kobject reference count for each qualifying klp_func in a klp_object. It iterates the function list, optionally filtering to only nop functions, removes each from the list, and calls kobject_put. After this function returns, the func objects may have been freed (if the refcount reached zero) and must not be accessed further. The caller must ensure no concurrent use of the func objects. This function is a teardown helper, typically called during module unloading or object cleanup.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to iterate over klp_func objects in a klp_object and release each func's kobject reference (kobject_put). The only non-refcount logic is optional filtering via the nops_only flag and list_del — minimal selection and list maintenance. The entire function is about releasing references.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kobject_put is unconditional on the chosen path; failure would mean a double-free scenario (refcount already zero) where retrying is dangerous.",
+      "contract_summary": "This is a release (put) wrapper that decrements the kobject reference count for each qualifying klp_func in a klp_object. It iterates the function list, optionally filtering to only nop functions, removes each from the list, and calls kobject_put. After this function returns, the func objects may have been freed (if the refcount reached zero) and must not be accessed further. The caller must ensure no concurrent use of the func objects. This function is a teardown helper, typically called during module unloading or object cleanup."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "return",
+          "0",
+          "func.kobj.kref.refcount",
+          "klp_func--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation uses 'return' index 0 as location, but the function has no return value. Additionally, the access path starts with 'func', which is a local variable not present at the function interface (the only parameters are obj and nops_only). The refcount operation acts on func->kobj, but func is not passed as an argument or returned, making the extracted path invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function __klp_free_funcs is an internal cleanup helper that iterates over all functions in a klp_object and calls kobject_put on each func->kobj. It neither receives nor returns any reference-counted object (the individual func->kobj is not a parameter or return value). The critical variable (the kobject) originates from a local loop variable, not from the function interface. Therefore, this is not a refcount wrapper or helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kobject_put is unconditional on the chosen path; failure would mean a double-free scenario (refcount already zero) where retrying is dangerous.",
+    "contract_summary": "This is a release (put) wrapper that decrements the kobject reference count for each qualifying klp_func in a klp_object. It iterates the function list, optionally filtering to only nop functions, removes each from the list, and calls kobject_put. After this function returns, the func objects may have been freed (if the refcount reached zero) and must not be accessed further. The caller must ensure no concurrent use of the func objects. This function is a teardown helper, typically called during module unloading or object cleanup."
+  }
+}

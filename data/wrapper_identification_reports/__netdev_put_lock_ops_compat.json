@@ -1,0 +1,99 @@
+{
+  "function_name": "__netdev_put_lock_ops_compat",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.dev_refcnt.refs",
+      "net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always succeeds (unconditional) and does not fail; no retry is needed.",
+  "contract_summary": "This function releases one reference count held on a net_device. It performs the release under a compatibility lock and checks whether the device is still in a registered state and not moving to a different network namespace. If the device is unregistered, moving, or belongs to a different net, the function returns NULL after the put, indicating that the device should no longer be used. Otherwise, it returns the pointer to the same net_device (now with one fewer reference). The caller must have held a valid reference before invoking this function, and after the call that reference is dropped. The caller must not access the device after a NULL return and must not call dev_put on it again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the net_device reference count via dev_put; the locking and condition checks are minimal and directly support the put semantics by determining the return state. The function always executes dev_put, making it a clear put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always succeeds (unconditional) and does not fail; no retry is needed.",
+      "contract_summary": "This function releases one reference count held on a net_device. It performs the release under a compatibility lock and checks whether the device is still in a registered state and not moving to a different network namespace. If the device is unregistered, moving, or belongs to a different net, the function returns NULL after the put, indicating that the device should no longer be used. Otherwise, it returns the pointer to the same net_device (now with one fewer reference). The caller must have held a valid reference before invoking this function, and after the call that reference is dropped. The caller must not access the device after a NULL return and must not call dev_put on it again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The dev_put call operates on parameter dev (index 1) and accesses dev->dev_refcnt.refs (path dev.dev_refcnt.refs). The type chain net_device--refcount_t--atomic_t matches the callee info from the implementation of dev_put. Number of segments (3) matches number of types (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.dev_refcnt.refs",
+        "net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always succeeds (unconditional) and does not fail; no retry is needed.",
+    "contract_summary": "This function releases one reference count held on a net_device. It performs the release under a compatibility lock and checks whether the device is still in a registered state and not moving to a different network namespace. If the device is unregistered, moving, or belongs to a different net, the function returns NULL after the put, indicating that the device should no longer be used. Otherwise, it returns the pointer to the same net_device (now with one fewer reference). The caller must have held a valid reference before invoking this function, and after the call that reference is dropped. The caller must not access the device after a NULL return and must not call dev_put on it again."
+  }
+}

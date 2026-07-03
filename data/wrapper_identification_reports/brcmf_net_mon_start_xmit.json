@@ -1,0 +1,99 @@
+{
+  "function_name": "brcmf_net_mon_start_xmit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation is unconditional and consumes the skb; retrying would cause a use-after-free.",
+  "contract_summary": "Put wrapper: unconditionally frees the sk_buff by dropping one reference via dev_kfree_skb_any. The caller must not use the skb after calling this function. This function implements the TX path for a monitor interface, where packets are simply discarded. No reference is returned to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is unconditional release (put) of an sk_buff via dev_kfree_skb_any; no other logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation is unconditional and consumes the skb; retrying would cause a use-after-free.",
+      "contract_summary": "Put wrapper: unconditionally frees the sk_buff by dropping one reference via dev_kfree_skb_any. The caller must not use the skb after calling this function. This function implements the TX path for a monitor interface, where packets are simply discarded. No reference is returned to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb_any decrements refcount on skb, with access path skb.users.refs matching the type chain sk_buff--refcount_t--atomic_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation is unconditional and consumes the skb; retrying would cause a use-after-free.",
+    "contract_summary": "Put wrapper: unconditionally frees the sk_buff by dropping one reference via dev_kfree_skb_any. The caller must not use the skb after calling this function. This function implements the TX path for a monitor interface, where packets are simply discarded. No reference is returned to the caller."
+  }
+}

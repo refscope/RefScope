@@ -1,0 +1,74 @@
+{
+  "function_name": "_rcds_seq_show",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hfi1_rcd_get_by_index_safe",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rcd.kref.refcount",
+      "member_type_chain": "hfi1_ctxtdata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "hfi1_rcd_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rcd.kref.refcount",
+      "member_type_chain": "hfi1_ctxtdata--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hfi1_rcd_get_by_index_safe",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rcd.kref.refcount",
+      "member_type_chain": "hfi1_ctxtdata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "hfi1_rcd_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rcd.kref.refcount",
+      "member_type_chain": "hfi1_ctxtdata--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable; the function always returns 0 regardless of whether the get succeeds, and retrying the seq_file iteration will naturally advance to the next entry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose of _rcds_seq_show is to display information for a specific context index via a seq_file. It uses get/put for safe access, but the refcount operations are ancillary to the main task of showing data. The function does not return the refcounted object to the caller; it only uses it internally and then releases it. This is a typical seq_file show function, not a reference-count wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable; the function always returns 0 regardless of whether the get succeeds, and retrying the seq_file iteration will naturally advance to the next entry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable; the function always returns 0 regardless of whether the get succeeds, and retrying the seq_file iteration will naturally advance to the next entry.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__fuse_write_file_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ff.count.refs",
+      "fuse_file--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fuse_file_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ff.count.refs",
+      "member_type_chain": "fuse_file--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fuse_file_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ff.count.refs",
+      "member_type_chain": "fuse_file--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If the list is empty, retrying later after a new write file has been added may succeed.",
+  "contract_summary": "Conditional get-wrapper that retrieves the first fuse_file from the inode's write_files list and takes a reference on it via fuse_file_get, transferring ownership of the reference to the caller. Must be called with the inode lock held (or equivalent protection). Returns NULL if the list is empty, in which case no reference is acquired. The caller must later release the reference with fuse_file_put. A retry after a write file is added to the list is valid and may succeed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to the first entry in the inode's write_files list. The list access and spinlock management are purely to safely retrieve the object and increment its refcount.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If the list is empty, retrying later after a new write file has been added may succeed.",
+      "contract_summary": "Conditional get-wrapper that retrieves the first fuse_file from the inode's write_files list and takes a reference on it via fuse_file_get, transferring ownership of the reference to the caller. Must be called with the inode lock held (or equivalent protection). Returns NULL if the list is empty, in which case no reference is acquired. The caller must later release the reference with fuse_file_put. A retry after a write file is added to the list is valid and may succeed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ff.count.refs",
+          "fuse_file--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ff.count.refs",
+          "fuse_file--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __fuse_write_file_get returns a struct fuse_file pointer after calling fuse_file_get(ff) to increment its refcount. The critical variable at the interface is the return value (ff). The access path ff.count.refs and type chain fuse_file--refcount_t--atomic_t match the callee information and are consistent with the code (the refcount is incremented on ff and ff is returned)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ff.count.refs",
+        "fuse_file--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If the list is empty, retrying later after a new write file has been added may succeed.",
+    "contract_summary": "Conditional get-wrapper that retrieves the first fuse_file from the inode's write_files list and takes a reference on it via fuse_file_get, transferring ownership of the reference to the caller. Must be called with the inode lock held (or equivalent protection). Returns NULL if the list is empty, in which case no reference is acquired. The caller must later release the reference with fuse_file_put. A retry after a write file is added to the list is valid and may succeed."
+  }
+}

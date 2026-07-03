@@ -1,0 +1,82 @@
+{
+  "function_name": "bsg_complete",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bsg_job_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount",
+      "member_type_chain": "bsg_job--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bsg_job_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.kref.refcount",
+      "member_type_chain": "bsg_job--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operation always succeeds in a correct refcount system; retrying would cause double-put and use-after-free.",
+  "contract_summary": "This is a put wrapper that releases a reference on a bsg_job when the associated request completes. It is called from the request completion path to decrement the job's refcount. The caller must ensure that the request has an associated job and that this function is called exactly once per reference. After calling bsg_complete, the caller must not use the job unless it holds another reference. This function is part of the lifecycle management for bsg_job objects.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's entire purpose is to extract a bsg_job from a request and release a reference via bsg_job_put. No other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operation always succeeds in a correct refcount system; retrying would cause double-put and use-after-free.",
+      "contract_summary": "This is a put wrapper that releases a reference on a bsg_job when the associated request completes. It is called from the request completion path to decrement the job's refcount. The caller must ensure that the request has an associated job and that this function is called exactly once per reference. After calling bsg_complete, the caller must not use the job unless it holds another reference. This function is part of the lifecycle management for bsg_job objects."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "rq.pdu.kref.refcount",
+          "struct request--bsg_job--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The put operation is performed on the bsg_job object derived from rq, not on the parameter rq itself. The proposed access path 'rq.pdu.kref.refcount' is invalid because 'pdu' is not a direct member of struct request; the refcount is accessed via a pointer obtained by blk_mq_rq_to_pdu, not through a named member chain. The location 'parameter' index 1 is incorrect because the callee's argument is the derived job, not the original parameter rq."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function is a wrapper because it solely calls bsg_job_put on the bsg_job derived from rq, but the put is not on the parameter rq itself, and the candidate access path 'rq.pdu.kref.refcount' is invalid as pdu is not a direct member of struct request. No correct candidate was provided."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operation always succeeds in a correct refcount system; retrying would cause double-put and use-after-free.",
+    "contract_summary": "This is a put wrapper that releases a reference on a bsg_job when the associated request completes. It is called from the request completion path to decrement the job's refcount. The caller must ensure that the request has an associated job and that this function is called exactly once per reference. After calling bsg_complete, the caller must not use the job unless it holds another reference. This function is part of the lifecycle management for bsg_job objects."
+  }
+}

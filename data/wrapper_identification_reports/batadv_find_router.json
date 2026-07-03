@@ -1,0 +1,251 @@
+{
+  "function_name": "batadv_find_router",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "router.refcount.refcount",
+      "batadv_neigh_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_last_bonding_replace",
+      "get_or_put": "put",
+      "index": "old_candidate",
+      "location": "global",
+      "member_access_path": "old_candidate.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_last_bonding_replace",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new_candidate.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_last_bonding_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "last_bonding_candidate.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_router_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_router_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount.refs",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_last_bonding_replace",
+      "get_or_put": "put",
+      "index": "old_candidate",
+      "location": "global",
+      "member_access_path": "old_candidate.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_last_bonding_replace",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "new_candidate.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_last_bonding_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "last_bonding_candidate.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_router_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no router is found the condition may be transient due to network changes, but typical usage expects caller to handle NULL gracefully without immediate retry. The get operation itself (batadv_orig_router_get or kref_get) is not retryable because it depends on existing state.",
+  "contract_summary": "Acquires a reference to a neighbor router (batadv_neigh_node) for the given orig_node and recv_if. The function returns the default router (via batadv_orig_router_get) if bonding is inactive, or selects an alternative bonding candidate when bonding is active. The caller receives a pointer with an increased reference count and must release it via batadv_neigh_node_put when done. Returns NULL if no router is available; the caller must check for NULL before use. RCU read lock is held internally during bonding candidate iteration—no external lock is required.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to return a referenced batadv_neigh_node (router) for a given orig_node. The bonding selection logic adds non-trivial business logic beyond a simple get, but the core semantic remains acquiring and returning a reference-counted object.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no router is found the condition may be transient due to network changes, but typical usage expects caller to handle NULL gracefully without immediate retry. The get operation itself (batadv_orig_router_get or kref_get) is not retryable because it depends on existing state.",
+      "contract_summary": "Acquires a reference to a neighbor router (batadv_neigh_node) for the given orig_node and recv_if. The function returns the default router (via batadv_orig_router_get) if bonding is inactive, or selects an alternative bonding candidate when bonding is active. The caller receives a pointer with an increased reference count and must release it via batadv_neigh_node_put when done. Returns NULL if no router is available; the caller must check for NULL before use. RCU read lock is held internally during bonding candidate iteration—no external lock is required."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "router.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "router.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a batadv_neigh_node pointer with an incremented refcount. The access path 'router.refcount.refcount' correctly traces from the returned variable to the refcount field (batadv_neigh_node->refcount (kref) -> refcount (refcount_t)). The type chain batadv_neigh_node--kref--refcount_t matches the callee info and the kernel struct definitions. The segment count (3) matches the type count (3). All conditions are satisfied."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "router.refcount.refcount",
+        "batadv_neigh_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 10,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no router is found the condition may be transient due to network changes, but typical usage expects caller to handle NULL gracefully without immediate retry. The get operation itself (batadv_orig_router_get or kref_get) is not retryable because it depends on existing state.",
+    "contract_summary": "Acquires a reference to a neighbor router (batadv_neigh_node) for the given orig_node and recv_if. The function returns the default router (via batadv_orig_router_get) if bonding is inactive, or selects an alternative bonding candidate when bonding is active. The caller receives a pointer with an increased reference count and must release it via batadv_neigh_node_put when done. Returns NULL if no router is available; the caller must check for NULL before use. RCU read lock is held internally during bonding candidate iteration—no external lock is required."
+  }
+}

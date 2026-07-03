@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_get_newest_cred_label_condref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "l.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_label",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The conditional get always succeeds when executed (aa_get_newest_label always returns a valid reference); there is no failure path to retry.",
+  "contract_summary": "Conditionally obtains a reference to the newest aa_label from a cred. If the current label is stale, acquires a new reference via aa_get_newest_label and sets *needput=true (caller must release). Otherwise, returns the label without a new reference and sets *needput=false (caller must not release). The caller MUST check *needput to determine ownership: only when true does the caller own a reference and must later call aa_put_label. This function does not handle errors; it always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference to the newest label, with minimal additional logic (stale check).",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The conditional get always succeeds when executed (aa_get_newest_label always returns a valid reference); there is no failure path to retry.",
+      "contract_summary": "Conditionally obtains a reference to the newest aa_label from a cred. If the current label is stale, acquires a new reference via aa_get_newest_label and sets *needput=true (caller must release). Otherwise, returns the label without a new reference and sets *needput=false (caller must not release). The caller MUST check *needput to determine ownership: only when true does the caller own a reference and must later call aa_put_label. This function does not handle errors; it always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "l.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "l.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a label that may have its refcount increased via aa_get_newest_label when stale. The callee aa_get_newest_label performs a get on its parameter (the label) with access path l.count.count.refcount and type chain aa_label--aa_count--kref--refcount_t, which matches the candidate. The return value carries this reference, so the operation is correctly attributed to 'return', index '0'. Segment counts match (4 segments, 4 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "l.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The conditional get always succeeds when executed (aa_get_newest_label always returns a valid reference); there is no failure path to retry.",
+    "contract_summary": "Conditionally obtains a reference to the newest aa_label from a cred. If the current label is stale, acquires a new reference via aa_get_newest_label and sets *needput=true (caller must release). Otherwise, returns the label without a new reference and sets *needput=false (caller must not release). The caller MUST check *needput to determine ownership: only when true does the caller own a reference and must later call aa_put_label. This function does not handle errors; it always succeeds."
+  }
+}

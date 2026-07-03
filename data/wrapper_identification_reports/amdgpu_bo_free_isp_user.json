@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_bo_free_isp_user",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bo.tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function unconditionally decrements the refcount and never fails; retrying would be a double-free risk.",
+  "contract_summary": "Put wrapper that releases a reference on an amdgpu_bo object. Before dropping the reference, it attempts to reserve, unpin, and unreserve the BO, which is standard cleanup for ISP user buffers. The reference is always released via amdgpu_bo_unref; the caller must not use the bo pointer after the call. Failure of the reservation does not prevent the unref, so the object may be freed even if the unpin fails.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primarily a put wrapper: the core action is amdgpu_bo_unref to release a reference, but it also attempts to unpin/unreserve the BO beforehand. The extra cleanup logic makes it not pure refcount, but the primary purpose is still reference release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function unconditionally decrements the refcount and never fails; retrying would be a double-free risk.",
+      "contract_summary": "Put wrapper that releases a reference on an amdgpu_bo object. Before dropping the reference, it attempts to reserve, unpin, and unreserve the BO, which is standard cleanup for ISP user buffers. The reference is always released via amdgpu_bo_unref; the caller must not use the bo pointer after the call. Failure of the reservation does not prevent the unref, so the object may be freed even if the unpin fails."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "amdgpu_bo_unref is called on &bo, which decrements the refcount of the bo object. The access path bo.tbo.base.refcount.refcount correctly traces from parameter bo to the refcount field. The type chain matches the structure hierarchy. Segment counts are equal (5 segments, 5 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bo.tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function unconditionally decrements the refcount and never fails; retrying would be a double-free risk.",
+    "contract_summary": "Put wrapper that releases a reference on an amdgpu_bo object. Before dropping the reference, it attempts to reserve, unpin, and unreserve the BO, which is standard cleanup for ISP user buffers. The reference is always released via amdgpu_bo_unref; the caller must not use the bo pointer after the call. Failure of the reservation does not prevent the unref, so the object may be freed even if the unpin fails."
+  }
+}

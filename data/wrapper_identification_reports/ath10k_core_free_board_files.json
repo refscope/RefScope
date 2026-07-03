@@ -1,0 +1,134 @@
+{
+  "function_name": "ath10k_core_free_board_files",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ar.normal_mode_fw.board.priv.ref.refcount",
+      "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ar.normal_mode_fw.ext_board.priv.ref.refcount",
+      "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "release_firmware is a put operation that should always succeed; failure indicates a kernel bug, not a transient condition.",
+  "contract_summary": "This function releases the board firmware files by calling release_firmware on the normal and extended board firmware pointers, provided they are not error pointers. After release, it clears the pointers and associated data/length fields to prevent use-after-free. This is a cleanup function that should be called when the board files are no longer needed. The caller must ensure that these firmware objects are not used after this call. There is no return value or error handling.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on board firmware objects via release_firmware, which is a refcount put operation. The additional null/zero assignments are standard cleanup to avoid stale pointers.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "release_firmware is a put operation that should always succeed; failure indicates a kernel bug, not a transient condition.",
+      "contract_summary": "This function releases the board firmware files by calling release_firmware on the normal and extended board firmware pointers, provided they are not error pointers. After release, it clears the pointers and associated data/length fields to prevent use-after-free. This is a cleanup function that should be called when the board files are no longer needed. The caller must ensure that these firmware objects are not used after this call. There is no return value or error handling."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ar.normal_mode_fw.board.priv.ref.refcount",
+          "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ar.normal_mode_fw.ext_board.priv.ref.refcount",
+          "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted access paths incorrectly start from the outer 'ar' structure instead of the function parameter (the 'struct firmware *' passed to release_firmware). The correct path from the parameter should be 'priv.ref.refcount' (or 'fw.priv.ref.refcount' including parameter name) with type chain 'firmware--fw_priv--kref--refcount_t'. The candidate paths include extra outer context ('ath10k--ath10k_fw_components') that do not correspond to the parameter's type, making them inconsistent with the callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ar.normal_mode_fw.board.priv.ref.refcount",
+          "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ar.normal_mode_fw.ext_board.priv.ref.refcount",
+          "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls release_firmware on two board firmware pointers, which decrements their refcounts. It is a focused release wrapper with high purity. The extracted paths from parameter 'ar' are correct; the check erroneously expected paths relative to release_firmware's parameter, but the wrapper's parameter is 'ar'. The function does not pass the critical variable back to the caller, hence passes_critical_variable is false."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ar.normal_mode_fw.board.priv.ref.refcount",
+        "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ar.normal_mode_fw.ext_board.priv.ref.refcount",
+        "ath10k--ath10k_fw_components--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "release_firmware is a put operation that should always succeed; failure indicates a kernel bug, not a transient condition.",
+    "contract_summary": "This function releases the board firmware files by calling release_firmware on the normal and extended board firmware pointers, provided they are not error pointers. After release, it clears the pointers and associated data/length fields to prevent use-after-free. This is a cleanup function that should be called when the board files are no longer needed. The caller must ensure that these firmware objects are not used after this call. There is no return value or error handling."
+  }
+}

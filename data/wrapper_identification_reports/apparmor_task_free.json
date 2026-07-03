@@ -1,0 +1,187 @@
+{
+  "function_name": "apparmor_task_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.security.nnp.count.count.refcount",
+      "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.security.previous.count.count.refcount",
+      "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.security.onexec.count.count.refcount",
+      "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_free_task_ctx",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_task_ctx",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_task_ctx",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.nnp.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_free_task_ctx",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.onexec.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_task_ctx",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.previous.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_task_ctx",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.nnp.count.count.refcount",
+      "member_type_chain": "aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper always succeeds if called correctly; retrying would only risk a double-free or use-after-free.",
+  "contract_summary": "This function is an AppArmor security hook called when a task_struct is being freed. It releases references held by the task's security context (aa_task_ctx) by calling aa_free_task_ctx, which decrements reference counts on the previous, onexec, and nnp labels. This is a pure put wrapper: after this call, the task's security context is cleaned up and the labels' refcounts are decremented. The caller (the task free path) must ensure this function is called exactly once per task, and no further use of the task's AppArmor context should occur.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function body is a call to aa_free_task_ctx, a put function that decrements refcounts on the task's AppArmor labels. No other logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper always succeeds if called correctly; retrying would only risk a double-free or use-after-free.",
+      "contract_summary": "This function is an AppArmor security hook called when a task_struct is being freed. It releases references held by the task's security context (aa_task_ctx) by calling aa_free_task_ctx, which decrements reference counts on the previous, onexec, and nnp labels. This is a pure put wrapper: after this call, the task's security context is cleaned up and the labels' refcounts are decremented. The caller (the task free path) must ensure this function is called exactly once per task, and no further use of the task's AppArmor context should occur."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.security.nnp.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.security.previous.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.security.onexec.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.security.nnp.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.security.previous.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.security.onexec.count.count.refcount",
+          "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The callee aa_free_task_ctx performs put operations on three label refcounts (nnp, previous, onexec) stored in the aa_task_ctx, which is obtained via task->security. The access paths correctly start from parameter 1 (task) and traverse through security and the relevant fields; segment counts (6) match type chain lengths (6) for each operation."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.security.nnp.count.count.refcount",
+        "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.security.previous.count.count.refcount",
+        "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.security.onexec.count.count.refcount",
+        "task_struct--aa_task_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper always succeeds if called correctly; retrying would only risk a double-free or use-after-free.",
+    "contract_summary": "This function is an AppArmor security hook called when a task_struct is being freed. It releases references held by the task's security context (aa_task_ctx) by calling aa_free_task_ctx, which decrements reference counts on the previous, onexec, and nnp labels. This is a pure put wrapper: after this call, the task's security context is cleaned up and the labels' refcounts are decremented. The caller (the task free path) must ensure this function is called exactly once per task, and no further use of the task's AppArmor context should occur."
+  }
+}

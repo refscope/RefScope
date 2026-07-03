@@ -1,0 +1,143 @@
+{
+  "function_name": "batadv_last_bonding_replace",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "new_candidate.refcount.refcount",
+      "batadv_orig_ifinfo--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "old_candidate",
+      "old_candidate.refcount.refcount",
+      "batadv_orig_ifinfo--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_orig_ifinfo_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_orig_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get is unconditional and never fails; batadv_orig_ifinfo_put is safe with NULL. No failure path exists, so retry is meaningless.",
+  "contract_summary": "This is a replacement wrapper that manages the refcount of the `last_bonding_candidate` pointer in `orig_node`. It atomically increments the reference count of the new candidate (if non-NULL) via `kref_get`, releases the reference of the old candidate via `batadv_orig_ifinfo_put`, and updates the pointer under the protection of `neigh_list_lock`. The caller must supply a valid new candidate (or NULL) and must manage its own reference to that object. After this call, the `orig_node` holds a reference to the new candidate (if any) that will be released when a subsequent replacement or cleanup occurs. The function is safe to call with NULL for either candidate, and the lock ensures consistency between pointer assignment and refcount operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to manage refcount of last_bonding_candidate by getting a reference on new_candidate (if non-NULL) and putting the old candidate. The only additional logic is the pointer swap and locking, which are necessary for safe refcount management.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get is unconditional and never fails; batadv_orig_ifinfo_put is safe with NULL. No failure path exists, so retry is meaningless.",
+      "contract_summary": "This is a replacement wrapper that manages the refcount of the `last_bonding_candidate` pointer in `orig_node`. It atomically increments the reference count of the new candidate (if non-NULL) via `kref_get`, releases the reference of the old candidate via `batadv_orig_ifinfo_put`, and updates the pointer under the protection of `neigh_list_lock`. The caller must supply a valid new candidate (or NULL) and must manage its own reference to that object. After this call, the `orig_node` holds a reference to the new candidate (if any) that will be released when a subsequent replacement or cleanup occurs. The function is safe to call with NULL for either candidate, and the lock ensures consistency between pointer assignment and refcount operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "new_candidate.refcount.refcount",
+          "batadv_orig_ifinfo--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "old_candidate",
+          "old_candidate.refcount.refcount",
+          "batadv_orig_ifinfo--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "new_candidate.refcount.refcount",
+          "batadv_orig_ifinfo--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "old_candidate",
+          "old_candidate.refcount.refcount",
+          "batadv_orig_ifinfo--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code: kref_get on new_candidate->refcount and batadv_orig_ifinfo_put on old_candidate. The access paths and type chains match the callee info and the actual struct definitions. Segment counts (3 each) equal type chain lengths."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "new_candidate.refcount.refcount",
+        "batadv_orig_ifinfo--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "old_candidate",
+        "old_candidate.refcount.refcount",
+        "batadv_orig_ifinfo--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get is unconditional and never fails; batadv_orig_ifinfo_put is safe with NULL. No failure path exists, so retry is meaningless.",
+    "contract_summary": "This is a replacement wrapper that manages the refcount of the `last_bonding_candidate` pointer in `orig_node`. It atomically increments the reference count of the new candidate (if non-NULL) via `kref_get`, releases the reference of the old candidate via `batadv_orig_ifinfo_put`, and updates the pointer under the protection of `neigh_list_lock`. The caller must supply a valid new candidate (or NULL) and must manage its own reference to that object. After this call, the `orig_node` holds a reference to the new candidate (if any) that will be released when a subsequent replacement or cleanup occurs. The function is safe to call with NULL for either candidate, and the lock ensures consistency between pointer assignment and refcount operations."
+  }
+}

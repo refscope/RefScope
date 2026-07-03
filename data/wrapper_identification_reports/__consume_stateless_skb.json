@@ -1,0 +1,99 @@
+{
+  "function_name": "__consume_stateless_skb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.fclones.fclone_ref",
+      "sk_buff--sk_buff_fclones--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skbmem",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.fclones.fclone_ref",
+      "member_type_chain": "sk_buff--sk_buff_fclones--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skbmem",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.fclones.fclone_ref",
+      "member_type_chain": "sk_buff--sk_buff_fclones--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put is unconditional and always succeeds; retrying would cause use-after-free.",
+  "contract_summary": "This is a put wrapper that consumes and frees a stateless skb. It releases data references via skb_release_data with SKB_CONSUMED, then frees the skb memory via kfree_skbmem (which decrements the fclone_ref refcount). After calling this function, the skb is invalid and must not be accessed or released again. The caller must ensure that the skb is not shared and that no further references exist. This function is typically used when an skb has been fully processed and no longer needs to be owned.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references and free the skb; it calls skb_release_data and then kfree_skbmem (a put on fclone_ref). The trace is negligible overhead.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put is unconditional and always succeeds; retrying would cause use-after-free.",
+      "contract_summary": "This is a put wrapper that consumes and frees a stateless skb. It releases data references via skb_release_data with SKB_CONSUMED, then frees the skb memory via kfree_skbmem (which decrements the fclone_ref refcount). After calling this function, the skb is invalid and must not be accessed or released again. The caller must ensure that the skb is not shared and that no further references exist. This function is typically used when an skb has been fully processed and no longer needs to be owned."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.fclones.fclone_ref",
+          "sk_buff--sk_buff_fclones--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.fclones.fclone_ref",
+          "sk_buff--sk_buff_fclones--refcount_t"
+        ]
+      ],
+      "reason": "The function calls kfree_skbmem(skb), which according to callee info performs a put on parameter 1 with access path skb.fclones.fclone_ref. The access path segment count (3) matches the type chain count (3), and the critical variable is the parameter skb, consistent with the call."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.fclones.fclone_ref",
+        "sk_buff--sk_buff_fclones--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put is unconditional and always succeeds; retrying would cause use-after-free.",
+    "contract_summary": "This is a put wrapper that consumes and frees a stateless skb. It releases data references via skb_release_data with SKB_CONSUMED, then frees the skb memory via kfree_skbmem (which decrements the fclone_ref refcount). After calling this function, the skb is invalid and must not be accessed or released again. The caller must ensure that the skb is not shared and that no further references exist. This function is typically used when an skb has been fully processed and no longer needs to be owned."
+  }
+}

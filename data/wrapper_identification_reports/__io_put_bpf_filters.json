@@ -1,0 +1,99 @@
+{
+  "function_name": "__io_put_bpf_filters",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "filters.refs.refs",
+      "io_bpf_filters--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always succeeds; failure would indicate a use-after-free bug, so retry is never appropriate.",
+  "contract_summary": "This is a put-wrapper that releases a reference on an io_bpf_filters object. It decrements the refcount and, if the refcount reaches zero, schedules an RCU callback (io_free_bpf_filters) to free the object. The caller must not access the filters object after calling this function unless it holds another valid reference. The function does not return any status; the caller cannot know whether the object was freed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of this function is to decrement the reference count of an io_bpf_filters object and, if it becomes zero, schedule an RCU callback to free it. There is no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always succeeds; failure would indicate a use-after-free bug, so retry is never appropriate.",
+      "contract_summary": "This is a put-wrapper that releases a reference on an io_bpf_filters object. It decrements the refcount and, if the refcount reaches zero, schedules an RCU callback (io_free_bpf_filters) to free the object. The caller must not access the filters object after calling this function unless it holds another valid reference. The function does not return any status; the caller cannot know whether the object was freed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "filters.refs.refs",
+          "io_bpf_filters--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "filters.refs.refs",
+          "io_bpf_filters--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __io_put_bpf_filters calls refcount_dec_and_test(&filters->refs), which is a put operation on the parameter 'filters'. The access path 'filters.refs.refs' correctly traces from the parameter to the refcount field, with type chain 'io_bpf_filters--refcount_t--atomic_t' matching the callee info. Segment counts are equal. Therefore, the extracted operation is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "filters.refs.refs",
+        "io_bpf_filters--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always succeeds; failure would indicate a use-after-free bug, so retry is never appropriate.",
+    "contract_summary": "This is a put-wrapper that releases a reference on an io_bpf_filters object. It decrements the refcount and, if the refcount reaches zero, schedules an RCU callback (io_free_bpf_filters) to free the object. The caller must not access the filters object after calling this function unless it holds another valid reference. The function does not return any status; the caller cannot know whether the object was freed."
+  }
+}

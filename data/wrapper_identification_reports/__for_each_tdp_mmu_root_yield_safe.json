@@ -1,0 +1,150 @@
+{
+  "function_name": "__for_each_tdp_mmu_root_yield_safe",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "_root.tdp_mmu_root_count.refs",
+      "kvm_mmu_page--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "_root.tdp_mmu_root_count.refs",
+      "kvm_mmu_page--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tdp_mmu_next_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "next_root.tdp_mmu_root_count.refs",
+      "member_type_chain": "kvm_mmu_page--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tdp_mmu_next_root",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "prev_root.tdp_mmu_root_count.refs",
+      "member_type_chain": "kvm_mmu_page--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "tdp_mmu_next_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "next_root.tdp_mmu_root_count.refs",
+      "member_type_chain": "kvm_mmu_page--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tdp_mmu_next_root",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "prev_root.tdp_mmu_root_count.refs",
+      "member_type_chain": "kvm_mmu_page--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operations always succeed (refcount increment/decrement) and the iteration simply ends when no roots remain; there is no failure to retry.",
+  "contract_summary": "Iterator macro for TDP MMU roots. On each iteration, the macro acquires a reference to the current root and releases the reference to the previous root. The caller receives a non-NULL root pointer inside the loop body and must not manually put the root within the loop. If the caller breaks out of the loop early (e.g., via break), they are responsible for releasing the reference to the last obtained root by calling tdp_mmu_put_root or similar. The macro holds the mmu_lock (asserted), and the lock is yielded at each iteration via the 'yield_safe' mechanism.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The macro's sole purpose is to iterate over TDP MMU roots while acquiring a reference to each root via tdp_mmu_next_root and releasing the previous root. The only operations are refcount management and a lockdep assertion.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operations always succeed (refcount increment/decrement) and the iteration simply ends when no roots remain; there is no failure to retry.",
+      "contract_summary": "Iterator macro for TDP MMU roots. On each iteration, the macro acquires a reference to the current root and releases the reference to the previous root. The caller receives a non-NULL root pointer inside the loop body and must not manually put the root within the loop. If the caller breaks out of the loop early (e.g., via break), they are responsible for releasing the reference to the last obtained root by calling tdp_mmu_put_root or similar. The macro holds the mmu_lock (asserted), and the lock is yielded at each iteration via the 'yield_safe' mechanism."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "_root.tdp_mmu_root_count.refs",
+          "kvm_mmu_page--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "_root.tdp_mmu_root_count.refs",
+          "kvm_mmu_page--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "For the 'get' operation, the callee indicates it is on the return value (index 0), not on parameter 2; the candidate incorrectly uses parameter index 2. For the 'put' operation, although the direction and index (parameter 2) match the callee, the access path starts with '_root' instead of the callee's parameter name (e.g., 'prev_root'), making it inconsistent. The critical variable location/index is wrong for the get, and the access path is incorrect for the put; thus both operations are invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "_root.tdp_mmu_root_count.refs",
+          "kvm_mmu_page--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "_root.tdp_mmu_root_count.refs",
+          "kvm_mmu_page--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The macro __for_each_tdp_mmu_root_yield_safe is a wrapper for iterating TDP MMU roots while managing references via tdp_mmu_next_root. The get operation should be on the return value (index 0) because tdp_mmu_next_root returns a new root with a reference; the macro assigns this to _root. The put operation is correctly on parameter 2 (the previous root passed as the second argument to tdp_mmu_next_root). The check stage incorrectly rejected the access path due to parameter naming differences (macro parameter _root vs callee's prev_root), but the semantic mapping is valid. The critical variable _root flows to the caller, and the function has focused refcount semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "_root.tdp_mmu_root_count.refs",
+        "kvm_mmu_page--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "_root.tdp_mmu_root_count.refs",
+        "kvm_mmu_page--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operations always succeed (refcount increment/decrement) and the iteration simply ends when no roots remain; there is no failure to retry.",
+    "contract_summary": "Iterator macro for TDP MMU roots. On each iteration, the macro acquires a reference to the current root and releases the reference to the previous root. The caller receives a non-NULL root pointer inside the loop body and must not manually put the root within the loop. If the caller breaks out of the loop early (e.g., via break), they are responsible for releasing the reference to the last obtained root by calling tdp_mmu_put_root or similar. The macro holds the mmu_lock (asserted), and the lock is yielded at each iteration via the 'yield_safe' mechanism."
+  }
+}

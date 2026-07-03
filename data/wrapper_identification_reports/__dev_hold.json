@@ -1,0 +1,115 @@
+{
+  "function_name": "__dev_hold",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "dev.dev_refcnt.refs",
+      "net_device--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The increment operation (this_cpu_inc or refcount_inc) is unconditional and never fails; there is no failure path to retry.",
+  "contract_summary": "Low-level get-wrapper that unconditionally increments the reference count of a net_device. The function is safe to call with a NULL pointer (no-op). The caller must ensure that the device is alive (e.g., by holding an existing reference) before calling this function, and must pair the call with a corresponding dev_put (or __dev_put) when the reference is no longer needed. This is the raw increment operation; higher-level helpers like dev_hold typically call this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The only operation is a null check followed by a reference count increment (either per-CPU or via refcount_inc). No other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The increment operation (this_cpu_inc or refcount_inc) is unconditional and never fails; there is no failure path to retry.",
+      "contract_summary": "Low-level get-wrapper that unconditionally increments the reference count of a net_device. The function is safe to call with a NULL pointer (no-op). The caller must ensure that the device is alive (e.g., by holding an existing reference) before calling this function, and must pair the call with a corresponding dev_put (or __dev_put) when the reference is no longer needed. This is the raw increment operation; higher-level helpers like dev_hold typically call this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "dev.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&dev->dev_refcnt) is called on dev->dev_refcnt, where dev is parameter 1. The access path dev.dev_refcnt.refs matches the callee's path (r.refs) and the type chain net_device--refcount_struct--atomic_t is consistent with dev->dev_refcnt being refcount_t (refcount_struct) and its refs field being atomic_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "dev.dev_refcnt.refs",
+        "net_device--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The increment operation (this_cpu_inc or refcount_inc) is unconditional and never fails; there is no failure path to retry.",
+    "contract_summary": "Low-level get-wrapper that unconditionally increments the reference count of a net_device. The function is safe to call with a NULL pointer (no-op). The caller must ensure that the device is alive (e.g., by holding an existing reference) before calling this function, and must pair the call with a corresponding dev_put (or __dev_put) when the reference is no longer needed. This is the raw increment operation; higher-level helpers like dev_hold typically call this function."
+  }
+}

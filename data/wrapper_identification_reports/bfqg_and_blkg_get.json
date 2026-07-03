@@ -1,0 +1,127 @@
+{
+  "function_name": "bfqg_and_blkg_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "bfqg.ref.refs",
+      "bfq_group--refcount_struct--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "bfqg.pd.blkg.refcnt",
+      "bfq_group--blkg_policy_data--blkcg_gq--percpu_ref"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfqg_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqg.ref.refs",
+      "member_type_chain": "bfq_group--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfqg_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bfqg.ref.refs",
+      "member_type_chain": "bfq_group--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operations are unconditional and always succeed in normal operation; failure would indicate a kernel bug (e.g., refcount overflow), not a transient condition.",
+  "contract_summary": "This function acquires references on both the bfq_group and its associated blkg. It is a compound get wrapper: after calling, the caller owns an additional reference on both objects and must later release each with corresponding put functions (bfqg_put and blkg_put). The operation is unconditional and always succeeds under normal conditions. There is no return value to check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire references on both a bfq_group and its associated blkg via callee get functions. No other logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operations are unconditional and always succeed in normal operation; failure would indicate a kernel bug (e.g., refcount overflow), not a transient condition.",
+      "contract_summary": "This function acquires references on both the bfq_group and its associated blkg. It is a compound get wrapper: after calling, the caller owns an additional reference on both objects and must later release each with corresponding put functions (bfqg_put and blkg_put). The operation is unconditional and always succeeds under normal conditions. There is no return value to check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "bfqg.pd.blkg.refcnt",
+          "bfq_group--blkg_policy_data--blkcg_gq--percpu_ref"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "bfqg.ref.refs",
+          "bfq_group--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "bfqg.pd.blkg.refcnt",
+          "bfq_group--blkg_policy_data--blkcg_gq--percpu_ref"
+        ]
+      ],
+      "reason": "Both operations correspond to the two get calls in the function: bfqg_get on bfqg->ref.refs (access path bfqg.ref.refs, type chain bfq_group--refcount_struct--atomic_t) and blkg_get on the blkg obtained via bfqg_to_blkg(bfqg) (access path bfqg.pd.blkg.refcnt, type chain bfq_group--blkg_policy_data--blkcg_gq--percpu_ref). The critical variable for both is the input parameter bfqg (index 1). Access path segment counts match type chain lengths. No inconsistencies found."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "bfqg.ref.refs",
+        "bfq_group--refcount_struct--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "bfqg.pd.blkg.refcnt",
+        "bfq_group--blkg_policy_data--blkcg_gq--percpu_ref"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operations are unconditional and always succeed in normal operation; failure would indicate a kernel bug (e.g., refcount overflow), not a transient condition.",
+    "contract_summary": "This function acquires references on both the bfq_group and its associated blkg. It is a compound get wrapper: after calling, the caller owns an additional reference on both objects and must later release each with corresponding put functions (bfqg_put and blkg_put). The operation is unconditional and always succeeds under normal conditions. There is no return value to check."
+  }
+}

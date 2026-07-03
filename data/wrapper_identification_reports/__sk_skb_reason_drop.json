@@ -1,0 +1,99 @@
+{
+  "function_name": "__sk_skb_reason_drop",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "skb_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "skb_unref",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put always succeeds; if the skb is freed, retrying is impossible and pointless.",
+  "contract_summary": "This function drops a reference on the sk_buff, recording the drop reason with a trace event. After calling, the caller must not access the skb, as it may have been freed if the reference count reached zero. The return value indicates whether the skb is still alive (true) or freed (false). It is a release (put) operation, part of the skb lifecycle: the caller relinquishes its reference and ownership.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to drop a reference (put) on an sk_buff via skb_unref, with minimal extra logic (debug check and tracing). The function manages the skb's reference count and logs the drop reason, making it a focused put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put always succeeds; if the skb is freed, retrying is impossible and pointless.",
+      "contract_summary": "This function drops a reference on the sk_buff, recording the drop reason with a trace event. After calling, the caller must not access the skb, as it may have been freed if the reference count reached zero. The return value indicates whether the skb is still alive (true) or freed (false). It is a release (put) operation, part of the skb lifecycle: the caller relinquishes its reference and ownership."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "skb_unref(skb) is called on parameter 1 (skb), which performs a put on skb->users.refs. The access path 'skb.users.refs' starts from the critical variable (parameter skb) and matches the callee specification. The type chain 'sk_buff--refcount_t--atomic_t' is consistent with the struct definitions. Segment count matches (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put always succeeds; if the skb is freed, retrying is impossible and pointless.",
+    "contract_summary": "This function drops a reference on the sk_buff, recording the drop reason with a trace event. After calling, the caller must not access the skb, as it may have been freed if the reference count reached zero. The return value indicates whether the skb is still alive (true) or freed (false). It is a release (put) operation, part of the skb lifecycle: the caller relinquishes its reference and ownership."
+  }
+}

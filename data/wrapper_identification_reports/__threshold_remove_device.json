@@ -1,0 +1,99 @@
+{
+  "function_name": "__threshold_remove_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bp[0].kobj.kref.refcount",
+      "threshold_bank--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "threshold_remove_bank",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bank.kobj.kref.refcount",
+      "member_type_chain": "threshold_bank--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "threshold_remove_bank",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bank.kobj.kref.refcount",
+      "member_type_chain": "threshold_bank--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final and not retryable; if a put is called on an already-released object, it indicates a use-after-free bug.",
+  "contract_summary": "This function performs a batch release of all threshold bank objects in the given array. For each non-NULL bank pointer, it calls threshold_remove_bank (which decrements the object's refcount and potentially frees it), then nullifies the pointer. After processing all banks, it frees the array itself. The caller must not access any bank pointer in the array after this call, and must not call kfree again on the array. This is the cleanup/unregister path for a threshold device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release (put) all threshold_bank objects via threshold_remove_bank and free the container array. No significant non-refcount logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final and not retryable; if a put is called on an already-released object, it indicates a use-after-free bug.",
+      "contract_summary": "This function performs a batch release of all threshold bank objects in the given array. For each non-NULL bank pointer, it calls threshold_remove_bank (which decrements the object's refcount and potentially frees it), then nullifies the pointer. After processing all banks, it frees the array itself. The caller must not access any bank pointer in the array after this call, and must not call kfree again on the array. This is the cleanup/unregister path for a threshold device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp[0].kobj.kref.refcount",
+          "threshold_bank--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bp[0].kobj.kref.refcount",
+          "threshold_bank--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation is a put on the threshold_bank object passed to threshold_remove_bank. The access path bp[0].kobj.kref.refcount correctly traces from the parameter bp (a pointer to an array of pointers) through the first element to the refcount field. The type chain threshold_bank--kobject--kref--refcount_t matches the struct definitions. The segment counts are equal (4 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bp[0].kobj.kref.refcount",
+        "threshold_bank--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final and not retryable; if a put is called on an already-released object, it indicates a use-after-free bug.",
+    "contract_summary": "This function performs a batch release of all threshold bank objects in the given array. For each non-NULL bank pointer, it calls threshold_remove_bank (which decrements the object's refcount and potentially frees it), then nullifies the pointer. After processing all banks, it frees the array itself. The caller must not access any bank pointer in the array after this call, and must not call kfree again on the array. This is the cleanup/unregister path for a threshold device."
+  }
+}

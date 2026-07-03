@@ -1,0 +1,99 @@
+{
+  "function_name": "am65_cpsw_remove_dt",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "common.ports[i].slave.port_np.kobj.kref.refcount",
+      "am65_cpsw_common--am65_cpsw_port--am65_cpsw_slave--device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "of_node_put is unconditional and void; there is no failure path, and retrying would constitute a double-put (use-after-free risk).",
+  "contract_summary": "This is a put wrapper that releases the device_node references held in each CPSW port's slave.port_np field. It is typically called during driver removal or error cleanup. After this function returns, the caller must not access the port_np pointers of any port, as the underlying nodes may have been freed. The function is unconditional and always consumes the references for all ports.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to release device_node references (of_node_put) for each port's slave node, with no other significant logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "of_node_put is unconditional and void; there is no failure path, and retrying would constitute a double-put (use-after-free risk).",
+      "contract_summary": "This is a put wrapper that releases the device_node references held in each CPSW port's slave.port_np field. It is typically called during driver removal or error cleanup. After this function returns, the caller must not access the port_np pointers of any port, as the underlying nodes may have been freed. The function is unconditional and always consumes the references for all ports."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "common.ports[i].slave.port_np.kobj.kref.refcount",
+          "am65_cpsw_common--am65_cpsw_port--am65_cpsw_slave--device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "common.ports[i].slave.port_np.kobj.kref.refcount",
+          "am65_cpsw_common--am65_cpsw_port--am65_cpsw_slave--device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "of_node_put is called on port->slave.port_np for each port, releasing a device_node reference. The access path from the outer function's parameter 'common' through the array and fields to the kobj.kref.refcount matches the callee's expected path node.kobj.kref.refcount. The type chain matches the structure hierarchy. Segment count (7) equals type count (7)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "common.ports[i].slave.port_np.kobj.kref.refcount",
+        "am65_cpsw_common--am65_cpsw_port--am65_cpsw_slave--device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "of_node_put is unconditional and void; there is no failure path, and retrying would constitute a double-put (use-after-free risk).",
+    "contract_summary": "This is a put wrapper that releases the device_node references held in each CPSW port's slave.port_np field. It is typically called during driver removal or error cleanup. After this function returns, the caller must not access the port_np pointers of any port, as the underlying nodes may have been freed. The function is unconditional and always consumes the references for all ports."
+  }
+}

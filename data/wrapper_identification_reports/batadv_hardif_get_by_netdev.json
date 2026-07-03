@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_hardif_get_by_netdev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount.refs",
+      "batadv_hard_iface--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either the interface is not registered (transient) or its refcount is zero (freeing). The function does not distinguish; retrying without state change is not appropriate for a get-wrapper.",
+  "contract_summary": "This is an RCU-protected get-wrapper that atomically looks up a batadv_hard_iface by its associated net_device and acquires a reference if the object is still alive (kref_get_unless_zero). The caller receives a pointer with an elevated refcount and must call batadv_hardif_put() when the reference is no longer needed. If the interface is not found or is in the process of being freed (refcount zero), the function returns NULL and no reference is taken. The caller must check the return value for NULL before using the result.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to look up a batadv_hard_iface by net_device and conditionally acquire a reference via kref_get_unless_zero. The RCU lock/unlock and list traversal are purely supporting refcount acquisition.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either the interface is not registered (transient) or its refcount is zero (freeing). The function does not distinguish; retrying without state change is not appropriate for a get-wrapper.",
+      "contract_summary": "This is an RCU-protected get-wrapper that atomically looks up a batadv_hard_iface by its associated net_device and acquires a reference if the object is still alive (kref_get_unless_zero). The caller receives a pointer with an elevated refcount and must call batadv_hardif_put() when the reference is no longer needed. If the interface is not found or is in the process of being freed (refcount zero), the function returns NULL and no reference is taken. The caller must check the return value for NULL before using the result."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount.refs",
+          "batadv_hard_iface--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount.refs",
+          "batadv_hard_iface--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The operation correctly identifies the get on the returned hard_iface pointer via kref_get_unless_zero on &hard_iface->refcount. The access path from the return value hard_iface through its refcount (kref) and inner refcount (refcount_t) to refs (atomic_t) matches the code and callee information. Location/type chain are consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount.refs",
+        "batadv_hard_iface--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either the interface is not registered (transient) or its refcount is zero (freeing). The function does not distinguish; retrying without state change is not appropriate for a get-wrapper.",
+    "contract_summary": "This is an RCU-protected get-wrapper that atomically looks up a batadv_hard_iface by its associated net_device and acquires a reference if the object is still alive (kref_get_unless_zero). The caller receives a pointer with an elevated refcount and must call batadv_hardif_put() when the reference is no longer needed. If the interface is not found or is in the process of being freed (refcount zero), the function returns NULL and no reference is taken. The caller must check the return value for NULL before using the result."
+  }
+}

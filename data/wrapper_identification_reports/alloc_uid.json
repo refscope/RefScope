@@ -1,0 +1,107 @@
+{
+  "function_name": "alloc_uid",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "up.__count.refs",
+      "user_struct--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "uid_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "user.__count.refs",
+      "member_type_chain": "user_struct--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The only failure path is kmem_cache_zalloc allocation failure (or user_epoll_alloc failure); retrying without freeing memory or changing conditions is unlikely to succeed.",
+  "contract_summary": "Get-or-create wrapper for user_struct associated with a UID. Returns a pointer to a user_struct with an elevated reference count. If the UID already exists, increments its refcount; otherwise allocates and initializes a new user_struct with refcount set to 1. The caller must later call free_uid to release the reference. On memory allocation failure, returns NULL. Includes initialization of epoll and ratelimit fields; error handling properly cleans up on allocation or epoll init failure.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a reference-counted user_struct for a given UID, either by incrementing an existing reference (via uid_hash_find which does refcount_inc) or by allocating a new one and setting its refcount to 1. Minor initialization of epoll and ratelimit fields is inherent to creation and does not dilute the core refcount management role.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The only failure path is kmem_cache_zalloc allocation failure (or user_epoll_alloc failure); retrying without freeing memory or changing conditions is unlikely to succeed.",
+      "contract_summary": "Get-or-create wrapper for user_struct associated with a UID. Returns a pointer to a user_struct with an elevated reference count. If the UID already exists, increments its refcount; otherwise allocates and initializes a new user_struct with refcount set to 1. The caller must later call free_uid to release the reference. On memory allocation failure, returns NULL. Includes initialization of epoll and ratelimit fields; error handling properly cleans up on allocation or epoll init failure."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "up.__count.refs",
+          "user_struct--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "up.__count.refs",
+          "user_struct--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set is called on &new->__count (which becomes up) in the function. The return value is a pointer to user_struct, and the access path 'up.__count.refs' correctly traces from the returned pointer to the refcount field. Type chain matches: user_struct -> __count (refcount_t) -> refs (atomic_t). Segment count (3) equals type chain count (3). Operation direction 'set' matches refcount_set."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "up.__count.refs",
+        "user_struct--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The only failure path is kmem_cache_zalloc allocation failure (or user_epoll_alloc failure); retrying without freeing memory or changing conditions is unlikely to succeed.",
+    "contract_summary": "Get-or-create wrapper for user_struct associated with a UID. Returns a pointer to a user_struct with an elevated reference count. If the UID already exists, increments its refcount; otherwise allocates and initializes a new user_struct with refcount set to 1. The caller must later call free_uid to release the reference. On memory allocation failure, returns NULL. Includes initialization of epoll and ratelimit fields; error handling properly cleans up on allocation or epoll init failure."
+  }
+}

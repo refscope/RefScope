@@ -1,0 +1,143 @@
+{
+  "function_name": "FULL_PROXY_FUNC",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "filp.f_path.dentry.d_fsdata.active_users.refs",
+      "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "filp.f_path.dentry.d_fsdata.active_users.refs",
+      "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "debugfs_file_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "debugfs_file_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "debugfs_file_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "debugfs_file_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dentry.d_fsdata.active_users.refs",
+      "member_type_chain": "dentry--debugfs_fsdata--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "debugfs_file_get fails only when the file's active_users refcount is zero (file being torn down); retry will not succeed.",
+  "contract_summary": "This function is a proxy wrapper that acquires the debugfs file's active_users reference via debugfs_file_get before calling the real file operation (fsd->real_fops->name) and releases it via debugfs_file_put afterwards. It ensures the file's underlying data structure remains alive during the operation. The wrapper checks a methods bit to conditionally enable the call; if the bit is not set, it returns a default value without acquiring any reference. On failure of debugfs_file_get (e.g., file being removed), it returns the error and does not call the real operation. The caller is responsible for checking the return value for errors. The reference is held only temporarily and is released before return; the caller does not obtain any ownership of the refcounted object itself.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire and release a reference (debugfs_file_get/put) around a call to the real file operation. The only additional logic is a methods bit check and error handling from the get.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "debugfs_file_get fails only when the file's active_users refcount is zero (file being torn down); retry will not succeed.",
+      "contract_summary": "This function is a proxy wrapper that acquires the debugfs file's active_users reference via debugfs_file_get before calling the real file operation (fsd->real_fops->name) and releases it via debugfs_file_put afterwards. It ensures the file's underlying data structure remains alive during the operation. The wrapper checks a methods bit to conditionally enable the call; if the bit is not set, it returns a default value without acquiring any reference. On failure of debugfs_file_get (e.g., file being removed), it returns the error and does not call the real operation. The caller is responsible for checking the return value for errors. The reference is held only temporarily and is released before return; the caller does not obtain any ownership of the refcounted object itself."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "filp.f_path.dentry.d_fsdata.active_users.refs",
+          "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations correctly capture the get/put on the refcount_t field active_users.refs via the dentry derived from filp. The access path from parameter 1 (filp) through f_path.dentry.d_fsdata.active_users.refs matches the callee's operation on dentry->d_fsdata->active_users. The type chain file--path--dentry--debugfs_fsdata--refcount_t--atomic_t is consistent with the code structure. Segment counts are equal (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "filp.f_path.dentry.d_fsdata.active_users.refs",
+        "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "filp.f_path.dentry.d_fsdata.active_users.refs",
+        "file--path--dentry--debugfs_fsdata--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "debugfs_file_get fails only when the file's active_users refcount is zero (file being torn down); retry will not succeed.",
+    "contract_summary": "This function is a proxy wrapper that acquires the debugfs file's active_users reference via debugfs_file_get before calling the real file operation (fsd->real_fops->name) and releases it via debugfs_file_put afterwards. It ensures the file's underlying data structure remains alive during the operation. The wrapper checks a methods bit to conditionally enable the call; if the bit is not set, it returns a default value without acquiring any reference. On failure of debugfs_file_get (e.g., file being removed), it returns the error and does not call the real operation. The caller is responsible for checking the return value for errors. The reference is held only temporarily and is released before return; the caller does not obtain any ownership of the refcounted object itself."
+  }
+}

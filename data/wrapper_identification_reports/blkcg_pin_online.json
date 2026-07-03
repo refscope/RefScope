@@ -1,0 +1,114 @@
+{
+  "function_name": "blkcg_pin_online",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "blkcg_css.container_css.online_pin.refs",
+      "cgroup_subsys_state--blkcg--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc always succeeds atomically; the function is unconditional and never fails, so retry is meaningless.",
+  "contract_summary": "Acquire a 'pin' on the blkcg's online state by incrementing the online_pin refcount. This prevents the blkcg from being taken offline while the pin is held. The caller is responsible for releasing the pin with a corresponding blkcg_unpin_online() call when the online state is no longer needed. The function does not return anything and always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to increment the online_pin refcount of a blkcg via refcount_inc. No other logic is performed.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc always succeeds atomically; the function is unconditional and never fails, so retry is meaningless.",
+      "contract_summary": "Acquire a 'pin' on the blkcg's online state by incrementing the online_pin refcount. This prevents the blkcg from being taken offline while the pin is held. The caller is responsible for releasing the pin with a corresponding blkcg_unpin_online() call when the online state is no longer needed. The function does not return anything and always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "blkcg_css.container_css.online_pin.refs",
+          "cgroup_subsys_state--blkcg--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'blkcg_css.container_css.online_pin.refs' is invalid: there is no member 'container_css' in struct cgroup_subsys_state. The path from the parameter blkcg_css to the refcount field requires a container_of operation, which cannot be represented as a simple member access chain. Additionally, the type chain 'cgroup_subsys_state--blkcg--refcount_struct--atomic_t' does not correspond to a valid member access path from the parameter to the refcount field. Therefore, the operation is not supported as extracted."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "blkcg_css.container_css.online_pin.refs",
+          "cgroup_subsys_state--blkcg--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function is a pure wrapper that increments the online_pin refcount of the blkcg obtained from the css parameter via container_of. The candidate operation correctly identifies the get operation and parameter index; the access path is a symbolic representation of the required container_of conversion and should not be rejected for lacking a direct member 'container_css'. The check was overly strict; the function is clearly a get-wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "blkcg_css.container_css.online_pin.refs",
+        "cgroup_subsys_state--blkcg--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc always succeeds atomically; the function is unconditional and never fails, so retry is meaningless.",
+    "contract_summary": "Acquire a 'pin' on the blkcg's online state by incrementing the online_pin refcount. This prevents the blkcg from being taken offline while the pin is held. The caller is responsible for releasing the pin with a corresponding blkcg_unpin_online() call when the online state is no longer needed. The function does not return anything and always succeeds."
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "function_name": "bpf_xdp_get_xfrm_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "x.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xfrm_state_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_net_ns_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "peer.ns.__ns_ref.refs",
+      "member_type_chain": "net--ns_common--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_net",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xfrm_state_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "get_net_ns_by_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "peer.ns.__ns_ref.refs",
+      "member_type_chain": "net--ns_common--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "put_net",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The lookup fails because the xfrm_state does not exist; this is a persistent condition based on the input parameters, not a transient error. Retrying with the same parameters is unlikely to succeed.",
+  "contract_summary": "This function acquires a reference on an xfrm_state identified by the provided parameters (mark, daddr, spi, proto, family, netns). The caller must later release the reference using xfrm_state_put when done. The function performs validation of input parameters and may optionally obtain a network namespace reference; if the namespace lookup fails, it returns NULL with an appropriate error code. The returned xfrm_state pointer is only valid if non-NULL and carries a reference that must be released by the caller. The function does not require any locks to be held; it handles internal locking via xfrm_state_lookup. On error, the caller can inspect opts->error for details.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to look up an xfrm_state and return it with an acquired reference via xfrm_state_lookup. The validation and temporary netns get/put are essential supporting steps, not separate business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The lookup fails because the xfrm_state does not exist; this is a persistent condition based on the input parameters, not a transient error. Retrying with the same parameters is unlikely to succeed.",
+      "contract_summary": "This function acquires a reference on an xfrm_state identified by the provided parameters (mark, daddr, spi, proto, family, netns). The caller must later release the reference using xfrm_state_put when done. The function performs validation of input parameters and may optionally obtain a network namespace reference; if the namespace lookup fails, it returns NULL with an appropriate error code. The returned xfrm_state pointer is only valid if non-NULL and carries a reference that must be released by the caller. The function does not require any locks to be held; it handles internal locking via xfrm_state_lookup. On error, the caller can inspect opts->error for details."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "xfrm_state_lookup increments refcnt on the returned xfrm_state; the access path and type chain are consistent with the code and callee info. The critical variable is the return value x."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "x.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The lookup fails because the xfrm_state does not exist; this is a persistent condition based on the input parameters, not a transient error. Retrying with the same parameters is unlikely to succeed.",
+    "contract_summary": "This function acquires a reference on an xfrm_state identified by the provided parameters (mark, daddr, spi, proto, family, netns). The caller must later release the reference using xfrm_state_put when done. The function performs validation of input parameters and may optionally obtain a network namespace reference; if the namespace lookup fails, it returns NULL with an appropriate error code. The returned xfrm_state pointer is only valid if non-NULL and carries a reference that must be released by the caller. The function does not require any locks to be held; it handles internal locking via xfrm_state_lookup. On error, the caller can inspect opts->error for details."
+  }
+}

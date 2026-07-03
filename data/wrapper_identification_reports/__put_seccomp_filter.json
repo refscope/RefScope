@@ -1,0 +1,99 @@
+{
+  "function_name": "__put_seccomp_filter",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "orig.refs.refs",
+      "seccomp_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional on a non-NULL pointer; there is no failure path to retry.",
+  "contract_summary": "Put wrapper that decrements the reference count of a seccomp_filter (and its ancestor chain). When the refcount reaches zero, the filter is freed via seccomp_filter_free. The caller must ensure that orig is valid (non-NULL) and holds a reference. After calling this function, the caller must not use the orig pointer (or any filter in the chain) because it may have been freed. This function handles the full chain cleanup iteratively, so the caller does not need to track the prev pointer separately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement refcount and free filter chain when refcount reaches zero; minimal non-refcount logic (iterating prev pointers).",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional on a non-NULL pointer; there is no failure path to retry.",
+      "contract_summary": "Put wrapper that decrements the reference count of a seccomp_filter (and its ancestor chain). When the refcount reaches zero, the filter is freed via seccomp_filter_free. The caller must ensure that orig is valid (non-NULL) and holds a reference. After calling this function, the caller must not use the orig pointer (or any filter in the chain) because it may have been freed. This function handles the full chain cleanup iteratively, so the caller does not need to track the prev pointer separately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig.refs.refs",
+          "seccomp_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig.refs.refs",
+          "seccomp_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&orig->refs) is a put operation on orig->refs (refcount_t). The access path orig.refs.refs correctly traces from the parameter orig through seccomp_filter->refs (refcount_t) to the atomic_t field inside. The type chain seccomp_filter--refcount_t--atomic_t is consistent. Segment count 3 matches type count 3."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "orig.refs.refs",
+        "seccomp_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional on a non-NULL pointer; there is no failure path to retry.",
+    "contract_summary": "Put wrapper that decrements the reference count of a seccomp_filter (and its ancestor chain). When the refcount reaches zero, the filter is freed via seccomp_filter_free. The caller must ensure that orig is valid (non-NULL) and holds a reference. After calling this function, the caller must not use the orig pointer (or any filter in the chain) because it may have been freed. This function handles the full chain cleanup iteratively, so the caller does not need to track the prev pointer separately."
+  }
+}

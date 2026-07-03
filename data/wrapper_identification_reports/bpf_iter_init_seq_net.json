@@ -1,0 +1,106 @@
+{
+  "function_name": "bpf_iter_init_seq_net",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "0",
+      "p.net.ns.__ns_ref",
+      "seq_net_private--net--ns_common--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_net_track",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.ns.__ns_ref",
+      "member_type_chain": "net--ns_common--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_net_track",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.ns.__ns_ref",
+      "member_type_chain": "net--ns_common--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation is unconditional and always succeeds (typical for get_net). No failure path exists, so retry is not applicable.",
+  "contract_summary": "Acquires a reference to the current process's network namespace via get_net_track and stores it in the private data. This reference must be released by the caller (e.g., by calling put_net) when the iterator is destroyed. The function is unconditional and always returns 0; the caller does not need to check the return value.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function body consists solely of a call to get_net_track to acquire a reference to the current net namespace and store it in the private data. No other business logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation is unconditional and always succeeds (typical for get_net). No failure path exists, so retry is not applicable.",
+      "contract_summary": "Acquires a reference to the current process's network namespace via get_net_track and stores it in the private data. This reference must be released by the caller (e.g., by calling put_net) when the iterator is destroyed. The function is unconditional and always returns 0; the caller does not need to check the return value."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "current",
+          "current.nsproxy.net_ns.ns.__ns_ref",
+          "task_struct--nsproxy--net--ns_common--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The operation's location is 'global' with variable 'current', which is not a function parameter or return value. The critical variable that receives the reference is p->net (a field of parameter priv_data). The access path should start from parameter 0 (priv_data) and trace through .net.ns.__ns_ref, not from current. The type chain also starts incorrectly from task_struct. Therefore, the candidate is invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "0",
+          "p.net.ns.__ns_ref",
+          "seq_net_private--net--ns_common--refcount_t"
+        ]
+      ],
+      "reason": "The function's sole purpose is to call get_net_track() on the current network namespace and store the resulting net pointer in p->net (where p is derived from parameter 0, priv_data). The reference-counted object is therefore passed to the caller via a field of the parameter, making it a classic get-wrapper. The extract candidate incorrectly started from 'current' instead of from the parameter; the corrected operation path starts from parameter 0 and follows the field accesses to the refcount. The type chain is seq_net_private->net->ns_common->refcount_t. The check was right to reject the original candidate but the function is indeed a wrapper, so the operation is restored with the proper base variable."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "0",
+        "p.net.ns.__ns_ref",
+        "seq_net_private--net--ns_common--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation is unconditional and always succeeds (typical for get_net). No failure path exists, so retry is not applicable.",
+    "contract_summary": "Acquires a reference to the current process's network namespace via get_net_track and stores it in the private data. This reference must be released by the caller (e.g., by calling put_net) when the iterator is destroyed. The function is unconditional and always returns 0; the caller does not need to check the return value."
+  }
+}

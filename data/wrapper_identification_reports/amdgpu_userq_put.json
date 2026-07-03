@@ -1,0 +1,107 @@
+{
+  "function_name": "amdgpu_userq_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "queue.refcount.refcount",
+      "amdgpu_usermode_queue--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put always succeeds when called on a valid object; if the pointer is NULL there is nothing to do. No failure condition exists for caller to retry.",
+  "contract_summary": "This is a put wrapper that releases a reference on an amdgpu_usermode_queue object. If the queue pointer is non-NULL, it decrements the refcount via kref_put, and when the refcount reaches zero, the amdgpu_userq_kref_destroy destructor is invoked. The caller must not use the queue after calling this function because the object may be freed. No return value is provided, so the caller has no failure to recover from.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release a reference on an amdgpu_usermode_queue via kref_put, with only a NULL guard; no other logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put always succeeds when called on a valid object; if the pointer is NULL there is nothing to do. No failure condition exists for caller to retry.",
+      "contract_summary": "This is a put wrapper that releases a reference on an amdgpu_usermode_queue object. If the queue pointer is non-NULL, it decrements the refcount via kref_put, and when the refcount reaches zero, the amdgpu_userq_kref_destroy destructor is invoked. The caller must not use the queue after calling this function because the object may be freed. No return value is provided, so the caller has no failure to recover from."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "queue.refcount.refcount",
+          "amdgpu_usermode_queue--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "queue.refcount.refcount",
+          "amdgpu_usermode_queue--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put(&queue->refcount, ...) is called, which decrements the refcount of the kref object. The access path 'queue.refcount.refcount' correctly traces from the function parameter 'queue' (index 1) via the 'refcount' field of type kref to the inner refcount_t field. The type chain 'amdgpu_usermode_queue--kref--refcount_t' is consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "queue.refcount.refcount",
+        "amdgpu_usermode_queue--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put always succeeds when called on a valid object; if the pointer is NULL there is nothing to do. No failure condition exists for caller to retry.",
+    "contract_summary": "This is a put wrapper that releases a reference on an amdgpu_usermode_queue object. If the queue pointer is non-NULL, it decrements the refcount via kref_put, and when the refcount reaches zero, the amdgpu_userq_kref_destroy destructor is invoked. The caller must not use the queue after calling this function because the object may be freed. No return value is provided, so the caller has no failure to recover from."
+  }
+}

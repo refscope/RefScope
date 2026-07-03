@@ -1,0 +1,58 @@
+{
+  "function_name": "ath12k_mac_setup_bcn_tmpl_ema",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ieee80211_beacon_free_ema_list",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ema_beacons.bcn.skb.users.refs",
+      "member_type_chain": "ieee80211_ema_beacons--ieee80211_ema_beacon--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ieee80211_beacon_free_ema_list",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ema_beacons.bcn.skb.users.refs",
+      "member_type_chain": "ieee80211_ema_beacons--ieee80211_ema_beacon--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable because the function is not a wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to set up EMA beacon templates by retrieving, processing, and sending beacon frames via WMI. The reference-count operations (get from mac80211, put via ieee80211_beacon_free_ema_list) are incidental steps within a broader workflow that includes setting IEs, looping, error handling, and WMI command submission. It is not focused on refcount management.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable because the function is not a wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable because the function is not a wrapper.",
+    "contract_summary": ""
+  }
+}

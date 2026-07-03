@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_release_path",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "p.nodes[i].refs.refs",
+      "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "free_extent_buffer always succeeds and there is no failure path; the function is a cleanup operation that does not need retrying.",
+  "contract_summary": "Put wrapper: releases all references to extent buffers held in the path by calling free_extent_buffer (a put) on each non-NULL node, and unlocks any held locks. After the call, the path is cleared (all slots zero, nodes NULL, locks zero) and must not be accessed until re-initialized (e.g., via btrfs_init_path). The caller must ensure no further use of the released extent buffers, and must not call this function again on the same path without obtaining new references. This function is typically called at the end of a btrfs operation to safely discard the path's state.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references to all extent buffers stored in the path (via free_extent_buffer, which is a put) and unlock them; slot reset is minimal ancillary logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "free_extent_buffer always succeeds and there is no failure path; the function is a cleanup operation that does not need retrying.",
+      "contract_summary": "Put wrapper: releases all references to extent buffers held in the path by calling free_extent_buffer (a put) on each non-NULL node, and unlocks any held locks. After the call, the path is cleared (all slots zero, nodes NULL, locks zero) and must not be accessed until re-initialized (e.g., via btrfs_init_path). The caller must ensure no further use of the released extent buffers, and must not call this function again on the same path without obtaining new references. This function is typically called at the end of a btrfs operation to safely discard the path's state."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "p.nodes[i].refs.refs",
+          "btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "free_extent_buffer is a put on its first argument, which is p->nodes[i]. The access path from parameter p (index 1) to the refcount field is p.nodes[i].refs.refs, and the type chain btrfs_path--extent_buffer--refcount_t--atomic_t matches the segment count and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "p.nodes[i].refs.refs",
+        "btrfs_path--extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "free_extent_buffer always succeeds and there is no failure path; the function is a cleanup operation that does not need retrying.",
+    "contract_summary": "Put wrapper: releases all references to extent buffers held in the path by calling free_extent_buffer (a put) on each non-NULL node, and unlocks any held locks. After the call, the path is cleared (all slots zero, nodes NULL, locks zero) and must not be accessed until re-initialized (e.g., via btrfs_init_path). The caller must ensure no further use of the released extent buffers, and must not call this function again on the same path without obtaining new references. This function is typically called at the end of a btrfs operation to safely discard the path's state."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_get_real_netdev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "real_netdev.dev_refcnt",
+      "net_device--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__batadv_get_real_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "real_netdev.dev_refcnt",
+      "member_type_chain": "net_device--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__batadv_get_real_netdev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "real_netdev.dev_refcnt",
+      "member_type_chain": "net_device--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the function returns NULL, the underlying net_device does not exist or is not a valid real device; retrying is unlikely to change that.",
+  "contract_summary": "This wrapper acquires a reference (increments the reference count) on the real underlying net_device associated with the given net_device. It handles the rtnl locking internally, so the caller does not need to hold any locks. The caller must call dev_put() on the returned net_device pointer when it is no longer needed. If the function returns NULL, no reference is taken and the caller should not attempt to dev_put().",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The entire function is just rtnl lock/unlock around a call to __batadv_get_real_netdev, which is a get function that increments the reference count of the returned net_device. No other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the function returns NULL, the underlying net_device does not exist or is not a valid real device; retrying is unlikely to change that.",
+      "contract_summary": "This wrapper acquires a reference (increments the reference count) on the real underlying net_device associated with the given net_device. It handles the rtnl locking internally, so the caller does not need to hold any locks. The caller must call dev_put() on the returned net_device pointer when it is no longer needed. If the function returns NULL, no reference is taken and the caller should not attempt to dev_put()."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "real_netdev.dev_refcnt",
+          "net_device--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "real_netdev.dev_refcnt",
+          "net_device--refcount_t"
+        ]
+      ],
+      "reason": "The callee __batadv_get_real_netdev is a get function that returns a net_device with an incremented refcount. The returned variable is real_netdev, and the access path real_netdev.dev_refcnt correctly traces from the return value to the refcount field. The type chain net_device--refcount_t matches the struct field. Segment counts match (2 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "real_netdev.dev_refcnt",
+        "net_device--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the function returns NULL, the underlying net_device does not exist or is not a valid real device; retrying is unlikely to change that.",
+    "contract_summary": "This wrapper acquires a reference (increments the reference count) on the real underlying net_device associated with the given net_device. It handles the rtnl locking internally, so the caller does not need to hold any locks. The caller must call dev_put() on the returned net_device pointer when it is no longer needed. If the function returns NULL, no reference is taken and the caller should not attempt to dev_put()."
+  }
+}

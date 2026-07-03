@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_free_static_csa",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bo[0].tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and should not fail; retrying after a put would risk double-free.",
+  "contract_summary": "Put wrapper that releases a reference on an amdgpu_bo object by calling amdgpu_bo_free_kernel. It takes a double pointer to the buffer object and likely sets the pointer to NULL after freeing. After calling this function, the caller must not use the original pointer value. This operation represents the end of the object's lifecycle from the caller's perspective.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely calls amdgpu_bo_free_kernel, which is a put function for the amdgpu_bo object's refcount. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and should not fail; retrying after a put would risk double-free.",
+      "contract_summary": "Put wrapper that releases a reference on an amdgpu_bo object by calling amdgpu_bo_free_kernel. It takes a double pointer to the buffer object and likely sets the pointer to NULL after freeing. After calling this function, the caller must not use the original pointer value. This operation represents the end of the object's lifecycle from the caller's perspective."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo[0].tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo[0].tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function passes `bo` (struct amdgpu_bo**) as the first argument to amdgpu_bo_free_kernel, which is a put function for its first parameter. The access path from `bo[0]` through `.tbo.base.refcount.refcount` correctly traces to the refcount_t field, and the type chain length matches the path segment count. The direction 'put' is consistent with the callee's semantics."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bo[0].tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and should not fail; retrying after a put would risk double-free.",
+    "contract_summary": "Put wrapper that releases a reference on an amdgpu_bo object by calling amdgpu_bo_free_kernel. It takes a double pointer to the buffer object and likely sets the pointer to NULL after freeing. After calling this function, the caller must not use the original pointer value. This operation represents the end of the object's lifecycle from the caller's perspective."
+  }
+}

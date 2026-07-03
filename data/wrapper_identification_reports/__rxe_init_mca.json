@@ -1,0 +1,58 @@
+{
+  "function_name": "__rxe_init_mca",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rxe_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.elem.ref_cnt.refcount",
+      "member_type_chain": "rxe_object--rxe_pool_elem--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rxe_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.elem.ref_cnt.refcount",
+      "member_type_chain": "rxe_object--rxe_pool_elem--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The failure is due to static capacity limits (max_total_mcast_qp_attach / max_mcast_qp_attach). These are fixed attributes; success requires an earlier detachment, so retry is possible only if the caller expects a detachment. The function itself does not provide a mechanism for transient retry.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to initialize and attach a multicast group member (MCA), including capacity checks, counter updates, and list linkage; the rxe_get call is one step within broader setup logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The failure is due to static capacity limits (max_total_mcast_qp_attach / max_mcast_qp_attach). These are fixed attributes; success requires an earlier detachment, so retry is possible only if the caller expects a detachment. The function itself does not provide a mechanism for transient retry.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The failure is due to static capacity limits (max_total_mcast_qp_attach / max_mcast_qp_attach). These are fixed attributes; success requires an earlier detachment, so retry is possible only if the caller expects a detachment. The function itself does not provide a mechanism for transient retry.",
+    "contract_summary": ""
+  }
+}

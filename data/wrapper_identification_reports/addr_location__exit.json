@@ -1,0 +1,143 @@
+{
+  "function_name": "addr_location__exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "al.map.refcnt.refs",
+      "addr_location--map--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "al.thread.orig.refcnt.refs",
+      "addr_location--thread--original_thread--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "map__zput",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "map.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__zput",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "thread.orig.refcnt.refs",
+      "member_type_chain": "thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "map__zput",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "map.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__zput",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "thread.orig.refcnt.refs",
+      "member_type_chain": "thread--original_thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operations are irreversible and never retried; they always succeed (even on NULL).",
+  "contract_summary": "addr_location__exit releases the caller's references to the map and thread held in the addr_location struct, using map__zput and thread__zput to decrement refcounts and zero the pointers. After calling this function, the caller must not use the map or thread pointers from the struct, as they are released and set to NULL. This function is intended for cleanup when the addr_location is no longer needed, typically at the end of its lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to release (zput) references to the map and thread members of addr_location, making it a pure put-wrapper with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operations are irreversible and never retried; they always succeed (even on NULL).",
+      "contract_summary": "addr_location__exit releases the caller's references to the map and thread held in the addr_location struct, using map__zput and thread__zput to decrement refcounts and zero the pointers. After calling this function, the caller must not use the map or thread pointers from the struct, as they are released and set to NULL. This function is intended for cleanup when the addr_location is no longer needed, typically at the end of its lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "al.map.refcnt.refs",
+          "addr_location--map--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "al.thread.orig.refcnt.refs",
+          "addr_location--thread--original_thread--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "al.map.refcnt.refs",
+          "addr_location--map--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "al.thread.orig.refcnt.refs",
+          "addr_location--thread--original_thread--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are put on the respective fields via map__zput and thread__zput, consistent with callee info. The access paths start from parameter 1 (al) and navigate to the refcount fields, and type chains match segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "al.map.refcnt.refs",
+        "addr_location--map--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "al.thread.orig.refcnt.refs",
+        "addr_location--thread--original_thread--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operations are irreversible and never retried; they always succeed (even on NULL).",
+    "contract_summary": "addr_location__exit releases the caller's references to the map and thread held in the addr_location struct, using map__zput and thread__zput to decrement refcounts and zero the pointers. After calling this function, the caller must not use the map or thread pointers from the struct, as they are released and set to NULL. This function is intended for cleanup when the addr_location is no longer needed, typically at the end of its lifecycle."
+  }
+}

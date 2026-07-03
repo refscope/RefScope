@@ -1,0 +1,99 @@
+{
+  "function_name": "can_skb_set_owner",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "sk.sk_refcnt.refs",
+      "sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If refcount_inc_not_zero fails, the socket is already dying/dead and retrying will not revive it. The function is void so the caller cannot directly check success; instead it must inspect skb->sk or skb->destructor.",
+  "contract_summary": "This function conditionally transfers ownership of an skb to a socket by taking a reference on the socket (via refcount_inc_not_zero) only if the socket is still alive (refcount > 0). On success, it sets skb->sk to the socket and skb->destructor to sock_efree, so that when the skb is freed, the destructor releases the socket reference. If the socket is already closed (refcount 0), the function does nothing and the caller must handle the skb appropriately (e.g., drop it). The caller does not receive a return value but should infer success from whether skb->sk is non-NULL after the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to conditionally acquire a reference on a socket (via refcount_inc_not_zero) and associate the skb with that socket. The only other logic is setting skb pointers and destructor, which are integral to the ownership transfer.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If refcount_inc_not_zero fails, the socket is already dying/dead and retrying will not revive it. The function is void so the caller cannot directly check success; instead it must inspect skb->sk or skb->destructor.",
+      "contract_summary": "This function conditionally transfers ownership of an skb to a socket by taking a reference on the socket (via refcount_inc_not_zero) only if the socket is still alive (refcount > 0). On success, it sets skb->sk to the socket and skb->destructor to sock_efree, so that when the skb is freed, the destructor releases the socket reference. If the socket is already closed (refcount 0), the function does nothing and the caller must handle the skb appropriately (e.g., drop it). The caller does not receive a return value but should infer success from whether skb->sk is non-NULL after the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "sk.sk_refcnt.refs",
+          "sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code calls refcount_inc_not_zero(&sk->sk_refcnt) on parameter sk (index 2). The access path sk.sk_refcnt.refs correctly traces from sk to the atomic_t field, and the type chain sock--refcount_t--atomic_t matches. The segment counts (3 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "sk.sk_refcnt.refs",
+        "sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If refcount_inc_not_zero fails, the socket is already dying/dead and retrying will not revive it. The function is void so the caller cannot directly check success; instead it must inspect skb->sk or skb->destructor.",
+    "contract_summary": "This function conditionally transfers ownership of an skb to a socket by taking a reference on the socket (via refcount_inc_not_zero) only if the socket is still alive (refcount > 0). On success, it sets skb->sk to the socket and skb->destructor to sock_efree, so that when the skb is freed, the destructor releases the socket reference. If the socket is already closed (refcount 0), the function does nothing and the caller must handle the skb appropriately (e.g., drop it). The caller does not receive a return value but should infer success from whether skb->sk is non-NULL after the call."
+  }
+}

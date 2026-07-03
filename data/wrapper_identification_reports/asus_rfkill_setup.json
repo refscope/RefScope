@@ -1,0 +1,58 @@
+{
+  "function_name": "asus_rfkill_setup",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rfkill_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rfkill.dev.kobj.kref.refcount",
+      "member_type_chain": "rfkill--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rfkill_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rfkill.dev.kobj.kref.refcount",
+      "member_type_chain": "rfkill--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the function performs setup tasks; failure indicates allocation or registration error, not a refcount operation that can be retried.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "Primary purpose is to allocate, configure, and register an rfkill device, not primarily reference-count management. The rfkill_alloc and rfkill_destroy calls are incidental to the setup logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the function performs setup tasks; failure indicates allocation or registration error, not a refcount operation that can be retried.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the function performs setup tasks; failure indicates allocation or registration error, not a refcount operation that can be retried.",
+    "contract_summary": ""
+  }
+}

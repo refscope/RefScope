@@ -1,0 +1,99 @@
+{
+  "function_name": "__xfrm_find_acq_byseq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "x.refcnt.refs",
+      "xfrm_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xfrm_state_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xfrm_state_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "x.refcnt.refs",
+      "member_type_chain": "xfrm_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when no matching ACQ state exists; the refcount operation is not even attempted. The caller should not retry this exact call immediately as conditions (state creation) are unlikely to change without external events. Retrying would be pointless without a new ACQ state being inserted.",
+  "contract_summary": "Get-wrapper that looks up a pending acquire state (XFRM_STATE_ACQ) by sequence number and, if found, acquires a reference on the xfrm_state via xfrm_state_hold. The caller receives the state with an elevated refcount and is responsible for calling xfrm_state_put when done. If no matching state is found, NULL is returned with no reference taken. The caller must check the return value before dereferencing. The lookup is performed under the appropriate protection (state_byseq hash table).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find an xfrm_state in the ACQ state by sequence number and acquire a reference to it via xfrm_state_hold, returning the held state to the caller. Minimal incidental logic (hash calculation and matching) serves only to locate the correct object.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when no matching ACQ state exists; the refcount operation is not even attempted. The caller should not retry this exact call immediately as conditions (state creation) are unlikely to change without external events. Retrying would be pointless without a new ACQ state being inserted.",
+      "contract_summary": "Get-wrapper that looks up a pending acquire state (XFRM_STATE_ACQ) by sequence number and, if found, acquires a reference on the xfrm_state via xfrm_state_hold. The caller receives the state with an elevated refcount and is responsible for calling xfrm_state_put when done. If no matching state is found, NULL is returned with no reference taken. The caller must check the return value before dereferencing. The lookup is performed under the appropriate protection (state_byseq hash table)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "x.refcnt.refs",
+          "xfrm_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls xfrm_state_hold(x) on the matching xfrm_state and returns the same pointer. The critical variable is the return value (index 0). The access path x.refcnt.refs (3 segments) and type chain xfrm_state--refcount_t--atomic_t (3 types) are consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "x.refcnt.refs",
+        "xfrm_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when no matching ACQ state exists; the refcount operation is not even attempted. The caller should not retry this exact call immediately as conditions (state creation) are unlikely to change without external events. Retrying would be pointless without a new ACQ state being inserted.",
+    "contract_summary": "Get-wrapper that looks up a pending acquire state (XFRM_STATE_ACQ) by sequence number and, if found, acquires a reference on the xfrm_state via xfrm_state_hold. The caller receives the state with an elevated refcount and is responsible for calling xfrm_state_put when done. If no matching state is found, NULL is returned with no reference taken. The caller must check the return value before dereferencing. The lookup is performed under the appropriate protection (state_byseq hash table)."
+  }
+}

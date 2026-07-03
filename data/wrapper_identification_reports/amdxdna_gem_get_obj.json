@@ -1,0 +1,86 @@
+{
+  "function_name": "amdxdna_gem_get_obj",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_object_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_object_lookup",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the handle is invalid or the type does not match; neither condition is transient, so retrying with the same parameters will not succeed.",
+  "contract_summary": "This function looks up a GEM buffer object by its handle and optionally validates its type. It acquires a reference on the object via drm_gem_object_lookup. If the type check passes (or bo_type is AMDXDNA_BO_INVALID), it returns the object with an acquired reference; the caller must call drm_gem_object_put to release it. If the lookup fails or the type does not match, it returns NULL without transferring a reference. The function is a conditional get-wrapper: on success the caller owns a reference, on failure no reference is held.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a GEM object by handle, acquire a reference, and optionally validate its type before returning it to the caller. The only non-refcount logic is a minor type check, making this a focused get-wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the handle is invalid or the type does not match; neither condition is transient, so retrying with the same parameters will not succeed.",
+      "contract_summary": "This function looks up a GEM buffer object by its handle and optionally validates its type. It acquires a reference on the object via drm_gem_object_lookup. If the type check passes (or bo_type is AMDXDNA_BO_INVALID), it returns the object with an acquired reference; the caller must call drm_gem_object_put to release it. If the lookup fails or the type does not match, it returns NULL without transferring a reference. The function is a conditional get-wrapper: on success the caller owns a reference, on failure no reference is held."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "struct amdxdna_gem_obj"
+      ],
+      "reason": "Need the full definition of struct amdxdna_gem_obj to determine the type of the 'base' member, which is necessary to construct the complete member access path and type chain from the returned 'abo' to the refcount field."
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate list is empty, but the function performs a get via drm_gem_object_lookup (incrementing refcount on the returned object) and on the success path returns that object with the reference held, which constitutes a get operation on the return value. Additionally, a put is called on the failure path. These operations are missing from the extracted list, making it inconsistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the handle is invalid or the type does not match; neither condition is transient, so retrying with the same parameters will not succeed.",
+    "contract_summary": "This function looks up a GEM buffer object by its handle and optionally validates its type. It acquires a reference on the object via drm_gem_object_lookup. If the type check passes (or bo_type is AMDXDNA_BO_INVALID), it returns the object with an acquired reference; the caller must call drm_gem_object_put to release it. If the lookup fails or the type does not match, it returns NULL without transferring a reference. The function is a conditional get-wrapper: on success the caller owns a reference, on failure no reference is held."
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "function_name": "__dsos__find_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "return.refcnt.refs",
+      "dso--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__dsos__find_by_longname_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dso.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "__dsos__find_by_longname_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__dsos__find_by_longname_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dso.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "__dsos__find_by_longname_id",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.refcnt.refs",
+      "member_type_chain": "dso--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means no matching dso was found; the refcount operation never fails when the object exists, so retrying would only be beneficial if the dsos list is updated — which is not a refcount-level concern.",
+  "contract_summary": "This is a get-wrapper that looks up a dso by name (and optionally id), acquiring a reference on the found dso. The caller receives a pointer to the dso with an incremented refcount and must release it via an appropriate put function (e.g., dso__put). The lookup method depends on the cmp_short flag; if set, it uses a callback-based iteration, otherwise a direct lookup. If no matching dso is found, NULL is returned and no reference is acquired. The caller must check the return value and not dereference NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a dso and return it with an acquired reference; the only logic is choosing the lookup method, and the callee/callback handle the refcount increment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means no matching dso was found; the refcount operation never fails when the object exists, so retrying would only be beneficial if the dsos list is updated — which is not a refcount-level concern.",
+      "contract_summary": "This is a get-wrapper that looks up a dso by name (and optionally id), acquiring a reference on the found dso. The caller receives a pointer to the dso with an incremented refcount and must release it via an appropriate put function (e.g., dso__put). The lookup method depends on the cmp_short flag; if set, it uses a callback-based iteration, otherwise a direct lookup. If no matching dso is found, NULL is returned and no reference is acquired. The caller must check the return value and not dereference NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Access path segment count (2) does not match type chain count (3). The path should start with the critical variable (return value), e.g., 'return.refcnt.refs' or 'res.refcnt.refs'."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.refcnt.refs",
+          "dso--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function __dsos__find_id is a get-wrapper that returns a dso pointer with an incremented reference count. The extract stage correctly identified the operation but omitted the 'return.' prefix in the access path, causing a segment count mismatch. The callee __dsos__find_by_longname_id is a get function, and this function forwards the result. The critical variable is the return value, so the correct path is 'return.refcnt.refs' matching the type chain dso--refcount_struct--atomic_t."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "return.refcnt.refs",
+        "dso--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means no matching dso was found; the refcount operation never fails when the object exists, so retrying would only be beneficial if the dsos list is updated — which is not a refcount-level concern.",
+    "contract_summary": "This is a get-wrapper that looks up a dso by name (and optionally id), acquiring a reference on the found dso. The caller receives a pointer to the dso with an incremented refcount and must release it via an appropriate put function (e.g., dso__put). The lookup method depends on the cmp_short flag; if set, it uses a callback-based iteration, otherwise a direct lookup. If no matching dso is found, NULL is returned and no reference is acquired. The caller must check the return value and not dereference NULL."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "bnge_lookup_l2_filter",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "fltr.refcnt.refs",
+      "bnge_l2_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Lookup failure means the filter does not exist under the given key; retrying without changing input conditions is unlikely to succeed.",
+  "contract_summary": "This is an RCU-protected get-wrapper: it looks up a bnge_l2_filter by key and increments its reference count if found. The caller receives a pointer to the filter with an acquired reference and must later release it with a matching put (e.g., refcount_dec). The RCU read lock is held only during the lookup and refcount increment; after this function returns, the caller can safely use the reference without holding the RCU lock. If the lookup fails, NULL is returned and no reference is taken.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a bnge_l2_filter by key and acquire a reference on it via refcount_inc. The only non-refcount logic is the lookup itself, which is needed to find the object to increment.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Lookup failure means the filter does not exist under the given key; retrying without changing input conditions is unlikely to succeed.",
+      "contract_summary": "This is an RCU-protected get-wrapper: it looks up a bnge_l2_filter by key and increments its reference count if found. The caller receives a pointer to the filter with an acquired reference and must later release it with a matching put (e.g., refcount_dec). The RCU read lock is held only during the lookup and refcount increment; after this function returns, the caller can safely use the reference without holding the RCU lock. If the lookup fails, NULL is returned and no reference is taken."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "fltr.refcnt.refs",
+          "bnge_l2_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "fltr.refcnt.refs",
+          "bnge_l2_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The candidate correctly identifies that refcount_inc is called on fltr->refcnt (the return value) and traces the access path fltr.refcnt.refs with the appropriate type chain, consistent with the callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "fltr.refcnt.refs",
+        "bnge_l2_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Lookup failure means the filter does not exist under the given key; retrying without changing input conditions is unlikely to succeed.",
+    "contract_summary": "This is an RCU-protected get-wrapper: it looks up a bnge_l2_filter by key and increments its reference count if found. The caller receives a pointer to the filter with an acquired reference and must later release it with a matching put (e.g., refcount_dec). The RCU read lock is held only during the lookup and refcount increment; after this function returns, the caller can safely use the reference without holding the RCU lock. If the lookup fails, NULL is returned and no reference is taken."
+  }
+}

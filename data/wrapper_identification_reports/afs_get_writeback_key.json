@@ -1,0 +1,138 @@
+{
+  "function_name": "afs_get_writeback_key",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "0",
+      "wreq.netfs_priv2.usage.refs",
+      "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_put_wb_key",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "wbk.usage.refs",
+      "member_type_chain": "afs_wb_key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure to find a valid key means no key is currently valid; key validation is immutable so retrying would not help.",
+  "contract_summary": "This function updates the writeback request's references to hold the next valid writeback key from the vnode's key list. It releases any previously held references (via key_put and afs_put_wb_key) before acquiring new ones. The caller must not use the old key after calling this function. If no valid key exists, wreq->netfs_priv is set to NULL, indicating the request has no writeback key. The caller is expected to check wreq->netfs_priv after the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is reference-count management: it releases old references and acquires a reference to the next valid writeback key (via refcount_inc and key_get) for the writeback request. The list iteration and validation are necessary to find the correct key, but they add moderate logic beyond a simple get.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure to find a valid key means no key is currently valid; key validation is immutable so retrying would not help.",
+      "contract_summary": "This function updates the writeback request's references to hold the next valid writeback key from the vnode's key list. It releases any previously held references (via key_put and afs_put_wb_key) before acquiring new ones. The caller must not use the old key after calling this function. If no valid key exists, wreq->netfs_priv is set to NULL, indicating the request has no writeback key. The caller is expected to check wreq->netfs_priv after the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "wreq.netfs_priv2.usage.refs",
+          "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Parameter index '1' is invalid; function has only one parameter (index 0). The critical variable is 'wreq' (parameter index 0), not index 1. Therefore the operation is incorrectly located."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "0",
+          "wreq.netfs_priv2.usage.refs",
+          "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function afs_get_writeback_key takes a single parameter wreq (index 0) and obtains a reference to a writeback key (afs_wb_key) that is stored in wreq->netfs_priv2. The extract stage correctly identified the refcount_inc on wbk->usage, but erroneously assigned parameter index 1. Since there is only one parameter, the correct index is 0. The operation is a get on the refcount of the object that flows out through the parameter's member. The function's primary purpose is to manage writeback key references, making it a wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "0",
+        "wreq.netfs_priv2.usage.refs",
+        "netfs_io_request--afs_wb_key--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure to find a valid key means no key is currently valid; key validation is immutable so retrying would not help.",
+    "contract_summary": "This function updates the writeback request's references to hold the next valid writeback key from the vnode's key list. It releases any previously held references (via key_put and afs_put_wb_key) before acquiring new ones. The caller must not use the old key after calling this function. If no valid key exists, wreq->netfs_priv is set to NULL, indicating the request has no writeback key. The caller is expected to check wreq->netfs_priv after the call."
+  }
+}

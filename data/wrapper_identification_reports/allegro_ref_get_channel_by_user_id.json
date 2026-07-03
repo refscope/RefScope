@@ -1,0 +1,115 @@
+{
+  "function_name": "allegro_ref_get_channel_by_user_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "channel.ref.refcount.refs",
+      "allegro_channel--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the channel either does not exist or its refcount is zero (object dying). In the former case, retrying the same user_id may succeed only if the channel is added later, but the function does not distinguish, and typical usage expects the caller to handle errors without retry on the same key.",
+  "contract_summary": "Acquires a reference to an allegro_channel identified by user_id. It searches the dev->channels list under dev->channels_lock. If the channel is found and its reference count is non-zero, it increments the reference via kref_get_unless_zero and returns the channel pointer. If not found or the channel is dying (refcount zero), it returns ERR_PTR(-EINVAL). The caller must check the return value for errors and, upon success, must release the reference with a corresponding kref_put (or channel-specific release function) when done. The function does not transfer ownership of the channel itself, only a reference that extends its lifetime.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an allegro_channel by user_id and acquire a reference on it via kref_get_unless_zero. The list traversal and ID comparison are necessary glue for the get operation; there is no meaningful non-refcount logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the channel either does not exist or its refcount is zero (object dying). In the former case, retrying the same user_id may succeed only if the channel is added later, but the function does not distinguish, and typical usage expects the caller to handle errors without retry on the same key.",
+      "contract_summary": "Acquires a reference to an allegro_channel identified by user_id. It searches the dev->channels list under dev->channels_lock. If the channel is found and its reference count is non-zero, it increments the reference via kref_get_unless_zero and returns the channel pointer. If not found or the channel is dying (refcount zero), it returns ERR_PTR(-EINVAL). The caller must check the return value for errors and, upon success, must release the reference with a corresponding kref_put (or channel-specific release function) when done. The function does not transfer ownership of the channel itself, only a reference that extends its lifetime."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "channel.ref.refcount.refs",
+          "allegro_channel--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "channel.ref.refcount.refs",
+          "allegro_channel--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero(&channel->ref) increments the refcount of channel on successful match; the critical variable is the returned channel pointer. The access path channel.ref.refcount.refs matches the callee's path kref.refcount.refs, and the type chain allegro_channel--kref--refcount_t--atomic_t is consistent with the actual struct definitions. The location 'return' index 0 correctly identifies the object passed to the caller."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "channel.ref.refcount.refs",
+        "allegro_channel--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the channel either does not exist or its refcount is zero (object dying). In the former case, retrying the same user_id may succeed only if the channel is added later, but the function does not distinguish, and typical usage expects the caller to handle errors without retry on the same key.",
+    "contract_summary": "Acquires a reference to an allegro_channel identified by user_id. It searches the dev->channels list under dev->channels_lock. If the channel is found and its reference count is non-zero, it increments the reference via kref_get_unless_zero and returns the channel pointer. If not found or the channel is dying (refcount zero), it returns ERR_PTR(-EINVAL). The caller must check the return value for errors and, upon success, must release the reference with a corresponding kref_put (or channel-specific release function) when done. The function does not transfer ownership of the channel itself, only a reference that extends its lifetime."
+  }
+}

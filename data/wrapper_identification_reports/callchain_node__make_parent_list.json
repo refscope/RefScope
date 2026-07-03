@@ -1,0 +1,106 @@
+{
+  "function_name": "callchain_node__make_parent_list",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.thread.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.thread.orig.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.thread.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.thread.orig.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__copy",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "src.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — refcount operations are not the primary purpose.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to build a list of parent callchain entries by traversing parent nodes, allocating and copying data, and managing list linkage. Refcount operations (via map_symbol__copy/map_symbol__exit) are incidental to the copy and cleanup steps, not the main focus. Significant non-refcount logic includes allocation, iteration, list manipulation, and tree structure checks.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — refcount operations are not the primary purpose.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — refcount operations are not the primary purpose.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "function_name": "__fl_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "f.refcnt.refs",
+      "cls_fl_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tcf_exts_get_net",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "exts.net.ns.__ns_ref.refs",
+      "member_type_chain": "tcf_exts--net--ns_common--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount decrement always succeeds; if it reaches zero, object is destroyed; retrying would lead to use-after-free.",
+  "contract_summary": "This is a put wrapper that releases a reference on a cls_fl_filter object via refcount_dec_and_test. If the refcount drops to zero, the filter is either destroyed immediately (if no net namespace) or via deferred work (if net namespace exists). After calling __fl_put, the caller must not access the filter object, as it may have been freed. This function is the standard release mechanism for a cls_fl_filter reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is refcount decrement and conditional cleanup; only refcount management logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount decrement always succeeds; if it reaches zero, object is destroyed; retrying would lead to use-after-free.",
+      "contract_summary": "This is a put wrapper that releases a reference on a cls_fl_filter object via refcount_dec_and_test. If the refcount drops to zero, the filter is either destroyed immediately (if no net namespace) or via deferred work (if net namespace exists). After calling __fl_put, the caller must not access the filter object, as it may have been freed. This function is the standard release mechanism for a cls_fl_filter reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "f.refcnt.refs",
+          "cls_fl_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "f.refcnt.refs",
+          "cls_fl_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&f->refcnt) is a put operation on f->refcnt.refs. The access path f.refcnt.refs and type chain cls_fl_filter--refcount_t--atomic_t are consistent with the code and callee info. Segment counts match (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "f.refcnt.refs",
+        "cls_fl_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount decrement always succeeds; if it reaches zero, object is destroyed; retrying would lead to use-after-free.",
+    "contract_summary": "This is a put wrapper that releases a reference on a cls_fl_filter object via refcount_dec_and_test. If the refcount drops to zero, the filter is either destroyed immediately (if no net namespace) or via deferred work (if net namespace exists). After calling __fl_put, the caller must not access the filter object, as it may have been freed. This function is the standard release mechanism for a cls_fl_filter reference."
+  }
+}

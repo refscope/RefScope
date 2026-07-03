@@ -1,0 +1,99 @@
+{
+  "function_name": "aac_put_safw_scsi_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "sdev.sdev_gendev.kobj.kref.refcount",
+      "scsi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "scsi_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "scsi_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sdev.sdev_gendev.kobj.kref.refcount",
+      "member_type_chain": "scsi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If sdev is NULL, operation is a harmless no-op; if non-NULL, scsi_device_put always succeeds (decrements refcount). Retry is meaningless.",
+  "contract_summary": "Put wrapper: releases a reference on the given scsi_device if the pointer is non-NULL. After calling this function, the caller must not use the scsi_device object (the reference count may have dropped to zero, triggering deallocation). This wrapper is designed to safely handle NULL pointers (e.g., from optional device pointers).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on a scsi_device via scsi_device_put, with only a NULL check for safety. No other business logic present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If sdev is NULL, operation is a harmless no-op; if non-NULL, scsi_device_put always succeeds (decrements refcount). Retry is meaningless.",
+      "contract_summary": "Put wrapper: releases a reference on the given scsi_device if the pointer is non-NULL. After calling this function, the caller must not use the scsi_device object (the reference count may have dropped to zero, triggering deallocation). This wrapper is designed to safely handle NULL pointers (e.g., from optional device pointers)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sdev.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "sdev.sdev_gendev.kobj.kref.refcount",
+          "scsi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function directly calls scsi_device_put(sdev) when sdev is non-NULL. The access path from parameter 1 (sdev) matches the callee's description, and the type chain segment count equals the path segment count."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "sdev.sdev_gendev.kobj.kref.refcount",
+        "scsi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If sdev is NULL, operation is a harmless no-op; if non-NULL, scsi_device_put always succeeds (decrements refcount). Retry is meaningless.",
+    "contract_summary": "Put wrapper: releases a reference on the given scsi_device if the pointer is non-NULL. After calling this function, the caller must not use the scsi_device object (the reference count may have dropped to zero, triggering deallocation). This wrapper is designed to safely handle NULL pointers (e.g., from optional device pointers)."
+  }
+}

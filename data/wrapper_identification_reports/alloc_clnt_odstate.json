@@ -1,0 +1,99 @@
+{
+  "function_name": "alloc_clnt_odstate",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "co.co_odcount.refs",
+      "nfs4_clnt_odstate--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_set always succeeds; allocation failure is not a refcount operation, and retrying under same memory pressure is unlikely to help.",
+  "contract_summary": "This is a creation wrapper (set) that allocates a new nfs4_clnt_odstate object, initializes its reference count to 1, and returns it to the caller. The caller acquires ownership of a reference and must eventually release it by calling a corresponding put function (e.g., nfs4_put_clnt_odstate). If allocation fails, NULL is returned; the caller must check for NULL and handle the error appropriately. No special locking or RCU requirements are introduced by this wrapper.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate a refcounted object and set its initial reference count to 1. The function contains no other significant logic.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_set always succeeds; allocation failure is not a refcount operation, and retrying under same memory pressure is unlikely to help.",
+      "contract_summary": "This is a creation wrapper (set) that allocates a new nfs4_clnt_odstate object, initializes its reference count to 1, and returns it to the caller. The caller acquires ownership of a reference and must eventually release it by calling a corresponding put function (e.g., nfs4_put_clnt_odstate). If allocation fails, NULL is returned; the caller must check for NULL and handle the error appropriately. No special locking or RCU requirements are introduced by this wrapper."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "co.co_odcount.refs",
+          "nfs4_clnt_odstate--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "co.co_odcount.refs",
+          "nfs4_clnt_odstate--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set is called on &co->co_odcount, which sets the refcount to 1 before returning co. The access path co.co_odcount.refs traces from the return variable co to the atomic refs field, matching the callee's r.refs pattern. The type chain nfs4_clnt_odstate--refcount_t--atomic_t is consistent with the struct definition. Segment counts match: 3 path segments and 3 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "co.co_odcount.refs",
+        "nfs4_clnt_odstate--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_set always succeeds; allocation failure is not a refcount operation, and retrying under same memory pressure is unlikely to help.",
+    "contract_summary": "This is a creation wrapper (set) that allocates a new nfs4_clnt_odstate object, initializes its reference count to 1, and returns it to the caller. The caller acquires ownership of a reference and must eventually release it by calling a corresponding put function (e.g., nfs4_put_clnt_odstate). If allocation fails, NULL is returned; the caller must check for NULL and handle the error appropriately. No special locking or RCU requirements are introduced by this wrapper."
+  }
+}

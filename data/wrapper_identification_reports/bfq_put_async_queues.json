@@ -1,0 +1,127 @@
+{
+  "function_name": "bfq_put_async_queues",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "bfqg.async_bfqq.ref",
+      "bfq_group--bfq_queue--int"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "bfqg.async_idle_bfqq.ref",
+      "bfq_group--bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__bfq_put_async_bfqq",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__bfq_put_async_bfqq",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "bfqq.ref",
+      "member_type_chain": "bfq_queue--int"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and always succeeds (assuming correct usage); failure indicates a bug (refcount underflow), not a transient condition.",
+  "contract_summary": "Batch release wrapper: decrements the reference count of every async bfq_queue (per actuator, I/O priority, and class) in the given bfq_group via __bfq_put_async_bfqq. Called during group teardown or when async queues should be destroyed. After this call, the caller must not access the queued objects. No return value; no failure retry is possible.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release refcounts on all async bfq_queues via __bfq_put_async_bfqq; no other business logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and always succeeds (assuming correct usage); failure indicates a bug (refcount underflow), not a transient condition.",
+      "contract_summary": "Batch release wrapper: decrements the reference count of every async bfq_queue (per actuator, I/O priority, and class) in the given bfq_group via __bfq_put_async_bfqq. Called during group teardown or when async queues should be destroyed. After this call, the caller must not access the queued objects. No return value; no failure retry is possible."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqg.async_bfqq.ref",
+          "bfq_group--bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqg.async_idle_bfqq.ref",
+          "bfq_group--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqg.async_bfqq.ref",
+          "bfq_group--bfq_queue--int"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "bfqg.async_idle_bfqq.ref",
+          "bfq_group--bfq_queue--int"
+        ]
+      ],
+      "reason": "The callee __bfq_put_async_bfqq is a put function on parameter 2 (a pointer to struct bfq_queue), accessing bfqq.ref. In the caller, the arguments &bfqg->async_bfqq[i][j][k] and &bfqg->async_idle_bfqq[k] provide pointers to struct bfq_queue, so the access paths bfqg.async_bfqq.ref and bfqg.async_idle_bfqq.ref correctly trace from the function parameter bfqg to the refcount field. The type chains are consistent: bfq_group contains arrays of bfq_queue, and each bfq_queue has an int ref. No indices are needed in the path for validation purposes, and the segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "bfqg.async_bfqq.ref",
+        "bfq_group--bfq_queue--int"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "bfqg.async_idle_bfqq.ref",
+        "bfq_group--bfq_queue--int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and always succeeds (assuming correct usage); failure indicates a bug (refcount underflow), not a transient condition.",
+    "contract_summary": "Batch release wrapper: decrements the reference count of every async bfq_queue (per actuator, I/O priority, and class) in the given bfq_group via __bfq_put_async_bfqq. Called during group teardown or when async queues should be destroyed. After this call, the caller must not access the queued objects. No return value; no failure retry is possible."
+  }
+}

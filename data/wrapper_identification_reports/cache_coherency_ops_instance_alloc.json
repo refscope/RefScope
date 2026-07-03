@@ -1,0 +1,99 @@
+{
+  "function_name": "cache_coherency_ops_instance_alloc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "return.member.kref.refcount.refs",
+      "drv_struct--cache_coherency_ops_inst--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "_cache_coherency_ops_instance_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cci.kref.refcount.refs",
+      "member_type_chain": "cache_coherency_ops_inst--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "_cache_coherency_ops_instance_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cci.kref.refcount.refs",
+      "member_type_chain": "cache_coherency_ops_inst--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation failure (OOM), not a transient refcount issue; retry may succeed if memory becomes available but the refcount set itself never fails.",
+  "contract_summary": "Set-wrapper: allocates a new drv_struct (whose first member is a cache_coherency_ops_inst) and initializes its embedded kref to 1, establishing the initial reference. Returns a pointer to the newly allocated object, or NULL on allocation failure. The caller must check the return value and, on success, holds one reference that must later be released via the corresponding put function (e.g., cache_coherency_ops_instance_put). The object’s refcount lifecycle begins with this call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate a drv_struct and initialize its embedded kref to 1 (set wrapper). The only non-refcount logic is the static_assert checks and the allocation call, which are minimal setup.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation failure (OOM), not a transient refcount issue; retry may succeed if memory becomes available but the refcount set itself never fails.",
+      "contract_summary": "Set-wrapper: allocates a new drv_struct (whose first member is a cache_coherency_ops_inst) and initializes its embedded kref to 1, establishing the initial reference. Returns a pointer to the newly allocated object, or NULL on allocation failure. The caller must check the return value and, on success, holds one reference that must later be released via the corresponding put function (e.g., cache_coherency_ops_instance_put). The object’s refcount lifecycle begins with this call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "return.member.kref.refcount.refs",
+          "drv_struct--cache_coherency_ops_inst--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "return.member.kref.refcount.refs",
+          "drv_struct--cache_coherency_ops_inst--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The macro returns a pointer to a drv_struct whose first member (member) is of type cache_coherency_ops_inst. The callee _cache_coherency_ops_instance_alloc is described as a set function operating on the returned object's refcount at path cci.kref.refcount.refs. The candidate's access path return.member.kref.refcount.refs matches this by tracing from the return value through the embedded cache_coherency_ops_inst member to the kref.refcount.refs atomic_t. The segment count (5) equals the type chain count (5), and the types are consistent. No other operations are present or missing."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "return.member.kref.refcount.refs",
+        "drv_struct--cache_coherency_ops_inst--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation failure (OOM), not a transient refcount issue; retry may succeed if memory becomes available but the refcount set itself never fails.",
+    "contract_summary": "Set-wrapper: allocates a new drv_struct (whose first member is a cache_coherency_ops_inst) and initializes its embedded kref to 1, establishing the initial reference. Returns a pointer to the newly allocated object, or NULL on allocation failure. The caller must check the return value and, on success, holds one reference that must later be released via the corresponding put function (e.g., cache_coherency_ops_instance_put). The object’s refcount lifecycle begins with this call."
+  }
+}

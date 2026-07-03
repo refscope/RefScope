@@ -1,0 +1,99 @@
+{
+  "function_name": "atmel_aes_xts_exit_tfm",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+      "crypto_skcipher--crypto_tfm--atmel_aes_xts_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "crypto_free_skcipher is a void function and always succeeds; retry is not applicable.",
+  "contract_summary": "This is a put wrapper that releases the reference to the fallback skcipher tfm (ctx->fallback_tfm). It should be called during tfm destruction (e.g., from a crypto_skcipher exit callback). After calling this function, the fallback_tfm must not be accessed by the caller. The caller must ensure that the fallback_tfm was previously allocated and that no other concurrent references exist.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference to the fallback skcipher tfm via crypto_free_skcipher, a put function. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "crypto_free_skcipher is a void function and always succeeds; retry is not applicable.",
+      "contract_summary": "This is a put wrapper that releases the reference to the fallback skcipher tfm (ctx->fallback_tfm). It should be called during tfm destruction (e.g., from a crypto_skcipher exit callback). After calling this function, the fallback_tfm must not be accessed by the caller. The caller must ensure that the fallback_tfm was previously allocated and that no other concurrent references exist."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--atmel_aes_xts_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--atmel_aes_xts_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls crypto_free_skcipher on ctx->fallback_tfm, which is obtained via tfm (parameter 1). The access path and type chain correctly trace from the parameter through the context to the refcount field of the fallback_tfm object, and the callee confirms it is a put operation."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+        "crypto_skcipher--crypto_tfm--atmel_aes_xts_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "crypto_free_skcipher is a void function and always succeeds; retry is not applicable.",
+    "contract_summary": "This is a put wrapper that releases the reference to the fallback skcipher tfm (ctx->fallback_tfm). It should be called during tfm destruction (e.g., from a crypto_skcipher exit callback). After calling this function, the fallback_tfm must not be accessed by the caller. The caller must ensure that the fallback_tfm was previously allocated and that no other concurrent references exist."
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "function_name": "__sock_map_delete",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "sk.sk_user_data.refcnt",
+      "sock--sk_psock--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (-EINVAL) means the expected sock was not in the slot; retrying with the same parameters will not succeed unless the map state changes, which is unlikely in typical use.",
+  "contract_summary": "Put wrapper for BPF sock map deletions: atomically removes the sock from the map slot (setting *psk to NULL) and decrements its reference count via sock_map_unref. The caller must have previously obtained the sock via a map lookup and must not use the sock pointer after this function returns, as the reference is released and the slot is cleared. Returns 0 on success; -EINVAL if sk_test is non-NULL and does not match the sock in the slot, indicating no unref was performed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to remove a sock from a BPF sock map (by xchg to NULL) and decrement its reference count via sock_map_unref, with minimal other logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (-EINVAL) means the expected sock was not in the slot; retrying with the same parameters will not succeed unless the map state changes, which is unlikely in typical use.",
+      "contract_summary": "Put wrapper for BPF sock map deletions: atomically removes the sock from the map slot (setting *psk to NULL) and decrements its reference count via sock_map_unref. The caller must have previously obtained the sock via a map lookup and must not use the sock pointer after this function returns, as the reference is released and the slot is cleared. Returns 0 on success; -EINVAL if sk_test is non-NULL and does not match the sock in the slot, indicating no unref was performed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "sk_test.sk_user_data.refcnt",
+          "sock--sk_psock--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The candidate operation starts the access path from 'sk_test' (parameter 1), but the actual refcount decrement occurs on the sock retrieved via *psk (parameter 2) and stored in local variable 'sk'. The critical variable at the function interface is *psk, not sk_test. Therefore the access path is incorrect, and the operation is rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "sk.sk_user_data.refcnt",
+          "sock--sk_psock--refcount_t"
+        ]
+      ],
+      "reason": "The function is a refcount decrement wrapper: it removes a sock from the map and drops the reference via sock_map_unref. The critical variable is the sock obtained from *psk (parameter 2). The candidate operation had an incorrect path starting from sk_test; we correct the path to reflect that the refcount is on the sock returned by xchg(psk, NULL), stored in local variable sk. The direction (put) and type chain are correct. The check correctly identified the path error but should not have rejected the wrapper classification."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "sk.sk_user_data.refcnt",
+        "sock--sk_psock--refcount_t"
+      ]
+    ],
+    "callee_count": 0,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (-EINVAL) means the expected sock was not in the slot; retrying with the same parameters will not succeed unless the map state changes, which is unlikely in typical use.",
+    "contract_summary": "Put wrapper for BPF sock map deletions: atomically removes the sock from the map slot (setting *psk to NULL) and decrements its reference count via sock_map_unref. The caller must have previously obtained the sock via a map lookup and must not use the sock pointer after this function returns, as the reference is released and the slot is cleared. Returns 0 on success; -EINVAL if sk_test is non-NULL and does not match the sock in the slot, indicating no unref was performed."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "__xe_bo_unpin_map_no_vm",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "arg.ttm.base.refcount.refcount",
+      "xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "arg.backup_obj.ttm.base.refcount.refcount",
+      "xe_bo--xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "xe_bo_unpin_map_no_vm",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.ttm.base.refcount.refcount",
+      "member_type_chain": "xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "xe_bo_unpin_map_no_vm",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.backup_obj.ttm.base.refcount.refcount",
+      "member_type_chain": "xe_bo--xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "xe_bo_unpin_map_no_vm",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.ttm.base.refcount.refcount",
+      "member_type_chain": "xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "xe_bo_unpin_map_no_vm",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo.backup_obj.ttm.base.refcount.refcount",
+      "member_type_chain": "xe_bo--xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes; if the refcount were already zero, retrying would cause a double-put and potential use-after-free.",
+  "contract_summary": "This is a thin put wrapper that releases a reference on a bo by delegating to xe_bo_unpin_map_no_vm. It is intended for use as a cleanup callback (e.g., for workqueues or deferred releases) where the argument is passed as void*. The caller must ensure that a corresponding get was previously performed and that the bo is still valid at the time of the call. After calling, the caller must not access the bo unless it holds another reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only purpose is to call xe_bo_unpin_map_no_vm, which is a put/refcount-release operation on the bo. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes; if the refcount were already zero, retrying would cause a double-put and potential use-after-free.",
+      "contract_summary": "This is a thin put wrapper that releases a reference on a bo by delegating to xe_bo_unpin_map_no_vm. It is intended for use as a cleanup callback (e.g., for workqueues or deferred releases) where the argument is passed as void*. The caller must ensure that a corresponding get was previously performed and that the bo is still valid at the time of the call. After calling, the caller must not access the bo unless it holds another reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "arg.ttm.base.refcount.refcount",
+          "xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "arg.backup_obj.ttm.base.refcount.refcount",
+          "xe_bo--xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "arg.ttm.base.refcount.refcount",
+          "xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "arg.backup_obj.ttm.base.refcount.refcount",
+          "xe_bo--xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations describe put calls on the xe_bo pointed to by 'arg', as per callee information. The access paths and type chains match the expected structure and segment counts. The wrapper function simply delegates to xe_bo_unpin_map_no_vm, which performs both put operations on its parameter."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "arg.ttm.base.refcount.refcount",
+        "xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "arg.backup_obj.ttm.base.refcount.refcount",
+        "xe_bo--xe_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes; if the refcount were already zero, retrying would cause a double-put and potential use-after-free.",
+    "contract_summary": "This is a thin put wrapper that releases a reference on a bo by delegating to xe_bo_unpin_map_no_vm. It is intended for use as a cleanup callback (e.g., for workqueues or deferred releases) where the argument is passed as void*. The caller must ensure that a corresponding get was previously performed and that the bo is still valid at the time of the call. After calling, the caller must not access the bo unless it holds another reference."
+  }
+}

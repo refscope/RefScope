@@ -1,0 +1,122 @@
+{
+  "function_name": "_mlx5_add_flow_rules",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "tree_put_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.parent.refcount.refs",
+      "member_type_chain": "fs_node--fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nested_down_read_ref_node",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_put_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_put_node",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.parent.refcount.refs",
+      "member_type_chain": "fs_node--fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "up_write_ref_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nested_down_read_ref_node",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "up_write_ref_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_put_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.parent.refcount.refs",
+      "member_type_chain": "fs_node--fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_put_node",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.refcount.refs",
+      "member_type_chain": "fs_node--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "tree_put_node",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.parent.refcount.refs",
+      "member_type_chain": "fs_node--fs_node--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no specific retry contract exists for the refcount operations within the broader business logic.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to add a flow rule to a flow table, involving extensive validation, match list building, flow group allocation, FTE allocation, and insertion logic. Reference-count operations (e.g., nested_down_read_ref_node, up_write_ref_node) are merely internal locking/refcounting mechanisms to protect the steering tree during the multi-step rule addition, not the main goal of the function.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no specific retry contract exists for the refcount operations within the broader business logic.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no specific retry contract exists for the refcount operations within the broader business logic.",
+    "contract_summary": ""
+  }
+}

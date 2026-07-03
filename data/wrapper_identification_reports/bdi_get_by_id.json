@@ -1,0 +1,99 @@
+{
+  "function_name": "bdi_get_by_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bdi.refcnt.refcount",
+      "backing_dev_info--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bdi_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "bdi.refcnt.refcount",
+      "member_type_chain": "backing_dev_info--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bdi_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "bdi.refcnt.refcount",
+      "member_type_chain": "backing_dev_info--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the id is not present in the tree; retrying without external changes (e.g., creation of the bdi) would yield the same result.",
+  "contract_summary": "Get-wrapper that finds a backing_dev_info by id and increments its reference count. The caller receives a pointer with an elevated refcount and must eventually call bdi_put to release it. If the id is not found, returns NULL; the caller must check the return value. The function does not create a new bdi, only acquires a reference on an existing one.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a backing_dev_info by id and acquire a reference via bdi_get. The lookup logic is minimal scaffolding; the core semantic is refcount acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the id is not present in the tree; retrying without external changes (e.g., creation of the bdi) would yield the same result.",
+      "contract_summary": "Get-wrapper that finds a backing_dev_info by id and increments its reference count. The caller receives a pointer with an elevated refcount and must eventually call bdi_put to release it. If the id is not found, returns NULL; the caller must check the return value. The function does not create a new bdi, only acquires a reference on an existing one."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bdi.refcnt.refcount",
+          "backing_dev_info--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bdi.refcnt.refcount",
+          "backing_dev_info--kref--refcount_t"
+        ]
+      ],
+      "reason": "bdi_get is called on the local variable bdi, which is then returned. The access path bdi.refcnt.refcount correctly traces from the return value (bdi) to the refcount field, and the type chain backing_dev_info--kref--refcount_t matches the callee info. The segment counts (3 path segments vs 3 types) are equal."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bdi.refcnt.refcount",
+        "backing_dev_info--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the id is not present in the tree; retrying without external changes (e.g., creation of the bdi) would yield the same result.",
+    "contract_summary": "Get-wrapper that finds a backing_dev_info by id and increments its reference count. The caller receives a pointer with an elevated refcount and must eventually call bdi_put to release it. If the id is not found, returns NULL; the caller must check the return value. The function does not create a new bdi, only acquires a reference on an existing one."
+  }
+}

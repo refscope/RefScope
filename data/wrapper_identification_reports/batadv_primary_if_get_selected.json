@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_primary_if_get_selected",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount.refs",
+      "batadv_hard_iface--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "if the primary_if is NULL or its refcount is zero, the object is either non-existent or being freed; retrying the same operation will not succeed",
+  "contract_summary": "This is a get-wrapper that safely acquires a reference to the batadv_priv's primary interface under RCU. It returns a pointer with an incremented refcount if the primary_if exists and is still alive (refcount non-zero). The caller must release the reference via batadv_hardif_put() when done. The function uses rcu_read_lock to ensure the pointer remains valid during the get. If the primary_if is NULL or dead, it returns NULL. This is a conditional get; the caller must check the return value and not use a NULL pointer. No retry is needed on failure.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "primary purpose is to acquire a reference to bat_priv->primary_if via kref_get_unless_zero; RCU locking is minimal setup/teardown for safe pointer access",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "if the primary_if is NULL or its refcount is zero, the object is either non-existent or being freed; retrying the same operation will not succeed",
+      "contract_summary": "This is a get-wrapper that safely acquires a reference to the batadv_priv's primary interface under RCU. It returns a pointer with an incremented refcount if the primary_if exists and is still alive (refcount non-zero). The caller must release the reference via batadv_hardif_put() when done. The function uses rcu_read_lock to ensure the pointer remains valid during the get. If the primary_if is NULL or dead, it returns NULL. This is a conditional get; the caller must check the return value and not use a NULL pointer. No retry is needed on failure."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount.refs",
+          "batadv_hard_iface--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount.refs",
+          "batadv_hard_iface--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on &hard_iface->refcount; the return value hard_iface is the critical variable; the access path and type chain are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount.refs",
+        "batadv_hard_iface--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "if the primary_if is NULL or its refcount is zero, the object is either non-existent or being freed; retrying the same operation will not succeed",
+    "contract_summary": "This is a get-wrapper that safely acquires a reference to the batadv_priv's primary interface under RCU. It returns a pointer with an incremented refcount if the primary_if exists and is still alive (refcount non-zero). The caller must release the reference via batadv_hardif_put() when done. The function uses rcu_read_lock to ensure the pointer remains valid during the get. If the primary_if is NULL or dead, it returns NULL. This is a conditional get; the caller must check the return value and not use a NULL pointer. No retry is needed on failure."
+  }
+}

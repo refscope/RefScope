@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_bo_ref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bo.tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_object_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_object_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount increment is unconditional when the object is non-NULL and always succeeds; no retry is needed.",
+  "contract_summary": "This functions as a get-wrapper for struct amdgpu_bo: it increments the underlying drm_gem_object's reference count via drm_gem_object_get. It returns the same bo pointer with an additional reference acquired. The caller must eventually call amdgpu_bo_unref (or the appropriate put function) to release the reference. The function gracefully handles NULL input by returning NULL without taking any reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on the amdgpu_bo by incrementing the underlying drm_gem_object's refcount. The only logic besides the get is a NULL check, which simply returns NULL for NULL input.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount increment is unconditional when the object is non-NULL and always succeeds; no retry is needed.",
+      "contract_summary": "This functions as a get-wrapper for struct amdgpu_bo: it increments the underlying drm_gem_object's reference count via drm_gem_object_get. It returns the same bo pointer with an additional reference acquired. The caller must eventually call amdgpu_bo_unref (or the appropriate put function) to release the reference. The function gracefully handles NULL input by returning NULL without taking any reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bo.tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "drm_gem_object_get(&bo->tbo.base) increments the refcount on bo->tbo.base. The return value is bo, so the critical variable is the return value. Access path bo.tbo.base.refcount.refcount and type chain amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bo.tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount increment is unconditional when the object is non-NULL and always succeeds; no retry is needed.",
+    "contract_summary": "This functions as a get-wrapper for struct amdgpu_bo: it increments the underlying drm_gem_object's reference count via drm_gem_object_get. It returns the same bo pointer with an additional reference acquired. The caller must eventually call amdgpu_bo_unref (or the appropriate put function) to release the reference. The function gracefully handles NULL input by returning NULL without taking any reference."
+  }
+}

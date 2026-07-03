@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_free_fs_context",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "fc.fs_private.refs.refs",
+      "fs_context--btrfs_fs_context--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put wrapper: the decrement is unconditional when ctx is non-NULL; if the refcount reaches zero the object is freed. Retrying would mean a double-put (use-after-free risk) so retry is never appropriate.",
+  "contract_summary": "This function is the cleanup/destructor for a btrfs_fs_context structure. It releases the filesystem info reference by calling btrfs_free_fs_info and decrements the context's reference count. When the refcount drops to zero, it frees the context and its associated subvol_name. After calling this function, the caller must not use the context pointer, as it may have been freed. The caller must have previously acquired a valid reference (ownership) on the context, typically via a get operation or allocation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references: it calls btrfs_free_fs_info on fs_info (likely a put) and decrements the refcount of ctx via refcount_dec_and_test, freeing the context when the count reaches zero. No other business logic distracts from refcount management.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put wrapper: the decrement is unconditional when ctx is non-NULL; if the refcount reaches zero the object is freed. Retrying would mean a double-put (use-after-free risk) so retry is never appropriate.",
+      "contract_summary": "This function is the cleanup/destructor for a btrfs_fs_context structure. It releases the filesystem info reference by calling btrfs_free_fs_info and decrements the context's reference count. When the refcount drops to zero, it frees the context and its associated subvol_name. After calling this function, the caller must not use the context pointer, as it may have been freed. The caller must have previously acquired a valid reference (ownership) on the context, typically via a get operation or allocation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fc.fs_private.refs.refs",
+          "fs_context--btrfs_fs_context--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fc.fs_private.refs.refs",
+          "fs_context--btrfs_fs_context--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on ctx->refs, where ctx = fc->fs_private. The access path from parameter 1 (fc) correctly traverses fc->fs_private->refs.refs, matching the member-access path r.refs from the callee. The type chain (fs_context, btrfs_fs_context, refcount_t, atomic_t) aligns with the struct layout. The operation is a put because refcount_dec_and_test is a decrement-and-test. The segment count (4) matches the type count (4)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "fc.fs_private.refs.refs",
+        "fs_context--btrfs_fs_context--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put wrapper: the decrement is unconditional when ctx is non-NULL; if the refcount reaches zero the object is freed. Retrying would mean a double-put (use-after-free risk) so retry is never appropriate.",
+    "contract_summary": "This function is the cleanup/destructor for a btrfs_fs_context structure. It releases the filesystem info reference by calling btrfs_free_fs_info and decrements the context's reference count. When the refcount drops to zero, it frees the context and its associated subvol_name. After calling this function, the caller must not use the context pointer, as it may have been freed. The caller must have previously acquired a valid reference (ownership) on the context, typically via a get operation or allocation."
+  }
+}

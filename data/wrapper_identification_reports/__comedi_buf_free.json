@@ -1,0 +1,99 @@
+{
+  "function_name": "__comedi_buf_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "s.async.buf_map.refcount.refcount",
+      "comedi_subdevice--comedi_async--comedi_buf_map--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "comedi_buf_map_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bm.refcount.refcount",
+      "member_type_chain": "comedi_buf_map--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "comedi_buf_map_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bm.refcount.refcount",
+      "member_type_chain": "comedi_buf_map--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and expected to succeed; there is no failure indication to retry on.",
+  "contract_summary": "Put wrapper: safely releases the comedi_buf_map reference held by the subdevice's async buffer map. Under spinlock, the pointer is extracted and cleared, then comedi_buf_map_put is called, which decrements the refcount and may free the object if the count reaches zero. After this call, the caller must not use the buffer map pointer obtained previously, unless they hold another reference. This function is typically called during buffer cleanup or device removal.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the comedi_buf_map reference by extracting the pointer under spinlock and calling comedi_buf_map_put. Setting prealloc_bufsz=0 is a minor housekeeping step, but the core operation is the put.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and expected to succeed; there is no failure indication to retry on.",
+      "contract_summary": "Put wrapper: safely releases the comedi_buf_map reference held by the subdevice's async buffer map. Under spinlock, the pointer is extracted and cleared, then comedi_buf_map_put is called, which decrements the refcount and may free the object if the count reaches zero. After this call, the caller must not use the buffer map pointer obtained previously, unless they hold another reference. This function is typically called during buffer cleanup or device removal."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "s.async.buf_map.refcount.refcount",
+          "comedi_subdevice--comedi_async--comedi_buf_map--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "s.async.buf_map.refcount.refcount",
+          "comedi_subdevice--comedi_async--comedi_buf_map--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put operation is correctly identified from comedi_buf_map_put(bm). The access path starts from parameter s (index 2), traverses s->async->buf_map->refcount (kref) and then refcount (refcount_t), matching the callee's type chain comedi_subdevice--comedi_async--comedi_buf_map--kref--refcount_t. The segment count (5) equals type count (5), so the path is complete."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "s.async.buf_map.refcount.refcount",
+        "comedi_subdevice--comedi_async--comedi_buf_map--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and expected to succeed; there is no failure indication to retry on.",
+    "contract_summary": "Put wrapper: safely releases the comedi_buf_map reference held by the subdevice's async buffer map. Under spinlock, the pointer is extracted and cleared, then comedi_buf_map_put is called, which decrements the refcount and may free the object if the count reaches zero. After this call, the caller must not use the buffer map pointer obtained previously, unless they hold another reference. This function is typically called during buffer cleanup or device removal."
+  }
+}

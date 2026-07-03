@@ -1,0 +1,99 @@
+{
+  "function_name": "arm_cspmu_acpi_dev_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "return.dev.kobj.kref.refcount",
+      "acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpi_dev_get_first_match_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpi_dev_get_first_match_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no matching ACPI device exists for the given HID/UID, it will not appear later; retrying will not change the result.",
+  "contract_summary": "This function is a get-wrapper that obtains a reference to an ACPI device matching the HID and UID derived from the APMT node associated with the given CSPMU device. It returns a pointer to the acpi_device with its reference count incremented, transferring ownership to the caller. The caller must call acpi_dev_put() to release the reference when done. If the APMT node is missing, not of type ACPI, or no matching ACPI device exists, it returns NULL, and the caller must handle the error appropriately.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a reference to an ACPI device matching HID/UID from APMT node; only trivial parameter extraction and null check before the get call.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no matching ACPI device exists for the given HID/UID, it will not appear later; retrying will not change the result.",
+      "contract_summary": "This function is a get-wrapper that obtains a reference to an ACPI device matching the HID and UID derived from the APMT node associated with the given CSPMU device. It returns a pointer to the acpi_device with its reference count incremented, transferring ownership to the caller. The caller must call acpi_dev_put() to release the reference when done. If the APMT node is missing, not of type ACPI, or no matching ACPI device exists, it returns NULL, and the caller must handle the error appropriately."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "return.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the result of acpi_dev_get_first_match_dev, which is a get function that increments the refcount on the returned acpi_device. The access path and type chain are correct and consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "return.dev.kobj.kref.refcount",
+        "acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no matching ACPI device exists for the given HID/UID, it will not appear later; retrying will not change the result.",
+    "contract_summary": "This function is a get-wrapper that obtains a reference to an ACPI device matching the HID and UID derived from the APMT node associated with the given CSPMU device. It returns a pointer to the acpi_device with its reference count incremented, transferring ownership to the caller. The caller must call acpi_dev_put() to release the reference when done. If the APMT node is missing, not of type ACPI, or no matching ACPI device exists, it returns NULL, and the caller must handle the error appropriately."
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "function_name": "batadv_orig_node_vlan_new",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "vlan.refcount.refcount",
+      "batadv_orig_node_vlan--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount.refs",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure from allocation (kzalloc) is not transient under the same conditions; retrying would likely fail again.",
+  "contract_summary": "Get-or-create wrapper: returns a pointer to a batadv_orig_node_vlan with an acquired reference (refcount incremented). If the object already exists, its reference is taken via batadv_orig_node_vlan_get. If not, a new object is allocated, its refcount is initialized to 1 via kref_init and then incremented again (to 2) so both the list and the caller hold a reference. The caller must later release the returned reference with a corresponding put function (e.g., batadv_orig_node_vlan_put). The returned pointer may be NULL if the vid is invalid or memory allocation fails; the caller must check for NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a reference-counted batadv_orig_node_vlan object (get-or-create). Minor non-refcount operations are a simple validation and list insertion.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure from allocation (kzalloc) is not transient under the same conditions; retrying would likely fail again.",
+      "contract_summary": "Get-or-create wrapper: returns a pointer to a batadv_orig_node_vlan with an acquired reference (refcount incremented). If the object already exists, its reference is taken via batadv_orig_node_vlan_get. If not, a new object is allocated, its refcount is initialized to 1 via kref_init and then incremented again (to 2) so both the list and the caller hold a reference. The caller must later release the returned reference with a corresponding put function (e.g., batadv_orig_node_vlan_put). The returned pointer may be NULL if the vid is invalid or memory allocation fails; the caller must check for NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_orig_node_vlan--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_orig_node_vlan--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns a vlan object with a reference acquired either via batadv_orig_node_vlan_get or via explicit kref_get after kref_init. The access path vlan.refcount.refcount and type chain batadv_orig_node_vlan--kref--refcount_t correctly trace from the return value to the refcount_t field. The segment count (3) matches the number of types in the chain (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "vlan.refcount.refcount",
+        "batadv_orig_node_vlan--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure from allocation (kzalloc) is not transient under the same conditions; retrying would likely fail again.",
+    "contract_summary": "Get-or-create wrapper: returns a pointer to a batadv_orig_node_vlan with an acquired reference (refcount incremented). If the object already exists, its reference is taken via batadv_orig_node_vlan_get. If not, a new object is allocated, its refcount is initialized to 1 via kref_init and then incremented again (to 2) so both the list and the caller hold a reference. The caller must later release the returned reference with a corresponding put function (e.g., batadv_orig_node_vlan_put). The returned pointer may be NULL if the vid is invalid or memory allocation fails; the caller must check for NULL."
+  }
+}

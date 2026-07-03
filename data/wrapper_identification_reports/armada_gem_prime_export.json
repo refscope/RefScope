@@ -1,0 +1,143 @@
+{
+  "function_name": "armada_gem_prime_export",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "obj.dev.ref.refcount",
+      "drm_gem_object--drm_device--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "obj.refcount.refcount",
+      "drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "exp_info.priv.refcount.refcount",
+      "member_type_chain": "dma_buf_export_info--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "exp_info.priv.refcount.refcount",
+      "member_type_chain": "dma_buf_export_info--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_gem_dmabuf_export",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.ref.refcount",
+      "member_type_chain": "drm_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is typically due to memory allocation failure; retrying under the same conditions would likely also fail, and standard kernel error handling propagates the error rather than retrying.",
+  "contract_summary": "This function exports a DRM GEM object as a dma-buf. It acquires a reference on the GEM object and the device via drm_gem_dmabuf_export, and returns a struct dma_buf pointer to the caller. The caller must check the return value for errors using IS_ERR and, on success, must release the dma-buf with dma_buf_put when it is no longer needed. The function does not require any specific locks to be held. This is an acquire-type wrapper that transfers ownership of the dma-buf and its associated references to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to create a dma-buf export by calling drm_gem_dmabuf_export, which acquires references on the DRM GEM object and the device. The only additional logic is trivial assignment of structure fields (ops, size, flags, priv), which are necessary for the export operation. No other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is typically due to memory allocation failure; retrying under the same conditions would likely also fail, and standard kernel error handling propagates the error rather than retrying.",
+      "contract_summary": "This function exports a DRM GEM object as a dma-buf. It acquires a reference on the GEM object and the device via drm_gem_dmabuf_export, and returns a struct dma_buf pointer to the caller. The caller must check the return value for errors using IS_ERR and, on success, must release the dma-buf with dma_buf_put when it is no longer needed. The function does not require any specific locks to be held. This is an acquire-type wrapper that transfers ownership of the dma-buf and its associated references to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "obj.dev.ref.refcount",
+          "drm_gem_object--drm_device--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "obj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "obj.dev.ref.refcount",
+          "drm_gem_object--drm_device--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "obj.refcount.refcount",
+          "drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both candidate operations are consistent with the code. drm_gem_dmabuf_export takes obj->dev and &exp_info (which contains obj as priv). It increments the refcount on dev->ref.refcount and on obj->refcount.refcount. The access paths start from the interface parameter obj and correctly trace to the respective refcount fields. Type chains match the actual struct definitions and segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "obj.dev.ref.refcount",
+        "drm_gem_object--drm_device--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "obj.refcount.refcount",
+        "drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is typically due to memory allocation failure; retrying under the same conditions would likely also fail, and standard kernel error handling propagates the error rather than retrying.",
+    "contract_summary": "This function exports a DRM GEM object as a dma-buf. It acquires a reference on the GEM object and the device via drm_gem_dmabuf_export, and returns a struct dma_buf pointer to the caller. The caller must check the return value for errors using IS_ERR and, on success, must release the dma-buf with dma_buf_put when it is no longer needed. The function does not require any specific locks to be held. This is an acquire-type wrapper that transfers ownership of the dma-buf and its associated references to the caller."
+  }
+}

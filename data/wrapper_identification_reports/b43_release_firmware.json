@@ -1,0 +1,183 @@
+{
+  "function_name": "b43_release_firmware",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.ucode.data.priv.ref.refcount",
+      "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.pcm.data.priv.ref.refcount",
+      "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.initvals.data.priv.ref.refcount",
+      "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.initvals_band.data.priv.ref.refcount",
+      "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "b43_do_release_fw",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fw.data.priv.ref.refcount",
+      "member_type_chain": "b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "b43_do_release_fw",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fw.data.priv.ref.refcount",
+      "member_type_chain": "b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "All operations are unconditional puts; there is no failure path to retry.",
+  "contract_summary": "This function releases references to the ucode, pcm, initvals, and initvals_band firmware structures by calling b43_do_release_fw on each. After this call, all those firmware pointers are invalid and must not be accessed. It also signals the completion of firmware loading via dev->fw_load_complete. This function is typically called at the end of a firmware loading attempt or when the device is being torn down. Caller must ensure that no further firmware operations occur after calling this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references to four firmware objects via b43_do_release_fw (put operations). The complete() call is a minor lifecycle signal, but the function's core and only significant work is refcount management.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "All operations are unconditional puts; there is no failure path to retry.",
+      "contract_summary": "This function releases references to the ucode, pcm, initvals, and initvals_band firmware structures by calling b43_do_release_fw on each. After this call, all those firmware pointers are invalid and must not be accessed. It also signals the completion of firmware loading via dev->fw_load_complete. This function is typically called at the end of a firmware loading attempt or when the device is being torn down. Caller must ensure that no further firmware operations occur after calling this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.ucode.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.pcm.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals_band.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.ucode.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.pcm.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals_band.data.priv.ref.refcount",
+          "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "Each call to b43_do_release_fw passes the address of a b43_firmware_file field (ucode, pcm, initvals, initvals_band) from dev->fw. The callee is a put function on its parameter (index 1), and the access path from dev through the struct hierarchy to the refcount field is consistent with the callee's type chain (b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t). The segment count (7) matches the number of types, so all operations are valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.ucode.data.priv.ref.refcount",
+        "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.pcm.data.priv.ref.refcount",
+        "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.initvals.data.priv.ref.refcount",
+        "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.initvals_band.data.priv.ref.refcount",
+        "b43_wldev--b43_firmware--b43_firmware_file--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "All operations are unconditional puts; there is no failure path to retry.",
+    "contract_summary": "This function releases references to the ucode, pcm, initvals, and initvals_band firmware structures by calling b43_do_release_fw on each. After this call, all those firmware pointers are invalid and must not be accessed. It also signals the completion of firmware loading via dev->fw_load_complete. This function is typically called at the end of a firmware loading attempt or when the device is being torn down. Caller must ensure that no further firmware operations occur after calling this function."
+  }
+}

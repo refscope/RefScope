@@ -1,0 +1,115 @@
+{
+  "function_name": "aa_get_label_rcu",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "c.count.refcount.refs",
+      "aa_label--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails only when the refcount is zero, indicating the object is dying or dead; retrying cannot revive it.",
+  "contract_summary": "RCU-protected conditional get-wrapper: obtains a reference to an aa_label via kref_get_unless_zero, protected by an RCU read lock. The caller receives a pointer to the label with an elevated refcount, or NULL if the object is already being freed. The caller must release the reference using aa_put_label() when done. No other locks are required, but the caller must not rely on the label after the reference is released.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to acquire a reference on an aa_label under RCU protection using kref_get_unless_zero. No other logic is performed.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails only when the refcount is zero, indicating the object is dying or dead; retrying cannot revive it.",
+      "contract_summary": "RCU-protected conditional get-wrapper: obtains a reference to an aa_label via kref_get_unless_zero, protected by an RCU read lock. The caller receives a pointer to the label with an elevated refcount, or NULL if the object is already being freed. The caller must release the reference using aa_put_label() when done. No other locks are required, but the caller must not rely on the label after the reference is released."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "c.count.refcount.refs",
+          "aa_label--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "c.count.refcount.refs",
+          "aa_label--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The access path c.count.refcount.refs matches the code: c is the return value, count is a kref field, and inside kref_get_unless_zero the refcount.refs is accessed. The type chain aa_label--kref--refcount_t--atomic_t aligns with the struct hierarchy, and the segment counts (4 vs 4) are equal. The operation correctly reflects that a get is performed on the returned label."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "c.count.refcount.refs",
+        "aa_label--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails only when the refcount is zero, indicating the object is dying or dead; retrying cannot revive it.",
+    "contract_summary": "RCU-protected conditional get-wrapper: obtains a reference to an aa_label via kref_get_unless_zero, protected by an RCU read lock. The caller receives a pointer to the label with an elevated refcount, or NULL if the object is already being freed. The caller must release the reference using aa_put_label() when done. No other locks are required, but the caller must not rely on the label after the reference is released."
+  }
+}

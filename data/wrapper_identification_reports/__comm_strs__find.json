@@ -1,0 +1,99 @@
+{
+  "function_name": "__comm_strs__find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.refcnt.refs",
+      "comm_str--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "comm_str__get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cs.refcnt.refs",
+      "member_type_chain": "comm_str--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "comm_str__get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cs.refcnt.refs",
+      "member_type_chain": "comm_str--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Under the held lock, the array state is stable; a failed search will not succeed until the lock is released and new entries are added.",
+  "contract_summary": "Finds a comm_str by name (via binary search) in the given comm_strs array and returns it with an incremented reference count. Returns NULL if not found. The caller must hold comm_strs->lock in shared mode and must later release the returned reference with comm_str__put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a comm_str by binary search and return it with an acquired reference via comm_str__get; the only non-refcount logic is the search itself, which is integral to the lookup.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Under the held lock, the array state is stable; a failed search will not succeed until the lock is released and new entries are added.",
+      "contract_summary": "Finds a comm_str by name (via binary search) in the given comm_strs array and returns it with an incremented reference count. Returns NULL if not found. The caller must hold comm_strs->lock in shared mode and must later release the returned reference with comm_str__put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refcnt.refs",
+          "comm_str--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.refcnt.refs",
+          "comm_str--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "comm_str__get(*result) is called on the found comm_str, and the result is returned. The return value is the critical variable with increased refcount. The access path ret.refcnt.refs and type chain comm_str--refcount_t--atomic_t are consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.refcnt.refs",
+        "comm_str--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Under the held lock, the array state is stable; a failed search will not succeed until the lock is released and new entries are added.",
+    "contract_summary": "Finds a comm_str by name (via binary search) in the given comm_strs array and returns it with an incremented reference count. Returns NULL if not found. The caller must hold comm_strs->lock in shared mode and must later release the returned reference with comm_str__put."
+  }
+}

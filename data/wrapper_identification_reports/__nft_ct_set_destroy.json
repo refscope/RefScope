@@ -1,0 +1,127 @@
+{
+  "function_name": "__nft_ct_set_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      1,
+      "ctx.net.ct.labels_used",
+      "nft_ctx--net--netns_ct--atomic_t"
+    ],
+    [
+      "put",
+      "global",
+      "nft_ct_pcpu_template",
+      "nft_ct_pcpu_template.ct_general.use.refs",
+      "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nft_ct_tmpl_put_pcpu",
+      "get_or_put": "put",
+      "index": "nft_ct_pcpu_template",
+      "location": "global",
+      "member_access_path": "nft_ct_pcpu_template.ct_general.use.refs",
+      "member_type_chain": "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nft_ct_tmpl_put_pcpu",
+      "get_or_put": "put",
+      "index": "nft_ct_pcpu_template",
+      "location": "global",
+      "member_access_path": "nft_ct_pcpu_template.ct_general.use.refs",
+      "member_type_chain": "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Refcount decrements are unconditional on their code paths and always succeed; failure would indicate a use-after-free or double-put, not a retryable condition.",
+  "contract_summary": "Put-wrapper for conntrack set resources. Releases a reference on connlabels (via nf_connlabels_put) and on the global percpu template (via nft_ct_tmpl_put_pcpu, which decrements a refcount_t and potentially frees the template when the refcount reaches zero). Must be called exactly once when the nft conntrack set is destroyed. After this call, the corresponding resources must not be accessed. The caller must hold appropriate locks to protect the private data structure (priv) during the call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release reference counts on connlabels and percpu conntrack template when destroying a conntrack set. The function only performs refcount decrements and minimal associated cleanup (lock/unlock, nf_queue_nf_hook_drop), making it a focused put-wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Refcount decrements are unconditional on their code paths and always succeed; failure would indicate a use-after-free or double-put, not a retryable condition.",
+      "contract_summary": "Put-wrapper for conntrack set resources. Releases a reference on connlabels (via nf_connlabels_put) and on the global percpu template (via nft_ct_tmpl_put_pcpu, which decrements a refcount_t and potentially frees the template when the refcount reaches zero). Must be called exactly once when the nft conntrack set is destroyed. After this call, the corresponding resources must not be accessed. The caller must hold appropriate locks to protect the private data structure (priv) during the call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "ctx.net.ct.labels_used",
+          "nft_ctx--net--netns_ct--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "nft_ct_pcpu_template",
+          "nft_ct_pcpu_template.ct_general.use.refs",
+          "nf_conn--nf_conntrack--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          1,
+          "ctx.net.ct.labels_used",
+          "nft_ctx--net--netns_ct--atomic_t"
+        ],
+        [
+          "put",
+          "global",
+          "nft_ct_pcpu_template",
+          "nft_ct_pcpu_template.ct_general.use.refs",
+          "nf_conn--nf_conntrack--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "In the NFT_CT_LABELS case, nf_connlabels_put(ctx->net) decrements the labels_used counter in netns_ct, accessed via ctx->net->ct.labels_used. The access path and type chain (nft_ctx→net→netns_ct→atomic_t) are consistent. In the NFT_CT_ZONE case, the conditional call to nft_ct_tmpl_put_pcpu() decrements the refcount of the global nft_ct_pcpu_template, with the path nft_ct_pcpu_template.ct_general.use.refs and type chain nf_conn→nf_conntrack→refcount_t→atomic_t as per callee info. Both operations are supported by the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        1,
+        "ctx.net.ct.labels_used",
+        "nft_ctx--net--netns_ct--atomic_t"
+      ],
+      [
+        "put",
+        "global",
+        "nft_ct_pcpu_template",
+        "nft_ct_pcpu_template.ct_general.use.refs",
+        "nf_conn--nf_conntrack--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Refcount decrements are unconditional on their code paths and always succeed; failure would indicate a use-after-free or double-put, not a retryable condition.",
+    "contract_summary": "Put-wrapper for conntrack set resources. Releases a reference on connlabels (via nf_connlabels_put) and on the global percpu template (via nft_ct_tmpl_put_pcpu, which decrements a refcount_t and potentially frees the template when the refcount reaches zero). Must be called exactly once when the nft conntrack set is destroyed. After this call, the corresponding resources must not be accessed. The caller must hold appropriate locks to protect the private data structure (priv) during the call."
+  }
+}

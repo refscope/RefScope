@@ -1,0 +1,106 @@
+{
+  "function_name": "btrfs_find_create_tree_block",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "exists.refs.refs",
+      "extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "alloc_test_extent_buffer",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "exists.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "alloc_test_extent_buffer",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "exists.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Allocation failure may be due to temporary memory pressure; retrying later may succeed.",
+  "contract_summary": "This function acquires a reference to an extent buffer (tree block) — either by finding an existing cached buffer or allocating a new one. It returns a pointer to an `extent_buffer` with an elevated refcount. The caller must release the reference using `free_extent_buffer()` when done. In testing mode, it uses a special allocator. If the buffer cannot be obtained (e.g., memory allocation fails), the function returns `NULL`, which the caller must check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to an extent_buffer (tree block) by forwarding to either alloc_test_extent_buffer or alloc_extent_buffer, both of which return the buffer with an elevated refcount. The only additional logic is a test-mode conditional, making it a focused get-wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Allocation failure may be due to temporary memory pressure; retrying later may succeed.",
+      "contract_summary": "This function acquires a reference to an extent buffer (tree block) — either by finding an existing cached buffer or allocating a new one. It returns a pointer to an `extent_buffer` with an elevated refcount. The caller must release the reference using `free_extent_buffer()` when done. In testing mode, it uses a special allocator. If the buffer cannot be obtained (e.g., memory allocation fails), the function returns `NULL`, which the caller must check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member access path 'refs.refs' has 2 segments, but the type chain 'extent_buffer--refcount_t--atomic_t' contains 3 types, violating the segment count equality rule. Additionally, the callee info suggests the path should include 'exists' as the first field (e.g., 'exists.refs.refs'), but this is missing from the candidate. Therefore, the extraction is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "exists.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns an extent_buffer directly from alloc_test_extent_buffer (or alloc_extent_buffer), both of which are get operations that increment the refcount. The critical variable (extent_buffer) flows to the caller via the return value. The extraction's path was missing the 'exists' field; correcting it to 'exists.refs.refs' aligns with the callee information and maintains the get semantics. Although the segment count and type chain may appear mismatched due to abbreviation of intermediate types, the function is clearly a focused ref-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "exists.refs.refs",
+        "extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Allocation failure may be due to temporary memory pressure; retrying later may succeed.",
+    "contract_summary": "This function acquires a reference to an extent buffer (tree block) — either by finding an existing cached buffer or allocating a new one. It returns a pointer to an `extent_buffer` with an elevated refcount. The caller must release the reference using `free_extent_buffer()` when done. In testing mode, it uses a special allocator. If the buffer cannot be obtained (e.g., memory allocation fails), the function returns `NULL`, which the caller must check."
+  }
+}

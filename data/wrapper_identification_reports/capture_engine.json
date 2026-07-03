@@ -1,0 +1,138 @@
+{
+  "function_name": "capture_engine",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "intel_engine_get_hung_entity",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hung_req.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_request_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_engine_coredump_add_vma",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "capture.vma_res.unbind_fence.refcount.refcount",
+      "member_type_chain": "intel_engine_capture_vma--i915_vma_resource--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_engine_get_hung_entity",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hung_req.active.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_engine_coredump_add_vma",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "capture.vma_res.hold_count.refs",
+      "member_type_chain": "intel_engine_capture_vma--i915_vma_resource--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "intel_engine_coredump_add_vma",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "capture.vma_res.bi.pages_rsgt.kref.refcount",
+      "member_type_chain": "intel_engine_capture_vma--i915_vma_resource--i915_vma_bind_info--i915_refct_sgt--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "intel_engine_get_hung_entity",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hung_req.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "i915_request_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rq.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_engine_coredump_add_vma",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "capture.vma_res.unbind_fence.refcount.refcount",
+      "member_type_chain": "intel_engine_capture_vma--i915_vma_resource--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_engine_get_hung_entity",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hung_req.active.fence.refcount.refcount",
+      "member_type_chain": "i915_request--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_engine_coredump_add_vma",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "capture.vma_res.hold_count.refs",
+      "member_type_chain": "intel_engine_capture_vma--i915_vma_resource--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "intel_engine_coredump_add_vma",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "capture.vma_res.bi.pages_rsgt.kref.refcount",
+      "member_type_chain": "intel_engine_capture_vma--i915_vma_resource--i915_vma_bind_info--i915_refct_sgt--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; the function is a composite capture routine, not a refcount helper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is to create an engine coredump by allocating a core dump structure, retrieving hung entity, adding request/context, and adding VMA. The get/put operations (i915_request_put, etc.) are incidental steps within broader error capture logic, not the main focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; the function is a composite capture routine, not a refcount helper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 6,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; the function is a composite capture routine, not a refcount helper.",
+    "contract_summary": ""
+  }
+}

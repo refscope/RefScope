@@ -1,0 +1,99 @@
+{
+  "function_name": "ath12k_dp_htt_htc_tx_complete",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dev_kfree_skb_any is a void function that always succeeds; no retry is needed.",
+  "contract_summary": "This function is a put wrapper that releases a reference on the provided skb by calling dev_kfree_skb_any. The caller must not access the skb after calling this function, as the reference count is decremented and the skb may be freed. The function is unconditional and always produces the same effect: the skb's refcount is decreased, and ownership is relinquished.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of ath12k_dp_htt_htc_tx_complete is to call dev_kfree_skb_any, a put function that decrements the skb's refcount and frees it if zero. There is no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dev_kfree_skb_any is a void function that always succeeds; no retry is needed.",
+      "contract_summary": "This function is a put wrapper that releases a reference on the provided skb by calling dev_kfree_skb_any. The caller must not access the skb after calling this function, as the reference count is decremented and the skb may be freed. The function is unconditional and always produces the same effect: the skb's refcount is decreased, and ownership is relinquished."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls dev_kfree_skb_any(skb) which is a put on skb->users.refs. The parameter index 1 (skb) is directly used, and the access path skb.users.refs and type chain sk_buff--refcount_t--atomic_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dev_kfree_skb_any is a void function that always succeeds; no retry is needed.",
+    "contract_summary": "This function is a put wrapper that releases a reference on the provided skb by calling dev_kfree_skb_any. The caller must not access the skb after calling this function, as the reference count is decremented and the skb may be freed. The function is unconditional and always produces the same effect: the skb's refcount is decreased, and ownership is relinquished."
+  }
+}

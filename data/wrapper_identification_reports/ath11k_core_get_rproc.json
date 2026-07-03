@@ -1,0 +1,99 @@
+{
+  "function_name": "ath11k_core_get_rproc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "prproc.dev.kobj.kref.refcount",
+      "rproc--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rproc_get_by_phandle",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rproc.dev.kobj.kref.refcount",
+      "member_type_chain": "rproc--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rproc_get_by_phandle",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "rproc.dev.kobj.kref.refcount",
+      "member_type_chain": "rproc--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "On -EPROBE_DEFER the driver core retries probing; on -ENOENT the property is missing so retry is pointless.",
+  "contract_summary": "This function acquires a reference to a remote processor (rproc) specified by the 'qcom,rproc' device tree phandle via rproc_get_by_phandle(). It stores the rproc pointer in ab_ahb->tgt_rproc, transferring ownership of the reference to the caller (the driver). The caller must later release the reference using rproc_put(ab_ahb->tgt_rproc) when the rproc is no longer needed. On failure, returns -ENOENT if the DT property is missing, or -EPROBE_DEFER if the rproc is not yet available; the caller should propagate -EPROBE_DEFER to trigger deferred probe. There is no RCU or lock requirement for this acquisition.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to fetch a remote processor (rproc) by device tree phandle and acquire a reference via rproc_get_by_phandle. Minimal unrelated logic: only DT property reading and error handling.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "On -EPROBE_DEFER the driver core retries probing; on -ENOENT the property is missing so retry is pointless.",
+      "contract_summary": "This function acquires a reference to a remote processor (rproc) specified by the 'qcom,rproc' device tree phandle via rproc_get_by_phandle(). It stores the rproc pointer in ab_ahb->tgt_rproc, transferring ownership of the reference to the caller (the driver). The caller must later release the reference using rproc_put(ab_ahb->tgt_rproc) when the rproc is no longer needed. On failure, returns -ENOENT if the DT property is missing, or -EPROBE_DEFER if the rproc is not yet available; the caller should propagate -EPROBE_DEFER to trigger deferred probe. There is no RCU or lock requirement for this acquisition."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "prproc.dev.kobj.kref.refcount",
+          "rproc--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "prproc.dev.kobj.kref.refcount",
+          "rproc--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "rproc_get_by_phandle returns a struct rproc * and the callee info indicates it performs a get on the return value's refcount. The access path prproc.dev.kobj.kref.refcount and type chain rproc--device--kobject--kref--refcount_t are consistent with the code's use of prproc, and segment counts match (5 segments, 5 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "prproc.dev.kobj.kref.refcount",
+        "rproc--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "On -EPROBE_DEFER the driver core retries probing; on -ENOENT the property is missing so retry is pointless.",
+    "contract_summary": "This function acquires a reference to a remote processor (rproc) specified by the 'qcom,rproc' device tree phandle via rproc_get_by_phandle(). It stores the rproc pointer in ab_ahb->tgt_rproc, transferring ownership of the reference to the caller (the driver). The caller must later release the reference using rproc_put(ab_ahb->tgt_rproc) when the rproc is no longer needed. On failure, returns -ENOENT if the DT property is missing, or -EPROBE_DEFER if the rproc is not yet available; the caller should propagate -EPROBE_DEFER to trigger deferred probe. There is no RCU or lock requirement for this acquisition."
+  }
+}

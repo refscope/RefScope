@@ -1,0 +1,239 @@
+{
+  "function_name": "batadv_neigh_ifinfo_new",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "neigh_ifinfo.refcount.refcount",
+      "batadv_neigh_ifinfo--kref--refcount_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "neigh_ifinfo.refcount.refcount.refs",
+      "batadv_neigh_ifinfo--kref--refcount_struct--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "neigh_ifinfo.refcount.refcount",
+      "batadv_neigh_ifinfo--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "if_outgoing.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_ifinfo.refcount.refcount.refs",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_ifinfo_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_ifinfo.refcount.refcount",
+      "member_type_chain": "batadv_neigh_ifinfo--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If allocation fails, retrying immediately without freeing memory is unlikely to succeed; caller should propagate the error.",
+  "contract_summary": "This function is a get-or-create wrapper for batadv_neigh_ifinfo. It first attempts to find an existing object for the given neigh and if_outgoing; if found, it increments its reference count via batadv_neigh_ifinfo_get and returns it. If not found, it allocates a new object, initializes its refcount to 1 via kref_init, and then increments it again (so the returned pointer holds a reference, and the list also holds a reference). The function acquires and holds ifinfo_lock to protect the list; the caller does not need to hold any lock. The caller receives a pointer with a valid reference and must later release it with a corresponding batadv_neigh_ifinfo_put. On allocation failure, NULL is returned, which the caller must check.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to get-or-create a batadv_neigh_ifinfo object and ensure a reference is acquired for the caller. The only non-refcount logic is minimal setup (initializing list head, storing if_outgoing, adding to list) which is directly part of the object's lifecycle.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If allocation fails, retrying immediately without freeing memory is unlikely to succeed; caller should propagate the error.",
+      "contract_summary": "This function is a get-or-create wrapper for batadv_neigh_ifinfo. It first attempts to find an existing object for the given neigh and if_outgoing; if found, it increments its reference count via batadv_neigh_ifinfo_get and returns it. If not found, it allocates a new object, initializes its refcount to 1 via kref_init, and then increments it again (so the returned pointer holds a reference, and the list also holds a reference). The function acquires and holds ifinfo_lock to protect the list; the caller does not need to hold any lock. The caller receives a pointer with a valid reference and must later release it with a corresponding batadv_neigh_ifinfo_put. On allocation failure, NULL is returned, which the caller must check."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount",
+          "batadv_neigh_ifinfo--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount.refs",
+          "batadv_neigh_ifinfo--kref--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount",
+          "batadv_neigh_ifinfo--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "if_outgoing.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount",
+          "batadv_neigh_ifinfo--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount.refs",
+          "batadv_neigh_ifinfo--kref--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_ifinfo.refcount.refcount",
+          "batadv_neigh_ifinfo--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "if_outgoing.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "All operations are supported by the code: batadv_neigh_ifinfo_get returns an existing object with incremented refcount (get on return), kref_init sets the new object's refcount via subfield refs (set on return), kref_get on the new object increments its refcount (get on return), and kref_get on if_outgoing increments its refcount (get on parameter 2). Paths and type chains match callee information and segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "neigh_ifinfo.refcount.refcount",
+        "batadv_neigh_ifinfo--kref--refcount_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "neigh_ifinfo.refcount.refcount.refs",
+        "batadv_neigh_ifinfo--kref--refcount_struct--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "neigh_ifinfo.refcount.refcount",
+        "batadv_neigh_ifinfo--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "if_outgoing.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If allocation fails, retrying immediately without freeing memory is unlikely to succeed; caller should propagate the error.",
+    "contract_summary": "This function is a get-or-create wrapper for batadv_neigh_ifinfo. It first attempts to find an existing object for the given neigh and if_outgoing; if found, it increments its reference count via batadv_neigh_ifinfo_get and returns it. If not found, it allocates a new object, initializes its refcount to 1 via kref_init, and then increments it again (so the returned pointer holds a reference, and the list also holds a reference). The function acquires and holds ifinfo_lock to protect the list; the caller does not need to hold any lock. The caller receives a pointer with a valid reference and must later release it with a corresponding batadv_neigh_ifinfo_put. On allocation failure, NULL is returned, which the caller must check."
+  }
+}

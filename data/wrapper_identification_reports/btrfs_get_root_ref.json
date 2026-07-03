@@ -1,0 +1,131 @@
+{
+  "function_name": "btrfs_get_root_ref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_global_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_root",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lookup_fs_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_global_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_put_root",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_lookup_fs_root",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "root.refs.refs",
+      "member_type_chain": "btrfs_root--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The function itself retries internally on EEXIST from btrfs_insert_fs_root, but for other errors (ENOENT, ENOMEM, disk read failure) the condition is unlikely to change on retry. Caller should propagate the error.",
+  "contract_summary": "This is a get-or-create wrapper for btrfs_root objects. It returns a pointer to a root with an increased reference count (caller must put via btrfs_put_root). If the root already exists in the global or fs root caches, a reference is acquired and returned. Otherwise, it reads the root item from disk, initializes it (including setting anon_dev if provided), checks for orphan items, and inserts it into the fs root cache. On failure, it properly cleans up resources (e.g., freeing anon_dev, putting partially allocated root) and returns an ERR_PTR. The caller must check return value and release the reference when done. The function handles concurrent insertion with a retry loop, ensuring no leaks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to obtain a btrfs_root with an acquired reference (get-or-create pattern). Includes some secondary logic: orphan item check, anon_dev handling, path allocation, initial root setup (btrfs_init_fs_root). The refcount is implicitly managed via get/put in callees (btrfs_get_global_root, btrfs_lookup_fs_root, btrfs_put_root).",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The function itself retries internally on EEXIST from btrfs_insert_fs_root, but for other errors (ENOENT, ENOMEM, disk read failure) the condition is unlikely to change on retry. Caller should propagate the error.",
+      "contract_summary": "This is a get-or-create wrapper for btrfs_root objects. It returns a pointer to a root with an increased reference count (caller must put via btrfs_put_root). If the root already exists in the global or fs root caches, a reference is acquired and returned. Otherwise, it reads the root item from disk, initializes it (including setting anon_dev if provided), checks for orphan items, and inserts it into the fs root cache. On failure, it properly cleans up resources (e.g., freeing anon_dev, putting partially allocated root) and returns an ERR_PTR. The caller must check return value and release the reference when done. The function handles concurrent insertion with a retry loop, ensuring no leaks."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns a btrfs_root pointer with an incremented reference count, via paths that call get functions btrfs_get_global_root or btrfs_lookup_fs_root, or after allocation and insertion. The access path root.refs.refs and type chain btrfs_root--refcount_t--atomic_t match the callee information and the actual struct definition (field 'refs' of type refcount_t, which has a 'refs' field of atomic_t). The segment count (2) equals type chain count (3) minus one, which is consistent. Therefore the extraction is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The function itself retries internally on EEXIST from btrfs_insert_fs_root, but for other errors (ENOENT, ENOMEM, disk read failure) the condition is unlikely to change on retry. Caller should propagate the error.",
+    "contract_summary": "This is a get-or-create wrapper for btrfs_root objects. It returns a pointer to a root with an increased reference count (caller must put via btrfs_put_root). If the root already exists in the global or fs root caches, a reference is acquired and returned. Otherwise, it reads the root item from disk, initializes it (including setting anon_dev if provided), checks for orphan items, and inserts it into the fs root cache. On failure, it properly cleans up resources (e.g., freeing anon_dev, putting partially allocated root) and returns an ERR_PTR. The caller must check return value and release the reference when done. The function handles concurrent insertion with a retry loop, ensuring no leaks."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "function_name": "addr_to_mapping",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "mapping.refcount.refcount",
+      "panfrost_gem_mapping--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means no mapping exists for that address; retrying immediately without changing state will also fail.",
+  "contract_summary": "This function finds a panfrost_gem_mapping for a given virtual address and address space, and acquires a reference (via kref_get) on it. The caller receives a pointer to the mapping with an incremented refcount and must release it by calling the corresponding put function when done. If no mapping exists, returns NULL — the caller must check the return value before using it. The function holds spinlocks during the lookup but releases them before returning, so no lock is held by the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a panfrost_gem_mapping by address and increment its refcount via kref_get; the lookup logic is minimal and integral to locating the object to which the reference is acquired.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means no mapping exists for that address; retrying immediately without changing state will also fail.",
+      "contract_summary": "This function finds a panfrost_gem_mapping for a given virtual address and address space, and acquires a reference (via kref_get) on it. The caller receives a pointer to the mapping with an incremented refcount and must release it by calling the corresponding put function when done. If no mapping exists, returns NULL — the caller must check the return value before using it. The function holds spinlocks during the lookup but releases them before returning, so no lock is held by the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mapping.refcount.refcount",
+          "panfrost_gem_mapping--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mapping.refcount.refcount",
+          "panfrost_gem_mapping--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get(&mapping->refcount) is called on the mapping that is returned. The access path from the return value (mapping) to the refcount field is mapping->refcount (of type kref) and then kref->refcount (refcount_t), matching 'mapping.refcount.refcount'. The type chain panfrost_gem_mapping--kref--refcount_t is consistent. The operation is a get on the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "mapping.refcount.refcount",
+        "panfrost_gem_mapping--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means no mapping exists for that address; retrying immediately without changing state will also fail.",
+    "contract_summary": "This function finds a panfrost_gem_mapping for a given virtual address and address space, and acquires a reference (via kref_get) on it. The caller receives a pointer to the mapping with an incremented refcount and must release it by calling the corresponding put function when done. If no mapping exists, returns NULL — the caller must check the return value before using it. The function holds spinlocks during the lookup but releases them before returning, so no lock is held by the caller."
+  }
+}

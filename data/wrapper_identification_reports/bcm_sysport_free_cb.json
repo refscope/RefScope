@@ -1,0 +1,99 @@
+{
+  "function_name": "bcm_sysport_free_cb",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "cb.skb.users.refs",
+      "bcm_sysport_cb--sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_consume_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_consume_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dev_consume_skb_any is a put operation; if it succeeds the skb is freed, and calling again would be a double-free leading to use-after-free. Failure is not expected and retry would be dangerous.",
+  "contract_summary": "This is a put wrapper that releases the skb reference held in a bcm_sysport_cb structure. It calls dev_consume_skb_any on cb->skb, which decrements the skb's refcount and frees it if the count reaches zero, then clears the skb and DMA address fields to avoid stale pointers. The caller must ensure that cb->skb is valid and that no other references to the skb remain before calling this function. After this call, the cb can be reused or freed. This function does not return a value and always performs the release unconditionally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the skb reference via dev_consume_skb_any and clear the callback fields; the only non-refcount logic is zeroing dma_addr and setting skb to NULL, which are cleanup steps tightly coupled to the release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dev_consume_skb_any is a put operation; if it succeeds the skb is freed, and calling again would be a double-free leading to use-after-free. Failure is not expected and retry would be dangerous.",
+      "contract_summary": "This is a put wrapper that releases the skb reference held in a bcm_sysport_cb structure. It calls dev_consume_skb_any on cb->skb, which decrements the skb's refcount and frees it if the count reaches zero, then clears the skb and DMA address fields to avoid stale pointers. The caller must ensure that cb->skb is valid and that no other references to the skb remain before calling this function. After this call, the cb can be reused or freed. This function does not return a value and always performs the release unconditionally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cb.skb.users.refs",
+          "bcm_sysport_cb--sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "cb.skb.users.refs",
+          "bcm_sysport_cb--sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls dev_consume_skb_any(cb->skb), which is a put on the skb's users.refs. The critical variable at the function interface is the parameter cb of type bcm_sysport_cb*. The access path cb.skb.users.refs correctly traces from cb through its skb field to the refcount field. The type chain bcm_sysport_cb--sk_buff--refcount_t--atomic_t is consistent with the field types. The segment count (4) matches the type count (4). All aspects are consistent with the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "cb.skb.users.refs",
+        "bcm_sysport_cb--sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dev_consume_skb_any is a put operation; if it succeeds the skb is freed, and calling again would be a double-free leading to use-after-free. Failure is not expected and retry would be dangerous.",
+    "contract_summary": "This is a put wrapper that releases the skb reference held in a bcm_sysport_cb structure. It calls dev_consume_skb_any on cb->skb, which decrements the skb's refcount and frees it if the count reaches zero, then clears the skb and DMA address fields to avoid stale pointers. The caller must ensure that cb->skb is valid and that no other references to the skb remain before calling this function. After this call, the cb can be reused or freed. This function does not return a value and always performs the release unconditionally."
+  }
+}

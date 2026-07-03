@@ -1,0 +1,99 @@
+{
+  "function_name": "agilent_82357a_release_urbs",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "a_priv.interrupt_urb.kref.refcount",
+      "agilent_82357a_priv--urb--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is a release; after the function, the URB and buffer are freed, so retrying would be a double-free.",
+  "contract_summary": "This function releases the interrupt URB and frees the interrupt buffer of the agilent_82357a_priv structure. It decrements the URB's reference count via usb_free_urb, sets the URB pointer to NULL, and frees the buffer. After this call, the priv structure must not be used in a way that expects the URB or buffer to be valid. This is a complete cleanup function; the caller must not access the freed resources.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to release the interrupt URB (decrement its refcount via usb_free_urb) and free the associated buffer. The refcount put is central, but the additional kfree and NULL-setting reduce purity.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is a release; after the function, the URB and buffer are freed, so retrying would be a double-free.",
+      "contract_summary": "This function releases the interrupt URB and frees the interrupt buffer of the agilent_82357a_priv structure. It decrements the URB's reference count via usb_free_urb, sets the URB pointer to NULL, and frees the buffer. After this call, the priv structure must not be used in a way that expects the URB or buffer to be valid. This is a complete cleanup function; the caller must not access the freed resources."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "a_priv.interrupt_urb.kref.refcount",
+          "agilent_82357a_priv--urb--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "a_priv.interrupt_urb.kref.refcount",
+          "agilent_82357a_priv--urb--kref--refcount_t"
+        ]
+      ],
+      "reason": "usb_free_urb is called on a_priv->interrupt_urb, which is a put operation on the URB's refcount. The access path and type chain correctly trace from parameter 1 (a_priv) through interrupt_urb to the kref.refcount field, matching the callee's urb.kref.refcount. Segment counts match (4 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "a_priv.interrupt_urb.kref.refcount",
+        "agilent_82357a_priv--urb--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is a release; after the function, the URB and buffer are freed, so retrying would be a double-free.",
+    "contract_summary": "This function releases the interrupt URB and frees the interrupt buffer of the agilent_82357a_priv structure. It decrements the URB's reference count via usb_free_urb, sets the URB pointer to NULL, and frees the buffer. After this call, the priv structure must not be used in a way that expects the URB or buffer to be valid. This is a complete cleanup function; the caller must not access the freed resources."
+  }
+}

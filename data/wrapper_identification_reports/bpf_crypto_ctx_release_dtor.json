@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_crypto_ctx_release_dtor",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.usage.refs",
+      "bpf_crypto_ctx--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_crypto_ctx_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.usage.refs",
+      "member_type_chain": "bpf_crypto_ctx--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_crypto_ctx_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.usage.refs",
+      "member_type_chain": "bpf_crypto_ctx--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is an unconditional reference decrement; no failure path exists, and retrying after an invalid use would be a double-free.",
+  "contract_summary": "This is a release wrapper that decrements the reference count of a bpf_crypto_ctx object. It is intended as a destructor callback (dtor) for use in APIs like kfree_rcu or BPF object lifecycle management. The caller must ensure the context is valid and that this release does not exceed the reference count; after this call, the context must not be accessed. No return value is provided — the operation always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function consists solely of a call to bpf_crypto_ctx_release, which is a put function for the refcount field ctx.usage.refs. There is no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is an unconditional reference decrement; no failure path exists, and retrying after an invalid use would be a double-free.",
+      "contract_summary": "This is a release wrapper that decrements the reference count of a bpf_crypto_ctx object. It is intended as a destructor callback (dtor) for use in APIs like kfree_rcu or BPF object lifecycle management. The caller must ensure the context is valid and that this release does not exceed the reference count; after this call, the context must not be accessed. No return value is provided — the operation always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.usage.refs",
+          "bpf_crypto_ctx--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.usage.refs",
+          "bpf_crypto_ctx--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "bpf_crypto_ctx_release_dtor passes its parameter ctx directly to bpf_crypto_ctx_release, which is a put function on ctx->usage.refs. The access path ctx.usage.refs and type chain bpf_crypto_ctx--refcount_t--atomic_t are consistent with the actual struct definitions and the callee information. The segment counts match: path has 3 segments, type chain has 3 types."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.usage.refs",
+        "bpf_crypto_ctx--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is an unconditional reference decrement; no failure path exists, and retrying after an invalid use would be a double-free.",
+    "contract_summary": "This is a release wrapper that decrements the reference count of a bpf_crypto_ctx object. It is intended as a destructor callback (dtor) for use in APIs like kfree_rcu or BPF object lifecycle management. The caller must ensure the context is valid and that this release does not exceed the reference count; after this call, the context must not be accessed. No return value is provided — the operation always succeeds."
+  }
+}

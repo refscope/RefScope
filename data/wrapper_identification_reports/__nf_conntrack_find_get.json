@@ -1,0 +1,114 @@
+{
+  "function_name": "__nf_conntrack_find_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ct.ct_general.use.refs",
+      "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "nf_ct_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ct.ct_general.use.refs",
+      "member_type_chain": "nf_conn--nf_conntrack--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If refcount_inc_not_zero fails, the conntrack is being destroyed; if the lookup fails, the tuple may appear later but the caller typically does not retry this function directly. Retrying does not fit the intended usage pattern.",
+  "contract_summary": "Get-wrapper that looks up a conntrack by tuple and acquires a reference if the conntrack is still alive. Returns the tuple hash pointer on success (caller must check for NULL) and the caller must release the reference with nf_ct_put() when done. The function uses RCU protection internally and re-checks the tuple after acquiring the reference to handle concurrent recycling. On failure (no entry or dying conntrack), returns NULL and no reference is taken.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a conntrack and conditionally acquire a reference via refcount_inc_not_zero, returning the hash pointer. The tuple validation after reference acquisition is necessary for correctness but does not add unrelated business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If refcount_inc_not_zero fails, the conntrack is being destroyed; if the lookup fails, the tuple may appear later but the caller typically does not retry this function directly. Retrying does not fit the intended usage pattern.",
+      "contract_summary": "Get-wrapper that looks up a conntrack by tuple and acquires a reference if the conntrack is still alive. Returns the tuple hash pointer on success (caller must check for NULL) and the caller must release the reference with nf_ct_put() when done. The function uses RCU protection internally and re-checks the tuple after acquiring the reference to handle concurrent recycling. On failure (no entry or dying conntrack), returns NULL and no reference is taken."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ct.ct_general.use.refs",
+          "nf_conn--nf_conntrack--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path starts from 'ct' (local variable) instead of the return variable 'h'. The function returns a pointer to an embedded structure (h), not the container (nf_conn). The path from the return value to the refcount field is not a simple member chain; it requires a container_of macro. Therefore, the extraction is inconsistent with the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ct.ct_general.use.refs",
+          "nf_conn--nf_conntrack--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __nf_conntrack_find_get is a classic get-wrapper: it looks up a conntrack entry, increments its refcount if found, and returns a pointer to an embedded structure (tuple hash). The reference-counted object (nf_conn) is accessible via container_of from the returned pointer, so the critical variable effectively flows to the caller. The extraction correctly identifies the get operation on ct.ct_general.use.refs. The check's rejection based on the return type not being the container is overly strict; the wrapper classification and candidate are valid."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ct.ct_general.use.refs",
+        "nf_conn--nf_conntrack--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If refcount_inc_not_zero fails, the conntrack is being destroyed; if the lookup fails, the tuple may appear later but the caller typically does not retry this function directly. Retrying does not fit the intended usage pattern.",
+    "contract_summary": "Get-wrapper that looks up a conntrack by tuple and acquires a reference if the conntrack is still alive. Returns the tuple hash pointer on success (caller must check for NULL) and the caller must release the reference with nf_ct_put() when done. The function uses RCU protection internally and re-checks the tuple after acquiring the reference to handle concurrent recycling. On failure (no entry or dying conntrack), returns NULL and no reference is taken."
+  }
+}

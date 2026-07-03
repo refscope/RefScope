@@ -1,0 +1,99 @@
+{
+  "function_name": "_zfcp_unit_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "unit.dev.kobj.kref.refcount",
+      "zfcp_unit--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no unit is found, the object does not exist; retrying without state change would again fail.",
+  "contract_summary": "Lookup-and-get wrapper: searches a port's unit list for a unit matching the given fcp_lun. On success, it acquires a reference via get_device and returns the unit pointer; the caller must later release this reference with put_device. On failure (no match), returns NULL and does not acquire any reference. The caller must check the return value before using the unit.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a zfcp_unit by fcp_lun and acquire a reference via get_device; the only other logic is list iteration and pointer comparison.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no unit is found, the object does not exist; retrying without state change would again fail.",
+      "contract_summary": "Lookup-and-get wrapper: searches a port's unit list for a unit matching the given fcp_lun. On success, it acquires a reference via get_device and returns the unit pointer; the caller must later release this reference with put_device. On failure (no match), returns NULL and does not acquire any reference. The caller must check the return value before using the unit."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "unit.dev.kobj.kref.refcount",
+          "zfcp_unit--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "unit.dev.kobj.kref.refcount",
+          "zfcp_unit--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation correctly models get_device(&unit->dev) where unit is the returned pointer. The access path unit.dev.kobj.kref.refcount traces from the return value to the refcount, and the type chain matches the struct nesting. The segment counts are equal (5 each), and 'get' direction is appropriate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "unit.dev.kobj.kref.refcount",
+        "zfcp_unit--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no unit is found, the object does not exist; retrying without state change would again fail.",
+    "contract_summary": "Lookup-and-get wrapper: searches a port's unit list for a unit matching the given fcp_lun. On success, it acquires a reference via get_device and returns the unit pointer; the caller must later release this reference with put_device. On failure (no match), returns NULL and does not acquire any reference. The caller must check the return value before using the unit."
+  }
+}

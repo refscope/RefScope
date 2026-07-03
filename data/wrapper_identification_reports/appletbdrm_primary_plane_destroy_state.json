@@ -1,0 +1,106 @@
+{
+  "function_name": "appletbdrm_primary_plane_destroy_state",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.fb.base.refcount.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.fence.refcount.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.fb_damage_clips.base.refcount.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.commit.ref.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.fb.base.refcount.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.fence.refcount.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.fb_damage_clips.base.refcount.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "__drm_gem_destroy_shadow_plane_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "shadow_plane_state.base.commit.ref.refcount",
+      "member_type_chain": "drm_shadow_plane_state--drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is a custom destructor for a DRM plane state that frees internal allocations (request, response) and releases base state references via a helper. Refcount management is incidental to the primary purpose of destroying the state.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

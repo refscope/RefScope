@@ -1,0 +1,58 @@
+{
+  "function_name": "__mem_cgroup_try_charge_swap",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mem_cgroup_private_id_get_online",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "memcg.id.ref.refs",
+      "member_type_chain": "mem_cgroup--mem_cgroup_id--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mem_cgroup_private_id_get_online",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "memcg.id.ref.refs",
+      "member_type_chain": "mem_cgroup--mem_cgroup_id--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the refcount operation is incidental and not the function's primary purpose.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is swap charging and accounting for memory cgroups. The reference count operation (mem_cgroup_private_id_get_online) is one of several steps within broader business logic, including page counter charging, state modification, and swap record writing. It does not return a reference-counted object to the caller; the reference is managed internally for pinning the memcg during the charge.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the refcount operation is incidental and not the function's primary purpose.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the refcount operation is incidental and not the function's primary purpose.",
+    "contract_summary": ""
+  }
+}

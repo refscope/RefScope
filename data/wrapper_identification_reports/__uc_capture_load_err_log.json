@@ -1,0 +1,99 @@
+{
+  "function_name": "__uc_capture_load_err_log",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "uc.guc.log.vma.obj.base.refcount.refcount",
+      "intel_uc--intel_guc--intel_guc_log--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "i915_gem_object_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "i915_gem_object_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.base.refcount.refcount",
+      "member_type_chain": "drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (vma null or load_err_log already set) is a no-op; conditions are stable after initialization, so retrying is pointless unless the caller changes the state externally.",
+  "contract_summary": "This function conditionally acquires a reference on the GuC log buffer object and stores it in uc->load_err_log for post-failure error retrieval. It is a one-time capture, gated by the presence of the GuC log VMA and the absence of a previously captured log. The caller must later release the reference via i915_gem_object_put() on uc->load_err_log when the log is no longer needed. No return value is provided; the caller should check whether uc->load_err_log is non-NULL to determine if the capture succeeded.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference (via i915_gem_object_get) on the GEM object for the GuC log VMA and store it in uc->load_err_log. The only other logic is a guard condition (vma present and not already captured).",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (vma null or load_err_log already set) is a no-op; conditions are stable after initialization, so retrying is pointless unless the caller changes the state externally.",
+      "contract_summary": "This function conditionally acquires a reference on the GuC log buffer object and stores it in uc->load_err_log for post-failure error retrieval. It is a one-time capture, gated by the presence of the GuC log VMA and the absence of a previously captured log. The caller must later release the reference via i915_gem_object_put() on uc->load_err_log when the log is no longer needed. No return value is provided; the caller should check whether uc->load_err_log is non-NULL to determine if the capture succeeded."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "uc.guc.log.vma.obj.base.refcount.refcount",
+          "intel_uc--intel_guc--intel_guc_log--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "uc.guc.log.vma.obj.base.refcount.refcount",
+          "intel_uc--intel_guc--intel_guc_log--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function stores the result of i915_gem_object_get(guc->log.vma->obj) into uc->load_err_log. The refcount is taken on the object reached via uc->guc.log.vma.obj. The access path from uc correctly traces through the fields to the refcount field, and the type chain matches the callee's type chain. The segment count is consistent (8 segments each). The operation is a get on parameter 1 (uc) with the specified path."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "uc.guc.log.vma.obj.base.refcount.refcount",
+        "intel_uc--intel_guc--intel_guc_log--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (vma null or load_err_log already set) is a no-op; conditions are stable after initialization, so retrying is pointless unless the caller changes the state externally.",
+    "contract_summary": "This function conditionally acquires a reference on the GuC log buffer object and stores it in uc->load_err_log for post-failure error retrieval. It is a one-time capture, gated by the presence of the GuC log VMA and the absence of a previously captured log. The caller must later release the reference via i915_gem_object_put() on uc->load_err_log when the log is no longer needed. No return value is provided; the caller should check whether uc->load_err_log is non-NULL to determine if the capture succeeded."
+  }
+}

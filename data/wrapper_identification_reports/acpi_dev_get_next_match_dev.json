@@ -1,0 +1,122 @@
+{
+  "function_name": "acpi_dev_get_next_match_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.dev.kobj.kref.refcount",
+      "acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "acpi_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "acpi_dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "adev.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure to find a device indicates end of iteration; retrying would skip devices or loop forever; no transient condition.",
+  "contract_summary": "Iterator wrapper for acpi device matching: releases the reference on the previous device (adev) and returns the next matching device with an acquired reference. The caller must not call acpi_dev_put on the previous device after this call. If NULL is returned, the iteration is complete and the previous device's reference has been released. The caller is responsible for releasing the returned device with acpi_dev_put when no longer needed (typically by continuing the iteration or calling acpi_dev_put explicitly). This function is intended for use in while loops similar to for_each_acpi_dev_match.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to iterate and manage refcounts: release previous device reference and acquire reference on next matching device via bus_find_device; the only non-refcount logic is setting up the match structure, which is purely infrastructural.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure to find a device indicates end of iteration; retrying would skip devices or loop forever; no transient condition.",
+      "contract_summary": "Iterator wrapper for acpi device matching: releases the reference on the previous device (adev) and returns the next matching device with an acquired reference. The caller must not call acpi_dev_put on the previous device after this call. If NULL is returned, the iteration is complete and the previous device's reference has been released. The caller is responsible for releasing the returned device with acpi_dev_put when no longer needed (typically by continuing the iteration or calling acpi_dev_put explicitly). This function is intended for use in while loops similar to for_each_acpi_dev_match."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.dev.kobj.kref.refcount",
+          "acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The put operation from acpi_dev_put(adev) is correctly identified: parameter index 1 (adev) with path adev.dev.kobj.kref.refcount matching the callee's type chain. The get operation is rejected because it incorrectly starts from adev; bus_find_device increments the refcount of the returned device, not the input adev, so the critical variable should be the return value, not parameter 1."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.dev.kobj.kref.refcount",
+        "acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure to find a device indicates end of iteration; retrying would skip devices or loop forever; no transient condition.",
+    "contract_summary": "Iterator wrapper for acpi device matching: releases the reference on the previous device (adev) and returns the next matching device with an acquired reference. The caller must not call acpi_dev_put on the previous device after this call. If NULL is returned, the iteration is complete and the previous device's reference has been released. The caller is responsible for releasing the returned device with acpi_dev_put when no longer needed (typically by continuing the iteration or calling acpi_dev_put explicitly). This function is intended for use in while loops similar to for_each_acpi_dev_match."
+  }
+}

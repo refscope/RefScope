@@ -1,0 +1,107 @@
+{
+  "function_name": "c4iw_get_wr_wait",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "wr_waitp.kref.refcount",
+      "c4iw_wr_wait--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get always succeeds; no failure path, so retry is not applicable.",
+  "contract_summary": "This wrapper acquires an additional reference on a c4iw_wr_wait object by incrementing its kref. The caller must ensure the object is alive (the WARN_ON validates that the refcount is not zero before the increment). After the call, the caller holds a new reference that must be paired with a corresponding call to kref_put (or similar) to release it. There are no lock or RCU requirements for this operation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to increment the kref refcount of a c4iw_wr_wait object via kref_get, with only a debug print and a WARN_ON as ancillary logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get always succeeds; no failure path, so retry is not applicable.",
+      "contract_summary": "This wrapper acquires an additional reference on a c4iw_wr_wait object by incrementing its kref. The caller must ensure the object is alive (the WARN_ON validates that the refcount is not zero before the increment). After the call, the caller holds a new reference that must be paired with a corresponding call to kref_put (or similar) to release it. There are no lock or RCU requirements for this operation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "wr_waitp.kref.refcount",
+          "c4iw_wr_wait--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "wr_waitp.kref.refcount",
+          "c4iw_wr_wait--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &wr_waitp->kref, which is a get operation. The critical variable is parameter 1 (wr_waitp). The access path wr_waitp.kref.refcount correctly traces from the parameter to the refcount field, and the type chain c4iw_wr_wait--kref--refcount_t is consistent with the code and callee info. Segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "wr_waitp.kref.refcount",
+        "c4iw_wr_wait--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get always succeeds; no failure path, so retry is not applicable.",
+    "contract_summary": "This wrapper acquires an additional reference on a c4iw_wr_wait object by incrementing its kref. The caller must ensure the object is alive (the WARN_ON validates that the refcount is not zero before the increment). After the call, the caller holds a new reference that must be paired with a corresponding call to kref_put (or similar) to release it. There are no lock or RCU requirements for this operation."
+  }
+}

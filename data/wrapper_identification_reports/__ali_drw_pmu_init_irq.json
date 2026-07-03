@@ -1,0 +1,143 @@
+{
+  "function_name": "__ali_drw_pmu_init_irq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "irq.refcount.refs",
+      "ali_drw_pmu_irq--refcount_t--atomic_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "irq.refcount.refs",
+      "ali_drw_pmu_irq--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If refcount_inc_not_zero fails (object dying), the function creates a new object instead; other failures (allocation, IRQ registration) are resource errors that may be transient but the function returns an error pointer, and retrying is left to caller discretion — no intrinsic reason to retry.",
+  "contract_summary": "Get‑or‑create wrapper: looks up an existing `ali_drw_pmu_irq` by IRQ number in the global list and increments its refcount via `refcount_inc_not_zero`; if not found or the existing object is dying, allocates a new one, initialises its refcount to 1, registers the IRQ handler, sets affinity hint, and adds a cpuhp state instance. The caller receives a pointer to an `irq` with an elevated reference count and must later release it with a corresponding `ali_drw_pmu_irq_put` (or equivalent). On failure (e.g., memory allocation, IRQ request error), returns an `ERR_PTR`. The function properly handles the case where an existing object is being destroyed by falling through to creation.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to get or create an ali_drw_pmu_irq with reference counting, but includes significant non‑refcount logic (IRQ request, affinity hint, cpuhp state registration). The refcount operations (refcount_inc_not_zero or refcount_set) are central to acquiring/establishing a reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If refcount_inc_not_zero fails (object dying), the function creates a new object instead; other failures (allocation, IRQ registration) are resource errors that may be transient but the function returns an error pointer, and retrying is left to caller discretion — no intrinsic reason to retry.",
+      "contract_summary": "Get‑or‑create wrapper: looks up an existing `ali_drw_pmu_irq` by IRQ number in the global list and increments its refcount via `refcount_inc_not_zero`; if not found or the existing object is dying, allocates a new one, initialises its refcount to 1, registers the IRQ handler, sets affinity hint, and adds a cpuhp state instance. The caller receives a pointer to an `irq` with an elevated reference count and must later release it with a corresponding `ali_drw_pmu_irq_put` (or equivalent). On failure (e.g., memory allocation, IRQ request error), returns an `ERR_PTR`. The function properly handles the case where an existing object is being destroyed by falling through to creation."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "ali_drw_pmu_irq--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "ali_drw_pmu_irq--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "ali_drw_pmu_irq--refcount_t--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "irq.refcount.refs",
+          "ali_drw_pmu_irq--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both refcount_inc_not_zero (get) and refcount_set (set) operate on irq->refcount, and the critical variable irq is returned. The access path irq.refcount.refs and type chain ali_drw_pmu_irq--refcount_t--atomic_t are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "irq.refcount.refs",
+        "ali_drw_pmu_irq--refcount_t--atomic_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "irq.refcount.refs",
+        "ali_drw_pmu_irq--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If refcount_inc_not_zero fails (object dying), the function creates a new object instead; other failures (allocation, IRQ registration) are resource errors that may be transient but the function returns an error pointer, and retrying is left to caller discretion — no intrinsic reason to retry.",
+    "contract_summary": "Get‑or‑create wrapper: looks up an existing `ali_drw_pmu_irq` by IRQ number in the global list and increments its refcount via `refcount_inc_not_zero`; if not found or the existing object is dying, allocates a new one, initialises its refcount to 1, registers the IRQ handler, sets affinity hint, and adds a cpuhp state instance. The caller receives a pointer to an `irq` with an elevated reference count and must later release it with a corresponding `ali_drw_pmu_irq_put` (or equivalent). On failure (e.g., memory allocation, IRQ request error), returns an `ERR_PTR`. The function properly handles the case where an existing object is being destroyed by falling through to creation."
+  }
+}

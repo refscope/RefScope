@@ -1,0 +1,106 @@
+{
+  "function_name": "__rdma_create_kernel_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "ret.refcount.refs",
+      "rdma_id_private--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__rdma_create_id",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "id_priv.refcount.refs",
+      "member_type_chain": "rdma_id_private--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__rdma_create_id",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "id_priv.refcount.refs",
+      "member_type_chain": "rdma_id_private--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation (refcount_set inside __rdma_create_id) is unconditional and cannot fail. The only failure mode is allocation failure, which is not a refcount issue; retrying is not dictated by the wrapper's contract.",
+  "contract_summary": "Creates a kernel rdma_cm_id with an initial reference count of 1. The caller receives a pointer to the rdma_cm_id (via return value) and must release the reference by calling rdma_destroy_id (or equivalent) when the object is no longer needed. A resource tracking name is set for debugging purposes. On failure (e.g., memory allocation error), the function returns an ERR_PTR, which the caller must check using IS_ERR before use.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function creates a new rdma_id_private via __rdma_create_id, which initializes the refcount to 1 (set operation). It then sets a resource tracking name (minor informational step). The primary purpose is to allocate and return a new rdma_cm_id with an initial reference; the caller is responsible for eventually releasing that reference. This is a classic set wrapper (lifecycle creation).",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation (refcount_set inside __rdma_create_id) is unconditional and cannot fail. The only failure mode is allocation failure, which is not a refcount issue; retrying is not dictated by the wrapper's contract.",
+      "contract_summary": "Creates a kernel rdma_cm_id with an initial reference count of 1. The caller receives a pointer to the rdma_cm_id (via return value) and must release the reference by calling rdma_destroy_id (or equivalent) when the object is no longer needed. A resource tracking name is set for debugging purposes. On failure (e.g., memory allocation error), the function returns an ERR_PTR, which the caller must check using IS_ERR before use."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "ret.refcount.refs",
+          "rdma_id_private--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The return value of __rdma_create_kernel_id is &ret->id (struct rdma_cm_id *), not ret itself. The refcount set is on ret->refcount.refs (on the rdma_id_private structure), which is not directly accessible from the returned pointer without a container_of. Therefore, the access path starting from the return value is incorrect; the critical variable at the interface is not the local 'ret' but the returned rdma_cm_id. The extraction is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "ret.refcount.refs",
+          "rdma_id_private--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function __rdma_create_kernel_id is a wrapper that calls __rdma_create_id to create an rdma_id_private and initializes its refcount. Although the return value is &ret->id (rdma_cm_id*), the underlying critical variable is the rdma_id_private structure, which is accessible from the returned pointer via container_of. The candidate operation correctly identifies the refcount set on ret.refcount.refs. The check was overly strict; the function has high purity with only creation and resource tracking setup, making it a reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "ret.refcount.refs",
+        "rdma_id_private--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation (refcount_set inside __rdma_create_id) is unconditional and cannot fail. The only failure mode is allocation failure, which is not a refcount issue; retrying is not dictated by the wrapper's contract.",
+    "contract_summary": "Creates a kernel rdma_cm_id with an initial reference count of 1. The caller receives a pointer to the rdma_cm_id (via return value) and must release the reference by calling rdma_destroy_id (or equivalent) when the object is no longer needed. A resource tracking name is set for debugging purposes. On failure (e.g., memory allocation error), the function returns an ERR_PTR, which the caller must check using IS_ERR before use."
+  }
+}

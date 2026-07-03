@@ -1,0 +1,74 @@
+{
+  "function_name": "_scsih_send_event_to_turn_on_pfa_led",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "fw_event_work_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fw_work.refcount.refcount",
+      "member_type_chain": "fw_event_work--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "alloc_fw_event_work",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fw_event.refcount.refcount.refs",
+      "member_type_chain": "fw_event_work--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "fw_event_work_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fw_work.refcount.refcount",
+      "member_type_chain": "fw_event_work--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "alloc_fw_event_work",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "fw_event.refcount.refcount.refs",
+      "member_type_chain": "fw_event_work--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Allocation failure is transient, but the function does not expose a return value to the caller and does not retry internally. The typical kernel pattern is to bail out; retry is not part of the semantic contract.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to allocate and submit a firmware event to turn on a PFA LED. The refcount operations (set via alloc_fw_event_work, put via fw_event_work_put) are internal lifecycle management for the event object, not the main goal. The critical variable (fw_event) is not passed to the caller — it is consumed internally. This is an event-submission helper, not a reference-count wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Allocation failure is transient, but the function does not expose a return value to the caller and does not retry internally. The typical kernel pattern is to bail out; retry is not part of the semantic contract.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Allocation failure is transient, but the function does not expose a return value to the caller and does not retry internally. The typical kernel pattern is to bail out; retry is not part of the semantic contract.",
+    "contract_summary": ""
+  }
+}

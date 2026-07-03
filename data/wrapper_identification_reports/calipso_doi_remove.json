@@ -1,0 +1,58 @@
+{
+  "function_name": "calipso_doi_remove",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "calipso_doi_putdef",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "doi_def.refcount.refs",
+      "member_type_chain": "calipso_doi--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "calipso_doi_putdef",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "doi_def.refcount.refs",
+      "member_type_chain": "calipso_doi--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put only occurs if the DOI is found; failure (ENOENT) means the DOI does not exist, which is a permanent condition unless the DOI is later added again, but retrying the same operation will not make the DOI appear.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to remove a DOI from a list and log the action; the call to calipso_doi_putdef is a necessary consequence of removal, not the main purpose. The function also performs list search, list manipulation, and audit logging, indicating significant non-refcount logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put only occurs if the DOI is found; failure (ENOENT) means the DOI does not exist, which is a permanent condition unless the DOI is later added again, but retrying the same operation will not make the DOI appear.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put only occurs if the DOI is found; failure (ENOENT) means the DOI does not exist, which is a permanent condition unless the DOI is later added again, but retrying the same operation will not make the DOI appear.",
+    "contract_summary": ""
+  }
+}

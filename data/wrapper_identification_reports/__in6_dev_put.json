@@ -1,0 +1,99 @@
+{
+  "function_name": "__in6_dev_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "idev.refcnt.refs",
+      "inet6_dev--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_dec is unconditional and never fails; the put wrapper is a release operation and must only be called when a reference is held—double-put is a use-after-free bug, so retry makes no sense.",
+  "contract_summary": "Decrements the reference count of an inet6_dev object. The caller must already hold a valid reference (typically obtained via a prior get or allocation). After this call, if the reference count reaches zero, the object may be freed and must not be accessed again. The function does not return any value; the caller must ensure proper pairing with a corresponding get or init. This is a pure release-side wrapper with no special locking or RCU requirements beyond those imposed by the caller's reference discipline.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely consists of a single refcount decrement (refcount_dec) on the input struct inet6_dev, with no additional logic or side effects.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_dec is unconditional and never fails; the put wrapper is a release operation and must only be called when a reference is held—double-put is a use-after-free bug, so retry makes no sense.",
+      "contract_summary": "Decrements the reference count of an inet6_dev object. The caller must already hold a valid reference (typically obtained via a prior get or allocation). After this call, if the reference count reaches zero, the object may be freed and must not be accessed again. The function does not return any value; the caller must ensure proper pairing with a corresponding get or init. This is a pure release-side wrapper with no special locking or RCU requirements beyond those imposed by the caller's reference discipline."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "idev.refcnt.refs",
+          "inet6_dev--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "idev.refcnt.refs",
+          "inet6_dev--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec(&idev->refcnt) decrements the refcnt field of idev. The access path idev.refcnt.refs correctly traces from parameter 1 (idev) through field refcnt (of type refcount_t) to refs (atomic_t), matching the type chain inet6_dev--refcount_t--atomic_t. The segment counts (3 each) are equal. The operation is a put, consistent with callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "idev.refcnt.refs",
+        "inet6_dev--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_dec is unconditional and never fails; the put wrapper is a release operation and must only be called when a reference is held—double-put is a use-after-free bug, so retry makes no sense.",
+    "contract_summary": "Decrements the reference count of an inet6_dev object. The caller must already hold a valid reference (typically obtained via a prior get or allocation). After this call, if the reference count reaches zero, the object may be freed and must not be accessed again. The function does not return any value; the caller must ensure proper pairing with a corresponding get or init. This is a pure release-side wrapper with no special locking or RCU requirements beyond those imposed by the caller's reference discipline."
+  }
+}

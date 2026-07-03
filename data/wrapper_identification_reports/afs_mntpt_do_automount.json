@@ -1,0 +1,58 @@
+{
+  "function_name": "afs_mntpt_do_automount",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_fs_context",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fc.log.log.usage.refs",
+      "member_type_chain": "fs_context--log--fc_log--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_fs_context",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fc.log.log.usage.refs",
+      "member_type_chain": "fs_context--log--fc_log--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — no retry semantics for a non-refcount function.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to perform automount: create a submount context, configure parameters, perform the mount via fc_mount, and then clean up. The put_fs_context call is just cleanup for a temporary struct fs_context; the function does not primarily manage refcounts for a critical variable passed to the caller. It is a filesystem-specific helper, not a reference-count wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — no retry semantics for a non-refcount function.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — no retry semantics for a non-refcount function.",
+    "contract_summary": ""
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "function_name": "_gaudi_init_tpc_mem",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hl_cb_kernel_create",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cb.buf.refcount.refcount",
+      "member_type_chain": "hl_cb--hl_mmap_mem_buf--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "hl_cb_kernel_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cb.buf.refcount.refcount.refs",
+      "member_type_chain": "hl_cb--hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "hl_cb_destroy",
+      "get_or_put": "put",
+      "index": "buf",
+      "location": "global",
+      "member_access_path": "buf.refcount.refcount",
+      "member_type_chain": "hl_mmap_mem_buf--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "hl_cb_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cb.buf.refcount.refcount",
+      "member_type_chain": "hl_cb--hl_mmap_mem_buf--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hl_cb_kernel_create",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cb.buf.refcount.refcount",
+      "member_type_chain": "hl_cb--hl_mmap_mem_buf--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "hl_cb_kernel_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cb.buf.refcount.refcount.refs",
+      "member_type_chain": "hl_cb--hl_mmap_mem_buf--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "hl_cb_destroy",
+      "get_or_put": "put",
+      "index": "buf",
+      "location": "global",
+      "member_access_path": "buf.refcount.refcount",
+      "member_type_chain": "hl_mmap_mem_buf--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "hl_cb_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cb.buf.refcount.refcount",
+      "member_type_chain": "hl_cb--hl_mmap_mem_buf--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function performs complex initialization of TPC memory, involving job creation, packet setup, and engine execution; refcount operations are merely supporting steps, not the primary purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

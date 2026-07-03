@@ -1,0 +1,99 @@
+{
+  "function_name": "axp288_fuel_gauge_release_iio_chans",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "info.iio_channel[i].indio_dev.dev.kobj.kref.refcount",
+      "axp288_fg_info--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "iio_channel_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "channel.indio_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "iio_channel--iio_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "iio_channel_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "channel.indio_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "iio_channel--iio_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a cleanup action that releases references; retrying after a failure would indicate a double-release, which is unsafe.",
+  "contract_summary": "This function is a put-wrapper that releases all IIO channels stored in the axp288_fg_info structure by calling iio_channel_release on each valid (non-NULL, non-error) channel. It is typically used as a devm action or during driver removal to properly decrement reference counts and free resources. Callers must call this function exactly once during cleanup; after calling it, the channel array must not be used further. The function is safe to call if some channels were never allocated or are error pointers, as it checks each pointer before releasing.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call iio_channel_release on each valid channel, which decrements the channel's refcount. No other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a cleanup action that releases references; retrying after a failure would indicate a double-release, which is unsafe.",
+      "contract_summary": "This function is a put-wrapper that releases all IIO channels stored in the axp288_fg_info structure by calling iio_channel_release on each valid (non-NULL, non-error) channel. It is typically used as a devm action or during driver removal to properly decrement reference counts and free resources. Callers must call this function exactly once during cleanup; after calling it, the channel array must not be used further. The function is safe to call if some channels were never allocated or are error pointers, as it checks each pointer before releasing."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "info.iio_channel[i].indio_dev.dev.kobj.kref.refcount",
+          "axp288_fg_info--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "info.iio_channel[i].indio_dev.dev.kobj.kref.refcount",
+          "axp288_fg_info--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The iio_channel_release() call on info->iio_channel[i] is a 'put' operation that decreases the refcount of the iio_channel object. The access path starting from parameter 'info' (index 1) through .iio_channel[i].indio_dev.dev.kobj.kref.refcount matches the callee's specification (channel.indio_dev.dev.kobj.kref.refcount) after accounting for the containing structure. The type chain has 7 segments matching the 7 path segments, and all types are consistent with the struct hierarchy."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "info.iio_channel[i].indio_dev.dev.kobj.kref.refcount",
+        "axp288_fg_info--iio_channel--iio_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a cleanup action that releases references; retrying after a failure would indicate a double-release, which is unsafe.",
+    "contract_summary": "This function is a put-wrapper that releases all IIO channels stored in the axp288_fg_info structure by calling iio_channel_release on each valid (non-NULL, non-error) channel. It is typically used as a devm action or during driver removal to properly decrement reference counts and free resources. Callers must call this function exactly once during cleanup; after calling it, the channel array must not be used further. The function is safe to call if some channels were never allocated or are error pointers, as it checks each pointer before releasing."
+  }
+}

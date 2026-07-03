@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_cpumask_create",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "cpumask.usage.refs",
+      "bpf_cpumask--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount_set call always succeeds, but the allocation can fail (returns NULL). Allocation failure may be transient (OOM), so a caller could retry; however, the function itself does not loop. Retry is not dictated by refcount semantics.",
+  "contract_summary": "This is a creation/set wrapper that allocates and initializes a new `struct bpf_cpumask` object with an initial reference count of 1 (via refcount_set). The caller receives ownership of the object and must eventually release it by calling a corresponding put function (e.g., bpf_cpumask_release). On memory allocation failure, the function returns NULL, which the caller must check and handle accordingly (e.g., propagate the error). No further initialization or external synchronization is required; the object is ready for use after return.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate and initialize a bpf_cpumask, setting its refcount to 1 via refcount_set. The only unrelated logic is memsetting the memory to zero and the allocation attempt, which are standard object creation steps. The function returns the newly created object to the caller.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount_set call always succeeds, but the allocation can fail (returns NULL). Allocation failure may be transient (OOM), so a caller could retry; however, the function itself does not loop. Retry is not dictated by refcount semantics.",
+      "contract_summary": "This is a creation/set wrapper that allocates and initializes a new `struct bpf_cpumask` object with an initial reference count of 1 (via refcount_set). The caller receives ownership of the object and must eventually release it by calling a corresponding put function (e.g., bpf_cpumask_release). On memory allocation failure, the function returns NULL, which the caller must check and handle accordingly (e.g., propagate the error). No further initialization or external synchronization is required; the object is ready for use after return."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "cpumask.usage.refs",
+          "bpf_cpumask--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "cpumask.usage.refs",
+          "bpf_cpumask--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set is used to initialize the refcount to 1 on the newly allocated cpumask. The critical variable is the return value (cpumask). The access path cpumask.usage.refs and type chain bpf_cpumask--refcount_t--atomic_t match the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "cpumask.usage.refs",
+        "bpf_cpumask--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount_set call always succeeds, but the allocation can fail (returns NULL). Allocation failure may be transient (OOM), so a caller could retry; however, the function itself does not loop. Retry is not dictated by refcount semantics.",
+    "contract_summary": "This is a creation/set wrapper that allocates and initializes a new `struct bpf_cpumask` object with an initial reference count of 1 (via refcount_set). The caller receives ownership of the object and must eventually release it by calling a corresponding put function (e.g., bpf_cpumask_release). On memory allocation failure, the function returns NULL, which the caller must check and handle accordingly (e.g., propagate the error). No further initialization or external synchronization is required; the object is ready for use after return."
+  }
+}

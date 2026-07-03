@@ -1,0 +1,146 @@
+{
+  "function_name": "batadv_mcast_netlink_get_primary",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_primary_if_get_selected",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount.refs",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_netlink_get_meshif",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_primary_if_get_selected",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_hardif_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_primary_if_get_selected",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates no primary interface is selected or active; this condition is not expected to change transiently within a short interval, so retrying would likely yield the same error.",
+  "contract_summary": "This get-wrapper acquires a reference to the active primary hard interface of the B.A.T.M.A.N. mesh, if one exists and is active. On success, it transfers ownership of the referenced batadv_hard_iface to the caller via the output parameter; the caller must release this reference with batadv_hardif_put when done. On failure (no primary selected or not active), it returns -ENOENT and does not transfer any reference. The function temporarily holds a reference to the mesh net_device, which is released before returning.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to acquire a reference to the active primary hard interface via batadv_primary_if_get_selected and return it to the caller via an output parameter. The only additional logic is a status check and cleanup of a transient net_device reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates no primary interface is selected or active; this condition is not expected to change transiently within a short interval, so retrying would likely yield the same error.",
+      "contract_summary": "This get-wrapper acquires a reference to the active primary hard interface of the B.A.T.M.A.N. mesh, if one exists and is active. On success, it transfers ownership of the referenced batadv_hard_iface to the caller via the output parameter; the caller must release this reference with batadv_hardif_put when done. On failure (no primary selected or not active), it returns -ENOENT and does not transfer any reference. The function temporarily holds a reference to the mesh net_device, which is released before returning."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "The get operation from batadv_primary_if_get_selected correctly represents the acquisition of a reference on the hard_iface that is passed to the caller via *primary_if. The access path and type chain match the code and callee information. The put operation entry is rejected because it incorrectly uses 'return' as the location; the put does not correspond to an object that flows out of the function, and the location/index is inconsistent with the function's interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates no primary interface is selected or active; this condition is not expected to change transiently within a short interval, so retrying would likely yield the same error.",
+    "contract_summary": "This get-wrapper acquires a reference to the active primary hard interface of the B.A.T.M.A.N. mesh, if one exists and is active. On success, it transfers ownership of the referenced batadv_hard_iface to the caller via the output parameter; the caller must release this reference with batadv_hardif_put when done. On failure (no primary selected or not active), it returns -ENOENT and does not transfer any reference. The function temporarily holds a reference to the mesh net_device, which is released before returning."
+  }
+}

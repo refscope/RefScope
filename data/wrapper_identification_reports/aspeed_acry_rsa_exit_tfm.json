@@ -1,0 +1,82 @@
+{
+  "function_name": "aspeed_acry_rsa_exit_tfm",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_akcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_akcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_akcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_akcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "put operations are not retried; double freeing is a bug.",
+  "contract_summary": "This is a put wrapper for the fallback tfm. It calls crypto_free_akcipher to decrement the refcount of ctx->fallback_tfm, releasing the caller's reference. After this call, the fallback tfm must not be used again. There is no error handling; the function assumes the fallback tfm was properly allocated and managed. The caller (parent tfm teardown) must call this exactly once to clean up the fallback.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference on the fallback akcipher via crypto_free_akcipher, which is a put function. No other logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "put operations are not retried; double freeing is a bug.",
+      "contract_summary": "This is a put wrapper for the fallback tfm. It calls crypto_free_akcipher to decrement the refcount of ctx->fallback_tfm, releasing the caller's reference. After this call, the fallback tfm must not be used again. There is no error handling; the function assumes the fallback tfm was properly allocated and managed. The caller (parent tfm teardown) must call this exactly once to clean up the fallback."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+          "crypto_akcipher--crypto_tfm--aspeed_acry_ctx--crypto_akcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path starts from parameter 1 (outer tfm) but the refcount operation is on the fallback tfm (ctx->fallback_tfm), which is a different object. The path through __crt_ctx is invalid: __crt_ctx is an unsigned long array, not a struct aspeed_acry_ctx, so the member-access 'tfm.base.__crt_ctx.fallback_tfm' does not exist. The type chain incorrectly treats __crt_ctx as aspeed_acry_ctx. Furthermore, the critical variable (fallback tfm) is not a function interface parameter or return value, but an internal object. Hence the extracted operation is inconsistent with the code and callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function aspeed_acry_rsa_exit_tfm merely frees a fallback tfm via crypto_free_akcipher. The critical variable (fallback_tfm) is an internal field, not a parameter or return value, and the function performs no refcount operation on its own interface. It is a simple cleanup, not a reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "put operations are not retried; double freeing is a bug.",
+    "contract_summary": "This is a put wrapper for the fallback tfm. It calls crypto_free_akcipher to decrement the refcount of ctx->fallback_tfm, releasing the caller's reference. After this call, the fallback tfm must not be used again. There is no error handling; the function assumes the fallback tfm was properly allocated and managed. The caller (parent tfm teardown) must call this exactly once to clean up the fallback."
+  }
+}

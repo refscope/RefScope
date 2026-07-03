@@ -1,0 +1,166 @@
+{
+  "function_name": "batadv_iv_ogm_neigh_new",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "neigh_node.refcount.refcount",
+      "batadv_neigh_node--kref--refcount_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "neigh_node.refcount.refcount.refs",
+      "batadv_neigh_node--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_neigh_node_get_or_create",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_get_or_create",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_get_or_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_node.refcount.refcount.refs",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_neigh_node_get_or_create",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_node.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_get_or_create",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_neigh_node_get_or_create",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "neigh_node.refcount.refcount.refs",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL) indicates memory allocation failure; retrying without changes is unlikely to succeed.",
+  "contract_summary": "batadv_iv_ogm_neigh_new is a get-or-create wrapper for a batadv_neigh_node. It returns a pointer to a neigh_node with an elevated reference count (either by incrementing an existing one or initializing a new one). The caller must release this reference by calling batadv_neigh_node_put when done. Failure (NULL) indicates an allocation failure, so the caller should not use the returned pointer and may optionally retry under different conditions (e.g., after freeing memory).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to call batadv_neigh_node_get_or_create and return the result; no other logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL) indicates memory allocation failure; retrying without changes is unlikely to succeed.",
+      "contract_summary": "batadv_iv_ogm_neigh_new is a get-or-create wrapper for a batadv_neigh_node. It returns a pointer to a neigh_node with an elevated reference count (either by incrementing an existing one or initializing a new one). The caller must release this reference by calling batadv_neigh_node_put when done. Failure (NULL) indicates an allocation failure, so the caller should not use the returned pointer and may optionally retry under different conditions (e.g., after freeing memory)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount.refs",
+          "batadv_neigh_node--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount",
+          "batadv_neigh_node--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "neigh_node.refcount.refcount.refs",
+          "batadv_neigh_node--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "Operations on return value are correct: callee gets (increments) and sets (initializes) the refcount on the returned neigh_node, with consistent access paths and type chains. The get operation on hard_iface is rejected because its parameter index is 1, but hard_iface is the first parameter (index 0) of batadv_iv_ogm_neigh_new; the index mismatch makes it unsupported."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "neigh_node.refcount.refcount",
+        "batadv_neigh_node--kref--refcount_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "neigh_node.refcount.refcount.refs",
+        "batadv_neigh_node--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL) indicates memory allocation failure; retrying without changes is unlikely to succeed.",
+    "contract_summary": "batadv_iv_ogm_neigh_new is a get-or-create wrapper for a batadv_neigh_node. It returns a pointer to a neigh_node with an elevated reference count (either by incrementing an existing one or initializing a new one). The caller must release this reference by calling batadv_neigh_node_put when done. Failure (NULL) indicates an allocation failure, so the caller should not use the returned pointer and may optionally retry under different conditions (e.g., after freeing memory)."
+  }
+}

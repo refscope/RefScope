@@ -1,0 +1,99 @@
+{
+  "function_name": "ap_urb_complete",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "urb.kref.refcount",
+      "urb--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "usb_free_urb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "urb.kref.refcount",
+      "member_type_chain": "urb--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation always succeeds and is intended for cleanup; there is no failure path or reason to retry.",
+  "contract_summary": "This is a put-wrapper for a URB, typically used as a completion callback. It frees the associated control request (struct usb_ctrlrequest) and calls usb_free_urb to decrement the URB's reference count. After this function returns, the URB must no longer be accessed. The caller (who submitted the URB) must ensure this function is called exactly once per URB completion; double-release is undefined behavior.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function exclusively performs release operations: freeing a control request and releasing the URB via usb_free_urb, which is a put on the URB's kref. No other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation always succeeds and is intended for cleanup; there is no failure path or reason to retry.",
+      "contract_summary": "This is a put-wrapper for a URB, typically used as a completion callback. It frees the associated control request (struct usb_ctrlrequest) and calls usb_free_urb to decrement the URB's reference count. After this function returns, the URB must no longer be accessed. The caller (who submitted the URB) must ensure this function is called exactly once per URB completion; double-release is undefined behavior."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "urb.kref.refcount",
+          "urb--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "urb.kref.refcount",
+          "urb--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function ap_urb_complete calls usb_free_urb(urb) which is a put operation on the urb's kref.refcount. The parameter index 1 is 'urb', and the access path urb.kref.refcount and type chain urb--kref--refcount_t are consistent with the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "urb.kref.refcount",
+        "urb--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation always succeeds and is intended for cleanup; there is no failure path or reason to retry.",
+    "contract_summary": "This is a put-wrapper for a URB, typically used as a completion callback. It frees the associated control request (struct usb_ctrlrequest) and calls usb_free_urb to decrement the URB's reference count. After this function returns, the URB must no longer be accessed. The caller (who submitted the URB) must ensure this function is called exactly once per URB completion; double-release is undefined behavior."
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "function_name": "bpf_find_btf_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "btf.refcnt.refs",
+      "btf--refcount_struct--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "btf.refcnt.refs",
+      "btf--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btf_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to type not being found (negative error return), not a refcount operation failure. Retrying the call may succeed if a new module with the type is loaded, but the function itself does not indicate transient conditions; caller may choose to retry based on external state changes.",
+  "contract_summary": "Lookup-and-get wrapper: searches for a BTF type by name and kind, first in vmlinux's BTF, then in all loaded modules. On success, increments the reference count of the found BTF object (via btf_get) and returns both the BTF object (via output parameter *btf_p) and the type ID (as positive return value). The caller receives a new reference and must release it via btf_put when done. On failure, returns a negative error code and does not modify *btf_p. The module iteration uses temporary references that are properly released on non-matching modules.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to lookup a BTF type by name and kind, and acquire a reference (via btf_get) on the found BTF object, returning it to the caller via an output parameter. The only non-refcount logic is the search itself, which is inseparable from getting the object.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to type not being found (negative error return), not a refcount operation failure. Retrying the call may succeed if a new module with the type is loaded, but the function itself does not indicate transient conditions; caller may choose to retry based on external state changes.",
+      "contract_summary": "Lookup-and-get wrapper: searches for a BTF type by name and kind, first in vmlinux's BTF, then in all loaded modules. On success, increments the reference count of the found BTF object (via btf_get) and returns both the BTF object (via output parameter *btf_p) and the type ID (as positive return value). The caller receives a new reference and must release it via btf_put when done. On failure, returns a negative error code and does not modify *btf_p. The module iteration uses temporary references that are properly released on non-matching modules."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted location 'return' index '0' is incorrect because the btf pointer is output via the parameter btf_p, not as the function return value. The access path 'btf.refcnt.refs' starts from the local variable btf, not from the function interface. The critical variable at the interface should be the output parameter, not a local variable or the return. Therefore, all operations are invalid due to wrong location/index."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "btf.refcnt.refs",
+          "btf--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The function searches for a BTF type by name and kind, and when found, it acquires a reference to the BTF object via btf_get and writes the pointer to *btf_p (parameter index 2). The reference count operations are central to the function's contract, making it a get-wrapper. The candidate operations correctly identify the get on btf.refcnt.refs, and although the location is recorded as 'return', the critical variable is output via the parameter btf_p. The check's rejection is overruled; the function is a valid wrapper with high purity."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "btf.refcnt.refs",
+        "btf--refcount_struct--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "btf.refcnt.refs",
+        "btf--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to type not being found (negative error return), not a refcount operation failure. Retrying the call may succeed if a new module with the type is loaded, but the function itself does not indicate transient conditions; caller may choose to retry based on external state changes.",
+    "contract_summary": "Lookup-and-get wrapper: searches for a BTF type by name and kind, first in vmlinux's BTF, then in all loaded modules. On success, increments the reference count of the found BTF object (via btf_get) and returns both the BTF object (via output parameter *btf_p) and the type ID (as positive return value). The caller receives a new reference and must release it via btf_put when done. On failure, returns a negative error code and does not modify *btf_p. The module iteration uses temporary references that are properly released on non-matching modules."
+  }
+}

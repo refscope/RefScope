@@ -1,0 +1,90 @@
+{
+  "function_name": "batadv_handle_tt_response",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_tt_req_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_req_node.refcount.refcount",
+      "member_type_chain": "batadv_tt_req_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_tt_req_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tt_req_node.refcount.refcount",
+      "member_type_chain": "batadv_tt_req_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; the function is a response handler that may fail due to missing orig_node but that is a logical condition, not a retryable refcount operation.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is handling a TT response: updating the translation table, recalculating CRC, and cleaning up pending requests. The refcount operations (get/put on orig_node and put on tt_req_node) are supporting steps within broader business logic, not the function's main goal.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; the function is a response handler that may fail due to missing orig_node but that is a logical condition, not a retryable refcount operation.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; the function is a response handler that may fail due to missing orig_node but that is a logical condition, not a retryable refcount operation.",
+    "contract_summary": ""
+  }
+}

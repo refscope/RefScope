@@ -1,0 +1,66 @@
+{
+  "function_name": "add_one_watch",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure may be due to duplicate (-EBUSY) or resource limit (-EAGAIN); retry for -EAGAIN may succeed later but the function is not a simple wrapper, so retry guidance is not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to add a watch to a watch list and queue, including duplicate detection, user resource limit enforcement, credential acquisition, and list insertion. The kref_get calls are part of broader setup logic, not the sole or main purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure may be due to duplicate (-EBUSY) or resource limit (-EAGAIN); retry for -EAGAIN may succeed later but the function is not a simple wrapper, so retry guidance is not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure may be due to duplicate (-EBUSY) or resource limit (-EAGAIN); retry for -EAGAIN may succeed later but the function is not a simple wrapper, so retry guidance is not applicable.",
+    "contract_summary": ""
+  }
+}

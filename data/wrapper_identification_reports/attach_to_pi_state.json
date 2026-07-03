@@ -1,0 +1,99 @@
+{
+  "function_name": "attach_to_pi_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "3",
+      "pi_state.refcount.refs",
+      "futex_pi_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_pi_state",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pi_state.refcount.refs",
+      "member_type_chain": "futex_pi_state--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_pi_state",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pi_state.refcount.refs",
+      "member_type_chain": "futex_pi_state--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "Validation may fail transiently (e.g., uval changed due to concurrent modification), so the caller can retry the operation on -EAGAIN.",
+  "contract_summary": "Attaches to an existing pi_state by taking a reference on it after verifying that the futex state is consistent with the provided uaddr and uval. The pi_state is returned via output parameter *ps, and the caller must later release the reference with put_pi_state(). On success, returns 0 and the caller owns a reference; on error (e.g., -EAGAIN, -EINVAL, -EFAULT), no reference is taken and *ps is not set. The caller must check the return value and retry on -EAGAIN if desired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to acquire a reference on a futex_pi_state after validating state consistency; includes significant validation logic but the core operation is reference acquisition via get_pi_state.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "Validation may fail transiently (e.g., uval changed due to concurrent modification), so the caller can retry the operation on -EAGAIN.",
+      "contract_summary": "Attaches to an existing pi_state by taking a reference on it after verifying that the futex state is consistent with the provided uaddr and uval. The pi_state is returned via output parameter *ps, and the caller must later release the reference with put_pi_state(). On success, returns 0 and the caller owns a reference; on error (e.g., -EAGAIN, -EINVAL, -EFAULT), no reference is taken and *ps is not set. The caller must check the return value and retry on -EAGAIN if desired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "pi_state.refcount.refs",
+          "futex_pi_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "3",
+          "pi_state.refcount.refs",
+          "futex_pi_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "get_pi_state is called on pi_state at out_attach, incrementing its refcount. The access path pi_state.refcount.refs and type chain futex_pi_state--refcount_t--atomic_t are consistent with the callee info and the code. Segment counts match (3 each). The critical variable is the input parameter pi_state (index 3), which is correctly identified."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "3",
+        "pi_state.refcount.refs",
+        "futex_pi_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "Validation may fail transiently (e.g., uval changed due to concurrent modification), so the caller can retry the operation on -EAGAIN.",
+    "contract_summary": "Attaches to an existing pi_state by taking a reference on it after verifying that the futex state is consistent with the provided uaddr and uval. The pi_state is returned via output parameter *ps, and the caller must later release the reference with put_pi_state(). On success, returns 0 and the caller owns a reference; on error (e.g., -EAGAIN, -EINVAL, -EFAULT), no reference is taken and *ps is not set. The caller must check the return value and retry on -EAGAIN if desired."
+  }
+}

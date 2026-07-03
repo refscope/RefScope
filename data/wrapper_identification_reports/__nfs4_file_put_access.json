@@ -1,0 +1,82 @@
+{
+  "function_name": "__nfs4_file_put_access",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "nfsd_file_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nf.nf_ref.refs",
+      "member_type_chain": "nfsd_file--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "nfsd_file_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "nf.nf_ref.refs",
+      "member_type_chain": "nfsd_file--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The decrement always occurs; there is no failure return. Retrying would cause an extra decrement (double-put) and likely use-after-free.",
+  "contract_summary": "This function decrements the access reference count for a given open flag (oflag) on an nfs4_file. When the count reaches zero, it releases any cached nfsd_file pointers for that flag and, if the other flag also has zero references, releases the shared O_RDWR file descriptor. This is a put wrapper: the caller must have obtained an access reference previously via nfs4_file_get_access or similar, and should call this function exactly once per get to avoid leaks or use-after-free. After calling, the access is released; the caller must not use the oflag reference again.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the fi_access reference count for a given open flag and conditionally release underlying nfsd_file references. The only non-refcount logic is swapping pointers and calling nfsd_file_put, which are direct consequences of the refcount reaching zero.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The decrement always occurs; there is no failure return. Retrying would cause an extra decrement (double-put) and likely use-after-free.",
+      "contract_summary": "This function decrements the access reference count for a given open flag (oflag) on an nfs4_file. When the count reaches zero, it releases any cached nfsd_file pointers for that flag and, if the other flag also has zero references, releases the shared O_RDWR file descriptor. This is a put wrapper: the caller must have obtained an access reference previously via nfs4_file_get_access or similar, and should call this function exactly once per get to avoid leaks or use-after-free. After calling, the access is released; the caller must not use the oflag reference again."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "fp.fi_access",
+          "nfs4_file--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation targets fp.fi_access (an atomic_t array in nfs4_file), but the provided callee information is for nfsd_file_put, which operates on struct nfsd_file's nf.nf_ref.refs. The atomic_dec_and_lock on fi_access is not a callee call; it is a direct atomic operation. The candidate does not match any refcount operation performed via the given callee (nfsd_file_put). Additionally, the access path 'fp.fi_access' lacks the array index and the type chain nfs4_file--atomic_t does not correspond to the refcount type in the callee info. Therefore, the extraction is inconsistent."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function __nfs4_file_put_access is an internal helper that decreases an access counter and conditionally releases nfsd_file references by calling nfsd_file_put. It does not pass the critical variable (nfsd_file) through its parameters or return value; the nfsd_file pointers are obtained from internal fields of fp. Therefore, it is not a refcount wrapper/helper in the sense of the pipeline, and the extracted candidate targeting fi_access is incorrect. The check stage correctly rejected it."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The decrement always occurs; there is no failure return. Retrying would cause an extra decrement (double-put) and likely use-after-free.",
+    "contract_summary": "This function decrements the access reference count for a given open flag (oflag) on an nfs4_file. When the count reaches zero, it releases any cached nfsd_file pointers for that flag and, if the other flag also has zero references, releases the shared O_RDWR file descriptor. This is a put wrapper: the caller must have obtained an access reference previously via nfs4_file_get_access or similar, and should call this function exactly once per get to avoid leaks or use-after-free. After calling, the access is released; the caller must not use the oflag reference again."
+  }
+}

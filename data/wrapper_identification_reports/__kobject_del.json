@@ -1,0 +1,58 @@
+{
+  "function_name": "__kobject_del",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobj_kset_leave",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kset.kobj.kref.refcount",
+      "member_type_chain": "kobject--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobj_kset_leave",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kset.kobj.kref.refcount",
+      "member_type_chain": "kobject--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the put operation is just part of teardown; the function does not return a failure status for the refcount operation.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is kobject teardown: removing sysfs entries, sending uevents, and disconnecting from parent/kset. The refcount decrement via kobj_kset_leave is one of many cleanup steps, not the main focus.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the put operation is just part of teardown; the function does not return a failure status for the refcount operation.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the put operation is just part of teardown; the function does not return a failure status for the refcount operation.",
+    "contract_summary": ""
+  }
+}

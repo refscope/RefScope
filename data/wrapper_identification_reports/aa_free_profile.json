@@ -1,0 +1,342 @@
+{
+  "function_name": "aa_free_profile",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "profile.base.hname.count.refcount.refs",
+      "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "profile.parent.label.count.count",
+      "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "profile.ns.unconfined.label.count.count",
+      "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "profile.label.vec[i].label.count.count",
+      "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "profile.label.proxy.count.count",
+      "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "profile.attach.xmatch.count.refcount",
+      "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_label_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "free_attachment",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "attach.xmatch.count.refcount",
+      "member_type_chain": "aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_profile_loaddata",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "data.pcount.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_policy_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "policy.hname.count.refcount.refs",
+      "member_type_chain": "aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_label_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_attachment",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "attach.xmatch.count.refcount",
+      "member_type_chain": "aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_profile_loaddata",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "data.pcount.refcount",
+      "member_type_chain": "aa_loaddata--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_policy_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "policy.hname.count.refcount.refs",
+      "member_type_chain": "aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_put_ns",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ns.unconfined.label.count.count",
+      "member_type_chain": "aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_label_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.label.count.count",
+      "member_type_chain": "aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_label_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Function is called only when the profile's refcount is already zero; retrying would mean use-after-free.",
+  "contract_summary": "This is the destructor (release callback) for an aa_profile object. It is invoked automatically when the profile's reference count drops to zero via the kref mechanism (or similar). The function releases all references held by the profile: children profiles, parent, namespace, attachment data, rules, strings, data hashtable, loaddata, and the label. After this function returns, the profile memory is freed and must not be accessed. The caller (the reference counting infrastructure) ensures that no other references exist before calling this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all references and free memory for a profile when its reference count reaches zero — a typical destructor. It orchestrates multiple put operations and frees sub-resources, with no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Function is called only when the profile's refcount is already zero; retrying would mean use-after-free.",
+      "contract_summary": "This is the destructor (release callback) for an aa_profile object. It is invoked automatically when the profile's reference count drops to zero via the kref mechanism (or similar). The function releases all references held by the profile: children profiles, parent, namespace, attachment data, rules, strings, data hashtable, loaddata, and the label. After this function returns, the profile memory is freed and must not be accessed. The caller (the reference counting infrastructure) ensures that no other references exist before calling this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.base.hname.count.refcount.refs",
+          "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.parent.label.count.count",
+          "aa_profile--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.ns.unconfined.label.count.count",
+          "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.label.vec[i].label.count.count",
+          "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.label.proxy.count.count",
+          "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.attach.xmatch.count.refcount",
+          "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.rawdata.data.pcount.refcount",
+          "aa_profile--aa_loaddata--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.base.hname.count.refcount.refs",
+          "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.parent.label.count.count",
+          "aa_profile--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.ns.unconfined.label.count.count",
+          "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.label.vec[i].label.count.count",
+          "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.label.proxy.count.count",
+          "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "profile.attach.xmatch.count.refcount",
+          "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+        ]
+      ],
+      "reason": "Operations 1-6 are consistent with callee info: each put call in the code matches the callee's member-access path and type chain when prefixed with 'profile.' and the appropriate fields. Operation 7 is rejected because its type chain includes an extra 'atomic_t' not present in the callee's chain, which ends at 'refcount_t'; also the callee path 'data.pcount.refcount' corresponds to 'profile.rawdata.data.pcount.refcount', but the type chain is inconsistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "profile.base.hname.count.refcount.refs",
+        "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "profile.parent.label.count.count",
+        "aa_profile--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "profile.ns.unconfined.label.count.count",
+        "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "profile.label.vec[i].label.count.count",
+        "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "profile.label.proxy.count.count",
+        "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "profile.attach.xmatch.count.refcount",
+        "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 7,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Function is called only when the profile's refcount is already zero; retrying would mean use-after-free.",
+    "contract_summary": "This is the destructor (release callback) for an aa_profile object. It is invoked automatically when the profile's reference count drops to zero via the kref mechanism (or similar). The function releases all references held by the profile: children profiles, parent, namespace, attachment data, rules, strings, data hashtable, loaddata, and the label. After this function returns, the profile memory is freed and must not be accessed. The caller (the reference counting infrastructure) ensures that no other references exist before calling this function."
+  }
+}

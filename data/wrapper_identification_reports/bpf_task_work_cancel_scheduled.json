@@ -1,0 +1,150 @@
+{
+  "function_name": "bpf_task_work_cancel_scheduled",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.refcnt.refs",
+      "bpf_task_work_ctx--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ctx.refcnt.refs",
+      "bpf_task_work_ctx--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_task_work_ctx_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcnt.refs",
+      "member_type_chain": "bpf_task_work_ctx--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_task_work_cancel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcnt.refs",
+      "member_type_chain": "bpf_task_work_ctx--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_task_work_ctx_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcnt.refs",
+      "member_type_chain": "bpf_task_work_ctx--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "bpf_task_work_cancel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ctx.refcnt.refs",
+      "member_type_chain": "bpf_task_work_ctx--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Operation is unconditional and void; no failure path exists, so retry is not applicable.",
+  "contract_summary": "This function is a put wrapper that releases two accumulated references on a bpf_task_work_ctx object. It is called in the context of an irq_work callback to clean up the references transferred when scheduling the work (one for the task_work callback, one for the map's own ref). After this function returns, the context may be freed if its refcount reaches zero. The caller (the irq_work handler) must not access the context after this call, as it may be freed. The function is unconditional and void; no return value checking is needed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release two references (via bpf_task_work_cancel and bpf_task_work_ctx_put) on a bpf_task_work_ctx object. The only other logic is extracting ctx from the irq_work parameter.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Operation is unconditional and void; no failure path exists, so retry is not applicable.",
+      "contract_summary": "This function is a put wrapper that releases two accumulated references on a bpf_task_work_ctx object. It is called in the context of an irq_work callback to clean up the references transferred when scheduling the work (one for the task_work callback, one for the map's own ref). After this function returns, the context may be freed if its refcount reaches zero. The caller (the irq_work handler) must not access the context after this call, as it may be freed. The function is unconditional and void; no return value checking is needed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.refcnt.refs",
+          "bpf_task_work_ctx--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.refcnt.refs",
+          "bpf_task_work_ctx--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operations specify location 'parameter' with index 1, but the critical variable 'ctx' is a local variable derived from the parameter 'irq_work', not a parameter of this function. The callee information describes operations on the callee's parameter, but the mapping to the caller's interface is missing. Therefore, the operations are not directly supported by the function code as extracted."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.refcnt.refs",
+          "bpf_task_work_ctx--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ctx.refcnt.refs",
+          "bpf_task_work_ctx--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a dedicated wrapper that performs two put operations on the same refcount of the bpf_task_work_ctx structure. The critical variable ctx is obtained from the parameter irq_work via container_of, so the operations are directly associated with that parameter. The function has no other logic, giving it high purity as a refcount put helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.refcnt.refs",
+        "bpf_task_work_ctx--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ctx.refcnt.refs",
+        "bpf_task_work_ctx--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Operation is unconditional and void; no failure path exists, so retry is not applicable.",
+    "contract_summary": "This function is a put wrapper that releases two accumulated references on a bpf_task_work_ctx object. It is called in the context of an irq_work callback to clean up the references transferred when scheduling the work (one for the task_work callback, one for the map's own ref). After this function returns, the context may be freed if its refcount reaches zero. The caller (the irq_work handler) must not access the context after this call, as it may be freed. The function is unconditional and void; no return value checking is needed."
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "function_name": "__guc_context_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ce.state.obj.base.refcount.refcount",
+      "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ce.ring.ref.refcount",
+      "intel_context--intel_ring--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ce.vm.ref.refcount",
+      "intel_context--i915_address_space--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ce.timeline.kref.refcount",
+      "intel_context--intel_timeline--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "intel_context_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.vm.ref.refcount",
+      "member_type_chain": "intel_context--i915_address_space--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_breadcrumbs_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "b.ref.refcount",
+      "member_type_chain": "intel_breadcrumbs--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "lrc_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.state.obj.base.refcount.refcount",
+      "member_type_chain": "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "lrc_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ring.ref.refcount",
+      "member_type_chain": "intel_context--intel_ring--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_context_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.timeline.kref.refcount",
+      "member_type_chain": "intel_context--intel_timeline--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "intel_context_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.vm.ref.refcount",
+      "member_type_chain": "intel_context--i915_address_space--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_breadcrumbs_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "b.ref.refcount",
+      "member_type_chain": "intel_breadcrumbs--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "lrc_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.state.obj.base.refcount.refcount",
+      "member_type_chain": "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "lrc_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.ring.ref.refcount",
+      "member_type_chain": "intel_context--intel_ring--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "intel_context_fini",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ce.timeline.kref.refcount",
+      "member_type_chain": "intel_context--intel_timeline--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operations are unconditional and void; failure would indicate a bug (e.g., double-free), and retrying would cause use-after-free.",
+  "contract_summary": "Destructor wrapper for intel_context: releases references to the context's timeline (via intel_context_fini), VM (via intel_context_fini), LRC state object, and ring (via lrc_fini). For virtual engines, it also releases breadcrumbs and frees the container; for regular contexts, it frees the context via intel_context_free. After calling this function, the caller must not use the context pointer. No return value; the operation always succeeds under correct usage.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release multiple reference-counted resources (timeline, VM, ring, LRC state) and free the intel_context; all logic is focused on destruction and reference-count put operations.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operations are unconditional and void; failure would indicate a bug (e.g., double-free), and retrying would cause use-after-free.",
+      "contract_summary": "Destructor wrapper for intel_context: releases references to the context's timeline (via intel_context_fini), VM (via intel_context_fini), LRC state object, and ring (via lrc_fini). For virtual engines, it also releases breadcrumbs and frees the container; for regular contexts, it frees the context via intel_context_free. After calling this function, the caller must not use the context pointer. No return value; the operation always succeeds under correct usage."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.state.obj.base.refcount.refcount",
+          "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.ring.ref.refcount",
+          "intel_context--intel_ring--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.vm.ref.refcount",
+          "intel_context--i915_address_space--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.timeline.kref.refcount",
+          "intel_context--intel_timeline--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.state.obj.base.refcount.refcount",
+          "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.ring.ref.refcount",
+          "intel_context--intel_ring--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.vm.ref.refcount",
+          "intel_context--i915_address_space--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ce.timeline.kref.refcount",
+          "intel_context--intel_timeline--kref--refcount_t"
+        ]
+      ],
+      "reason": "All candidate put operations are validated: they correspond to lrc_fini(ce) and intel_context_fini(ce) calls within the function. The member access paths (starting from parameter ce) and type chains match the callee information, and segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ce.state.obj.base.refcount.refcount",
+        "intel_context--i915_vma--drm_i915_gem_object--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ce.ring.ref.refcount",
+        "intel_context--intel_ring--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ce.vm.ref.refcount",
+        "intel_context--i915_address_space--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ce.timeline.kref.refcount",
+        "intel_context--intel_timeline--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 5,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operations are unconditional and void; failure would indicate a bug (e.g., double-free), and retrying would cause use-after-free.",
+    "contract_summary": "Destructor wrapper for intel_context: releases references to the context's timeline (via intel_context_fini), VM (via intel_context_fini), LRC state object, and ring (via lrc_fini). For virtual engines, it also releases breadcrumbs and frees the container; for regular contexts, it frees the context via intel_context_free. After calling this function, the caller must not use the context pointer. No return value; the operation always succeeds under correct usage."
+  }
+}

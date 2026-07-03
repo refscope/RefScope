@@ -1,0 +1,99 @@
+{
+  "function_name": "aspeed_crypto_cra_exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+      "crypto_skcipher--crypto_tfm--aspeed_cipher_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_skcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional and does not fail; retry would cause a use-after-free double-put.",
+  "contract_summary": "Put wrapper that releases the reference on the fallback skcipher transformation stored in the context. Called during cra_exit to clean up resources allocated in cra_init. After this call, the fallback tfm may be freed; the caller must not use the algorithm instance any further. No return value; the operation always succeeds and the reference is unconditionally dropped.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the reference on ctx->fallback_tfm via crypto_free_skcipher, with only an inconsequential debug print. This is a focused put wrapper for the crypto algorithm instance destruction.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional and does not fail; retry would cause a use-after-free double-put.",
+      "contract_summary": "Put wrapper that releases the reference on the fallback skcipher transformation stored in the context. Called during cra_exit to clean up resources allocated in cra_init. After this call, the fallback tfm may be freed; the caller must not use the algorithm instance any further. No return value; the operation always succeeds and the reference is unconditionally dropped."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--aspeed_cipher_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+          "crypto_skcipher--crypto_tfm--aspeed_cipher_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The put operation on fallback_tfm via crypto_free_skcipher is correctly traced from the function parameter tfm through the context struct. The access path and type chain are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.__crt_ctx.fallback_tfm.base.refcnt.refs",
+        "crypto_skcipher--crypto_tfm--aspeed_cipher_ctx--crypto_skcipher--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional and does not fail; retry would cause a use-after-free double-put.",
+    "contract_summary": "Put wrapper that releases the reference on the fallback skcipher transformation stored in the context. Called during cra_exit to clean up resources allocated in cra_init. After this call, the fallback tfm may be freed; the caller must not use the algorithm instance any further. No return value; the operation always succeeds and the reference is unconditionally dropped."
+  }
+}

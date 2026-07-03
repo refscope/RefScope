@@ -1,0 +1,99 @@
+{
+  "function_name": "__ip_vs_conn_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "cp.refcnt.refs",
+      "ip_vs_conn--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc_not_zero fails when the refcount is already zero, meaning the connection is being destroyed; retrying will not revive it.",
+  "contract_summary": "Conditional get-wrapper: acquires a reference on the ip_vs_conn object only if its reference count is non-zero (object still alive). Returns true on success (caller now owns a reference) and false on failure (object is dead/dying). Caller MUST check the return value and, if true, must later release the reference with ip_vs_conn_put(). If false, the object must not be dereferenced or used further.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of this function is to conditionally acquire a reference on an ip_vs_conn object via refcount_inc_not_zero. No other logic exists.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc_not_zero fails when the refcount is already zero, meaning the connection is being destroyed; retrying will not revive it.",
+      "contract_summary": "Conditional get-wrapper: acquires a reference on the ip_vs_conn object only if its reference count is non-zero (object still alive). Returns true on success (caller now owns a reference) and false on failure (object is dead/dying). Caller MUST check the return value and, if true, must later release the reference with ip_vs_conn_put(). If false, the object must not be dereferenced or used further."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "cp.refcnt.refs",
+          "ip_vs_conn--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "cp.refcnt.refs",
+          "ip_vs_conn--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc_not_zero is called on &cp->refcnt, which corresponds to cp.refcnt.refs. Parameter 1 (cp) is the critical variable. Access path and type chain are consistent with code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "cp.refcnt.refs",
+        "ip_vs_conn--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc_not_zero fails when the refcount is already zero, meaning the connection is being destroyed; retrying will not revive it.",
+    "contract_summary": "Conditional get-wrapper: acquires a reference on the ip_vs_conn object only if its reference count is non-zero (object still alive). Returns true on success (caller now owns a reference) and false on failure (object is dead/dying). Caller MUST check the return value and, if true, must later release the reference with ip_vs_conn_put(). If false, the object must not be dereferenced or used further."
+  }
+}

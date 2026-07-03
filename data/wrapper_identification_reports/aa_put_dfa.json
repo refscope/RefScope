@@ -1,0 +1,107 @@
+{
+  "function_name": "aa_put_dfa",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dfa.count.refcount",
+      "aa_dfa--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "A put operation releases a reference; if the object pointer is NULL it's a no-op, and if the refcount hits zero the object is freed. Retrying would be a double-put or operate on a freed object.",
+  "contract_summary": "This is a put wrapper that releases a reference on a `struct aa_dfa`. It is NULL-safe: if `dfa` is NULL, the function does nothing. Otherwise, it calls `kref_put` which decrements the refcount and invokes `aa_dfa_free_kref` when the last reference is dropped. After calling this function, the caller must not access the `dfa` object. This release is the counterpart to a prior `aa_get_dfa` (or similar get operation). No return value is provided; the caller does not need to check success since the operation is always benign and has no failure path.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of an aa_dfa via kref_put, with a null check to guard against NULL pointers; no other logic is present.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "A put operation releases a reference; if the object pointer is NULL it's a no-op, and if the refcount hits zero the object is freed. Retrying would be a double-put or operate on a freed object.",
+      "contract_summary": "This is a put wrapper that releases a reference on a `struct aa_dfa`. It is NULL-safe: if `dfa` is NULL, the function does nothing. Otherwise, it calls `kref_put` which decrements the refcount and invokes `aa_dfa_free_kref` when the last reference is dropped. After calling this function, the caller must not access the `dfa` object. This release is the counterpart to a prior `aa_get_dfa` (or similar get operation). No return value is provided; the caller does not need to check success since the operation is always benign and has no failure path."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dfa.count.refcount",
+          "aa_dfa--kref--refcount_t"
+        ]
+      ],
+      "reason": "The operation is a put on parameter 1 (dfa). The code calls kref_put(&dfa->count, ...), so the access path dfa.count.refcount correctly traces from the parameter dfa through the count member (struct kref) to the refcount field. The type chain aa_dfa--kref--refcount_t matches the path segments count. All conditions satisfied."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dfa.count.refcount",
+        "aa_dfa--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "A put operation releases a reference; if the object pointer is NULL it's a no-op, and if the refcount hits zero the object is freed. Retrying would be a double-put or operate on a freed object.",
+    "contract_summary": "This is a put wrapper that releases a reference on a `struct aa_dfa`. It is NULL-safe: if `dfa` is NULL, the function does nothing. Otherwise, it calls `kref_put` which decrements the refcount and invokes `aa_dfa_free_kref` when the last reference is dropped. After calling this function, the caller must not access the `dfa` object. This release is the counterpart to a prior `aa_get_dfa` (or similar get operation). No return value is provided; the caller does not need to check success since the operation is always benign and has no failure path."
+  }
+}

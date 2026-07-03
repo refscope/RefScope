@@ -1,0 +1,99 @@
+{
+  "function_name": "acpi_spi_find_controller_by_adev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "controller.dev.kobj.kref.refcount",
+      "spi_controller--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "class_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "class_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the lookups fail, the ACPI device does not match any SPI controller; retrying with the same inputs will not change the outcome unless device enumeration changes, which is typically not expected in this context.",
+  "contract_summary": "This function looks up an SPI controller by ACPI device, acquiring a reference to the underlying device via class_find_device. On success, it returns a pointer to the spi_controller with its device's reference count incremented. The caller must ensure the reference is released by calling put_device on the spi_controller's dev member (or via a suitable put function) when the controller is no longer needed. Returns NULL if no matching device is found; in that case, no reference is acquired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to locate and return an spi_controller, acquiring a reference on its embedded device via class_find_device. No other significant logic; the function is a thin wrapper around device class lookup and container_of.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the lookups fail, the ACPI device does not match any SPI controller; retrying with the same inputs will not change the outcome unless device enumeration changes, which is typically not expected in this context.",
+      "contract_summary": "This function looks up an SPI controller by ACPI device, acquiring a reference to the underlying device via class_find_device. On success, it returns a pointer to the spi_controller with its device's reference count incremented. The caller must ensure the reference is released by calling put_device on the spi_controller's dev member (or via a suitable put function) when the controller is no longer needed. Returns NULL if no matching device is found; in that case, no reference is acquired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "controller.dev.kobj.kref.refcount",
+          "spi_controller--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "controller.dev.kobj.kref.refcount",
+          "spi_controller--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "class_find_device() increments the refcount of the found device. The function returns the corresponding spi_controller via container_of. The access path controller.dev.kobj.kref.refcount correctly traces from the returned spi_controller through its embedded device, kobject, kref, to refcount_t. The type chain matches. The operation direction (get) and location (return) are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "controller.dev.kobj.kref.refcount",
+        "spi_controller--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the lookups fail, the ACPI device does not match any SPI controller; retrying with the same inputs will not change the outcome unless device enumeration changes, which is typically not expected in this context.",
+    "contract_summary": "This function looks up an SPI controller by ACPI device, acquiring a reference to the underlying device via class_find_device. On success, it returns a pointer to the spi_controller with its device's reference count incremented. The caller must ensure the reference is released by calling put_device on the spi_controller's dev member (or via a suitable put function) when the controller is no longer needed. Returns NULL if no matching device is found; in that case, no reference is acquired."
+  }
+}

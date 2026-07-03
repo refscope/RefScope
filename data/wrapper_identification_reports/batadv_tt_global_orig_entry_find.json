@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_tt_global_orig_entry_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "orig_entry.refcount.refcount.refs",
+      "batadv_tt_orig_list_entry--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails when the object's refcount is zero, meaning the object is dying/freed; retrying after a short delay will not revive the object.",
+  "contract_summary": "RCU-protected get-wrapper: finds a batadv_tt_orig_list_entry in the global TT entry's orig_list that matches the given orig_node. On success, it acquires a reference via kref_get_unless_zero and returns the entry with an elevated refcount. The caller must check the return value for NULL. If non-NULL, the caller is responsible for releasing the reference with a corresponding put (e.g., batadv_tt_orig_list_entry_put) when done. Due to RCU protection, the caller must ensure proper RCU synchronization if accessing the object after the RCU read lock is dropped (the reference itself keeps the object alive). If the object is dead (refcount zero), the function returns NULL and no reference is taken.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a batadv_tt_orig_list_entry by matching orig_node, and acquire a reference via kref_get_unless_zero on the found entry. The only non-refcount logic is the iteration and comparison, which serve the lookup itself. Returns the entry with an elevated refcount to the caller.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails when the object's refcount is zero, meaning the object is dying/freed; retrying after a short delay will not revive the object.",
+      "contract_summary": "RCU-protected get-wrapper: finds a batadv_tt_orig_list_entry in the global TT entry's orig_list that matches the given orig_node. On success, it acquires a reference via kref_get_unless_zero and returns the entry with an elevated refcount. The caller must check the return value for NULL. If non-NULL, the caller is responsible for releasing the reference with a corresponding put (e.g., batadv_tt_orig_list_entry_put) when done. Due to RCU protection, the caller must ensure proper RCU synchronization if accessing the object after the RCU read lock is dropped (the reference itself keeps the object alive). If the object is dead (refcount zero), the function returns NULL and no reference is taken."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_entry.refcount.refcount.refs",
+          "batadv_tt_orig_list_entry--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_entry.refcount.refcount.refs",
+          "batadv_tt_orig_list_entry--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The code uses kref_get_unless_zero on &tmp_orig_entry->refcount and assigns orig_entry to the matched entry. The return value orig_entry is the object whose refcount is incremented. The access path orig_entry.refcount.refcount.refs corresponds to the struct's kref member (refcount), its inner refcount_t (refcount), and the atomic_t (refs). Segment count (4) matches type chain length (4). All consistent with callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "orig_entry.refcount.refcount.refs",
+        "batadv_tt_orig_list_entry--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails when the object's refcount is zero, meaning the object is dying/freed; retrying after a short delay will not revive the object.",
+    "contract_summary": "RCU-protected get-wrapper: finds a batadv_tt_orig_list_entry in the global TT entry's orig_list that matches the given orig_node. On success, it acquires a reference via kref_get_unless_zero and returns the entry with an elevated refcount. The caller must check the return value for NULL. If non-NULL, the caller is responsible for releasing the reference with a corresponding put (e.g., batadv_tt_orig_list_entry_put) when done. Due to RCU protection, the caller must ensure proper RCU synchronization if accessing the object after the RCU read lock is dropped (the reference itself keeps the object alive). If the object is dead (refcount zero), the function returns NULL and no reference is taken."
+  }
+}

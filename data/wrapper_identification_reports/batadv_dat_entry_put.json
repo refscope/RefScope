@@ -1,0 +1,107 @@
+{
+  "function_name": "batadv_dat_entry_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dat_entry.refcount.refcount",
+      "batadv_dat_entry--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_put is unconditional once the pointer is non-NULL; it never fails in a way that would benefit from retrying. If the pointer is NULL, the call is a no-op.",
+  "contract_summary": "Put wrapper for batadv_dat_entry objects. The function releases a reference held by the caller. If the reference count drops to zero after decrement, the object is freed via batadv_dat_entry_release. After calling this function, the caller must not access the dat_entry pointer. The NULL check allows safe invocation even on potentially NULL pointers.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the kref reference count on a batadv_dat_entry, releasing the caller's reference. The only additional logic is a NULL check before the kref_put call.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_put is unconditional once the pointer is non-NULL; it never fails in a way that would benefit from retrying. If the pointer is NULL, the call is a no-op.",
+      "contract_summary": "Put wrapper for batadv_dat_entry objects. The function releases a reference held by the caller. If the reference count drops to zero after decrement, the object is freed via batadv_dat_entry_release. After calling this function, the caller must not access the dat_entry pointer. The NULL check allows safe invocation even on potentially NULL pointers."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dat_entry.refcount.refcount",
+          "batadv_dat_entry--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dat_entry.refcount.refcount",
+          "batadv_dat_entry--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put is called on &dat_entry->refcount, where dat_entry is the input parameter. The member path starts from dat_entry, goes through refcount (struct kref), then refcount (refcount_t). The type chain batadv_dat_entry--kref--refcount_t is consistent. Direction put matches callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dat_entry.refcount.refcount",
+        "batadv_dat_entry--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_put is unconditional once the pointer is non-NULL; it never fails in a way that would benefit from retrying. If the pointer is NULL, the call is a no-op.",
+    "contract_summary": "Put wrapper for batadv_dat_entry objects. The function releases a reference held by the caller. If the reference count drops to zero after decrement, the object is freed via batadv_dat_entry_release. After calling this function, the caller must not access the dat_entry pointer. The NULL check allows safe invocation even on potentially NULL pointers."
+  }
+}

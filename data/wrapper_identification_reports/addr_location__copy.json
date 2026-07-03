@@ -1,0 +1,231 @@
+{
+  "function_name": "addr_location__copy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dst.thread.orig.refcnt.refs",
+      "addr_location--thread--original_thread--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dst.map.refcnt.refs",
+      "addr_location--map--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "src.thread.refcnt.refs",
+      "addr_location--thread--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "2",
+      "src.map.refcnt.refs",
+      "addr_location--map--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "map__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "map.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "thread.orig.refcnt.refs",
+      "member_type_chain": "thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "thread--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "map__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "map.refcnt.refs",
+      "member_type_chain": "map--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "thread.orig.refcnt.refs",
+      "member_type_chain": "thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "thread__get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "result.refcnt.refs",
+      "member_type_chain": "thread--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and never fails; no retry is needed.",
+  "contract_summary": "addr_location__copy performs a deep copy of a reference-counted addr_location structure. It releases any existing references held by dst->thread and dst->map, then copies the entire src struct into dst, and finally acquires new references on src's thread and map objects via thread__get and map__get. After the call, dst holds its own references to the same objects as src. The caller is responsible for eventually releasing these references (e.g., by calling addr_location__exit or similar cleanup). This function does not return an error; it always succeeds. No locking or RCU conditions are required beyond those inherent in the get/put operations.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to copy an addr_location while correctly managing reference counts for its thread and map members. It releases old references in dst and acquires new references from src, making it a dedicated refcount-copy wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and never fails; no retry is needed.",
+      "contract_summary": "addr_location__copy performs a deep copy of a reference-counted addr_location structure. It releases any existing references held by dst->thread and dst->map, then copies the entire src struct into dst, and finally acquires new references on src's thread and map objects via thread__get and map__get. After the call, dst holds its own references to the same objects as src. The caller is responsible for eventually releasing these references (e.g., by calling addr_location__exit or similar cleanup). This function does not return an error; it always succeeds. No locking or RCU conditions are required beyond those inherent in the get/put operations."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.thread.orig.refcnt.refs",
+          "addr_location--thread--original_thread--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.map.refcnt.refs",
+          "addr_location--map--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.thread.refcnt.refs",
+          "addr_location--thread--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.map.refcnt.refs",
+          "addr_location--map--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.thread.orig.refcnt.refs",
+          "addr_location--thread--original_thread--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dst.map.refcnt.refs",
+          "addr_location--map--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.thread.refcnt.refs",
+          "addr_location--thread--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.map.refcnt.refs",
+          "addr_location--map--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All four refcount operations match the actual code: thread__put/map__put on dst fields, thread__get/map__get on src fields. Access paths and type chains are consistent with callee information and struct traversal. Segment counts match type chain lengths. The get operations correctly trace from parameter 2 (src) since the get functions increment the refcount of src->thread and src->map, even though callee info marks them as return-based; the critical variable in caller is the input field."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dst.thread.orig.refcnt.refs",
+        "addr_location--thread--original_thread--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dst.map.refcnt.refs",
+        "addr_location--map--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "src.thread.refcnt.refs",
+        "addr_location--thread--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "2",
+        "src.map.refcnt.refs",
+        "addr_location--map--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and never fails; no retry is needed.",
+    "contract_summary": "addr_location__copy performs a deep copy of a reference-counted addr_location structure. It releases any existing references held by dst->thread and dst->map, then copies the entire src struct into dst, and finally acquires new references on src's thread and map objects via thread__get and map__get. After the call, dst holds its own references to the same objects as src. The caller is responsible for eventually releasing these references (e.g., by calling addr_location__exit or similar cleanup). This function does not return an error; it always succeeds. No locking or RCU conditions are required beyond those inherent in the get/put operations."
+  }
+}

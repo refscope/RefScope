@@ -1,0 +1,127 @@
+{
+  "function_name": "__netdev_adjacent_dev_unlink_lists",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "upper_dev.dev_refcnt.refs",
+      "net_device--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.dev_refcnt.refs",
+      "net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "__netdev_adjacent_dev_remove",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "adj_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "__netdev_adjacent_dev_remove",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "adj_dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation: failure indicates use-after-free or double-put; retrying would be dangerous.",
+  "contract_summary": "This function removes the adjacency relationship between two net_devices by unlinking both directions from the respective adjacency lists and decrementing the reference counts of the adjacency objects. It is the release (put) counterpart to a prior get operation (e.g., when the adjacency was established). After this call, the adjacency entries are eliminated, and the caller must not use the removed entries. The function returns void and assumes valid input; it is an unconditional release step in the adjacency lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to remove adjacency links between two net_devices and decrement the associated refcounts via __netdev_adjacent_dev_remove, which is a put operation. No other business logic present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation: failure indicates use-after-free or double-put; retrying would be dangerous.",
+      "contract_summary": "This function removes the adjacency relationship between two net_devices by unlinking both directions from the respective adjacency lists and decrementing the reference counts of the adjacency objects. It is the release (put) counterpart to a prior get operation (e.g., when the adjacency was established). After this call, the adjacency entries are eliminated, and the caller must not use the removed entries. The function returns void and assumes valid input; it is an unconditional release step in the adjacency lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "upper_dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "upper_dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both calls to __netdev_adjacent_dev_remove decrement the dev_refcnt of the respective device (parameter 1 and 2 of the outer function). The access paths and type chains are consistent with the function signatures."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "upper_dev.dev_refcnt.refs",
+        "net_device--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.dev_refcnt.refs",
+        "net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation: failure indicates use-after-free or double-put; retrying would be dangerous.",
+    "contract_summary": "This function removes the adjacency relationship between two net_devices by unlinking both directions from the respective adjacency lists and decrementing the reference counts of the adjacency objects. It is the release (put) counterpart to a prior get operation (e.g., when the adjacency was established). After this call, the adjacency entries are eliminated, and the caller must not use the removed entries. The function returns void and assumes valid input; it is an unconditional release step in the adjacency lifecycle."
+  }
+}

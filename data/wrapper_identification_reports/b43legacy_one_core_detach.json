@@ -1,0 +1,106 @@
+{
+  "function_name": "b43legacy_one_core_detach",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.pcm.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.ucode.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals_band.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.pcm.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.ucode.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals_band.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "b43legacy_wireless_core_detach",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.fw.initvals.priv.ref.refcount",
+      "member_type_chain": "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is core detach and cleanup (debugfs removal, list_del, decrement nr_devs, clear drvdata, kfree). The call to b43legacy_wireless_core_detach (a put function) is one step among many, not the dominant purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

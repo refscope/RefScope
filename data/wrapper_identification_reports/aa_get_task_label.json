@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_get_task_label",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "p.count.count.refcount",
+      "aa_label--aa_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_newest_cred_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_newest_cred_label",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The get operation is unconditional and always succeeds for a valid task; no failure path to retry.",
+  "contract_summary": "RCU-protected get-wrapper: acquires a reference on the aa_label associated with the given task's credentials. The caller must call aa_put_label() to release the reference when done. The RCU read lock is held temporarily inside this function, so the caller does not need to hold it. The returned pointer is always valid and non-NULL for a valid task.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to acquire a reference on the aa_label from the task's credentials; it consists only of RCU lock/unlock and a call to a get function. No other business logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The get operation is unconditional and always succeeds for a valid task; no failure path to retry.",
+      "contract_summary": "RCU-protected get-wrapper: acquires a reference on the aa_label associated with the given task's credentials. The caller must call aa_put_label() to release the reference when done. The RCU read lock is held temporarily inside this function, so the caller does not need to hold it. The returned pointer is always valid and non-NULL for a valid task."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "p.count.count.refcount",
+          "aa_label--aa_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls aa_get_newest_cred_label which increments the reference count on the label at label.count.count.refcount. The return value p is the critical variable exposed to the caller, and the access path from p to the refcount is consistent with the callee's type chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "p.count.count.refcount",
+        "aa_label--aa_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The get operation is unconditional and always succeeds for a valid task; no failure path to retry.",
+    "contract_summary": "RCU-protected get-wrapper: acquires a reference on the aa_label associated with the given task's credentials. The caller must call aa_put_label() to release the reference when done. The RCU read lock is held temporarily inside this function, so the caller does not need to hold it. The returned pointer is always valid and non-NULL for a valid task."
+  }
+}

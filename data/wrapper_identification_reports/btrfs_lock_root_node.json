@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_lock_root_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "eb.refs.refs",
+      "extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The wrapper internally retries until it successfully locks the correct root node; the caller always receives a valid locked buffer.",
+  "contract_summary": "Acquires a reference and the tree lock on the current root node's extent buffer. The function loops until it locks the buffer that matches root->node, handling concurrent modifications. The returned buffer is both locked (caller must call btrfs_tree_unlock) and has an elevated refcount (caller must call free_extent_buffer to release the reference). This is a get+lock operation: the caller obtains ownership of a locked, reference-counted pointer. There is no failure path; the function always succeeds. The lockdep class may be reset for the buffer. The caller must not use the buffer after unlocking and releasing the reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to safely acquire a locked reference to the root node's extent buffer. The refcount get/put operations are central to the loop logic that handles concurrent root node updates, but locking and lock depreset add non-trivial additional logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The wrapper internally retries until it successfully locks the correct root node; the caller always receives a valid locked buffer.",
+      "contract_summary": "Acquires a reference and the tree lock on the current root node's extent buffer. The function loops until it locks the buffer that matches root->node, handling concurrent modifications. The returned buffer is both locked (caller must call btrfs_tree_unlock) and has an elevated refcount (caller must call free_extent_buffer to release the reference). This is a get+lock operation: the caller obtains ownership of a locked, reference-counted pointer. There is no failure path; the function always succeeds. The lockdep class may be reset for the buffer. The caller must not use the buffer after unlocking and releasing the reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "btrfs_root_node() acquires a reference on eb, which is locked and returned. The function returns the extent buffer with an elevated reference count. The access path eb.refs.refs and type chain extent_buffer--refcount_t--atomic_t are consistent with the callee info and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "eb.refs.refs",
+        "extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The wrapper internally retries until it successfully locks the correct root node; the caller always receives a valid locked buffer.",
+    "contract_summary": "Acquires a reference and the tree lock on the current root node's extent buffer. The function loops until it locks the buffer that matches root->node, handling concurrent modifications. The returned buffer is both locked (caller must call btrfs_tree_unlock) and has an elevated refcount (caller must call free_extent_buffer to release the reference). This is a get+lock operation: the caller obtains ownership of a locked, reference-counted pointer. There is no failure path; the function always succeeds. The lockdep class may be reset for the buffer. The caller must not use the buffer after unlocking and releasing the reference."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "__ip_map_lookup",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.h.ref.refcount",
+      "ip_map--cache_head--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sunrpc_cache_lookup_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.h.ref.refcount",
+      "member_type_chain": "cache_head--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sunrpc_cache_lookup_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "ret.h.ref.refcount",
+      "member_type_chain": "cache_head--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "A NULL return means the cache entry was not found; the caller must decide whether to create it. The wrapper itself does not provide a mechanism to retry the lookup with modified arguments, so retry is not inherent to this function.",
+  "contract_summary": "This function performs an RCU-lookup in the IP map cache, acquiring a reference on the entry if it exists. The caller receives a pointer to a reference-counted ip_map object and must release that reference (e.g., via cache_put) when done. If NULL is returned, no reference was taken and the entry does not exist in the cache. The caller should treat the returned pointer as an owned reference with a positive refcount; using it without a matching release would leak. No locks are required by the caller except that the cache must be valid.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference-counted cache entry via sunrpc_cache_lookup_rcu, which takes a reference. The only logic besides the lookup is trivial string copy and hash computation. The returned ip_map pointer carries a reference that the caller must release.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "A NULL return means the cache entry was not found; the caller must decide whether to create it. The wrapper itself does not provide a mechanism to retry the lookup with modified arguments, so retry is not inherent to this function.",
+      "contract_summary": "This function performs an RCU-lookup in the IP map cache, acquiring a reference on the entry if it exists. The caller receives a pointer to a reference-counted ip_map object and must release that reference (e.g., via cache_put) when done. If NULL is returned, no reference was taken and the entry does not exist in the cache. The caller should treat the returned pointer as an owned reference with a positive refcount; using it without a matching release would leak. No locks are required by the caller except that the cache must be valid."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.h.ref.refcount",
+          "ip_map--cache_head--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.h.ref.refcount",
+          "ip_map--cache_head--kref--refcount_t"
+        ]
+      ],
+      "reason": "The extracted operation matches the code: sunrpc_cache_lookup_rcu returns a cache_head pointer (with a refcount incremented internally), which is then container_of'd to ip_map. The access path from the return value 'ret' (representing the ip_map) through h.ref.refcount correctly reaches the refcount_t field. The type chain is consistent, and segment counts match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.h.ref.refcount",
+        "ip_map--cache_head--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "A NULL return means the cache entry was not found; the caller must decide whether to create it. The wrapper itself does not provide a mechanism to retry the lookup with modified arguments, so retry is not inherent to this function.",
+    "contract_summary": "This function performs an RCU-lookup in the IP map cache, acquiring a reference on the entry if it exists. The caller receives a pointer to a reference-counted ip_map object and must release that reference (e.g., via cache_put) when done. If NULL is returned, no reference was taken and the entry does not exist in the cache. The caller should treat the returned pointer as an owned reference with a positive refcount; using it without a matching release would leak. No locks are required by the caller except that the cache must be valid."
+  }
+}

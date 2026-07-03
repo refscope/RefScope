@@ -1,0 +1,115 @@
+{
+  "function_name": "acquire_rmpp_recv",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "rmpp_recv.refcount.refs",
+      "mad_rmpp_recv--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If find_rmpp_recv returns NULL, the lookup failed to find an rmpp_recv for the given mad_recv_wc; retrying under same conditions will not change the result.",
+  "contract_summary": "This function is a get-wrapper that looks up an existing rmpp_recv associated with the given agent and mad_recv_wc. If found, it increments the refcount using refcount_inc and returns the pointer, transferring ownership of one reference to the caller. If not found, it returns NULL. The caller must check the return value and must later call the corresponding put function (e.g., deref_rmpp_recv or similar) to release the reference when done. The function holds a lock during the lookup and refcount increment to ensure thread safety.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to find an existing rmpp_recv and acquire a reference (increment refcount) on it. The locking and lookup are necessary for safe refcount access, and there is no additional business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If find_rmpp_recv returns NULL, the lookup failed to find an rmpp_recv for the given mad_recv_wc; retrying under same conditions will not change the result.",
+      "contract_summary": "This function is a get-wrapper that looks up an existing rmpp_recv associated with the given agent and mad_recv_wc. If found, it increments the refcount using refcount_inc and returns the pointer, transferring ownership of one reference to the caller. If not found, it returns NULL. The caller must check the return value and must later call the corresponding put function (e.g., deref_rmpp_recv or similar) to release the reference when done. The function holds a lock during the lookup and refcount increment to ensure thread safety."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rmpp_recv.refcount.refs",
+          "mad_rmpp_recv--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rmpp_recv.refcount.refs",
+          "mad_rmpp_recv--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "The code calls refcount_inc on rmpp_recv->refcount when rmpp_recv is non-NULL, and returns rmpp_recv. The access path starts from the return variable rmpp_recv, then .refcount to refcount_struct, then .refs to atomic_t. The segment count (3) matches the type chain length (3), and the path is consistent with the callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "rmpp_recv.refcount.refs",
+        "mad_rmpp_recv--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If find_rmpp_recv returns NULL, the lookup failed to find an rmpp_recv for the given mad_recv_wc; retrying under same conditions will not change the result.",
+    "contract_summary": "This function is a get-wrapper that looks up an existing rmpp_recv associated with the given agent and mad_recv_wc. If found, it increments the refcount using refcount_inc and returns the pointer, transferring ownership of one reference to the caller. If not found, it returns NULL. The caller must check the return value and must later call the corresponding put function (e.g., deref_rmpp_recv or similar) to release the reference when done. The function holds a lock during the lookup and refcount increment to ensure thread safety."
+  }
+}

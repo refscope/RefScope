@@ -1,0 +1,183 @@
+{
+  "function_name": "b43legacy_release_firmware",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.ucode.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.pcm.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.initvals.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "dev.fw.initvals_band.priv.ref.refcount",
+      "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "release_firmware",
+      "get_or_put": "put",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "fw.priv.ref.refcount",
+      "member_type_chain": "firmware--fw_priv--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional and always succeeds (or is a safe no-op on NULL pointers). No retry scenario.",
+  "contract_summary": "This is a put wrapper that releases all firmware references held by the device structure (ucode, pcm, initvals, initvals_band) and sets the pointers to NULL. It must be called during device teardown to properly free the firmware. After calling, the firmware pointers must not be used again. The caller is responsible for ensuring no concurrent access to these pointers after release.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release firmware references and clear the pointers. No other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional and always succeeds (or is a safe no-op on NULL pointers). No retry scenario.",
+      "contract_summary": "This is a put wrapper that releases all firmware references held by the device structure (ucode, pcm, initvals, initvals_band) and sets the pointers to NULL. It must be called during device teardown to properly free the firmware. After calling, the firmware pointers must not be used again. The caller is responsible for ensuring no concurrent access to these pointers after release."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.ucode.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.pcm.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals_band.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.ucode.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.pcm.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "dev.fw.initvals_band.priv.ref.refcount",
+          "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+        ]
+      ],
+      "reason": "All four release_firmware calls are put operations on the respective firmware pointers accessed via dev->fw.*. The access paths start from parameter 1 (dev) and go through the firmware, fw_priv, kref, and refcount_t fields, consistent with the callee info. Type chain segment counts match access path segments. No inconsistencies found."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.ucode.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.pcm.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.initvals.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "dev.fw.initvals_band.priv.ref.refcount",
+        "b43legacy_wldev--b43legacy_firmware--firmware--fw_priv--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional and always succeeds (or is a safe no-op on NULL pointers). No retry scenario.",
+    "contract_summary": "This is a put wrapper that releases all firmware references held by the device structure (ucode, pcm, initvals, initvals_band) and sets the pointers to NULL. It must be called during device teardown to properly free the firmware. After calling, the firmware pointers must not be used again. The caller is responsible for ensuring no concurrent access to these pointers after release."
+  }
+}

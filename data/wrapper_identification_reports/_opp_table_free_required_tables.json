@@ -1,0 +1,52 @@
+{
+  "function_name": "_opp_table_free_required_tables",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "dev_pm_opp_put_opp_table is a put operation that never fails; retrying is meaningless and could cause double-release.",
+  "contract_summary": "This is a put wrapper that releases the references held by the OPP table on each required OPP table in the required_opp_tables array. After calling this function, the provided opp_table no longer owns any references to the required tables, and the array is freed. The function also removes the opp_table from the lazy list under the opp_table_lock. The caller must ensure that opp_table is no longer used after this call, as the required opp tables may be freed if their reference count drops to zero. This function is typically called during OPP table destruction.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "medium",
+      "reason": "Primary purpose is to release references on required opp tables via dev_pm_opp_put_opp_table; includes additional cleanup (kfree, list_del) but they are tightly coupled to the release operation.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "dev_pm_opp_put_opp_table is a put operation that never fails; retrying is meaningless and could cause double-release.",
+      "contract_summary": "This is a put wrapper that releases the references held by the OPP table on each required OPP table in the required_opp_tables array. After calling this function, the provided opp_table no longer owns any references to the required tables, and the array is freed. The function also removes the opp_table from the lazy list under the opp_table_lock. The caller must ensure that opp_table is no longer used after this call, as the required opp tables may be freed if their reference count drops to zero. This function is typically called during OPP table destruction."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "dev_pm_opp_put_opp_table"
+      ],
+      "reason": "Need the implementation of dev_pm_opp_put_opp_table to trace the refcount decrement operation and determine the member_access_path and member_type_chain from the struct opp_table parameter to the actual refcount field."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No reference count operations extracted (candidate list is empty), so nothing to validate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [],
+    "callee_count": 0,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "dev_pm_opp_put_opp_table is a put operation that never fails; retrying is meaningless and could cause double-release.",
+    "contract_summary": "This is a put wrapper that releases the references held by the OPP table on each required OPP table in the required_opp_tables array. After calling this function, the provided opp_table no longer owns any references to the required tables, and the array is freed. The function also removes the opp_table from the lazy list under the opp_table_lock. The caller must ensure that opp_table is no longer used after this call, as the required opp tables may be freed if their reference count drops to zero. This function is typically called during OPP table destruction."
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "function_name": "aie2_job_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ref.container.bos[i].refcount.refcount",
+      "kref--amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ref.container.out_fence.refcount.refcount",
+      "kref--amdxdna_sched_job--dma_fence--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdxdna_sched_job_cleanup",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.bos[i].refcount.refcount",
+      "member_type_chain": "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdxdna_sched_job_cleanup",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "job.bos[i].refcount.refcount",
+      "member_type_chain": "amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dma_fence_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "fence.refcount.refcount",
+      "member_type_chain": "dma_fence--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is only invoked when the refcount reaches zero; after that the object is freed and cannot be retried.",
+  "contract_summary": "This is the release callback (put wrapper) for the kref embedded in amdxdna_sched_job. It is called by kref_put when the last reference is dropped. Upon execution, it cleans up internal resources (via amdxdna_sched_job_cleanup), signals job completion counters, releases the optional out-fence, frees associated health data, and deallocates the job structure. After this function returns, the job must not be accessed. The caller must ensure that all references have been properly released; this function does not return any value or pass ownership.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is the kref release callback for amdxdna_sched_job; its primary purpose is to perform cleanup and free the object when the last reference is dropped. All operations (cleanup, signaling, fence put, memory free) are standard release actions, not extraneous business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is only invoked when the refcount reaches zero; after that the object is freed and cannot be retried.",
+      "contract_summary": "This is the release callback (put wrapper) for the kref embedded in amdxdna_sched_job. It is called by kref_put when the last reference is dropped. Upon execution, it cleans up internal resources (via amdxdna_sched_job_cleanup), signals job completion counters, releases the optional out-fence, frees associated health data, and deallocates the job structure. After this function returns, the job must not be accessed. The caller must ensure that all references have been properly released; this function does not return any value or pass ownership."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.container.bos[i].refcount.refcount",
+          "kref--amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.container.out_fence.refcount.refcount",
+          "kref--amdxdna_sched_job--dma_fence--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.container.bos[i].refcount.refcount",
+          "kref--amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ref.container.out_fence.refcount.refcount",
+          "kref--amdxdna_sched_job--dma_fence--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are supported: amdxdna_sched_job_cleanup puts the refcount of each GEM object in job->bos[i], and dma_fence_put() puts the refcount of job->out_fence. The access paths start from parameter ref (the kref), navigate through the containing structure (via container_of using field refcnt) to the job, then to the respective fields. The type chains and segment counts are consistent with the callee information and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ref.container.bos[i].refcount.refcount",
+        "kref--amdxdna_sched_job--drm_gem_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ref.container.out_fence.refcount.refcount",
+        "kref--amdxdna_sched_job--dma_fence--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is only invoked when the refcount reaches zero; after that the object is freed and cannot be retried.",
+    "contract_summary": "This is the release callback (put wrapper) for the kref embedded in amdxdna_sched_job. It is called by kref_put when the last reference is dropped. Upon execution, it cleans up internal resources (via amdxdna_sched_job_cleanup), signals job completion counters, releases the optional out-fence, frees associated health data, and deallocates the job structure. After this function returns, the job must not be accessed. The caller must ensure that all references have been properly released; this function does not return any value or pass ownership."
+  }
+}

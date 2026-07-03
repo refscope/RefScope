@@ -1,0 +1,99 @@
+{
+  "function_name": "blkdev_put_no_open",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bdev.bd_device.kobj.kref.refcount",
+      "block_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes and cannot fail; retrying would attempt a double-put, which is undefined and dangerous.",
+  "contract_summary": "Put-wrapper that releases a reference on a block_device by decrementing the refcount of its embedded device (via put_device). This corresponds to the release side of a get/put lifecycle (e.g., paired with blkdev_get_by_path or similar). After calling this function, the caller must not access the block_device pointer, as the underlying object may have been freed when the refcount reaches zero. No return value to check; the operation is unconditional.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's entire body is a single call to put_device, which decrements the refcount of the block_device's embedded device. There is no other logic, making it a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes and cannot fail; retrying would attempt a double-put, which is undefined and dangerous.",
+      "contract_summary": "Put-wrapper that releases a reference on a block_device by decrementing the refcount of its embedded device (via put_device). This corresponds to the release side of a get/put lifecycle (e.g., paired with blkdev_get_by_path or similar). After calling this function, the caller must not access the block_device pointer, as the underlying object may have been freed when the refcount reaches zero. No return value to check; the operation is unconditional."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bdev.bd_device.kobj.kref.refcount",
+          "block_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bdev.bd_device.kobj.kref.refcount",
+          "block_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_device(&bdev->bd_device) correctly decrements the refcount of the device embedded in the block device. The access path bdev.bd_device.kobj.kref.refcount matches the callee's path from its parameter (dev.kobj.kref.refcount), and the type chain block_device--device--kobject--kref--refcount_t is consistent with struct definitions. The path segment count (5) equals the type chain count (5)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bdev.bd_device.kobj.kref.refcount",
+        "block_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes and cannot fail; retrying would attempt a double-put, which is undefined and dangerous.",
+    "contract_summary": "Put-wrapper that releases a reference on a block_device by decrementing the refcount of its embedded device (via put_device). This corresponds to the release side of a get/put lifecycle (e.g., paired with blkdev_get_by_path or similar). After calling this function, the caller must not access the block_device pointer, as the underlying object may have been freed when the refcount reaches zero. No return value to check; the operation is unconditional."
+  }
+}

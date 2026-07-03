@@ -1,0 +1,138 @@
+{
+  "function_name": "DEFINE_SCMI_TRANSPORT_DRIVER",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "spdev.dev.kobj.kref.refcount",
+      "platform_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "device_set_of_node_from_dev",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "dev2.of_node.kobj.kref.refcount",
+      "member_type_chain": "device--device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "platform_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "device_set_of_node_from_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.of_node.kobj.kref.refcount",
+      "member_type_chain": "device--device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "device_set_of_node_from_dev",
+      "get_or_put": "get",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "dev2.of_node.kobj.kref.refcount",
+      "member_type_chain": "device--device_node--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "platform_device_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "pdev.dev.kobj.kref.refcount",
+      "member_type_chain": "platform_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "device_set_of_node_from_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.of_node.kobj.kref.refcount",
+      "member_type_chain": "device--device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is irreversible and always succeeds; after it the device is released and must not be used again.",
+  "contract_summary": "This is a put wrapper that releases a platform device by calling platform_device_unregister. It is intended to be used as a device release callback (e.g., with devm_add_action). After this function is called, the device must not be accessed. The function takes a void pointer assumed to be a valid platform_device pointer and returns void. No error handling is needed; the call always completes normally.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The defined function's sole purpose is to call platform_device_unregister, a put operation that releases a platform_device. There is no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is irreversible and always succeeds; after it the device is released and must not be used again.",
+      "contract_summary": "This is a put wrapper that releases a platform device by calling platform_device_unregister. It is intended to be used as a device release callback (e.g., with devm_add_action). After this function is called, the device must not be accessed. The function takes a void pointer assumed to be a valid platform_device pointer and returns void. No error handling is needed; the call always completes normally."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "spdev.dev.kobj.kref.refcount",
+          "platform_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function calls platform_device_unregister, not platform_device_put. The callee information only provides details for platform_device_put, so the extracted put operation is not directly supported by the code or callee info. Although the semantics may imply a put, the operation is not explicit in the given code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "spdev.dev.kobj.kref.refcount",
+          "platform_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a dev free helper that calls platform_device_unregister, which internally performs a reference put on the device. The critical variable spdev (parameter 1) is the platform_device whose refcount is decremented. The extraction correctly identifies this as a put operation."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "spdev.dev.kobj.kref.refcount",
+        "platform_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is irreversible and always succeeds; after it the device is released and must not be used again.",
+    "contract_summary": "This is a put wrapper that releases a platform device by calling platform_device_unregister. It is intended to be used as a device release callback (e.g., with devm_add_action). After this function is called, the device must not be accessed. The function takes a void pointer assumed to be a valid platform_device pointer and returns void. No error handling is needed; the call always completes normally."
+  }
+}

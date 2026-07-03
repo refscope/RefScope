@@ -1,0 +1,74 @@
+{
+  "function_name": "_drm_lease_held",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_master_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "master[0].refcount.refcount",
+      "member_type_chain": "drm_master--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_file_get_master",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "master.refcount.refcount",
+      "member_type_chain": "drm_master--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_master_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "master[0].refcount.refcount",
+      "member_type_chain": "drm_master--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_file_get_master",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "master.refcount.refcount",
+      "member_type_chain": "drm_master--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a refcount wrapper; retry semantics irrelevant.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to check lease status via _drm_lease_held_master; the get/put on master are merely temporary reference management to safely access the master, not the function's main goal. Significant business logic (lease check) is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a refcount wrapper; retry semantics irrelevant.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a refcount wrapper; retry semantics irrelevant.",
+    "contract_summary": ""
+  }
+}

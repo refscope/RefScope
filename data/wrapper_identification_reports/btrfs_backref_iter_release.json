@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_backref_iter_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "iter.path.nodes[i].refs.refs",
+      "btrfs_backref_iter--btrfs_path--extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_release_path",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "p.nodes[i].refs.refs",
+      "member_type_chain": "btrfs_path--extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Unconditional release operation; no failure path exists.",
+  "contract_summary": "Btrfs backref iterator release function: releases the embedded path (dropping references on extent buffers) and resets the iterator fields to an empty state. After this call, the iterator must not be used until reinitialized (e.g., via btrfs_backref_iter_alloc and btrfs_backref_iter_start). The caller is responsible for eventually calling this function to avoid leaking path resources.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the embedded path (which drops refcounts on extent buffers) and reset the iterator state; no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Unconditional release operation; no failure path exists.",
+      "contract_summary": "Btrfs backref iterator release function: releases the embedded path (dropping references on extent buffers) and resets the iterator fields to an empty state. After this call, the iterator must not be used until reinitialized (e.g., via btrfs_backref_iter_alloc and btrfs_backref_iter_start). The caller is responsible for eventually calling this function to avoid leaking path resources."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "iter.path.nodes[i].refs.refs",
+          "btrfs_backref_iter--btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "iter.path.nodes[i].refs.refs",
+          "btrfs_backref_iter--btrfs_path--extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls btrfs_release_path(iter->path), which is a put on the refcount fields in path->nodes[i]->refs. The access path starts from parameter iter (index 1), follows .path to the btrfs_path struct, then .nodes[i].refs.refs to the atomic_t. The type chain length matches the path segment count (5 each). The direction 'put' is consistent with callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "iter.path.nodes[i].refs.refs",
+        "btrfs_backref_iter--btrfs_path--extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Unconditional release operation; no failure path exists.",
+    "contract_summary": "Btrfs backref iterator release function: releases the embedded path (dropping references on extent buffers) and resets the iterator fields to an empty state. After this call, the iterator must not be used until reinitialized (e.g., via btrfs_backref_iter_alloc and btrfs_backref_iter_start). The caller is responsible for eventually calling this function to avoid leaking path resources."
+  }
+}

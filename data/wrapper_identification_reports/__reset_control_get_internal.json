@@ -1,0 +1,167 @@
+{
+  "function_name": "__reset_control_get_internal",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "rstc.refcnt.refcount",
+      "reset_control--kref--refcount_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "rstc.refcnt.refcount.refs",
+      "reset_control--kref--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_init",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure is due to memory allocation or module_get failure; these are not retryable in a standard kernel context. On the existing-object path, kref_get never fails.",
+  "contract_summary": "Get-or-create wrapper for a reset_control object. If an existing reset_control with the given index exists and is sharable (or an exclusive but not acquired request matches), the function increments its kref and returns it. Otherwise, it allocates a new reset_control, initializes its kref to 1 (via kref_init), and returns it. The caller receives an owned reference and must call reset_control_put() (or equivalent kref_put) to release it. The function properly handles errors by cleaning up partial allocations; on success it also takes a module reference and a device reference. The caller must check the return value for ERR_PTR errors.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to get or create a reset_control object, managing its reference count via kref_get (on existing) or kref_init (on new). The only non-refcount logic is minimal allocation and initialization, which is intrinsic to the get-or-create pattern.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure is due to memory allocation or module_get failure; these are not retryable in a standard kernel context. On the existing-object path, kref_get never fails.",
+      "contract_summary": "Get-or-create wrapper for a reset_control object. If an existing reset_control with the given index exists and is sharable (or an exclusive but not acquired request matches), the function increments its kref and returns it. Otherwise, it allocates a new reset_control, initializes its kref to 1 (via kref_init), and returns it. The caller receives an owned reference and must call reset_control_put() (or equivalent kref_put) to release it. The function properly handles errors by cleaning up partial allocations; on success it also takes a module reference and a device reference. The caller must check the return value for ERR_PTR errors."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rstc.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "rstc.refcnt.refcount.refs",
+          "reset_control--kref--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "rstc.refcnt.refcount",
+          "reset_control--kref--refcount_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "rstc.refcnt.refcount.refs",
+          "reset_control--kref--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are supported in the code: kref_get on existing rstc->refcnt and kref_init on new rstc->refcnt. Access paths from return value rstc to refcount fields are consistent with callee info and type chains match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "rstc.refcnt.refcount",
+        "reset_control--kref--refcount_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "rstc.refcnt.refcount.refs",
+        "reset_control--kref--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure is due to memory allocation or module_get failure; these are not retryable in a standard kernel context. On the existing-object path, kref_get never fails.",
+    "contract_summary": "Get-or-create wrapper for a reset_control object. If an existing reset_control with the given index exists and is sharable (or an exclusive but not acquired request matches), the function increments its kref and returns it. Otherwise, it allocates a new reset_control, initializes its kref to 1 (via kref_init), and returns it. The caller receives an owned reference and must call reset_control_put() (or equivalent kref_put) to release it. The function properly handles errors by cleaning up partial allocations; on success it also takes a module reference and a device reference. The caller must check the return value for ERR_PTR errors."
+  }
+}

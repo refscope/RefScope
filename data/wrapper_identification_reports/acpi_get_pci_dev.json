@@ -1,0 +1,99 @@
+{
+  "function_name": "acpi_get_pci_dev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "pci_dev.dev.kobj.kref.refcount",
+      "pci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (returning NULL) means no PCI device node was found in the list for that handle; this condition is not transient and retrying without any state change is unlikely to succeed.",
+  "contract_summary": "Get-wrapper: acquires a reference on the PCI device associated with the given ACPI handle. The caller must call pci_dev_put() on the returned pci_dev when done. Returns NULL if no PCI device is found; the caller must check the return value. The reference is obtained while holding the physical_node_lock, ensuring safe access to the list.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a pci_dev associated with an ACPI handle via get_device, and return the pci_dev to the caller. The lookup loop and locking are purely to safely perform the reference acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (returning NULL) means no PCI device node was found in the list for that handle; this condition is not transient and retrying without any state change is unlikely to succeed.",
+      "contract_summary": "Get-wrapper: acquires a reference on the PCI device associated with the given ACPI handle. The caller must call pci_dev_put() on the returned pci_dev when done. Returns NULL if no PCI device is found; the caller must check the return value. The reference is obtained while holding the physical_node_lock, ensuring safe access to the list."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pci_dev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "pci_dev.dev.kobj.kref.refcount",
+          "pci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "get_device is called on pn->dev, which is the device embedded in the returned pci_dev. The access path pci_dev.dev.kobj.kref.refcount correctly traces from the return variable to the refcount_t field. The type chain is consistent with struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "pci_dev.dev.kobj.kref.refcount",
+        "pci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (returning NULL) means no PCI device node was found in the list for that handle; this condition is not transient and retrying without any state change is unlikely to succeed.",
+    "contract_summary": "Get-wrapper: acquires a reference on the PCI device associated with the given ACPI handle. The caller must call pci_dev_put() on the returned pci_dev when done. Returns NULL if no PCI device is found; the caller must check the return value. The reference is obtained while holding the physical_node_lock, ensuring safe access to the list."
+  }
+}

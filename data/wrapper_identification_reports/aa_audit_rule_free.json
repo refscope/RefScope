@@ -1,0 +1,99 @@
+{
+  "function_name": "aa_audit_rule_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "vrule.label.count.count.refcount",
+      "aa_audit_rule--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "If rule is NULL, there is nothing to do; if label is an error pointer, the put is intentionally skipped. No failure mode exists that could benefit from retry.",
+  "contract_summary": "This function is a destructor for struct aa_audit_rule. It releases the reference held on the embedded rule->label by calling aa_put_label, then frees the rule structure. If the rule pointer is NULL, the function does nothing. If the label is an error pointer (e.g., from a failed allocation), the label release is skipped because error pointers do not represent valid references. The caller must not use the rule after this call. No return value is provided.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to free an aa_audit_rule and release its label reference via aa_put_label. The only non-refcount logic is the NULL/IS_ERR checks and kfree, which are standard in destructors.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "If rule is NULL, there is nothing to do; if label is an error pointer, the put is intentionally skipped. No failure mode exists that could benefit from retry.",
+      "contract_summary": "This function is a destructor for struct aa_audit_rule. It releases the reference held on the embedded rule->label by calling aa_put_label, then frees the rule structure. If the rule pointer is NULL, the function does nothing. If the label is an error pointer (e.g., from a failed allocation), the label release is skipped because error pointers do not represent valid references. The caller must not use the rule after this call. No return value is provided."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vrule.label.count.count.refcount",
+          "aa_audit_rule--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vrule.label.count.count.refcount",
+          "aa_audit_rule--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "The refcount operation aa_put_label(rule->label) is called on the label field of the rule structure, which is obtained from the function parameter vrule (cast to aa_audit_rule *). The access path vrule.label.count.count.refcount and type chain aa_audit_rule--aa_label--aa_label_count--kref--refcount_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "vrule.label.count.count.refcount",
+        "aa_audit_rule--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "If rule is NULL, there is nothing to do; if label is an error pointer, the put is intentionally skipped. No failure mode exists that could benefit from retry.",
+    "contract_summary": "This function is a destructor for struct aa_audit_rule. It releases the reference held on the embedded rule->label by calling aa_put_label, then frees the rule structure. If the rule pointer is NULL, the function does nothing. If the label is an error pointer (e.g., from a failed allocation), the label release is skipped because error pointers do not represent valid references. The caller must not use the rule after this call. No return value is provided."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_bo_unref",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bo[0].tbo.base.refcount.refcount",
+      "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_gem_object_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "obj.refcount.refcount",
+      "member_type_chain": "drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "drm_gem_object_put is a release operation; retrying after a successful put would cause a double-free. If the bo pointer was NULL, there is nothing to release.",
+  "contract_summary": "This function releases a reference to an amdgpu_bo by calling drm_gem_object_put on its embedded GEM object. After the call, the caller's pointer is set to NULL to prevent use-after-free. This is a standard put wrapper: it decrements the reference count, potentially freeing the object if the count reaches zero. The caller must not access the bo after calling this function. The operation is unconditional (if bo is non-NULL) and always succeeds. There are no retry semantics or special lock requirements.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to release a reference to an amdgpu_bo via drm_gem_object_put and nullify the caller's pointer. No other business logic exists.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "drm_gem_object_put is a release operation; retrying after a successful put would cause a double-free. If the bo pointer was NULL, there is nothing to release.",
+      "contract_summary": "This function releases a reference to an amdgpu_bo by calling drm_gem_object_put on its embedded GEM object. After the call, the caller's pointer is set to NULL to prevent use-after-free. This is a standard put wrapper: it decrements the reference count, potentially freeing the object if the count reaches zero. The caller must not access the bo after calling this function. The operation is unconditional (if bo is non-NULL) and always succeeds. There are no retry semantics or special lock requirements."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo[0].tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bo[0].tbo.base.refcount.refcount",
+          "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls drm_gem_object_put on &(*bo)->tbo.base, which decrements the refcount of the drm_gem_object inside the amdgpu_bo. The path bo[0].tbo.base.refcount.refcount and type chain amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t match the actual structure layout and the callee info. The put operation is on the object obtained from the parameter bo, and the parameter index and location are correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bo[0].tbo.base.refcount.refcount",
+        "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "drm_gem_object_put is a release operation; retrying after a successful put would cause a double-free. If the bo pointer was NULL, there is nothing to release.",
+    "contract_summary": "This function releases a reference to an amdgpu_bo by calling drm_gem_object_put on its embedded GEM object. After the call, the caller's pointer is set to NULL to prevent use-after-free. This is a standard put wrapper: it decrements the reference count, potentially freeing the object if the count reaches zero. The caller must not access the bo after calling this function. The operation is unconditional (if bo is non-NULL) and always succeeds. There are no retry semantics or special lock requirements."
+  }
+}

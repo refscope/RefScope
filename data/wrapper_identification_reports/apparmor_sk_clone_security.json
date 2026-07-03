@@ -1,0 +1,263 @@
+{
+  "function_name": "apparmor_sk_clone_security",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "sk.sk_security.label.count.count",
+      "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "newsk.sk_security.label.count.count.refcount",
+      "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "sk.sk_security.peer.count.count",
+      "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "newsk.sk_security.peer.count.count.refcount",
+      "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "sk.sk_security.peer_lastupdate.count.count",
+      "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "newsk.sk_security.peer_lastupdate.count.count.refcount",
+      "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_label_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.count.refcount.refs",
+      "member_type_chain": "aa_label--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_label_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.count.count",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_label_rcu",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "c.count.count",
+      "member_type_chain": "aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_put_label",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "l.count.count.refcount",
+      "member_type_chain": "aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path exists; the reference operations (get/put) are atomic and always succeed when called on valid labels (they are assumed to be alive).",
+  "contract_summary": "This function clones the AppArmor security context from a parent socket to a child socket during socket cloning. For each of the three label fields (label, peer, peer_lastupdate), it releases any existing reference in the child and acquires a new reference to the parent's label using aa_get_label_rcu, ensuring proper reference counting. The child socket's security context becomes a shallow copy with incremented refcounts. The caller must ensure the child socket's context is not concurrently modified during this operation and must eventually release the child's labels (e.g., via aa_put_label) when the socket is freed. If the parent and child already share the same pointer for a field, no refcount change occurs, preserving efficiency.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to clone the AppArmor security context from parent to child socket by managing reference counts on three label fields (label, peer, peer_lastupdate) using aa_get_label_rcu and aa_put_label. No other business logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path exists; the reference operations (get/put) are atomic and always succeed when called on valid labels (they are assumed to be alive).",
+      "contract_summary": "This function clones the AppArmor security context from a parent socket to a child socket during socket cloning. For each of the three label fields (label, peer, peer_lastupdate), it releases any existing reference in the child and acquires a new reference to the parent's label using aa_get_label_rcu, ensuring proper reference counting. The child socket's security context becomes a shallow copy with incremented refcounts. The caller must ensure the child socket's context is not concurrently modified during this operation and must eventually release the child's labels (e.g., via aa_put_label) when the socket is freed. If the parent and child already share the same pointer for a field, no refcount change occurs, preserving efficiency."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "sk.sk_security.label.count.count",
+          "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "newsk.sk_security.label.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "sk.sk_security.peer.count.count",
+          "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "newsk.sk_security.peer.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "sk.sk_security.peer_lastupdate.count.count",
+          "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "newsk.sk_security.peer_lastupdate.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "sk.sk_security.label.count.count",
+          "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "newsk.sk_security.label.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "sk.sk_security.peer.count.count",
+          "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "newsk.sk_security.peer.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "sk.sk_security.peer_lastupdate.count.count",
+          "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "newsk.sk_security.peer_lastupdate.count.count.refcount",
+          "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ],
+      "reason": "All six operations correctly reflect the refcount actions in apparmor_sk_clone_security: for each field (label, peer, peer_lastupdate), the source (sk) label gets a reference via aa_get_label_rcu, and the destination (newsk) label is put via aa_put_label. The access paths and type chains match the callee information and the struct definitions (sock->aa_sk_ctx->aa_label->...). Segment counts align: each path has the same number of segments as types in the chain."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "sk.sk_security.label.count.count",
+        "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "newsk.sk_security.label.count.count.refcount",
+        "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "sk.sk_security.peer.count.count",
+        "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "newsk.sk_security.peer.count.count.refcount",
+        "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "sk.sk_security.peer_lastupdate.count.count",
+        "sock--aa_sk_ctx--aa_label--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "newsk.sk_security.peer_lastupdate.count.count.refcount",
+        "sock--aa_sk_ctx--aa_label--aa_label_count--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path exists; the reference operations (get/put) are atomic and always succeed when called on valid labels (they are assumed to be alive).",
+    "contract_summary": "This function clones the AppArmor security context from a parent socket to a child socket during socket cloning. For each of the three label fields (label, peer, peer_lastupdate), it releases any existing reference in the child and acquires a new reference to the parent's label using aa_get_label_rcu, ensuring proper reference counting. The child socket's security context becomes a shallow copy with incremented refcounts. The caller must ensure the child socket's context is not concurrently modified during this operation and must eventually release the child's labels (e.g., via aa_put_label) when the socket is freed. If the parent and child already share the same pointer for a field, no refcount change occurs, preserving efficiency."
+  }
+}

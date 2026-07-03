@@ -1,0 +1,186 @@
+{
+  "function_name": "aa_alloc_profile",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.proxy.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.count.count.refcount.refs",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_get_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.parent.label.count.count",
+      "member_type_chain": "aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.label.proxy.count.count",
+      "member_type_chain": "aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_free_profile",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.count.count.refcount.refs",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is allocation and initialization of aa_profile; includes multiple non-refcount operations (kzalloc, policy_init, label_init, ruleset allocation, field assignments). Proxy handling is one part of initialization, not the main purpose. Not a refcount wrapper.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 9,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper",
+    "contract_summary": ""
+  }
+}

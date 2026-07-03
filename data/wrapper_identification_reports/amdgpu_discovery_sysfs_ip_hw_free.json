@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_discovery_sysfs_ip_hw_free",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ip_hw_id.hw_id_kset.kobj.kref.refcount",
+      "ip_hw_id--kset--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kobject_put is void and always succeeds; the function unconditionally releases all references. There is no failure path to retry.",
+  "contract_summary": "This is a release (put) wrapper that frees a collection of kobjects previously stored in a kset's list. It iterates the list under spinlock, removes each element, and releases its reference via kobject_put, then finally releases the kset's own kobject. After calling this function, the caller must not access any of the released kobjects or the parent kset. The function assumes the list is not concurrently modified (the spinlock provides mutual exclusion for list operations). It does not return any value and always completes all releases.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release kobject references: iterates over a list of kobjects and calls kobject_put on each, then releases the parent kset. The only non-refcount logic is minimal list manipulation (list_del_init, spin_lock/unlock) to safely iterate and remove elements.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kobject_put is void and always succeeds; the function unconditionally releases all references. There is no failure path to retry.",
+      "contract_summary": "This is a release (put) wrapper that frees a collection of kobjects previously stored in a kset's list. It iterates the list under spinlock, removes each element, and releases its reference via kobject_put, then finally releases the kset's own kobject. After calling this function, the caller must not access any of the released kobjects or the parent kset. The function assumes the list is not concurrently modified (the spinlock provides mutual exclusion for list operations). It does not return any value and always completes all releases."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ip_hw_id.hw_id_kset.kobj.kref.refcount",
+          "ip_hw_id--kset--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ip_hw_id.hw_id_kset.kobj.kref.refcount",
+          "ip_hw_id--kset--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The kobject_put call on &ip_hw_id->hw_id_kset.kobj corresponds to the extracted operation. The access path and type chain are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ip_hw_id.hw_id_kset.kobj.kref.refcount",
+        "ip_hw_id--kset--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kobject_put is void and always succeeds; the function unconditionally releases all references. There is no failure path to retry.",
+    "contract_summary": "This is a release (put) wrapper that frees a collection of kobjects previously stored in a kset's list. It iterates the list under spinlock, removes each element, and releases its reference via kobject_put, then finally releases the kset's own kobject. After calling this function, the caller must not access any of the released kobjects or the parent kset. The function assumes the list is not concurrently modified (the spinlock provides mutual exclusion for list operations). It does not return any value and always completes all releases."
+  }
+}

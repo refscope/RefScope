@@ -1,0 +1,231 @@
+{
+  "function_name": "batadv_pre_doit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "mesh_iface.dev_refcnt.refs",
+      "net_device--refcount_struct--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "vlan.refcount.refcount",
+      "batadv_meshif_vlan--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "mesh_iface.dev_refcnt.refs",
+      "net_device--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_netlink_get_hardif_from_info",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_netlink_get_meshif_from_info",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mesh_iface.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_get_vlan_from_info",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_netlink_get_hardif_from_info",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dev_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_netlink_get_meshif_from_info",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "mesh_iface.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_get_vlan_from_info",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_meshif_vlan--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the requested netlink object does not exist or invalid flags; retrying with the same input will yield the same failure.",
+  "contract_summary": "Acquire-reference wrapper for batman-adv genl operations. Based on internal flags (NEED_MESH, NEED_HARDIF, NEED_VLAN), this function obtains a reference to the corresponding kernel object (batadv_priv, batadv_hard_iface, or batadv_meshif_vlan) via dedicated get functions and stores the pointer in info->user_ptr[0] or info->user_ptr[1]. The caller of the genl operation (the actual doit handler) receives these references and must not free them; instead, a corresponding post_doit function (e.g., batadv_post_doit) must be called after the operation completes to properly release all acquired references. On any error, previously acquired references (e.g., to the mesh interface) are released via dev_put to avoid leaks. The caller must check the return value: non-zero indicates failure and user_ptr contents are invalid.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire and store references to batadv_priv, batadv_hard_iface, or batadv_meshif_vlan objects based on genl flags, passing them through info->user_ptr. The small validation logic ensures correct flag usage but is tightly coupled to the refcount operations.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the requested netlink object does not exist or invalid flags; retrying with the same input will yield the same failure.",
+      "contract_summary": "Acquire-reference wrapper for batman-adv genl operations. Based on internal flags (NEED_MESH, NEED_HARDIF, NEED_VLAN), this function obtains a reference to the corresponding kernel object (batadv_priv, batadv_hard_iface, or batadv_meshif_vlan) via dedicated get functions and stores the pointer in info->user_ptr[0] or info->user_ptr[1]. The caller of the genl operation (the actual doit handler) receives these references and must not free them; instead, a corresponding post_doit function (e.g., batadv_post_doit) must be called after the operation completes to properly release all acquired references. On any error, previously acquired references (e.g., to the mesh interface) are released via dev_put to avoid leaks. The caller must check the return value: non-zero indicates failure and user_ptr contents are invalid."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mesh_iface.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "mesh_iface.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "mesh_iface.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "vlan.refcount.refcount",
+          "batadv_meshif_vlan--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "mesh_iface.dev_refcnt.refs",
+          "net_device--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All four operations are supported by the code and callee information. The three get operations correspond to the callee functions that return new references for mesh_iface, hard_iface, and vlan. The put operation corresponds to dev_put on mesh_iface in the error path. Access paths and type chains match the code and callee definitions, with consistent segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "mesh_iface.dev_refcnt.refs",
+        "net_device--refcount_struct--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "vlan.refcount.refcount",
+        "batadv_meshif_vlan--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "mesh_iface.dev_refcnt.refs",
+        "net_device--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 4,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the requested netlink object does not exist or invalid flags; retrying with the same input will yield the same failure.",
+    "contract_summary": "Acquire-reference wrapper for batman-adv genl operations. Based on internal flags (NEED_MESH, NEED_HARDIF, NEED_VLAN), this function obtains a reference to the corresponding kernel object (batadv_priv, batadv_hard_iface, or batadv_meshif_vlan) via dedicated get functions and stores the pointer in info->user_ptr[0] or info->user_ptr[1]. The caller of the genl operation (the actual doit handler) receives these references and must not free them; instead, a corresponding post_doit function (e.g., batadv_post_doit) must be called after the operation completes to properly release all acquired references. On any error, previously acquired references (e.g., to the mesh interface) are released via dev_put to avoid leaks. The caller must check the return value: non-zero indicates failure and user_ptr contents are invalid."
+  }
+}

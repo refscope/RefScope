@@ -1,0 +1,115 @@
+{
+  "function_name": "__skb_ext_copy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "src.extensions.refcnt.refs",
+      "sk_buff--skb_ext--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc never fails; if the path condition is false (src has no extensions), there is nothing to copy and retry is meaningless.",
+  "contract_summary": "This function copies the skb_ext reference (if present) from src to dst, incrementing the refcount on the shared extension object. The caller obtains a dst that either shares the same extension (with an increased reference count) or has no extensions (if src had none). The caller must ensure that when dst is eventually freed, the extension is released appropriately (e.g., via skb_ext_put). This is a helper for reference-counted extension copying.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to copy the skb_ext pointer from src to dst while incrementing the refcount via refcount_inc. The only additional logic is copying the active_extensions flag, which is part of the copy semantics. No significant non-refcount logic exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc never fails; if the path condition is false (src has no extensions), there is nothing to copy and retry is meaningless.",
+      "contract_summary": "This function copies the skb_ext reference (if present) from src to dst, incrementing the refcount on the shared extension object. The caller obtains a dst that either shares the same extension (with an increased reference count) or has no extensions (if src had none). The caller must ensure that when dst is eventually freed, the extension is released appropriately (e.g., via skb_ext_put). This is a helper for reference-counted extension copying."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.extensions.refcnt.refs",
+          "sk_buff--skb_ext--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "src.extensions.refcnt.refs",
+          "sk_buff--skb_ext--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc(&ext->refcnt) is called on ext = src->extensions, which is a get operation on the skb_ext object. The access path correctly traces from parameter src through extensions, refcnt, refs. The segment count matches the type chain (4 segments, 4 types). The callee info confirms refcount_inc acts on parameter 1 (the refcount address) with path r.refs, which aligns with the path from ext (via refcnt.refs)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "src.extensions.refcnt.refs",
+        "sk_buff--skb_ext--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc never fails; if the path condition is false (src has no extensions), there is nothing to copy and retry is meaningless.",
+    "contract_summary": "This function copies the skb_ext reference (if present) from src to dst, incrementing the refcount on the shared extension object. The caller obtains a dst that either shares the same extension (with an increased reference count) or has no extensions (if src had none). The caller must ensure that when dst is eventually freed, the extension is released appropriately (e.g., via skb_ext_put). This is a helper for reference-counted extension copying."
+  }
+}

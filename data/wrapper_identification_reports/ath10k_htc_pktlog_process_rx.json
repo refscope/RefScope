@@ -1,0 +1,99 @@
+{
+  "function_name": "ath10k_htc_pktlog_process_rx",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_kfree_skb_any",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "After the put, the skb is freed or its reference reduced; retrying would be a use-after-free. The operation always executes and is final.",
+  "contract_summary": "This function is a put wrapper for an sk_buff. It consumes the caller's reference to the skb by calling dev_kfree_skb_any, which decrements the refcount and frees the skb if it reaches zero. After calling this function, the caller must not access the skb again. There is no return value and no need to check success; the operation is unconditional and always succeeds in that it either frees or decrements.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The primary purpose is to release the skb's reference count (put) via dev_kfree_skb_any, with only a minor tracing side effect.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "After the put, the skb is freed or its reference reduced; retrying would be a use-after-free. The operation always executes and is final.",
+      "contract_summary": "This function is a put wrapper for an sk_buff. It consumes the caller's reference to the skb by calling dev_kfree_skb_any, which decrements the refcount and frees the skb if it reaches zero. After calling this function, the caller must not access the skb again. There is no return value and no need to check success; the operation is unconditional and always succeeds in that it either frees or decrements."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "dev_kfree_skb_any is a put operation on skb (parameter index 2). The access path skb.users.refs and type chain sk_buff--refcount_t--atomic_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "After the put, the skb is freed or its reference reduced; retrying would be a use-after-free. The operation always executes and is final.",
+    "contract_summary": "This function is a put wrapper for an sk_buff. It consumes the caller's reference to the skb by calling dev_kfree_skb_any, which decrements the refcount and frees the skb if it reaches zero. After calling this function, the caller must not access the skb again. There is no return value and no need to check success; the operation is unconditional and always succeeds in that it either frees or decrements."
+  }
+}

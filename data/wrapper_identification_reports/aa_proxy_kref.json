@@ -1,0 +1,82 @@
+{
+  "function_name": "aa_proxy_kref",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_proxy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.label.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_proxy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.label.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_label--aa_label_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Release function is always called when refcount reaches zero; there is no failure path and retry would be meaningless.",
+  "contract_summary": "This is the release callback for the struct aa_proxy's embedded kref. It is invoked automatically by kref_put when the last reference is dropped. The function extracts the proxy and calls free_proxy, which decrements the label's reference count and frees the proxy. This function does not transfer ownership to any caller; it is the final step in the proxy's lifetime. Callers must not use the proxy after this call.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Function is a kref release callback that solely extracts the proxy object via container_of and calls free_proxy to release it. No other logic is present; it is a pure put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Release function is always called when refcount reaches zero; there is no failure path and retry would be meaningless.",
+      "contract_summary": "This is the release callback for the struct aa_proxy's embedded kref. It is invoked automatically by kref_put when the last reference is dropped. The function extracts the proxy and calls free_proxy, which decrements the label's reference count and frees the proxy. This function does not transfer ownership to any caller; it is the final step in the proxy's lifetime. Callers must not use the proxy after this call."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "proxy.label.count.count.refcount",
+          "aa_proxy--aa_label--aa_label_count--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The critical variable for the refcount operation is proxy (derived from the kref parameter via container_of), but the extraction incorrectly labels it as parameter 1. The access path starts from proxy, not from the parameter kref. Additionally, the operation is on the label's refcount, not on the kref passed to the function, making the assignment to parameter 1 incorrect. The extraction does not correctly identify the critical variable at the function interface."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function is a standard kref release callback that derives an aa_proxy from the kref and calls free_proxy. The critical variable for any refcount operation (the proxy.label.count.count.refcount) is not visible at the function interface—the function neither takes it as a parameter nor returns it. The candidate operation incorrectly assigns the put to 'parameter 1' (kref) while the actual refcount is on an internal member of the derived proxy object. Thus, this function is not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Release function is always called when refcount reaches zero; there is no failure path and retry would be meaningless.",
+    "contract_summary": "This is the release callback for the struct aa_proxy's embedded kref. It is invoked automatically by kref_put when the last reference is dropped. The function extracts the proxy and calls free_proxy, which decrements the label's reference count and frees the proxy. This function does not transfer ownership to any caller; it is the final step in the proxy's lifetime. Callers must not use the proxy after this call."
+  }
+}

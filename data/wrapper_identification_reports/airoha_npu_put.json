@@ -1,0 +1,99 @@
+{
+  "function_name": "airoha_npu_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "npu.dev.kobj.kref.refcount",
+      "airoha_npu--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations must be called exactly once per corresponding get; retrying would cause double-release and use-after-free.",
+  "contract_summary": "This is a put wrapper that releases two references: one on the kernel module via module_put and one on the device via put_device. It is the counterpart to a get operation that would have acquired these references. After calling this function, the caller must not access the npu object or its device pointer, as the references are released and the object may be freed. The function never fails and requires no return-value check; it must be paired exactly once with the corresponding get to maintain correct reference counting.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function solely performs two refcount decrement operations (module_put and put_device) with no other logic, making it a pure put-wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations must be called exactly once per corresponding get; retrying would cause double-release and use-after-free.",
+      "contract_summary": "This is a put wrapper that releases two references: one on the kernel module via module_put and one on the device via put_device. It is the counterpart to a get operation that would have acquired these references. After calling this function, the caller must not access the npu object or its device pointer, as the references are released and the object may be freed. The function never fails and requires no return-value check; it must be paired exactly once with the corresponding get to maintain correct reference counting."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "npu.dev.kobj.kref.refcount",
+          "airoha_npu--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "npu.dev.kobj.kref.refcount",
+          "airoha_npu--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "put_device(npu->dev) decrements the refcount on npu->dev.kobj.kref.refcount. The access path from parameter npu through fields dev, kobj, kref to refcount matches the callee's type chain airoha_npu--device--kobject--kref--refcount_t. Segment counts are equal (5 each). The operation direction 'put' is consistent with put_device being a put function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "npu.dev.kobj.kref.refcount",
+        "airoha_npu--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations must be called exactly once per corresponding get; retrying would cause double-release and use-after-free.",
+    "contract_summary": "This is a put wrapper that releases two references: one on the kernel module via module_put and one on the device via put_device. It is the counterpart to a get operation that would have acquired these references. After calling this function, the caller must not access the npu object or its device pointer, as the references are released and the object may be freed. The function never fails and requires no return-value check; it must be paired exactly once with the corresponding get to maintain correct reference counting."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "function_name": "__nfs4_find_lock_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "ret.ls_count.refs",
+      "nfs4_lock_state--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs only when no matching owner is found; this is a deterministic mismatch based on inputs (owner/owner2) and the current list state, not a transient error—retrying with the same inputs would not succeed unless external state changes, which is uncertain.",
+  "contract_summary": "This function performs a lookup of an nfs4_lock_state by matching one of two owners. If a match is found, it increments the object's reference count and returns a pointer to it. The caller must check the return value for NULL and ultimately release the reference (e.g., via nfs4_free_lock_state or a corresponding put) when the object is no longer needed. The function does not transfer ownership unconditionally; it only provides a borrowed reference that must be properly released. No special locking or cleanup semantics are imposed beyond the list iteration itself.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a lock state by owner and, if found, acquire a reference via refcount_inc. No other business logic; the list iteration and comparison are minimal and directly support the reference acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs only when no matching owner is found; this is a deterministic mismatch based on inputs (owner/owner2) and the current list state, not a transient error—retrying with the same inputs would not succeed unless external state changes, which is uncertain.",
+      "contract_summary": "This function performs a lookup of an nfs4_lock_state by matching one of two owners. If a match is found, it increments the object's reference count and returns a pointer to it. The caller must check the return value for NULL and ultimately release the reference (e.g., via nfs4_free_lock_state or a corresponding put) when the object is no longer needed. The function does not transfer ownership unconditionally; it only provides a borrowed reference that must be properly released. No special locking or cleanup semantics are imposed beyond the list iteration itself."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.ls_count.refs",
+          "nfs4_lock_state--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "ret.ls_count.refs",
+          "nfs4_lock_state--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc is called on &ret->ls_count, where ret is the pointer returned by the function. The access path from the return value (a pointer to nfs4_lock_state) to the refcount field is ret.ls_count.refs, which matches the chain nfs4_lock_state-->refcount_t-->atomic_t. The callee info confirms refcount_inc operates on a refcount_t with member path r.refs. This is consistent with the code and the function interface."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "ret.ls_count.refs",
+        "nfs4_lock_state--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs only when no matching owner is found; this is a deterministic mismatch based on inputs (owner/owner2) and the current list state, not a transient error—retrying with the same inputs would not succeed unless external state changes, which is uncertain.",
+    "contract_summary": "This function performs a lookup of an nfs4_lock_state by matching one of two owners. If a match is found, it increments the object's reference count and returns a pointer to it. The caller must check the return value for NULL and ultimately release the reference (e.g., via nfs4_free_lock_state or a corresponding put) when the object is no longer needed. The function does not transfer ownership unconditionally; it only provides a borrowed reference that must be properly released. No special locking or cleanup semantics are imposed beyond the list iteration itself."
+  }
+}

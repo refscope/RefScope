@@ -1,0 +1,58 @@
+{
+  "function_name": "calipso_opt_getattr",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "calipso_cache_check",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "secattr.cache.refcount.refs",
+      "member_type_chain": "netlbl_lsm_secattr--netlbl_lsm_cache--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "calipso_cache_check",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "secattr.cache.refcount.refs",
+      "member_type_chain": "netlbl_lsm_secattr--netlbl_lsm_cache--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not applicable — function is not a refcount wrapper.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is parsing a CALIPSO option and filling a security attribute structure. The refcount increment via calipso_cache_check is incidental to caching logic, not the main goal. The function includes format validation, DOI search, level setting, category mapping, and error handling — significant non-refcount business logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not applicable — function is not a refcount wrapper.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not applicable — function is not a refcount wrapper.",
+    "contract_summary": ""
+  }
+}

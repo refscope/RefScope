@@ -1,0 +1,155 @@
+{
+  "function_name": "afs_destroy_sbi",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "as.volume.ref",
+      "afs_super_info--afs_volume--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "as.cell.ref",
+      "afs_super_info--afs_cell--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "as.net_ns.__ns.ns.__ns_ref.refs",
+      "afs_super_info--net--namespace--ns_common--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "put_net",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "put_net",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "net.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "net--namespace--ns_common--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The only path where nothing happens is when as is NULL; retrying would not change the NULL condition.",
+  "contract_summary": "This is a destructor wrapper for struct afs_super_info. It releases the reference to the volume via afs_put_volume, unuses the cell via afs_unuse_cell, and puts the network namespace via put_net. After these puts, it frees the afs_super_info structure. The function is safe to call on NULL pointers (no-op). After a successful call, the as pointer becomes invalid and must not be dereferenced. Callers must have obtained the references to volume, cell, and net_ns before constructing the super_info, and this function ensures their proper release when the superblock is destroyed.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references on volume, cell, and net_ns held by the afs_super_info, then free the structure. All non-refcount logic is the null check and kfree, which are standard cleanup steps.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The only path where nothing happens is when as is NULL; retrying would not change the NULL condition.",
+      "contract_summary": "This is a destructor wrapper for struct afs_super_info. It releases the reference to the volume via afs_put_volume, unuses the cell via afs_unuse_cell, and puts the network namespace via put_net. After these puts, it frees the afs_super_info structure. The function is safe to call on NULL pointers (no-op). After a successful call, the as pointer becomes invalid and must not be dereferenced. Callers must have obtained the references to volume, cell, and net_ns before constructing the super_info, and this function ensures their proper release when the superblock is destroyed."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "as.volume.ref",
+          "afs_super_info--afs_volume--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "as.cell.ref",
+          "afs_super_info--afs_cell--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "as.net_ns.__ns.ns.__ns_ref.refs",
+          "afs_super_info--net--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "as.volume.ref",
+          "afs_super_info--afs_volume--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "as.cell.ref",
+          "afs_super_info--afs_cell--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "as.net_ns.__ns.ns.__ns_ref.refs",
+          "afs_super_info--net--namespace--ns_common--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "All three operations are consistent with the code: they correctly start from parameter 1 (as), traverse the fields where the put routines operate, and the access paths and type chains match the callee information and segment counts."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "as.volume.ref",
+        "afs_super_info--afs_volume--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "as.cell.ref",
+        "afs_super_info--afs_cell--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "as.net_ns.__ns.ns.__ns_ref.refs",
+        "afs_super_info--net--namespace--ns_common--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The only path where nothing happens is when as is NULL; retrying would not change the NULL condition.",
+    "contract_summary": "This is a destructor wrapper for struct afs_super_info. It releases the reference to the volume via afs_put_volume, unuses the cell via afs_unuse_cell, and puts the network namespace via put_net. After these puts, it frees the afs_super_info structure. The function is safe to call on NULL pointers (no-op). After a successful call, the as pointer becomes invalid and must not be dereferenced. Callers must have obtained the references to volume, cell, and net_ns before constructing the super_info, and this function ensures their proper release when the superblock is destroyed."
+  }
+}

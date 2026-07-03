@@ -1,0 +1,82 @@
+{
+  "function_name": "afs_replace_symlink",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "afs_put_symlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "symlink.ref.refs",
+      "member_type_chain": "afs_symlink--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "afs_put_symlink",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "symlink.ref.refs",
+      "member_type_chain": "afs_symlink--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation never fails; if the old symlink is NULL it is a no-op.",
+  "contract_summary": "This function atomically replaces the symlink pointer in a vnode (using RCU) with a new symlink, releasing the reference on the old one via afs_put_symlink. The caller must ensure that the new symlink already has a reference (the function does not take a new reference). After the call, the old symlink is released and must not be used again. This is a one-way lifecycle transition: the old reference is consumed and the new one is stored.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to replace the symlink pointer in vnode while releasing the old symlink reference via afs_put_symlink; the only non-refcount action is the rcu_replace_pointer assignment which is tightly coupled with the refcount management.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation never fails; if the old symlink is NULL it is a no-op.",
+      "contract_summary": "This function atomically replaces the symlink pointer in a vnode (using RCU) with a new symlink, releasing the reference on the old one via afs_put_symlink. The caller must ensure that the new symlink already has a reference (the function does not take a new reference). After the call, the old symlink is released and must not be used again. This is a one-way lifecycle transition: the old reference is consumed and the new one is stored."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "vnode.symlink.ref.refs",
+          "afs_vnode--afs_symlink--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'vnode.symlink.ref.refs' incorrectly starts from vnode (parameter 0) instead of from the critical variable 'old' (parameter 1). The refcount operation afs_put_symlink acts on the old symlink, so the access path should start at the symlink object (e.g., 'ref.refs'), not from vnode. The type chain also incorrectly includes afs_vnode. Therefore, the operation is not supported by the code's actual access path."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [],
+      "reason": "The function afs_replace_symlink performs a pointer swap and a put on the old symlink, but the old symlink is obtained internally from vnode->symlink, not from a parameter or return value. The candidate operation (put on parameter 1) is incorrect because it targets the new symlink, which is not put. The actual refcount operation is on a local variable, not on the function's interface. Therefore, the function is not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation never fails; if the old symlink is NULL it is a no-op.",
+    "contract_summary": "This function atomically replaces the symlink pointer in a vnode (using RCU) with a new symlink, releasing the reference on the old one via afs_put_symlink. The caller must ensure that the new symlink already has a reference (the function does not take a new reference). After the call, the old symlink is released and must not be used again. This is a one-way lifecycle transition: the old reference is consumed and the new one is stored."
+  }
+}

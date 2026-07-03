@@ -1,0 +1,418 @@
+{
+  "function_name": "aa_label_kref",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.parent.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].ns.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].attach.xmatch.count.refcount",
+      "member_type_chain": "aa_label--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.parent.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_ns--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.parent.label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_label--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].parent.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.parent.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_ns--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].parent.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.ns.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].ns.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].attach.xmatch.count.refcount",
+      "member_type_chain": "aa_label--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.parent.unconfined.label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_ns--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.parent.label.count.count",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.vec[i].label.proxy.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_proxy--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.attach.xmatch.count.refcount",
+      "member_type_chain": "aa_label--aa_profile--aa_attachment--aa_policydb--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.profile.label.vec[i].label.count.count",
+      "member_type_chain": "aa_label--aa_profile--aa_label--aa_profile--aa_label--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "label_free_switch",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.ns.unconfined.base.hname.count.refcount.refs",
+      "member_type_chain": "aa_label--aa_ns--aa_profile--aa_policy--counted_str--kref--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a destructor callback — once the refcount hits zero, the object is being freed; retrying is meaningless and would be a use-after-free.",
+  "contract_summary": "kref release callback for aa_label. When the label's reference count drops to zero, this function either directly frees the label (if it never lived) or schedules a deferred free via call_rcu. The caller is the kref subsystem — no explicit caller responsibility beyond proper kref_get/kref_put pairing. After this function runs, the label must not be accessed. This wrapper encapsulates the last decrement of the reference count and the cleanup of the label's internal resources (as handled by label_free_switch or label_free_rcu).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release an aa_label when its kref reaches zero, handling both direct free and RCU-based deferred free. All logic is about managing the label's lifecycle and releasing its resources.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a destructor callback — once the refcount hits zero, the object is being freed; retrying is meaningless and would be a use-after-free.",
+      "contract_summary": "kref release callback for aa_label. When the label's reference count drops to zero, this function either directly frees the label (if it never lived) or schedules a deferred free via call_rcu. The caller is the kref subsystem — no explicit caller responsibility beyond proper kref_get/kref_put pairing. After this function runs, the label must not be accessed. This wrapper encapsulates the last decrement of the reference count and the cleanup of the label's internal resources (as handled by label_free_switch or label_free_rcu)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "kref.count",
+          "kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The function aa_label_kref is a release callback for a kref. It does not perform a put operation on the kref parameter. The candidate operation would imply kref_put is called within the function, but the code only frees the label and does not modify kref.count. Therefore, the operation is not supported by the code."
+    },
+    "reevaluate": {
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "ResultList": [],
+      "reason": "The function aa_label_kref is a kref release callback (destructor). It does not perform any refcount get/put operation on its parameter or pass a critical variable to the caller. The candidate operation suggesting a put on the kref.count is incorrect because the function is called when the reference count reaches zero and does not modify it. The judge stage misclassified this as a wrapper; the function is a cleanup handler, not a reference-count wrapper/helper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 22,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a destructor callback — once the refcount hits zero, the object is being freed; retrying is meaningless and would be a use-after-free.",
+    "contract_summary": "kref release callback for aa_label. When the label's reference count drops to zero, this function either directly frees the label (if it never lived) or schedules a deferred free via call_rcu. The caller is the kref subsystem — no explicit caller responsibility beyond proper kref_get/kref_put pairing. After this function runs, the label must not be accessed. This wrapper encapsulates the last decrement of the reference count and the cleanup of the label's internal resources (as handled by label_free_switch or label_free_rcu)."
+  }
+}

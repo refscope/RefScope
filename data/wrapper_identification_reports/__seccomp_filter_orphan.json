@@ -1,0 +1,99 @@
+{
+  "function_name": "__seccomp_filter_orphan",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "orig.users.refs",
+      "seccomp_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "This is a put wrapper: the refcount decrement always occurs when the pointer is non-NULL; no failure path exists that would benefit from a retry. After the call, the caller must not use the filter pointer.",
+  "contract_summary": "Release a reference on a seccomp_filter. If the decremented refcount becomes zero, the function wakes any waiters on the filter's waitqueue and then recursively releases the previous filter in the chain (prev). This is a put operation: the caller must have held a valid reference before calling, and after the call the pointer is no longer safe to use. The function does not return a status; it always succeeds as long as the input pointer is not NULL.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the users refcount on a seccomp_filter; if it reaches zero, it triggers wakeup and recursively releases the predecessor filter. All other logic is directly tied to the release lifecycle.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "This is a put wrapper: the refcount decrement always occurs when the pointer is non-NULL; no failure path exists that would benefit from a retry. After the call, the caller must not use the filter pointer.",
+      "contract_summary": "Release a reference on a seccomp_filter. If the decremented refcount becomes zero, the function wakes any waiters on the filter's waitqueue and then recursively releases the previous filter in the chain (prev). This is a put operation: the caller must have held a valid reference before calling, and after the call the pointer is no longer safe to use. The function does not return a status; it always succeeds as long as the input pointer is not NULL."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig.users.refs",
+          "seccomp_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig.users.refs",
+          "seccomp_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &orig->users, decrementing the refcount; the access path orig.users.refs and type chain seccomp_filter--refcount_t--atomic_t are consistent with the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "orig.users.refs",
+        "seccomp_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "This is a put wrapper: the refcount decrement always occurs when the pointer is non-NULL; no failure path exists that would benefit from a retry. After the call, the caller must not use the filter pointer.",
+    "contract_summary": "Release a reference on a seccomp_filter. If the decremented refcount becomes zero, the function wakes any waiters on the filter's waitqueue and then recursively releases the previous filter in the chain (prev). This is a put operation: the caller must have held a valid reference before calling, and after the call the pointer is no longer safe to use. The function does not return a status; it always succeeds as long as the input pointer is not NULL."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "btintel_pcie_release_hdev",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "data.hdev.dev.kobj.kref.refcount",
+      "btintel_pcie_data--hci_dev--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hci_free_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdev.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hci_free_dev",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "hdev.dev.kobj.kref.refcount",
+      "member_type_chain": "hci_dev--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are final; after the refcount is decremented the object may be freed, so retry is not possible.",
+  "contract_summary": "Release/put wrapper: unregisters the HCI device and decrements its reference count via hci_free_dev. The local pointer in data->hdev is set to NULL to prevent reuse. After this call, the caller must not access the hdev object. This operation is irreversible and should only be called once per device lifecycle. No return value; no error paths.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release an HCI device by calling unregister and then freeing (put) the reference via hci_free_dev, with a NULL assignment to clear the pointer. No other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are final; after the refcount is decremented the object may be freed, so retry is not possible.",
+      "contract_summary": "Release/put wrapper: unregisters the HCI device and decrements its reference count via hci_free_dev. The local pointer in data->hdev is set to NULL to prevent reuse. After this call, the caller must not access the hdev object. This operation is irreversible and should only be called once per device lifecycle. No return value; no error paths."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.hdev.dev.kobj.kref.refcount",
+          "btintel_pcie_data--hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "data.hdev.dev.kobj.kref.refcount",
+          "btintel_pcie_data--hci_dev--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "hci_free_dev is called on hdev (from data->hdev), which performs a put on the refcount at hdev.dev.kobj.kref.refcount. The access path starts from parameter 1 (data) and correctly traverses .hdev.dev.kobj.kref.refcount. The type chain matches the struct hierarchy: btintel_pcie_data→hci_dev→device→kobject→kref→refcount_t. Segment counts match (6 each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "data.hdev.dev.kobj.kref.refcount",
+        "btintel_pcie_data--hci_dev--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are final; after the refcount is decremented the object may be freed, so retry is not possible.",
+    "contract_summary": "Release/put wrapper: unregisters the HCI device and decrements its reference count via hci_free_dev. The local pointer in data->hdev is set to NULL to prevent reuse. After this call, the caller must not access the hdev object. This operation is irreversible and should only be called once per device lifecycle. No return value; no error paths."
+  }
+}

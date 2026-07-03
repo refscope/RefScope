@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_put_root",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "root.refs.refs",
+      "btrfs_root--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_root_extent_buffers",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.commit_root.refs.refs",
+      "member_type_chain": "btrfs_root--extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "free_root_extent_buffers",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "root.node.refs.refs",
+      "member_type_chain": "btrfs_root--extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is unconditional (if root is non-NULL) and refcount_dec_and_test is safe; if the refcount reaches zero the object is freed, so retrying would be a double-free.",
+  "contract_summary": "btrfs_put_root is a put-wrapper that releases a reference on a btrfs_root. When the last reference is dropped (refcount becomes zero), it frees all internal resources (inodes xarray, delayed_nodes xarray, anon_dev, extent buffers) and kfrees the root itself. After calling this function, the caller must not access the root pointer. The function also removes the root from a debug leak list (only in DEBUG builds). This function represents the release lifecycle stage of the btrfs_root object.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to decrement the reference count of a btrfs_root and, when the count reaches zero, free the object and associated resources. The cleanup logic is inherent to the put operation and minimal.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is unconditional (if root is non-NULL) and refcount_dec_and_test is safe; if the refcount reaches zero the object is freed, so retrying would be a double-free.",
+      "contract_summary": "btrfs_put_root is a put-wrapper that releases a reference on a btrfs_root. When the last reference is dropped (refcount becomes zero), it frees all internal resources (inodes xarray, delayed_nodes xarray, anon_dev, extent buffers) and kfrees the root itself. After calling this function, the caller must not access the root pointer. The function also removes the root from a debug leak list (only in DEBUG builds). This function represents the release lifecycle stage of the btrfs_root object."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "root.refs.refs",
+          "btrfs_root--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&root->refs) is called on the first parameter root. The access path root.refs.refs correctly traces from parameter root to the atomic_t field: root->refs (refcount_t) then its internal refs (atomic_t). The type chain btrfs_root--refcount_t--atomic_t matches the actual struct definitions. The operation is a put (decrement and test). Segment counts (3 each) are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "root.refs.refs",
+        "btrfs_root--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is unconditional (if root is non-NULL) and refcount_dec_and_test is safe; if the refcount reaches zero the object is freed, so retrying would be a double-free.",
+    "contract_summary": "btrfs_put_root is a put-wrapper that releases a reference on a btrfs_root. When the last reference is dropped (refcount becomes zero), it frees all internal resources (inodes xarray, delayed_nodes xarray, anon_dev, extent buffers) and kfrees the root itself. After calling this function, the caller must not access the root pointer. The function also removes the root from a debug leak list (only in DEBUG builds). This function represents the release lifecycle stage of the btrfs_root object."
+  }
+}

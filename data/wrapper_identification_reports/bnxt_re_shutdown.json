@@ -1,0 +1,74 @@
+{
+  "function_name": "bnxt_re_shutdown",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "ib_unregister_device",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ib_dev.dev.kobj.kref.refcount",
+      "member_type_chain": "ib_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; retry does not apply.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function primarily unregisters and uninitializes an RDMA device; it does not primarily manage reference counts. Calls to ib_unregister_device and bnxt_re_dev_uninit are the main business logic, not a simple refcount get/put/set wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; retry does not apply.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; retry does not apply.",
+    "contract_summary": ""
+  }
+}

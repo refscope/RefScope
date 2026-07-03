@@ -1,0 +1,135 @@
+{
+  "function_name": "aca_alloc",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "set",
+      "return",
+      "0",
+      "aca.aca_refcnt.refs",
+      "ifacaddr6--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "parameter",
+      "1",
+      "f6i.fib6_ref.refs",
+      "fib6_info--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "fib6_info_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "f6i.fib6_ref.refs",
+      "member_type_chain": "fib6_info--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount_set operation is unconditional and never fails; the only potential failure is memory allocation (kzalloc), which is transient but the refcount wrapper itself does not govern retry behavior.",
+  "contract_summary": "Set-wrapper: allocates a new ifacaddr6 object and sets its reference count to 1 (initial reference). The caller receives ownership of the object with one reference and must release it via aca_put (or similar) when done. If allocation fails, returns NULL; the caller must check the return value. The object's aca_rt field also holds a reference on the associated fib6_info via fib6_info_hold, which will be released by the corresponding put on aca.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to allocate a new ifacaddr6 object and initialize its reference count to 1 via refcount_set, establishing the initial reference. The additional field assignments (address, timestamps, users) are standard initialization of the object's attributes.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount_set operation is unconditional and never fails; the only potential failure is memory allocation (kzalloc), which is transient but the refcount wrapper itself does not govern retry behavior.",
+      "contract_summary": "Set-wrapper: allocates a new ifacaddr6 object and sets its reference count to 1 (initial reference). The caller receives ownership of the object with one reference and must release it via aca_put (or similar) when done. If allocation fails, returns NULL; the caller must check the return value. The object's aca_rt field also holds a reference on the associated fib6_info via fib6_info_hold, which will be released by the corresponding put on aca."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "aca.aca_refcnt.refs",
+          "ifacaddr6--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "f6i.fib6_ref.refs",
+          "fib6_info--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "set",
+          "return",
+          "0",
+          "aca.aca_refcnt.refs",
+          "ifacaddr6--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "parameter",
+          "1",
+          "f6i.fib6_ref.refs",
+          "fib6_info--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_set on aca->aca_refcnt is correctly captured as 'set' on return variable aca, with access path aca.aca_refcnt.refs and type chain ifacaddr6--refcount_t--atomic_t. fib6_info_hold(f6i) increments the refcount on the input parameter f6i, captured as 'get' on parameter 1 with access path f6i.fib6_ref.refs and type chain fib6_info--refcount_t--atomic_t. Both operations are fully consistent with the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "set",
+        "return",
+        "0",
+        "aca.aca_refcnt.refs",
+        "ifacaddr6--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "parameter",
+        "1",
+        "f6i.fib6_ref.refs",
+        "fib6_info--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount_set operation is unconditional and never fails; the only potential failure is memory allocation (kzalloc), which is transient but the refcount wrapper itself does not govern retry behavior.",
+    "contract_summary": "Set-wrapper: allocates a new ifacaddr6 object and sets its reference count to 1 (initial reference). The caller receives ownership of the object with one reference and must release it via aca_put (or similar) when done. If allocation fails, returns NULL; the caller must check the return value. The object's aca_rt field also holds a reference on the associated fib6_info via fib6_info_hold, which will be released by the corresponding put on aca."
+  }
+}

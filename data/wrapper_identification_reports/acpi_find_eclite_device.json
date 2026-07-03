@@ -1,0 +1,99 @@
+{
+  "function_name": "acpi_find_eclite_device",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "opr_dev.adev.dev.kobj.kref.refcount",
+      "ishtp_opregion_dev--acpi_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "acpi_dev_get_first_match_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "acpi_dev_get_first_match_dev",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "return.dev.kobj.kref.refcount",
+      "member_type_chain": "acpi_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "The device either exists or does not in the ACPI namespace; retrying will not change the outcome.",
+  "contract_summary": "This function finds the INTC1035 ACPI device and acquires a reference to it via acpi_dev_get_first_match_dev. On success, the reference is stored in opr_dev->adev and ownership is transferred to the caller. The caller must call acpi_dev_put on opr_dev->adev when done with the device. On failure, returns -ENODEV and no reference is acquired.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to an acpi_device via acpi_dev_get_first_match_dev and store it in opr_dev->adev. The only other logic is a NULL check and error message.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "The device either exists or does not in the ACPI namespace; retrying will not change the outcome.",
+      "contract_summary": "This function finds the INTC1035 ACPI device and acquires a reference to it via acpi_dev_get_first_match_dev. On success, the reference is stored in opr_dev->adev and ownership is transferred to the caller. The caller must call acpi_dev_put on opr_dev->adev when done with the device. On failure, returns -ENODEV and no reference is acquired."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "opr_dev.adev.dev.kobj.kref.refcount",
+          "ishtp_opregion_dev--acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "opr_dev.adev.dev.kobj.kref.refcount",
+          "ishtp_opregion_dev--acpi_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "acpi_dev_get_first_match_dev returns a reference on an acpi_device which is stored into opr_dev->adev. The path and type chain match the callee's member-access path and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "opr_dev.adev.dev.kobj.kref.refcount",
+        "ishtp_opregion_dev--acpi_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "The device either exists or does not in the ACPI namespace; retrying will not change the outcome.",
+    "contract_summary": "This function finds the INTC1035 ACPI device and acquires a reference to it via acpi_dev_get_first_match_dev. On success, the reference is stored in opr_dev->adev and ownership is transferred to the caller. The caller must call acpi_dev_put on opr_dev->adev when done with the device. On failure, returns -ENODEV and no reference is acquired."
+  }
+}

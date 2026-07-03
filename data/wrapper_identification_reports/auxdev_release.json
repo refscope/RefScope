@@ -1,0 +1,107 @@
+{
+  "function_name": "auxdev_release",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "file.private_data.refcount.refcount",
+      "file--drm_dp_aux_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "unconditional put operation; retry is not applicable and double-put would be a bug.",
+  "contract_summary": "Release (put) wrapper for a drm_dp_aux_dev object. Called when the file is closed, it drops the reference held by the file's private data via kref_put. When the refcount reaches zero, the release callback release_drm_dp_aux_dev finalizes the object. After this function, the file's private_data must not be used; the caller must not call auxdev_release again on the same file.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to a drm_dp_aux_dev via kref_put; no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "unconditional put operation; retry is not applicable and double-put would be a bug.",
+      "contract_summary": "Release (put) wrapper for a drm_dp_aux_dev object. Called when the file is closed, it drops the reference held by the file's private data via kref_put. When the refcount reaches zero, the release callback release_drm_dp_aux_dev finalizes the object. After this function, the file's private_data must not be used; the caller must not call auxdev_release again on the same file."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "file.private_data.refcount.refcount",
+          "file--drm_dp_aux_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "file.private_data.refcount.refcount",
+          "file--drm_dp_aux_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_put is called on &aux_dev->refcount, which is derived from file->private_data as aux_dev. The access path file.private_data.refcount.refcount correctly traces from the second parameter (file) through private_data to aux_dev, then to the kref struct, and finally to the refcount_t field. The type chain matches the code and callee information, and the segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "file.private_data.refcount.refcount",
+        "file--drm_dp_aux_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "unconditional put operation; retry is not applicable and double-put would be a bug.",
+    "contract_summary": "Release (put) wrapper for a drm_dp_aux_dev object. Called when the file is closed, it drops the reference held by the file's private data via kref_put. When the refcount reaches zero, the release callback release_drm_dp_aux_dev finalizes the object. After this function, the file's private_data must not be used; the caller must not call auxdev_release again on the same file."
+  }
+}

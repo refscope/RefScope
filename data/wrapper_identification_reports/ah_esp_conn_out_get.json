@@ -1,0 +1,99 @@
+{
+  "function_name": "ah_esp_conn_out_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "cp.refcnt.refs",
+      "ip_vs_conn--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ip_vs_conn_out_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cp.refcnt.refs",
+      "member_type_chain": "ip_vs_conn--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ip_vs_conn_out_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "cp.refcnt.refs",
+      "member_type_chain": "ip_vs_conn--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the connection was not found in the hash table; retrying the same packet will not change the lookup result because the connection state is not altered by this function.",
+  "contract_summary": "Get-wrapper for an IPVS connection in the AH/ESP context (ISAKMP). Fills connection parameters from the packet and calls ip_vs_conn_out_get to look up an existing connection, acquiring a reference if found. Returns the connection with an incremented refcount, or NULL if no matching connection exists. The caller must pair this with ip_vs_conn_put to release the reference. The debug message is informational and does not affect the lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference-counted IPVS connection via ip_vs_conn_out_get; the only additional logic is parameter filling and a debug message, which is negligible.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the connection was not found in the hash table; retrying the same packet will not change the lookup result because the connection state is not altered by this function.",
+      "contract_summary": "Get-wrapper for an IPVS connection in the AH/ESP context (ISAKMP). Fills connection parameters from the packet and calls ip_vs_conn_out_get to look up an existing connection, acquiring a reference if found. Returns the connection with an incremented refcount, or NULL if no matching connection exists. The caller must pair this with ip_vs_conn_put to release the reference. The debug message is informational and does not affect the lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "cp.refcnt.refs",
+          "ip_vs_conn--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "cp.refcnt.refs",
+          "ip_vs_conn--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function returns cp from ip_vs_conn_out_get, which acquires a reference. The access path cp.refcnt.refs traces from the return variable to the refcount field, and the type chain ip_vs_conn--refcount_t--atomic_t is consistent with struct definitions. The segment count matches (3 segments each)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "cp.refcnt.refs",
+        "ip_vs_conn--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the connection was not found in the hash table; retrying the same packet will not change the lookup result because the connection state is not altered by this function.",
+    "contract_summary": "Get-wrapper for an IPVS connection in the AH/ESP context (ISAKMP). Fills connection parameters from the packet and calls ip_vs_conn_out_get to look up an existing connection, acquiring a reference if found. Returns the connection with an incremented refcount, or NULL if no matching connection exists. The caller must pair this with ip_vs_conn_put to release the reference. The debug message is informational and does not affect the lifecycle."
+  }
+}

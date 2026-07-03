@@ -1,0 +1,122 @@
+{
+  "function_name": "amdgpu_bo_list_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "2",
+      "refcount.refcount.refs",
+      "amdgpu_bo_list--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure means the handle does not exist or the object is already dying (refcount zero); retrying the same arguments will not succeed.",
+  "contract_summary": "This is a get-wrapper that looks up an amdgpu_bo_list by its handle ('id') within the file-private 'fpriv->bo_list_handles' IDR and conditionally acquires a reference via kref_get_unless_zero. On success, the function returns 0 and stores a pointer to the bo_list in *result, transferring a reference that the caller must later release with amdgpu_bo_list_put (or similar). On failure (handle not found or object already dying), it returns -ENOENT and sets *result to NULL; the caller must check the return value and must not use *result in the failure case. This function is RCU-safe: it holds rcu_read_lock during the lookup and only drops it after successfully taking the reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up an amdgpu_bo_list by handle and conditionally acquire a reference via kref_get_unless_zero; no other business logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure means the handle does not exist or the object is already dying (refcount zero); retrying the same arguments will not succeed.",
+      "contract_summary": "This is a get-wrapper that looks up an amdgpu_bo_list by its handle ('id') within the file-private 'fpriv->bo_list_handles' IDR and conditionally acquires a reference via kref_get_unless_zero. On success, the function returns 0 and stores a pointer to the bo_list in *result, transferring a reference that the caller must later release with amdgpu_bo_list_put (or similar). On failure (handle not found or object already dying), it returns -ENOENT and sets *result to NULL; the caller must check the return value and must not use *result in the failure case. This function is RCU-safe: it holds rcu_read_lock during the lookup and only drops it after successfully taking the reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "refcount.refcount.refs",
+          "amdgpu_bo_list--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operation is invalid: location is 'return' index 0, but the critical variable (the bo_list) is returned via parameter `result` (index 2), not via the return value. Additionally, the access path 'refcount.refcount.refs' has 3 segments but the type chain 'amdgpu_bo_list--kref--refcount_t--atomic_t' has 4 types, violating the segment count equality rule. The candidate does not correctly represent the code's refcount operation."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "refcount.refcount.refs",
+          "amdgpu_bo_list--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function is a pure get-wrapper: it looks up an amdgpu_bo_list by ID via idr_find, acquires a reference with kref_get_unless_zero, and returns the object to the caller through the `*result` parameter (index 2). The original candidate incorrectly used `'return'` as location because the function's return value is just an error code; the critical variable flows out via parameter. The access path `refcount.refcount.refs` and type chain `amdgpu_bo_list--kref--refcount_t--atomic_t` are correct (3 segments, 4 types). The check stage's rejection of the candidate's location was valid, but the function is clearly a reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "2",
+        "refcount.refcount.refs",
+        "amdgpu_bo_list--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure means the handle does not exist or the object is already dying (refcount zero); retrying the same arguments will not succeed.",
+    "contract_summary": "This is a get-wrapper that looks up an amdgpu_bo_list by its handle ('id') within the file-private 'fpriv->bo_list_handles' IDR and conditionally acquires a reference via kref_get_unless_zero. On success, the function returns 0 and stores a pointer to the bo_list in *result, transferring a reference that the caller must later release with amdgpu_bo_list_put (or similar). On failure (handle not found or object already dying), it returns -ENOENT and sets *result to NULL; the caller must check the return value and must not use *result in the failure case. This function is RCU-safe: it holds rcu_read_lock during the lookup and only drops it after successfully taking the reference."
+  }
+}

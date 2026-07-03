@@ -1,0 +1,150 @@
+{
+  "function_name": "cached_dir_offload_close",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "global",
+      "cfid",
+      "cfid.refcount.refcount",
+      "cached_fid--kref--refcount_t"
+    ],
+    [
+      "put",
+      "global",
+      "tcon",
+      "tcon.tc_count",
+      "cifs_tcon--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "cifs_put_tcon",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tcon.tc_count",
+      "member_type_chain": "cifs_tcon--int"
+    },
+    {
+      "callee_function_name": "close_cached_dir",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cfid.refcount.refcount",
+      "member_type_chain": "cached_fid--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "cifs_put_tcon",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tcon.tc_count",
+      "member_type_chain": "cifs_tcon--int"
+    },
+    {
+      "callee_function_name": "close_cached_dir",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "cfid.refcount.refcount",
+      "member_type_chain": "cached_fid--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations always succeed; retrying would cause double release and use-after-free.",
+  "contract_summary": "This function is a deferred put wrapper invoked via workqueue. It releases the reference on the cached_fid (via close_cached_dir) and the reference on the associated cifs_tcon (via cifs_put_tcon). After scheduling this work, the caller must not use the cfid or tcon objects. This represents the final release stage in asynchronous close offload.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "Primary purpose is to release two reference counts (cached_fid and cifs_tcon) via put functions, with only a WARN_ON debugging check.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations always succeed; retrying would cause double release and use-after-free.",
+      "contract_summary": "This function is a deferred put wrapper invoked via workqueue. It releases the reference on the cached_fid (via close_cached_dir) and the reference on the associated cifs_tcon (via cifs_put_tcon). After scheduling this work, the caller must not use the cfid or tcon objects. This represents the final release stage in asynchronous close offload."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "cfid",
+          "cfid.refcount.refcount",
+          "cached_fid--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "tcon",
+          "tcon.tc_count",
+          "cifs_tcon--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The extracted operations have access paths starting from local variables (cfid, tcon) derived via container_of, not from the function interface (parameter work or return). The instructions require the access path to begin from a critical variable at the function interface (parameter or return). Since neither cfid nor tcon is a parameter or return value of the function, the operations are inconsistent and cannot be accepted."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "cfid",
+          "cfid.refcount.refcount",
+          "cached_fid--kref--refcount_t"
+        ],
+        [
+          "put",
+          "global",
+          "tcon",
+          "tcon.tc_count",
+          "cifs_tcon--int"
+        ]
+      ],
+      "reason": "The function is a workqueue callback that releases references on both cfid and tcon. cfid is derived from the work parameter via container_of, and tcon is derived from cfid. Both refcount operations are the primary purpose of the function. The check was overly strict; the operations are correct and the function is a high-purity reference-count wrapper."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "global",
+        "cfid",
+        "cfid.refcount.refcount",
+        "cached_fid--kref--refcount_t"
+      ],
+      [
+        "put",
+        "global",
+        "tcon",
+        "tcon.tc_count",
+        "cifs_tcon--int"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations always succeed; retrying would cause double release and use-after-free.",
+    "contract_summary": "This function is a deferred put wrapper invoked via workqueue. It releases the reference on the cached_fid (via close_cached_dir) and the reference on the associated cifs_tcon (via cifs_put_tcon). After scheduling this work, the caller must not use the cfid or tcon objects. This represents the final release stage in asynchronous close offload."
+  }
+}

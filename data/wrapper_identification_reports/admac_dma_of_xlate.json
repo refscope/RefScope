@@ -1,0 +1,106 @@
+{
+  "function_name": "admac_dma_of_xlate",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "chan.device.ref.refcount",
+      "dma_chan--dma_device--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dma_get_slave_channel",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "chan.device.ref.refcount",
+      "member_type_chain": "dma_chan--dma_device--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dma_get_slave_channel",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "chan.device.ref.refcount",
+      "member_type_chain": "dma_chan--dma_device--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either an invalid device tree index or the channel is unavailable; retrying is unlikely to succeed.",
+  "contract_summary": "This wrapper translates a device tree phandle+args into a DMA channel and acquires a reference to it. The caller (DMA engine core) obtains a live reference to the channel and must release it with dma_release_channel when done. The function returns NULL if the index is out of bounds or if dma_get_slave_channel fails, so the caller must check the return value. There is no retry mechanism; failures are typically permanent for a given device tree specifier.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to translate a device tree specifier into a DMA channel and acquire a reference via dma_get_slave_channel. The bounds check is minimal and necessary for correctness.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either an invalid device tree index or the channel is unavailable; retrying is unlikely to succeed.",
+      "contract_summary": "This wrapper translates a device tree phandle+args into a DMA channel and acquires a reference to it. The caller (DMA engine core) obtains a live reference to the channel and must release it with dma_release_channel when done. The function returns NULL if the index is out of bounds or if dma_get_slave_channel fails, so the caller must check the return value. There is no retry mechanism; failures are typically permanent for a given device tree specifier."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "device.ref.refcount",
+          "dma_chan--dma_device--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The access path 'device.ref.refcount' has 3 segments but the type chain 'dma_chan--dma_device--kref--refcount_t' has 4 types. The number of path segments must equal the number of types in the chain. The correct path should include the initial variable, e.g., 'chan.device.ref.refcount' (4 segments) to match the type chain. Since the segment counts do not match, the operation is invalid."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "chan.device.ref.refcount",
+          "dma_chan--dma_device--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a DMA channel xlate wrapper: it returns a channel with a reference acquired via dma_get_slave_channel. The extracted operation is semantically correct (get, return, index 0). However, the check stage correctly rejected the path 'device.ref.refcount' because it has 3 segments but the type chain has 4 types. The path should include the initial variable name (the returned channel pointer). We correct the path to 'chan.device.ref.refcount' to match the type chain. The function has high purity as its sole purpose is to look up and return a channel with a reference."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "chan.device.ref.refcount",
+        "dma_chan--dma_device--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either an invalid device tree index or the channel is unavailable; retrying is unlikely to succeed.",
+    "contract_summary": "This wrapper translates a device tree phandle+args into a DMA channel and acquires a reference to it. The caller (DMA engine core) obtains a live reference to the channel and must release it with dma_release_channel when done. The function returns NULL if the index is out of bounds or if dma_get_slave_channel fails, so the caller must check the return value. There is no retry mechanism; failures are typically permanent for a given device tree specifier."
+  }
+}

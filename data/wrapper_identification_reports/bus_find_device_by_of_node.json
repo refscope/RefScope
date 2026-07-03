@@ -1,0 +1,99 @@
+{
+  "function_name": "bus_find_device_by_of_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "If no matching device is found (returns NULL), the caller can retry later, as the device may be added to the bus asynchronously.",
+  "contract_summary": "This is a get-wrapper for acquiring a reference on a device found by its device_node. It calls bus_find_device with the device_match_of_node predicate to locate the device and increment its reference count. The caller receives a pointer to the device with an additional reference; if no matching device exists, NULL is returned. Caller must put the device (e.g., via put_device()) when done. The caller should check for NULL and may retry if the device is expected to appear later.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a device by its of_node and return it with an incremented reference count via bus_find_device; no other logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "If no matching device is found (returns NULL), the caller can retry later, as the device may be added to the bus asynchronously.",
+      "contract_summary": "This is a get-wrapper for acquiring a reference on a device found by its device_node. It calls bus_find_device with the device_match_of_node predicate to locate the device and increment its reference count. The caller receives a pointer to the device with an additional reference; if no matching device exists, NULL is returned. Caller must put the device (e.g., via put_device()) when done. The caller should check for NULL and may retry if the device is expected to appear later."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "bus_find_device returns a device with incremented refcount. The access path from the return value 'dev' to dev->kobj.kref.refcount has 4 segments matching the 4 types in the chain. The operation is consistent with the callee information and the function code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "If no matching device is found (returns NULL), the caller can retry later, as the device may be added to the bus asynchronously.",
+    "contract_summary": "This is a get-wrapper for acquiring a reference on a device found by its device_node. It calls bus_find_device with the device_match_of_node predicate to locate the device and increment its reference count. The caller receives a pointer to the device with an additional reference; if no matching device exists, NULL is returned. Caller must put the device (e.g., via put_device()) when done. The caller should check for NULL and may retry if the device is expected to appear later."
+  }
+}

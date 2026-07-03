@@ -1,0 +1,99 @@
+{
+  "function_name": "calipso_doi_putdef",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "doi_def.refcount.refs",
+      "calipso_doi--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always succeeds when the pointer is non-NULL; no failure mode exists that would warrant a retry.",
+  "contract_summary": "This is a put wrapper that decrements the reference count of a calipso_doi object. If the count drops to zero, it invalidates the CALIPSO cache and schedules an RCU callback to free the object. The function is safe to call with a NULL pointer (no-op). After calling, the caller must not use the object unless it holds another reference. No return value to check; the caller releases ownership of one reference.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a reference to a calipso_doi object; the only additional logic is the necessary destruction sequence (cache invalidate and RCU free) when the refcount reaches zero. No unrelated business logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always succeeds when the pointer is non-NULL; no failure mode exists that would warrant a retry.",
+      "contract_summary": "This is a put wrapper that decrements the reference count of a calipso_doi object. If the count drops to zero, it invalidates the CALIPSO cache and schedules an RCU callback to free the object. The function is safe to call with a NULL pointer (no-op). After calling, the caller must not use the object unless it holds another reference. No return value to check; the caller releases ownership of one reference."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "doi_def.refcount.refs",
+          "calipso_doi--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "doi_def.refcount.refs",
+          "calipso_doi--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test is called on &doi_def->refcount, which decrements and tests the refcount of the input parameter. The access path from parameter 1 (doi_def) is doi_def.refcount.refs, and the type chain calipso_doi--refcount_t--atomic_t matches the struct definition. The segment count (3) matches type count (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "doi_def.refcount.refs",
+        "calipso_doi--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always succeeds when the pointer is non-NULL; no failure mode exists that would warrant a retry.",
+    "contract_summary": "This is a put wrapper that decrements the reference count of a calipso_doi object. If the count drops to zero, it invalidates the CALIPSO cache and schedules an RCU callback to free the object. The function is safe to call with a NULL pointer (no-op). After calling, the caller must not use the object unless it holds another reference. No return value to check; the caller releases ownership of one reference."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "arp_failure_discard",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "skb.users.refs",
+      "sk_buff--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kfree_skb",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "skb.users.refs",
+      "member_type_chain": "sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kfree_skb always consumes the reference; no failure return exists, so retry is not applicable.",
+  "contract_summary": "Put-wrapper that unconditionally releases one reference on the given sk_buff by calling kfree_skb. After this call, the caller must not access the skb pointer. This function is typically invoked on error paths to discard the skb. The error message is a side effect and does not affect ownership or lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the skb reference via kfree_skb; the pr_err is negligible debug output.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kfree_skb always consumes the reference; no failure return exists, so retry is not applicable.",
+      "contract_summary": "Put-wrapper that unconditionally releases one reference on the given sk_buff by calling kfree_skb. After this call, the caller must not access the skb pointer. This function is typically invoked on error paths to discard the skb. The error message is a side effect and does not affect ownership or lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "skb.users.refs",
+          "sk_buff--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kfree_skb(skb) is a put operation on parameter 1 (skb). The access path skb.users.refs correctly traces from the parameter through struct sk_buff field users (refcount_t) to its refs (atomic_t). Segment count (3) matches type chain length (3)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "skb.users.refs",
+        "sk_buff--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kfree_skb always consumes the reference; no failure return exists, so retry is not applicable.",
+    "contract_summary": "Put-wrapper that unconditionally releases one reference on the given sk_buff by calling kfree_skb. After this call, the caller must not access the skb pointer. This function is typically invoked on error paths to discard the skb. The error message is a side effect and does not affect ownership or lifecycle."
+  }
+}

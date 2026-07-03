@@ -1,0 +1,106 @@
+{
+  "function_name": "afs_free_fc",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_destroy_sbi",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "as.net_ns.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "afs_super_info--net--namespace--ns_common--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_destroy_sbi",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "as.volume.ref",
+      "member_type_chain": "afs_super_info--afs_volume--refcount_t"
+    },
+    {
+      "callee_function_name": "afs_destroy_sbi",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "as.cell.ref",
+      "member_type_chain": "afs_super_info--afs_cell--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_destroy_sbi",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "as.net_ns.__ns.ns.__ns_ref.refs",
+      "member_type_chain": "afs_super_info--net--namespace--ns_common--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "afs_destroy_sbi",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "as.volume.ref",
+      "member_type_chain": "afs_super_info--afs_volume--refcount_t"
+    },
+    {
+      "callee_function_name": "afs_destroy_sbi",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "as.cell.ref",
+      "member_type_chain": "afs_super_info--afs_cell--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function performs no retryable operation; it unconditionally releases references and frees memory. Failure in any put would indicate corruption, and retrying would be unsafe.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "reason": "The function is a cleanup/destructor that orchestrates the release of multiple references (volume, cell, key, superblock info) by calling several put/unuse functions and then frees the context structure itself. Its primary purpose is not to wrap a single reference-count operation but to tear down all resources associated with an afs filesystem context. This is a compound cleanup function, not a focused get/put/set wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function performs no retryable operation; it unconditionally releases references and frees memory. Failure in any put would indicate corruption, and retrying would be unsafe.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "high",
+    "functionality_list": [],
+    "callee_count": 4,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function performs no retryable operation; it unconditionally releases references and frees memory. Failure in any put would indicate corruption, and retrying would be unsafe.",
+    "contract_summary": ""
+  }
+}

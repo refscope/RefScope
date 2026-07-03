@@ -1,0 +1,106 @@
+{
+  "function_name": "bpf_lookup_user_key",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "bkey.key.usage.refs",
+      "bpf_key--key--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "key_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.usage.refs",
+      "member_type_chain": "key--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If lookup fails, the key may not exist or permission is denied; retrying without changing conditions is likely to fail again.",
+  "contract_summary": "Acquires a reference on a kernel key identified by serial and returns it wrapped in a struct bpf_key with has_ref=true. The caller must release this reference by calling bpf_key_put (or equivalent) when done. On failure (key not found, key error, or allocation failure) returns NULL; if lookup succeeds but allocation fails, the acquired key reference is properly released before returning NULL. Permission checking is deferred until the key is actually used.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on a user key via lookup_user_key and wrap it in a bpf_key struct. The only non-refcount logic is allocation of the wrapper and error handling.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If lookup fails, the key may not exist or permission is denied; retrying without changing conditions is likely to fail again.",
+      "contract_summary": "Acquires a reference on a kernel key identified by serial and returns it wrapped in a struct bpf_key with has_ref=true. The caller must release this reference by calling bpf_key_put (or equivalent) when done. On failure (key not found, key error, or allocation failure) returns NULL; if lookup succeeds but allocation fails, the acquired key reference is properly released before returning NULL. Permission checking is deferred until the key is actually used."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bkey.key.usage.refs",
+          "bpf_key--key--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Function bpf_lookup_user_key does not call any increment (get) operation on the key's refcount. The only reference count operation is key_put in the error path, which is a put, not a get. The candidate incorrectly claims a get on bkey.key.usage.refs at the return, which is unsupported by the code."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "bkey.key.usage.refs",
+          "bpf_key--key--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function acquires a reference to the key via lookup_user_key (which internally increments the key's refcount) and returns a bpf_key wrapper containing that key. The critical variable bkey is returned to the caller, transferring the reference. Although no direct refcount_inc is called in this function, the net effect is a get operation on the key's refcount via the return value. The candidate operation correctly models this reference transfer."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "bkey.key.usage.refs",
+        "bpf_key--key--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If lookup fails, the key may not exist or permission is denied; retrying without changing conditions is likely to fail again.",
+    "contract_summary": "Acquires a reference on a kernel key identified by serial and returns it wrapped in a struct bpf_key with has_ref=true. The caller must release this reference by calling bpf_key_put (or equivalent) when done. On failure (key not found, key error, or allocation failure) returns NULL; if lookup succeeds but allocation fails, the acquired key reference is properly released before returning NULL. Permission checking is deferred until the key is actually used."
+  }
+}

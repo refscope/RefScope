@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_next_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "next.refs.refs",
+      "btrfs_delayed_node--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": 1,
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_inc",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "refcount_inc always succeeds when executed; the function returns NULL only when no next node exists, which is not a refcount failure.",
+  "contract_summary": "This function is an iterator getter for the delayed node list. It returns the next delayed node in the list (starting from the provided node) with an incremented refcount, or NULL if no next node exists. The caller must release the returned node with a corresponding btrfs_release_delayed_node (or similar) when done. The function is used in iteration patterns where the caller typically calls this repeatedly to walk the list. Note: the caller must handle the case where the initial node may have been removed from the list; in that case, the function starts from the list head. The returned node is valid as long as the caller holds the reference; the caller should not modify the list while iterating (lock context may vary). The function itself holds the delayed_root->lock briefly to traverse the list safely.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to retrieve the next delayed node from the list and acquire a reference (refcount_inc) on it. The list traversal and locking are minimal and necessary to locate the object; the core semantic is a get operation that passes a reference-counted node to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "refcount_inc always succeeds when executed; the function returns NULL only when no next node exists, which is not a refcount failure.",
+      "contract_summary": "This function is an iterator getter for the delayed node list. It returns the next delayed node in the list (starting from the provided node) with an incremented refcount, or NULL if no next node exists. The caller must release the returned node with a corresponding btrfs_release_delayed_node (or similar) when done. The function is used in iteration patterns where the caller typically calls this repeatedly to walk the list. Note: the caller must handle the case where the initial node may have been removed from the list; in that case, the function starts from the list head. The returned node is valid as long as the caller holds the reference; the caller should not modify the list while iterating (lock context may vary). The function itself holds the delayed_root->lock briefly to traverse the list safely."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "next.refs.refs",
+          "btrfs_delayed_node--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The extracted operation is consistent: refcount_inc(&next->refs) is called on the local variable 'next' which is returned; the access path from the return value to the atomic counter is 'next.refs.refs' (3 segments), matching the type chain 'btrfs_delayed_node--refcount_t--atomic_t' (3 types). The callee information confirms that refcount_inc acts on a refcount_t with atomic field at .refs."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "next.refs.refs",
+        "btrfs_delayed_node--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "refcount_inc always succeeds when executed; the function returns NULL only when no next node exists, which is not a refcount failure.",
+    "contract_summary": "This function is an iterator getter for the delayed node list. It returns the next delayed node in the list (starting from the provided node) with an incremented refcount, or NULL if no next node exists. The caller must release the returned node with a corresponding btrfs_release_delayed_node (or similar) when done. The function is used in iteration patterns where the caller typically calls this repeatedly to walk the list. Note: the caller must handle the case where the initial node may have been removed from the list; in that case, the function starts from the list head. The returned node is valid as long as the caller holds the reference; the caller should not modify the list while iterating (lock context may vary). The function itself holds the delayed_root->lock briefly to traverse the list safely."
+  }
+}

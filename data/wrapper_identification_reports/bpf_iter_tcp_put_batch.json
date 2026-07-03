@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_iter_tcp_put_batch",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "iter.batch[cur_sk].sk.sk_refcnt.refs",
+      "bpf_tcp_iter_state--bpf_tcp_iter_batch_item--sock--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "sock_gen_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sk.sk_refcnt.refs",
+      "member_type_chain": "sock--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "sock_gen_put is an unconditional release; there is no failure path, so retry is irrelevant.",
+  "contract_summary": "Release (put) a batch of socket references stored in the iterator's batch array, saving each socket's cookie via sock_gen_cookie before the put so that the cookie can be used later to detect socket reuse. The function does not update iter->cur_sk, so the caller must advance the iterator state separately if needed. After this call, the socket references are released and must not be used again. The saved cookies allow the iterator to resume where it left off by matching cookies with newly obtained sockets.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to release references (put) on a batch of sockets, with a secondary operation of saving their cookies for future iteration. The core action is the sock_gen_put call, making it a focused put wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "sock_gen_put is an unconditional release; there is no failure path, so retry is irrelevant.",
+      "contract_summary": "Release (put) a batch of socket references stored in the iterator's batch array, saving each socket's cookie via sock_gen_cookie before the put so that the cookie can be used later to detect socket reuse. The function does not update iter->cur_sk, so the caller must advance the iterator state separately if needed. After this call, the socket references are released and must not be used again. The saved cookies allow the iterator to resume where it left off by matching cookies with newly obtained sockets."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "iter.batch[cur_sk].sk.sk_refcnt.refs",
+          "bpf_tcp_iter_state--bpf_tcp_iter_batch_item--sock--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "iter.batch[cur_sk].sk.sk_refcnt.refs",
+          "bpf_tcp_iter_state--bpf_tcp_iter_batch_item--sock--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "sock_gen_put is called on item->sk, where item is iter->batch[cur_sk]. The access path iter.batch[cur_sk].sk.sk_refcnt.refs correctly traces from parameter 1 (iter) to the refcount field, and the type chain matches the parameter type bpf_tcp_iter_state leading to atomic_t via bpf_tcp_iter_batch_item, sock, refcount_t. The operation direction 'put' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "iter.batch[cur_sk].sk.sk_refcnt.refs",
+        "bpf_tcp_iter_state--bpf_tcp_iter_batch_item--sock--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "sock_gen_put is an unconditional release; there is no failure path, so retry is irrelevant.",
+    "contract_summary": "Release (put) a batch of socket references stored in the iterator's batch array, saving each socket's cookie via sock_gen_cookie before the put so that the cookie can be used later to detect socket reuse. The function does not update iter->cur_sk, so the caller must advance the iterator state separately if needed. After this call, the socket references are released and must not be used again. The saved cookies allow the iterator to resume where it left off by matching cookies with newly obtained sockets."
+  }
+}

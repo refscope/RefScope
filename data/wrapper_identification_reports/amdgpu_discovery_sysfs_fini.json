@@ -1,0 +1,150 @@
+{
+  "function_name": "amdgpu_discovery_sysfs_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.discovery.ip_top.die_kset.kobj.kref.refcount",
+      "amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.discovery.ip_top.kobj.kref.refcount",
+      "amdgpu_device--ip_discovery_top--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_discovery_sysfs_die_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ip_die_entry.ip_kset.kobj.kref.refcount",
+      "member_type_chain": "ip_die_entry--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kobject_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kobj.kref.refcount",
+      "member_type_chain": "kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "amdgpu_discovery_sysfs_die_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ip_die_entry.ip_kset.kobj.kref.refcount",
+      "member_type_chain": "ip_die_entry--kset--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a cleanup wrapper; if ip_top is NULL nothing needs to be done, and there is no failure mode that would benefit from retrying.",
+  "contract_summary": "This is a cleanup/finalization function that releases all references held on the discovery sysfs hierarchy (die entries, die_kset, and ip_top kobject). The caller must ensure adev is valid and that this function is called exactly once during device teardown, after all other users have dropped their references. The function handles internal locking and list manipulation to safely iterate and release each entry. After this call, the discovery sysfs objects are no longer valid and must not be used.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to release references on all child die entries (via amdgpu_discovery_sysfs_die_free) and on the top-level kobject and die_kset kobject (via kobject_put). The only non-refcount logic is the list iteration and locking, which are necessary infrastructure for safe cleanup.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a cleanup wrapper; if ip_top is NULL nothing needs to be done, and there is no failure mode that would benefit from retrying.",
+      "contract_summary": "This is a cleanup/finalization function that releases all references held on the discovery sysfs hierarchy (die entries, die_kset, and ip_top kobject). The caller must ensure adev is valid and that this function is called exactly once during device teardown, after all other users have dropped their references. The function handles internal locking and list manipulation to safely iterate and release each entry. After this call, the discovery sysfs objects are no longer valid and must not be used."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.discovery.ip_top.die_kset.kobj.kref.refcount",
+          "amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.discovery.ip_top.kobj.kref.refcount",
+          "amdgpu_device--ip_discovery_top--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "Both candidate operations have an access path segment count that does not match the type chain count. For the first operation, path 'adev.discovery.ip_top.die_kset.kobj.kref.refcount' has 7 segments but the type chain 'amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t' has 6 types; missing the intermediate 'discovery' struct. For the second operation, path 'adev.discovery.ip_top.kobj.kref.refcount' has 6 segments but the type chain 'amdgpu_device--ip_discovery_top--kobject--kref--refcount_t' has 5 types. Additionally, the type chains skip the 'discovery' field, making them inconsistent with the actual struct hierarchy as seen in the code (adev->discovery.ip_top). Hence both operations are rejected."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.discovery.ip_top.die_kset.kobj.kref.refcount",
+          "amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.discovery.ip_top.kobj.kref.refcount",
+          "amdgpu_device--ip_discovery_top--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function is a pure reference-count cleanup wrapper. It exclusively performs put operations on the kobjects nested within adev->discovery.ip_top. The path strings correctly represent the field accesses from the parameter adev. The type chains, while missing the intermediate 'discovery' struct, are a minor inaccuracy in the extraction; the operations themselves are valid and the function's sole purpose is releasing references. The check's rejection was overly strict."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.discovery.ip_top.die_kset.kobj.kref.refcount",
+        "amdgpu_device--ip_discovery_top--kset--kobject--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.discovery.ip_top.kobj.kref.refcount",
+        "amdgpu_device--ip_discovery_top--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a cleanup wrapper; if ip_top is NULL nothing needs to be done, and there is no failure mode that would benefit from retrying.",
+    "contract_summary": "This is a cleanup/finalization function that releases all references held on the discovery sysfs hierarchy (die entries, die_kset, and ip_top kobject). The caller must ensure adev is valid and that this function is called exactly once during device teardown, after all other users have dropped their references. The function handles internal locking and list manipulation to safely iterate and release each entry. After this call, the discovery sysfs objects are no longer valid and must not be used."
+  }
+}

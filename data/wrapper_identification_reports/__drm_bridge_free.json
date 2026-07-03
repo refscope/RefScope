@@ -1,0 +1,52 @@
+{
+  "function_name": "__drm_bridge_free",
+  "end_flag": true,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [],
+  "analyzed_callee_snapshot": [],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The function is a callback invoked once when the refcount becomes zero. There is no caller checking a return value, and the operation is irreversible (object freed). Retry is meaningless.",
+  "contract_summary": "This function is the kref release callback for `struct drm_bridge`. It is called automatically when the last reference (via `kref_put`) is dropped. The function removes the bridge from the global list, invokes the driver's `->destroy` callback if defined, releases the reference to `next_bridge`, and frees the container memory. This release function finalizes the bridge lifecycle; after its execution, the bridge object is invalid and must not be accessed. Callers never invoke this function directly — it is passed as the second argument to `kref_put`.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is the kref release callback for struct drm_bridge. Its primary purpose is to clean up the bridge (remove from list, call destroy, put next_bridge, free container) when the reference count reaches zero. This makes it a reference-count lifecycle helper, but the logic includes multiple non-trivial cleanup steps beyond a simple put.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The function is a callback invoked once when the refcount becomes zero. There is no caller checking a return value, and the operation is irreversible (object freed). Retry is meaningless.",
+      "contract_summary": "This function is the kref release callback for `struct drm_bridge`. It is called automatically when the last reference (via `kref_put`) is dropped. The function removes the bridge from the global list, invokes the driver's `->destroy` callback if defined, releases the reference to `next_bridge`, and frees the container memory. This release function finalizes the bridge lifecycle; after its execution, the bridge object is invalid and must not be accessed. Callers never invoke this function directly — it is passed as the second argument to `kref_put`."
+    },
+    "extract": {
+      "need_more_info": true,
+      "requested_callees": [
+        "drm_bridge_put"
+      ],
+      "reason": "Need drm_bridge_put implementation to determine the exact refcount field it accesses (likely bridge->refcount) so we can construct the member_access_path from the function's interface parameter (kref) to the refcount being decremented on bridge->next_bridge."
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [],
+      "reason": "No candidate reference-count operations were provided to validate."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 0,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The function is a callback invoked once when the refcount becomes zero. There is no caller checking a return value, and the operation is irreversible (object freed). Retry is meaningless.",
+    "contract_summary": "This function is the kref release callback for `struct drm_bridge`. It is called automatically when the last reference (via `kref_put`) is dropped. The function removes the bridge from the global list, invokes the driver's `->destroy` callback if defined, releases the reference to `next_bridge`, and frees the container memory. This release function finalizes the bridge lifecycle; after its execution, the bridge object is invalid and must not be accessed. Callers never invoke this function directly — it is passed as the second argument to `kref_put`."
+  }
+}

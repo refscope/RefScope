@@ -1,0 +1,90 @@
+{
+  "function_name": "cache_miss_req_alloc",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "cache_key_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.ref.refcount",
+      "member_type_chain": "pcache_cache_key--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "cache_key_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "key.ref.refcount.refs",
+      "member_type_chain": "pcache_cache_key--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "cache_miss_req_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "backing_req.priv_data.ref.refcount",
+      "member_type_chain": "pcache_backing_dev_req--pcache_cache_key--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "cache_key_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "key.ref.refcount",
+      "member_type_chain": "pcache_cache_key--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "cache_key_alloc",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "key.ref.refcount.refs",
+      "member_type_chain": "pcache_cache_key--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "cache_miss_req_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "backing_req.priv_data.ref.refcount",
+      "member_type_chain": "pcache_backing_dev_req--pcache_cache_key--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — retry analysis not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is allocation and initialization of a cache miss request, including allocation of a backing device request and a cache key with an extra reference. The refcount operation (cache_key_get) is a step within broader setup logic, not the function's main purpose.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — retry analysis not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — retry analysis not applicable.",
+    "contract_summary": ""
+  }
+}

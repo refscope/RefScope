@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_mcast_get_bridge",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "upper.dev_refcnt.refs",
+      "net_device--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dev_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dev_hold",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "dev.dev_refcnt.refs",
+      "member_type_chain": "net_device--refcount_struct--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "dev_hold never fails; the only 'failure' is lookup returning NULL, which is not a refcount failure.",
+  "contract_summary": "Get-wrapper for the bridge master net_device. Acquires a reference (via dev_hold) on the bridge master found by traversing the upper master device chain from mesh_iface, and returns the device with an elevated refcount. Returns NULL if no bridge master exists; in that case no reference is taken. The caller must check the return value and call dev_put when done with the device. The function handles RCU synchronization internally, so the caller does not need to hold any locks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on the bridge master net_device via dev_hold after looking it up; the lookup is minimal and the refcount increment is the main side effect.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "dev_hold never fails; the only 'failure' is lookup returning NULL, which is not a refcount failure.",
+      "contract_summary": "Get-wrapper for the bridge master net_device. Acquires a reference (via dev_hold) on the bridge master found by traversing the upper master device chain from mesh_iface, and returns the device with an elevated refcount. Returns NULL if no bridge master exists; in that case no reference is taken. The caller must check the return value and call dev_put when done with the device. The function handles RCU synchronization internally, so the caller does not need to hold any locks."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "upper.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "upper.dev_refcnt.refs",
+          "net_device--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "dev_hold is called on the local variable 'upper' which is returned by the function (return value). The access path 'upper.dev_refcnt.refs' traces from the returned pointer to the refcount field: 'upper' (type net_device) -> dev_refcnt (type refcount_struct) -> refs (type atomic_t). The type chain 'net_device--refcount_struct--atomic_t' matches exactly. The operation is a get on the returned object."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "upper.dev_refcnt.refs",
+        "net_device--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "dev_hold never fails; the only 'failure' is lookup returning NULL, which is not a refcount failure.",
+    "contract_summary": "Get-wrapper for the bridge master net_device. Acquires a reference (via dev_hold) on the bridge master found by traversing the upper master device chain from mesh_iface, and returns the device with an elevated refcount. Returns NULL if no bridge master exists; in that case no reference is taken. The caller must check the return value and call dev_put when done with the device. The function handles RCU synchronization internally, so the caller does not need to hold any locks."
+  }
+}

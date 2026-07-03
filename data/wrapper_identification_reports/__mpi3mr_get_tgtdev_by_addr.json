@@ -1,0 +1,99 @@
+{
+  "function_name": "__mpi3mr_get_tgtdev_by_addr",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tgtdev.ref_count.refcount",
+      "mpi3mr_tgt_dev--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mpi3mr_tgtdev_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.ref_count.refcount",
+      "member_type_chain": "mpi3mr_tgt_dev--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If the device is not found, the lookup fails; retrying without changing the search key would also fail. The caller must handle the NULL case.",
+  "contract_summary": "This is a get-wrapper that searches the target device list for a device matching the given SAS address and HBA port while the caller holds tgtdev_lock. If found, it increments the device's reference count (via mpi3mr_tgtdev_get) and returns the pointer. The caller must check the return value for NULL; if non-NULL, the caller owns a reference and must release it with a matching put (mpi3mr_tgtdev_put) when done. The lock must be held for the duration of the lookup, but the reference count increment is safe to perform while the lock is held.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to look up a target device by SAS address and HBA port, then acquire a reference (increment refcount) via mpi3mr_tgtdev_get. The list traversal is minimal lookup logic; the core semantic is reference acquisition.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If the device is not found, the lookup fails; retrying without changing the search key would also fail. The caller must handle the NULL case.",
+      "contract_summary": "This is a get-wrapper that searches the target device list for a device matching the given SAS address and HBA port while the caller holds tgtdev_lock. If found, it increments the device's reference count (via mpi3mr_tgtdev_get) and returns the pointer. The caller must check the return value for NULL; if non-NULL, the caller owns a reference and must release it with a matching put (mpi3mr_tgtdev_put) when done. The lock must be held for the duration of the lookup, but the reference count increment is safe to perform while the lock is held."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tgtdev.ref_count.refcount",
+          "mpi3mr_tgt_dev--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function calls mpi3mr_tgtdev_get(tgtdev) on the found device and returns tgtdev. The access path tgtdev.ref_count.refcount matches the callee's path s.ref_count.refcount, with the critical variable being the returned tgtdev. The type chain is consistent with struct mpi3mr_tgt_dev having a kref field ref_count containing refcount_t. Segment count matches (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tgtdev.ref_count.refcount",
+        "mpi3mr_tgt_dev--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If the device is not found, the lookup fails; retrying without changing the search key would also fail. The caller must handle the NULL case.",
+    "contract_summary": "This is a get-wrapper that searches the target device list for a device matching the given SAS address and HBA port while the caller holds tgtdev_lock. If found, it increments the device's reference count (via mpi3mr_tgtdev_get) and returns the pointer. The caller must check the return value for NULL; if non-NULL, the caller owns a reference and must release it with a matching put (mpi3mr_tgtdev_put) when done. The lock must be held for the duration of the lookup, but the reference count increment is safe to perform while the lock is held."
+  }
+}

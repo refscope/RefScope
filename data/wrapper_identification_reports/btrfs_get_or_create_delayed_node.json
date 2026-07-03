@@ -1,0 +1,159 @@
+{
+  "function_name": "btrfs_get_or_create_delayed_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_struct--atomic_t"
+    ],
+    [
+      "set",
+      "return",
+      "0",
+      "node.refs.refs",
+      "btrfs_delayed_node--refcount_struct--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "refcount_set",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_get_delayed_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "node.refs.refs",
+      "member_type_chain": "btrfs_delayed_node--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Memory allocation failure is likely to recur under same conditions; caller should handle error rather than retry.",
+  "contract_summary": "Get-or-create wrapper for 'struct btrfs_delayed_node'. It either acquires an existing reference via btrfs_get_delayed_node (incrementing refcount) or allocates a new node with an initial refcount of 2 (one for the inode cache and one returned to the caller). The caller receives a pointer to the delayed node with a reference held and must release it with btrfs_put_delayed_node when done. The function handles caching in the inode and insertion into the root's delayed_nodes radix tree; the caller does not manage those. On memory allocation failure, returns ERR_PTR(-ENOMEM); caller must check IS_ERR. The function internally retries on a race during insertion, so the caller only gets a valid node or an error.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to return a reference-counted delayed node via get-or-create; the function manages refcount (get/increment for existing, set for new) but also includes allocation, initialization, and xarray insertion logic.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Memory allocation failure is likely to recur under same conditions; caller should handle error rather than retry.",
+      "contract_summary": "Get-or-create wrapper for 'struct btrfs_delayed_node'. It either acquires an existing reference via btrfs_get_delayed_node (incrementing refcount) or allocates a new node with an initial refcount of 2 (one for the inode cache and one returned to the caller). The caller receives a pointer to the delayed node with a reference held and must release it with btrfs_put_delayed_node when done. The function handles caching in the inode and insertion into the root's delayed_nodes radix tree; the caller does not manage those. On memory allocation failure, returns ERR_PTR(-ENOMEM); caller must check IS_ERR. The function internally retries on a race during insertion, so the caller only gets a valid node or an error."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_struct--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_struct--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_struct--atomic_t"
+        ],
+        [
+          "set",
+          "return",
+          "0",
+          "node.refs.refs",
+          "btrfs_delayed_node--refcount_struct--atomic_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the function code. The 'get' corresponds to the path where btrfs_get_delayed_node returns an existing node with an incremented refcount. The 'set' corresponds to the creation path where refcount_set(&node->refs, 2) initializes the refcount on the new node before returning it. The access path 'node.refs.refs' starts from the returned pointer, and the type chain 'btrfs_delayed_node--refcount_struct--atomic_t' matches the callee information and struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_struct--atomic_t"
+      ],
+      [
+        "set",
+        "return",
+        "0",
+        "node.refs.refs",
+        "btrfs_delayed_node--refcount_struct--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Memory allocation failure is likely to recur under same conditions; caller should handle error rather than retry.",
+    "contract_summary": "Get-or-create wrapper for 'struct btrfs_delayed_node'. It either acquires an existing reference via btrfs_get_delayed_node (incrementing refcount) or allocates a new node with an initial refcount of 2 (one for the inode cache and one returned to the caller). The caller receives a pointer to the delayed node with a reference held and must release it with btrfs_put_delayed_node when done. The function handles caching in the inode and insertion into the root's delayed_nodes radix tree; the caller does not manage those. On memory allocation failure, returns ERR_PTR(-ENOMEM); caller must check IS_ERR. The function internally retries on a race during insertion, so the caller only gets a valid node or an error."
+  }
+}

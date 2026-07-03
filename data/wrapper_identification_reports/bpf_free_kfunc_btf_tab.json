@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_free_kfunc_btf_tab",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tab.descs.btf.refcnt.refs",
+      "bpf_kfunc_btf_tab--bpf_kfunc_btf_tab_desc--btf--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "btf_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "btf.refcnt.refs",
+      "member_type_chain": "btf--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations release references; failure indicates a bug (e.g., underflow) not a transient condition, so retry is meaningless.",
+  "contract_summary": "This is a put/free wrapper that releases reference counts on the module and BTF objects stored in the table by decrementing their refcounts via module_put and btf_put, then frees the table itself. After this call, the table pointer becomes invalid and must not be used again. The caller must ensure that no other references to the table or its contained objects remain, and that this function is called exactly once when the table is fully released.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references (module_put, btf_put) and free the table container; no other business logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations release references; failure indicates a bug (e.g., underflow) not a transient condition, so retry is meaningless.",
+      "contract_summary": "This is a put/free wrapper that releases reference counts on the module and BTF objects stored in the table by decrementing their refcounts via module_put and btf_put, then frees the table itself. After this call, the table pointer becomes invalid and must not be used again. The caller must ensure that no other references to the table or its contained objects remain, and that this function is called exactly once when the table is fully released."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tab.descs.btf.refcnt.refs",
+          "bpf_kfunc_btf_tab--bpf_kfunc_btf_tab_desc--btf--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tab.descs.btf.refcnt.refs",
+          "bpf_kfunc_btf_tab--bpf_kfunc_btf_tab_desc--btf--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The candidate put operation correctly represents the call to btf_put on the btf pointer obtained from tab->descs[.].btf. The access path starts from parameter 1 (tab) and goes through descs.btf.refcnt.refs, matching the callee's type chain. The segment count (5) matches the number of types in the chain. The direction 'put' is consistent with btf_put being a refcount decrement function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tab.descs.btf.refcnt.refs",
+        "bpf_kfunc_btf_tab--bpf_kfunc_btf_tab_desc--btf--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations release references; failure indicates a bug (e.g., underflow) not a transient condition, so retry is meaningless.",
+    "contract_summary": "This is a put/free wrapper that releases reference counts on the module and BTF objects stored in the table by decrementing their refcounts via module_put and btf_put, then frees the table itself. After this call, the table pointer becomes invalid and must not be used again. The caller must ensure that no other references to the table or its contained objects remain, and that this function is called exactly once when the table is fully released."
+  }
+}

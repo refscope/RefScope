@@ -1,0 +1,99 @@
+{
+  "function_name": "acpiphp_grab_context",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "context.func.parent.ref.refcount",
+      "acpiphp_context--acpiphp_func--acpiphp_bridge--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_bridge",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bridge.ref.refcount",
+      "member_type_chain": "acpiphp_bridge--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "get_bridge",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bridge.ref.refcount",
+      "member_type_chain": "acpiphp_bridge--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates either the context does not exist or the bridge is being removed; both conditions are permanent or transient only at device removal, so retrying is pointless.",
+  "contract_summary": "This is a get-wrapper that yields a valid acpiphp_context with the associated bridge guaranteed alive (by holding a bridge reference). It acquires the context by calling acpiphp_get_context, checks that the parent bridge is not going away, and if valid, takes a bridge reference via get_bridge before releasing the temporary context reference. The caller receives a context pointer and implicitly owns a bridge reference. The caller must eventually release the bridge reference (e.g., via put_bridge or acpiphp_put_context on the context). Returns NULL if the context does not exist or the bridge is dying, which must be checked by the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference on the bridge (via get_bridge) and return the context pointer. The only non-refcount logic is the is_going_away check and put_context call, which are part of safe reference management.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates either the context does not exist or the bridge is being removed; both conditions are permanent or transient only at device removal, so retrying is pointless.",
+      "contract_summary": "This is a get-wrapper that yields a valid acpiphp_context with the associated bridge guaranteed alive (by holding a bridge reference). It acquires the context by calling acpiphp_get_context, checks that the parent bridge is not going away, and if valid, takes a bridge reference via get_bridge before releasing the temporary context reference. The caller receives a context pointer and implicitly owns a bridge reference. The caller must eventually release the bridge reference (e.g., via put_bridge or acpiphp_put_context on the context). Returns NULL if the context does not exist or the bridge is dying, which must be checked by the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "context.func.parent.ref.refcount",
+          "acpiphp_context--acpiphp_func--acpiphp_bridge--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "context.func.parent.ref.refcount",
+          "acpiphp_context--acpiphp_func--acpiphp_bridge--kref--refcount_t"
+        ]
+      ],
+      "reason": "get_bridge(context->func.parent) increments the refcount on the bridge object reachable via the returned context. The access path context.func.parent.ref.refcount correctly traces from the return value to the refcount field, and the type chain acpiphp_context--acpiphp_func--acpiphp_bridge--kref--refcount_t aligns with the 5 access path segments. The call to acpiphp_put_context(context) after get_bridge does not affect this get operation."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "context.func.parent.ref.refcount",
+        "acpiphp_context--acpiphp_func--acpiphp_bridge--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates either the context does not exist or the bridge is being removed; both conditions are permanent or transient only at device removal, so retrying is pointless.",
+    "contract_summary": "This is a get-wrapper that yields a valid acpiphp_context with the associated bridge guaranteed alive (by holding a bridge reference). It acquires the context by calling acpiphp_get_context, checks that the parent bridge is not going away, and if valid, takes a bridge reference via get_bridge before releasing the temporary context reference. The caller receives a context pointer and implicitly owns a bridge reference. The caller must eventually release the bridge reference (e.g., via put_bridge or acpiphp_put_context on the context). Returns NULL if the context does not exist or the bridge is dying, which must be checked by the caller."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bnge_del_l2_filter",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "fltr.refcnt.refs",
+      "bnge_l2_filter--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation is idempotent for each reference; if the refcount is not zero, the filter still has other users and should not be freed. Retrying would cause a double-decrement, which is incorrect.",
+  "contract_summary": "This is a put wrapper that releases a reference on an L2 filter. If the reference count drops to zero, the filter is removed from the hash list and freed via RCU. The caller must hold a valid reference (i.e., the filter must not already have zero references) and must not access the filter after calling this function, as it may be freed. The function is safe to call under RCU protection (kfree_rcu). This function does not return anything; the caller does not need to check success or retry.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to decrement the reference count of the L2 filter and free it if it becomes zero. The only additional operations are the hash list removal and RCU free, which are directly part of the cleanup when the last reference is dropped.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation is idempotent for each reference; if the refcount is not zero, the filter still has other users and should not be freed. Retrying would cause a double-decrement, which is incorrect.",
+      "contract_summary": "This is a put wrapper that releases a reference on an L2 filter. If the reference count drops to zero, the filter is removed from the hash list and freed via RCU. The caller must hold a valid reference (i.e., the filter must not already have zero references) and must not access the filter after calling this function, as it may be freed. The function is safe to call under RCU protection (kfree_rcu). This function does not return anything; the caller does not need to check success or retry."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "fltr.refcnt.refs",
+          "bnge_l2_filter--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "fltr.refcnt.refs",
+          "bnge_l2_filter--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The refcount_dec_and_test call operates on fltr->refcnt, matching parameter index 2. The access path fltr.refcnt.refs and type chain bnge_l2_filter--refcount_t--atomic_t are correct based on the code and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "fltr.refcnt.refs",
+        "bnge_l2_filter--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation is idempotent for each reference; if the refcount is not zero, the filter still has other users and should not be freed. Retrying would cause a double-decrement, which is incorrect.",
+    "contract_summary": "This is a put wrapper that releases a reference on an L2 filter. If the reference count drops to zero, the filter is removed from the hash list and freed via RCU. The caller must hold a valid reference (i.e., the filter must not already have zero references) and must not access the filter after calling this function, as it may be freed. The function is safe to call under RCU protection (kfree_rcu). This function does not return anything; the caller does not need to check success or retry."
+  }
+}

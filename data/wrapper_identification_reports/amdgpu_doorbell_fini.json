@@ -1,0 +1,99 @@
+{
+  "function_name": "amdgpu_doorbell_fini",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "adev.doorbell.kernel_doorbells[0].tbo.base.refcount.refcount",
+      "amdgpu_device--amdgpu_doorbell--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "amdgpu_bo_free_kernel",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bo[0].tbo.base.refcount.refcount",
+      "member_type_chain": "amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are unconditional and never fail in a way that retrying would help; double-put would be a use-after-free bug.",
+  "contract_summary": "This is a put wrapper for the doorbell buffer object. It releases the reference held by the driver on the doorbell BO, potentially freeing it if no other references exist. After calling this function, the caller must not access the doorbell mapping or BO. No special locking requirements beyond those internal to the BO; the function is synchronous and does not need retry.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the doorbell buffer object reference; entire function body is a single call to amdgpu_bo_free_kernel, which is a put function.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are unconditional and never fail in a way that retrying would help; double-put would be a use-after-free bug.",
+      "contract_summary": "This is a put wrapper for the doorbell buffer object. It releases the reference held by the driver on the doorbell BO, potentially freeing it if no other references exist. After calling this function, the caller must not access the doorbell mapping or BO. No special locking requirements beyond those internal to the BO; the function is synchronous and does not need retry."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.doorbell.kernel_doorbells[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_doorbell--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "adev.doorbell.kernel_doorbells[0].tbo.base.refcount.refcount",
+          "amdgpu_device--amdgpu_doorbell--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The code passes &adev->doorbell.kernel_doorbells to amdgpu_bo_free_kernel, which is a put function on the bo referenced by kernel_doorbells. The access path starts from parameter 1 (adev) and correctly traces through doorbell.kernel_doorbells (dereferenced with [0]), then follows tbo.base.refcount.refcount, matching the callee's reported path. The type chain from amdgpu_device to refcount_t is consistent, and the segment counts (7 each) match."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "adev.doorbell.kernel_doorbells[0].tbo.base.refcount.refcount",
+        "amdgpu_device--amdgpu_doorbell--amdgpu_bo--ttm_buffer_object--drm_gem_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are unconditional and never fail in a way that retrying would help; double-put would be a use-after-free bug.",
+    "contract_summary": "This is a put wrapper for the doorbell buffer object. It releases the reference held by the driver on the doorbell BO, potentially freeing it if no other references exist. After calling this function, the caller must not access the doorbell mapping or BO. No special locking requirements beyond those internal to the BO; the function is synchronous and does not need retry."
+  }
+}

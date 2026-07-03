@@ -1,0 +1,82 @@
+{
+  "function_name": "batadv_tt_global_check_crc",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_orig_node_vlan_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_vlan.refcount.refcount",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount.refs",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_orig_node_vlan_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_vlan.refcount.refcount",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_vlan_get",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "vlan.refcount.refcount",
+      "member_type_chain": "batadv_orig_node_vlan--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — failure in CRC comparison indicates data mismatch, not a transient condition; retry would not change result.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "Primary purpose is to validate global translation table CRC consistency across VLANs. The get/put operations are internal housekeeping to safely access VLAN objects, not the function's core mission.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — failure in CRC comparison indicates data mismatch, not a transient condition; retry would not change result.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — failure in CRC comparison indicates data mismatch, not a transient condition; retry would not change result.",
+    "contract_summary": ""
+  }
+}

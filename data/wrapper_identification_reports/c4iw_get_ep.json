@@ -1,0 +1,107 @@
+{
+  "function_name": "c4iw_get_ep",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "ep.kref.refcount",
+      "c4iw_ep--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    },
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get is unconditional and never fails; no retry needed.",
+  "contract_summary": "Get-wrapper: increments the kref reference count on the endpoint ep. This acquires an additional reference that the caller must later release by calling _c4iw_free_ep or a corresponding put function. The debug print is incidental. The operation is unconditional and always succeeds. The caller retains the ep pointer and is responsible for pairing this get with a put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The macro's primary purpose is to increment the kref reference count on ep via kref_get; the debug print is negligible. It is an unconditional get wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get is unconditional and never fails; no retry needed.",
+      "contract_summary": "Get-wrapper: increments the kref reference count on the endpoint ep. This acquires an additional reference that the caller must later release by calling _c4iw_free_ep or a corresponding put function. The debug print is incidental. The operation is unconditional and always succeeds. The caller retains the ep pointer and is responsible for pairing this get with a put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ep.kref.refcount",
+          "c4iw_ep--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "ep.kref.refcount",
+          "c4iw_ep--kref--refcount_t"
+        ]
+      ],
+      "reason": "kref_get is called on &((ep)->kref), incrementing the refcount on the same ep passed as parameter. The access path ep.kref.refcount correctly traces from parameter 1 through kref to refcount. The type chain c4iw_ep--kref--refcount_t matches the struct definition and callee info."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "ep.kref.refcount",
+        "c4iw_ep--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get is unconditional and never fails; no retry needed.",
+    "contract_summary": "Get-wrapper: increments the kref reference count on the endpoint ep. This acquires an additional reference that the caller must later release by calling _c4iw_free_ep or a corresponding put function. The debug print is incidental. The operation is unconditional and always succeeds. The caller retains the ep pointer and is responsible for pairing this get with a put."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "asus_rfkill_terminate",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "rfkill_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rfkill.dev.kobj.kref.refcount",
+      "member_type_chain": "rfkill--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "rfkill_destroy",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "rfkill.dev.kobj.kref.refcount",
+      "member_type_chain": "rfkill--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation is a put that should only fail on programming error (e.g., double free). Retrying after failure would be a bug.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to clean up an rfkill object by unregistering it and then destroying (putting) it. The refcount put via rfkill_destroy is only one step within a broader termination sequence that includes rfkill_unregister and pointer nullification. This is not a focused refcount wrapper.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation is a put that should only fail on programming error (e.g., double free). Retrying after failure would be a bug.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation is a put that should only fail on programming error (e.g., double free). Retrying after failure would be a bug.",
+    "contract_summary": ""
+  }
+}

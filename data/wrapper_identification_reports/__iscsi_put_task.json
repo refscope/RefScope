@@ -1,0 +1,99 @@
+{
+  "function_name": "__iscsi_put_task",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "task.refcount.refs",
+      "iscsi_task--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_dec_and_test",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation always succeeds; if refcount was already zero, calling again would cause a double-free (use-after-free), so retry is meaningless.",
+  "contract_summary": "This is a put wrapper that releases a reference on an iscsi_task by decrementing its refcount. If the refcount drops to zero, the task is freed via iscsi_free_task. The function returns void and always succeeds; the caller must not access the task after this call. This operation represents the 'release' lifecycle stage: each call must correspond to a previous reference acquisition (e.g., from __iscsi_get_task or initialization). There is no lock requirement; the caller is responsible for ensuring that no concurrent use occurs after the put.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to decrement the task's reference count and free it if it reaches zero, with no other logic.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation always succeeds; if refcount was already zero, calling again would cause a double-free (use-after-free), so retry is meaningless.",
+      "contract_summary": "This is a put wrapper that releases a reference on an iscsi_task by decrementing its refcount. If the refcount drops to zero, the task is freed via iscsi_free_task. The function returns void and always succeeds; the caller must not access the task after this call. This operation represents the 'release' lifecycle stage: each call must correspond to a previous reference acquisition (e.g., from __iscsi_get_task or initialization). There is no lock requirement; the caller is responsible for ensuring that no concurrent use occurs after the put."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.refcount.refs",
+          "iscsi_task--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "task.refcount.refs",
+          "iscsi_task--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_dec_and_test(&task->refcount) is a put operation on the refcount field of task (parameter 1). The access path from task through refcount to refs and the type chain iscsi_task--refcount_t--atomic_t are consistent with the callee's member-access path r.refs and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "task.refcount.refs",
+        "iscsi_task--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation always succeeds; if refcount was already zero, calling again would cause a double-free (use-after-free), so retry is meaningless.",
+    "contract_summary": "This is a put wrapper that releases a reference on an iscsi_task by decrementing its refcount. If the refcount drops to zero, the task is freed via iscsi_free_task. The function returns void and always succeeds; the caller must not access the task after this call. This operation represents the 'release' lifecycle stage: each call must correspond to a previous reference acquisition (e.g., from __iscsi_get_task or initialization). There is no lock requirement; the caller is responsible for ensuring that no concurrent use occurs after the put."
+  }
+}

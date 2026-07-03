@@ -1,0 +1,99 @@
+{
+  "function_name": "bus_find_device_by_fwnode",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bus_find_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "If no matching device is found, the device may not exist yet or may never appear; retrying is not guaranteed to succeed and is not part of the wrapper's contract.",
+  "contract_summary": "This is a get-wrapper that acquires a reference on the 'struct device' matching the given fwnode on the specified bus. The caller receives the device pointer with an elevated refcount and must call put_device() to release it when no longer needed. If no matching device is found, NULL is returned and no reference is acquired. The caller must check the return value for NULL before using the device.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function is a one-liner that delegates to bus_find_device, which increments the reference count on a found device. No other logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "If no matching device is found, the device may not exist yet or may never appear; retrying is not guaranteed to succeed and is not part of the wrapper's contract.",
+      "contract_summary": "This is a get-wrapper that acquires a reference on the 'struct device' matching the given fwnode on the specified bus. The caller receives the device pointer with an elevated refcount and must call put_device() to release it when no longer needed. If no matching device is found, NULL is returned and no reference is acquired. The caller must check the return value for NULL before using the device."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function bus_find_device_by_fwnode directly returns the result of bus_find_device, which (according to callee info) acquires a reference on the returned device pointer. The access path dev.kobj.kref.refcount correctly traces from the return value (struct device) through its kobj, kref, and refcount fields. The type chain device--kobject--kref--refcount_t matches the path segments count (4). Thus, the extracted operation is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "If no matching device is found, the device may not exist yet or may never appear; retrying is not guaranteed to succeed and is not part of the wrapper's contract.",
+    "contract_summary": "This is a get-wrapper that acquires a reference on the 'struct device' matching the given fwnode on the specified bus. The caller receives the device pointer with an elevated refcount and must call put_device() to release it when no longer needed. If no matching device is found, NULL is returned and no reference is acquired. The caller must check the return value for NULL before using the device."
+  }
+}

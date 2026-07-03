@@ -1,0 +1,143 @@
+{
+  "function_name": "addr_map_symbol__exit",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ams.ms.thread.orig.refcnt.refs",
+      "addr_map_symbol--map_symbol--thread--original_thread--refcount_t--atomic_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "ams.ms.map.refcnt.refs",
+      "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.thread.orig.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.thread.orig.refcnt.refs",
+      "member_type_chain": "map_symbol--thread--original_thread--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "map_symbol__exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "ms.map.refcnt.refs",
+      "member_type_chain": "map_symbol--map--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operations are never retried; after the put, the object may be freed and use-after-free would result from a retry.",
+  "contract_summary": "This is a put wrapper that releases the references held by the addr_map_symbol on its internal map and thread resources. It unconditionally calls map_symbol__exit, which decrements the refcount of both the map and the thread (via the original thread pointer). After this call, the addr_map_symbol object is considered invalid and must not be accessed further; the caller must not call any get/put functions on it. There is no return value and no failure condition; the operation always succeeds.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to call map_symbol__exit, which is a put function that decrements refcounts on both thread and map members. No other logic is present.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operations are never retried; after the put, the object may be freed and use-after-free would result from a retry.",
+      "contract_summary": "This is a put wrapper that releases the references held by the addr_map_symbol on its internal map and thread resources. It unconditionally calls map_symbol__exit, which decrements the refcount of both the map and the thread (via the original thread pointer). After this call, the addr_map_symbol object is considered invalid and must not be accessed further; the caller must not call any get/put functions on it. There is no return value and no failure condition; the operation always succeeds."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ams.ms.thread.orig.refcnt.refs",
+          "addr_map_symbol--map_symbol--thread--original_thread--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ams.ms.map.refcnt.refs",
+          "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ams.ms.thread.orig.refcnt.refs",
+          "addr_map_symbol--map_symbol--thread--original_thread--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "ams.ms.map.refcnt.refs",
+          "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls map_symbol__exit on &ams->ms, which (per callee info) performs put operations on ms.thread.orig.refcnt.refs and ms.map.refcnt.refs. The access paths starting from parameter ams correctly trace through the struct members. Both access paths have segment counts matching their type chains, and the direction (put) is consistent with the callee."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ams.ms.thread.orig.refcnt.refs",
+        "addr_map_symbol--map_symbol--thread--original_thread--refcount_t--atomic_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "ams.ms.map.refcnt.refs",
+        "addr_map_symbol--map_symbol--map--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operations are never retried; after the put, the object may be freed and use-after-free would result from a retry.",
+    "contract_summary": "This is a put wrapper that releases the references held by the addr_map_symbol on its internal map and thread resources. It unconditionally calls map_symbol__exit, which decrements the refcount of both the map and the thread (via the original thread pointer). After this call, the addr_map_symbol object is considered invalid and must not be accessed further; the caller must not call any get/put functions on it. There is no return value and no failure condition; the operation always succeeds."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_name": "bfq_exit_icq_bfqq",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "bic.bfqq[].new_bfqq.ref",
+      "bfq_io_cq--bfq_queue--bfq_queue--int"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bfq_exit_bfqq",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "bfqq.new_bfqq.ref",
+      "member_type_chain": "bfq_queue--bfq_queue--int"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bfq_exit_bfqq",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "bfqq.new_bfqq.ref",
+      "member_type_chain": "bfq_queue--bfq_queue--int"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Put operation always succeeds; failure would indicate a use-after-free bug which retry cannot fix.",
+  "contract_summary": "This function releases the reference that a block I/O context (bic) holds on a bfqq. It retrieves the bfqq pointer from the bic (via is_sync and actuator_idx), checks that both the bfqq and bfqd are valid, then nullifies the bic's reference and decrements the bfqq's reference count by calling bfq_exit_bfqq. After this call, the bic no longer owns a reference to the bfqq, and the caller must not access the bfqq through that bic. This is a standard put (release) pattern for bfqq references held by icqs.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release a bfqq reference held by the icq (bic). It clears the bic's bfqq pointer and calls bfq_exit_bfqq, which is a put function on the bfqq. No other significant logic exists.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Put operation always succeeds; failure would indicate a use-after-free bug which retry cannot fix.",
+      "contract_summary": "This function releases the reference that a block I/O context (bic) holds on a bfqq. It retrieves the bfqq pointer from the bic (via is_sync and actuator_idx), checks that both the bfqq and bfqd are valid, then nullifies the bic's reference and decrements the bfqq's reference count by calling bfq_exit_bfqq. After this call, the bic no longer owns a reference to the bfqq, and the caller must not access the bfqq through that bic. This is a standard put (release) pattern for bfqq references held by icqs."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq[].new_bfqq.ref",
+          "bfq_io_cq--bfq_queue--bfq_queue--int"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "bic.bfqq[].new_bfqq.ref",
+          "bfq_io_cq--bfq_queue--bfq_queue--int"
+        ]
+      ],
+      "reason": "The member_access_path starts from caller parameter bic (index 1), traces through the array indexing to obtain bfqq, then follows the callee's specified path new_bfqq.ref. The type chain is consistent: bfq_io_cq -> bfq_queue (first) -> bfq_queue (new_bfqq) -> int (ref). Segment counts match (4 segments, 4 types). The callee 'bfq_exit_bfqq' is a put on parameter 2 (bfqq), and the extraction correctly represents this put on the derived local variable."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "bic.bfqq[].new_bfqq.ref",
+        "bfq_io_cq--bfq_queue--bfq_queue--int"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Put operation always succeeds; failure would indicate a use-after-free bug which retry cannot fix.",
+    "contract_summary": "This function releases the reference that a block I/O context (bic) holds on a bfqq. It retrieves the bfqq pointer from the bic (via is_sync and actuator_idx), checks that both the bfqq and bfqd are valid, then nullifies the bic's reference and decrements the bfqq's reference count by calling bfq_exit_bfqq. After this call, the bic no longer owns a reference to the bfqq, and the caller must not access the bfqq through that bic. This is a standard put (release) pattern for bfqq references held by icqs."
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "function_name": "bus_find_device_reverse",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "dev.kobj.kref.refcount",
+      "device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "get_device",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "dev.kobj.kref.refcount",
+      "member_type_chain": "device--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "subsys_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "klist_iter_exit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "i.i_cur.n_ref.refcount",
+      "member_type_chain": "klist_iter--klist_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "klist_iter_init_node",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "n.n_ref.refcount",
+      "member_type_chain": "klist_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "bus_to_subsys",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "sp.subsys.kobj.kref.refcount",
+      "member_type_chain": "subsys_private--kset--kobject--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "klist_iter_init_node",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "n.n_ref.refcount.refs",
+      "member_type_chain": "klist_node--kref--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "klist_iter_init_node",
+      "get_or_put": "get",
+      "index": "3",
+      "location": "parameter",
+      "member_access_path": "n.n_ref.refcount",
+      "member_type_chain": "klist_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure (NULL) means no device matched; the get_device operation itself never fails, so retry is not relevant to the refcount operation.",
+  "contract_summary": "This get-wrapper searches a bus's device list in reverse order using a match callback and returns the first matching device with its reference count incremented. The caller owns the returned reference and must call put_device() when done. If no match is found, returns NULL. Internal klist and bus subsystem references are handled transparently; the caller does not need to hold locks.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a device by match and increment its refcount via get_device, returning the device to the caller.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure (NULL) means no device matched; the get_device operation itself never fails, so retry is not relevant to the refcount operation.",
+      "contract_summary": "This get-wrapper searches a bus's device list in reverse order using a match callback and returns the first matching device with its reference count incremented. The caller owns the returned reference and must call put_device() when done. If no match is found, returns NULL. Internal klist and bus subsystem references are handled transparently; the caller does not need to hold locks."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "2",
+          "start.p.knode_bus.n_ref.refcount",
+          "device--device_private--klist_node--kref--refcount_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "dev.kobj.kref.refcount",
+          "device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The first candidate is invalid: it describes a get on the start parameter's internal klist_node (via klist_iter_init_node), but this does not affect the reference count of the device object itself and the critical variable for the returned reference is the device, not start. The second candidate correctly identifies get_device(dev) on the returned device, which increments dev's kobject refcount."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "dev.kobj.kref.refcount",
+        "device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure (NULL) means no device matched; the get_device operation itself never fails, so retry is not relevant to the refcount operation.",
+    "contract_summary": "This get-wrapper searches a bus's device list in reverse order using a match callback and returns the first matching device with its reference count incremented. The caller owns the returned reference and must call put_device() when done. If no match is found, returns NULL. Internal klist and bus subsystem references are handled transparently; the caller does not need to hold locks."
+  }
+}

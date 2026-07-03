@@ -1,0 +1,305 @@
+{
+  "function_name": "amdgpu_dm_plane_drm_plane_destroy_state",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "2",
+      "state.commit.ref.refcount",
+      "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "state.fence.refcount.refcount",
+      "drm_plane_state--dma_fence--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "state.fb.base.refcount.refcount",
+      "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "2",
+      "state.fb_damage_clips.base.refcount.refcount",
+      "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.commit.ref.refcount",
+      "member_type_chain": "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb_damage_clips.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fence.refcount.refcount",
+      "member_type_chain": "drm_plane_state--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dc_plane_state_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "plane_state.refcount.refcount",
+      "member_type_chain": "dc_plane_state--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.commit.ref.refcount",
+      "member_type_chain": "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fence.refcount.refcount",
+      "member_type_chain": "drm_plane_state--dma_fence--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_property_blob_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "blob.base.refcount.refcount",
+      "member_type_chain": "drm_property_blob--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "dc_plane_state_release",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "plane_state.refcount.refcount",
+      "member_type_chain": "dc_plane_state--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "drm_atomic_helper_plane_destroy_state",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "state.fb_damage_clips.base.refcount.refcount",
+      "member_type_chain": "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "No failure path to retry; all puts are void and null-checked, so they cannot fail.",
+  "contract_summary": "Put wrapper for amdgpu DM plane state: releases references to color management blobs (degamma_lut, ctm, lut3d, shaper_lut, blend_lut) via drm_property_blob_put and releases the dc_plane_state via dc_plane_state_release, then calls drm_atomic_helper_plane_destroy_state to release the base drm_plane_state (including fb and fence references). After this function returns, the plane state must not be accessed or freed again. The state is destroyed unconditionally, with null checks ensuring safety for already-NULL fields.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release references held by the plane state (several blob properties and dc_state) and then call the helper to destroy the base state; no significant non-refcount logic.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "No failure path to retry; all puts are void and null-checked, so they cannot fail.",
+      "contract_summary": "Put wrapper for amdgpu DM plane state: releases references to color management blobs (degamma_lut, ctm, lut3d, shaper_lut, blend_lut) via drm_property_blob_put and releases the dc_plane_state via dc_plane_state_release, then calls drm_atomic_helper_plane_destroy_state to release the base drm_plane_state (including fb and fence references). After this function returns, the plane state must not be accessed or freed again. The state is destroyed unconditionally, with null checks ensuring safety for already-NULL fields."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.degamma_lut.base.refcount.refcount",
+          "dm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.ctm.base.refcount.refcount",
+          "dm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.lut3d.base.refcount.refcount",
+          "dm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.shaper_lut.base.refcount.refcount",
+          "dm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.blend_lut.base.refcount.refcount",
+          "dm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.dc_state.refcount.refcount",
+          "dm_plane_state--dc_plane_state--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.commit.ref.refcount",
+          "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.fence.refcount.refcount",
+          "drm_plane_state--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.fb.base.refcount.refcount",
+          "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.fb_damage_clips.base.refcount.refcount",
+          "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.commit.ref.refcount",
+          "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.fence.refcount.refcount",
+          "drm_plane_state--dma_fence--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.fb.base.refcount.refcount",
+          "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "2",
+          "state.fb_damage_clips.base.refcount.refcount",
+          "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+        ]
+      ],
+      "reason": "The explicit blob operations (degamma_lut, ctm, lut3d, shaper_lut, blend_lut) and dc_state operation are rejected because their access paths start with 'state' but the type chains start with 'dm_plane_state' (inconsistent first type) and the segment counts do not match. Only the operations from drm_atomic_helper_plane_destroy_state have consistent paths and type chains: the helper's member-access paths (commit, fence, fb, fb_damage_clips) start from parameter 2 'state' with correct drm_plane_state type, and segment counts match. These are valid indirect puts called within the function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "2",
+        "state.commit.ref.refcount",
+        "drm_plane_state--drm_crtc_commit--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "state.fence.refcount.refcount",
+        "drm_plane_state--dma_fence--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "state.fb.base.refcount.refcount",
+        "drm_plane_state--drm_framebuffer--drm_mode_object--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "2",
+        "state.fb_damage_clips.base.refcount.refcount",
+        "drm_plane_state--drm_property_blob--drm_mode_object--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 6,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "No failure path to retry; all puts are void and null-checked, so they cannot fail.",
+    "contract_summary": "Put wrapper for amdgpu DM plane state: releases references to color management blobs (degamma_lut, ctm, lut3d, shaper_lut, blend_lut) via drm_property_blob_put and releases the dc_plane_state via dc_plane_state_release, then calls drm_atomic_helper_plane_destroy_state to release the base drm_plane_state (including fb and fence references). After this function returns, the plane state must not be accessed or freed again. The state is destroyed unconditionally, with null checks ensuring safety for already-NULL fields."
+  }
+}

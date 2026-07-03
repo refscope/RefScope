@@ -1,0 +1,90 @@
+{
+  "function_name": "alloc_cpls",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "cxgbi_sock_free_cpl_skbs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "csk.cpl_close.users.refs",
+      "member_type_chain": "cxgbi_sock--sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "cxgbi_sock_free_cpl_skbs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "csk.cpl_abort_rpl.users.refs",
+      "member_type_chain": "cxgbi_sock--sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "cxgbi_sock_free_cpl_skbs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "csk.cpl_abort_req.users.refs",
+      "member_type_chain": "cxgbi_sock--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "cxgbi_sock_free_cpl_skbs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "csk.cpl_close.users.refs",
+      "member_type_chain": "cxgbi_sock--sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "cxgbi_sock_free_cpl_skbs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "csk.cpl_abort_rpl.users.refs",
+      "member_type_chain": "cxgbi_sock--sk_buff--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "cxgbi_sock_free_cpl_skbs",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "csk.cpl_abort_req.users.refs",
+      "member_type_chain": "cxgbi_sock--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The primary purpose is to allocate and store three sk_buff objects in a cxgbi_sock structure. Reference count management (via alloc_wr and cxgbi_sock_free_cpl_skbs) is incidental to the allocation logic and error cleanup, not the core purpose.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; retry semantics are not applicable.",
+    "contract_summary": ""
+  }
+}

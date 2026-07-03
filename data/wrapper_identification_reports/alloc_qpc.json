@@ -1,0 +1,90 @@
+{
+  "function_name": "alloc_qpc",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "hns_roce_table_put",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "table.hem[i].refcount.refs",
+      "member_type_chain": "hns_roce_hem_table--hns_roce_hem--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "hns_roce_table_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "table.hem[i].refcount.refs",
+      "member_type_chain": "hns_roce_hem_table--hns_roce_hem--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "hns_roce_table_get",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "table.hem[i].refcount.refs",
+      "member_type_chain": "hns_roce_hem_table--hns_roce_hem--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "hns_roce_table_put",
+      "get_or_put": "put",
+      "index": "2",
+      "location": "parameter",
+      "member_access_path": "table.hem[i].refcount.refs",
+      "member_type_chain": "hns_roce_hem_table--hns_roce_hem--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "hns_roce_table_get",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "table.hem[i].refcount.refs",
+      "member_type_chain": "hns_roce_hem_table--hns_roce_hem--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "hns_roce_table_get",
+      "get_or_put": "set",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "table.hem[i].refcount.refs",
+      "member_type_chain": "hns_roce_hem_table--hns_roce_hem--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper — the primary purpose is allocation, not refcount management; retry semantics are unrelated to refcount operation failure.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function orchestrates the allocation of multiple HW table resources (QPC, IRRL, TRRL, SCC CTX) for a queue pair. While it uses hns_roce_table_get/put to manage reference counts on table pages, its primary purpose is resource allocation, not refcount management. The refcount operations are incidental to the broader allocation logic, and the function handles conditional paths, error messages, and cleanup.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper — the primary purpose is allocation, not refcount management; retry semantics are unrelated to refcount operation failure.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper — the primary purpose is allocation, not refcount management; retry semantics are unrelated to refcount operation failure.",
+    "contract_summary": ""
+  }
+}

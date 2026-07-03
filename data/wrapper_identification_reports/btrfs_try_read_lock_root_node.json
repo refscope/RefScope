@@ -1,0 +1,115 @@
+{
+  "function_name": "btrfs_try_read_lock_root_node",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "eb.refs.refs",
+      "extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "btrfs_root_node",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": true,
+  "retry_reason": "btrfs_try_tree_read_lock is a non-blocking trylock; if it fails, the lock is contended, retrying later may succeed.",
+  "contract_summary": "This function tries to acquire a read lock on the root node and return it with a reference held. It may retry internally if the root node changes under it. On success, the caller gets an extent_buffer that is read-locked and has an elevated refcount. The caller must eventually call btrfs_tree_read_unlock and free_extent_buffer (or btrfs_tree_read_unlock then free_extent_buffer). On failure (lock not acquired), it returns ERR_PTR(-EAGAIN) without any reference held.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a read-locked reference to the root node; all logic is about obtaining and maintaining that reference with appropriate lock and refcount management.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": true,
+      "retry_reason": "btrfs_try_tree_read_lock is a non-blocking trylock; if it fails, the lock is contended, retrying later may succeed.",
+      "contract_summary": "This function tries to acquire a read lock on the root node and return it with a reference held. It may retry internally if the root node changes under it. On success, the caller gets an extent_buffer that is read-locked and has an elevated refcount. The caller must eventually call btrfs_tree_read_unlock and free_extent_buffer (or btrfs_tree_read_unlock then free_extent_buffer). On failure (lock not acquired), it returns ERR_PTR(-EAGAIN) without any reference held."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls btrfs_root_node which is a get function on the return value (eb). The returned eb is then returned to the caller without dropping the reference, so the caller obtains a reference. The access path eb.refs.refs and type chain extent_buffer--refcount_t--atomic_t match the callee information and the code."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "eb.refs.refs",
+        "extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": true,
+    "retry_reason": "btrfs_try_tree_read_lock is a non-blocking trylock; if it fails, the lock is contended, retrying later may succeed.",
+    "contract_summary": "This function tries to acquire a read lock on the root node and return it with a reference held. It may retry internally if the root node changes under it. On success, the caller gets an extent_buffer that is read-locked and has an elevated refcount. The caller must eventually call btrfs_tree_read_unlock and free_extent_buffer (or btrfs_tree_read_unlock then free_extent_buffer). On failure (lock not acquired), it returns ERR_PTR(-EAGAIN) without any reference held."
+  }
+}

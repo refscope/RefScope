@@ -1,0 +1,99 @@
+{
+  "function_name": "bcma_mdio_mii_unregister",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "mii_bus.dev.kobj.kref.refcount",
+      "mii_bus--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "mdiobus_free",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "bus.dev.kobj.kref.refcount",
+      "member_type_chain": "mii_bus--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonnull",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation is unconditional when mii_bus is non-NULL; no failure return exists, so retry is not applicable.",
+  "contract_summary": "This function unregisters the given mii_bus from the MDIO subsystem and then drops the last reference via mdiobus_free. It is a terminal release wrapper: after calling this function, the provided mii_bus pointer must not be used again. The function does not require the caller to check a return value. It is safe to call with NULL (no-op).",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release the mii_bus (unregister and free). The only logic is NULL check and two cleanup calls, one of which (mdiobus_free) is a put operation. This is a typical release wrapper that combines unregistration with dropping the reference.",
+      "conditionality": "conditional_on_nonnull",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation is unconditional when mii_bus is non-NULL; no failure return exists, so retry is not applicable.",
+      "contract_summary": "This function unregisters the given mii_bus from the MDIO subsystem and then drops the last reference via mdiobus_free. It is a terminal release wrapper: after calling this function, the provided mii_bus pointer must not be used again. The function does not require the caller to check a return value. It is safe to call with NULL (no-op)."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "mii_bus.dev.kobj.kref.refcount",
+          "mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "mii_bus.dev.kobj.kref.refcount",
+          "mii_bus--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "mdiobus_free(mii_bus) is called, which acts as a put on the mii_bus's internal refcount. The access path mii_bus.dev.kobj.kref.refcount correctly traces from the parameter to the refcount_t field, and the type chain matches the struct hierarchy. The segment count (5) equals the type count (5). No inconsistencies found."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "mii_bus.dev.kobj.kref.refcount",
+        "mii_bus--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonnull",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation is unconditional when mii_bus is non-NULL; no failure return exists, so retry is not applicable.",
+    "contract_summary": "This function unregisters the given mii_bus from the MDIO subsystem and then drops the last reference via mdiobus_free. It is a terminal release wrapper: after calling this function, the provided mii_bus pointer must not be used again. The function does not require the caller to check a return value. It is safe to call with NULL (no-op)."
+  }
+}

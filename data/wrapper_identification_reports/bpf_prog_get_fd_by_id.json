@@ -1,0 +1,113 @@
+{
+  "function_name": "bpf_prog_get_fd_by_id",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "prog.aux.refcnt",
+      "bpf_prog--bpf_prog_aux--atomic64_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "bpf_prog_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "prog.aux.refcnt",
+      "member_type_chain": "bpf_prog--bpf_prog_aux--atomic64_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure modes are lookup failure (id not found) or fd creation failure (e.g., ENOMEM); neither is a transient refcount condition that would benefit from immediate retry within the wrapper's context.",
+  "contract_summary": "This function is an acquire-and-transfer wrapper: it looks up a bpf_prog by its id, obtains a reference (via bpf_prog_by_id), and returns a new file descriptor that owns that reference. The caller must close the fd to release the reference. On error (invalid id or fd creation failure), the acquired reference is safely released via bpf_prog_put, so no reference is leaked. The caller must check the return value for errors.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's primary purpose is to acquire a reference to a bpf_prog by id and either transfer that reference to a new file descriptor (which becomes the caller's handle) or release it on error. The only non-refcount logic is a capability check and attribute validation, which are minimal prerequisites.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure modes are lookup failure (id not found) or fd creation failure (e.g., ENOMEM); neither is a transient refcount condition that would benefit from immediate retry within the wrapper's context.",
+      "contract_summary": "This function is an acquire-and-transfer wrapper: it looks up a bpf_prog by its id, obtains a reference (via bpf_prog_by_id), and returns a new file descriptor that owns that reference. The caller must close the fd to release the reference. On error (invalid id or fd creation failure), the acquired reference is safely released via bpf_prog_put, so no reference is leaked. The caller must check the return value for errors."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "global",
+          "prog",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ],
+        [
+          "put",
+          "global",
+          "prog",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The location field for both operations is 'global', which does not correspond to the actual critical variable 'prog' (a local variable). The critical variable prog is not a global, parameter, or return of this function. Additionally, the get operation is not directly called in the function; it is an implicit effect of bpf_prog_by_id, and no callee info is provided for that function. Therefore, the extracted operations are inconsistent with the function code and callee information."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "prog.aux.refcnt",
+          "bpf_prog--bpf_prog_aux--atomic64_t"
+        ]
+      ],
+      "reason": "The function retrieves a BPF program reference via bpf_prog_by_id and returns a file descriptor that holds that reference. The critical variable 'prog' is effectively passed to the caller via the returned fd. The get operation is the primary refcount effect; the put on error is internal cleanup and does not affect the wrapper classification. The check stage incorrectly rejected due to a 'global' location, but the get operation correctly targets the reference that flows out through the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "prog.aux.refcnt",
+        "bpf_prog--bpf_prog_aux--atomic64_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure modes are lookup failure (id not found) or fd creation failure (e.g., ENOMEM); neither is a transient refcount condition that would benefit from immediate retry within the wrapper's context.",
+    "contract_summary": "This function is an acquire-and-transfer wrapper: it looks up a bpf_prog by its id, obtains a reference (via bpf_prog_by_id), and returns a new file descriptor that owns that reference. The caller must close the fd to release the reference. On error (invalid id or fd creation failure), the acquired reference is safely released via bpf_prog_put, so no reference is leaked. The caller must check the return value for errors."
+  }
+}

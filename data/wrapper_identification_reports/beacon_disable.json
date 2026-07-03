@@ -1,0 +1,58 @@
+{
+  "function_name": "beacon_disable",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "zd_mac_free_cur_beacon",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mac.beacon.cur_beacon.users.refs",
+      "member_type_chain": "zd_mac--zd_beacon--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "zd_mac_free_cur_beacon",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mac.beacon.cur_beacon.users.refs",
+      "member_type_chain": "zd_mac--zd_beacon--sk_buff--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function beacon_disable is a cleanup routine that cancels a watchdog work and then releases the current beacon via zd_mac_free_cur_beacon (a put). The cancellation is non-trivial synchronization that is not part of reference-count management. The primary purpose is to disable the beacon (stop periodic tasks and free memory), not merely to manage a reference count.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "",
+    "contract_summary": ""
+  }
+}

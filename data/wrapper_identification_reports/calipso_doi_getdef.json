@@ -1,0 +1,99 @@
+{
+  "function_name": "calipso_doi_getdef",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "doi_def.refcount.refs",
+      "calipso_doi--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "refcount_inc_not_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "r.refs",
+      "member_type_chain": "refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs when the object's refcount is zero (dying/being freed); retrying is pointless as the object is gone.",
+  "contract_summary": "RCU-protected get-wrapper: searches for a calipso_doi by DOI and, if found and still alive (refcount non-zero), increments its reference count. Returns a pointer to the object with an additional reference, or NULL if not found or dying. The caller must release the reference via calipso_doi_put() (or equivalent) when done. The RCU read lock is only held transiently during the lookup and reference acquisition; the caller need not hold it afterward.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose is to look up a calipso_doi by DOI and conditionally acquire a reference via refcount_inc_not_zero. No other logic is performed.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs when the object's refcount is zero (dying/being freed); retrying is pointless as the object is gone.",
+      "contract_summary": "RCU-protected get-wrapper: searches for a calipso_doi by DOI and, if found and still alive (refcount non-zero), increments its reference count. Returns a pointer to the object with an additional reference, or NULL if not found or dying. The caller must release the reference via calipso_doi_put() (or equivalent) when done. The RCU read lock is only held transiently during the lookup and reference acquisition; the caller need not hold it afterward."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "doi_def.refcount.refs",
+          "calipso_doi--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "doi_def.refcount.refs",
+          "calipso_doi--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "refcount_inc_not_zero is called on &doi_def->refcount when the object is found, and doi_def is returned. The access path doi_def.refcount.refs and type chain calipso_doi--refcount_t--atomic_t are consistent with the code and callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "doi_def.refcount.refs",
+        "calipso_doi--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs when the object's refcount is zero (dying/being freed); retrying is pointless as the object is gone.",
+    "contract_summary": "RCU-protected get-wrapper: searches for a calipso_doi by DOI and, if found and still alive (refcount non-zero), increments its reference count. Returns a pointer to the object with an additional reference, or NULL if not found or dying. The caller must release the reference via calipso_doi_put() (or equivalent) when done. The RCU read lock is only held transiently during the lookup and reference acquisition; the caller need not hold it afterward."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "function_name": "__ipv6_dev_mc_dec",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mc.mca_refcnt.refs",
+      "member_type_chain": "ifmcaddr6--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ma_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "mc.mca_refcnt.refs",
+      "member_type_chain": "ifmcaddr6--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The refcount operation (ma_put) is unconditional on the path where it is called and never fails. Lookup failure is not a refcount failure.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function is not primarily a reference-count wrapper. It performs a lookup, decrements a two-tier count (mca_users), and on zero triggers a complex teardown sequence (list removal, IGMP group notify, source clearing, and ultimately ma_put). The refcount operation (ma_put) is only one step in the larger lifecycle management of a multicast group address. The function does not directly receive or return the refcounted object (ma) or an acquired reference; it locates the object internally.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The refcount operation (ma_put) is unconditional on the path where it is called and never fails. Lookup failure is not a refcount failure.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The refcount operation (ma_put) is unconditional on the path where it is called and never fails. Lookup failure is not a refcount failure.",
+    "contract_summary": ""
+  }
+}

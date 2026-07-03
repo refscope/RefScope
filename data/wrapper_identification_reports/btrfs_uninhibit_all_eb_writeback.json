@@ -1,0 +1,99 @@
+{
+  "function_name": "btrfs_uninhibit_all_eb_writeback",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "eb.refs.refs",
+      "extent_buffer--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "free_extent_buffer",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "eb.refs.refs",
+      "member_type_chain": "extent_buffer--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "operation is unconditional and always succeeds; no failure path exists",
+  "contract_summary": "This is a batch put-wrapper that releases all references acquired by prior calls that added extent buffers to the transaction's writeback_inhibited_ebs xarray. For each entry, it decrements the writeback_inhibitors counter and then releases one reference (via free_extent_buffer) on the extent buffer. After iterating, the xarray is destroyed. The caller must not access any extent buffer through the xarray after this call, but the extent buffers themselves may still be alive if other references exist. No further action is required from the caller regarding this inhibition set.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "primary purpose is to release references (put) on all extent buffers stored in the writeback_inhibited_ebs xarray, along with destroying the xarray; no other business logic",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "operation is unconditional and always succeeds; no failure path exists",
+      "contract_summary": "This is a batch put-wrapper that releases all references acquired by prior calls that added extent buffers to the transaction's writeback_inhibited_ebs xarray. For each entry, it decrements the writeback_inhibitors counter and then releases one reference (via free_extent_buffer) on the extent buffer. After iterating, the xarray is destroyed. The caller must not access any extent buffer through the xarray after this call, but the extent buffers themselves may still be alive if other references exist. No further action is required from the caller regarding this inhibition set."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "global",
+          "eb",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "eb.refs.refs",
+          "extent_buffer--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls free_extent_buffer(eb) which is a put operation on eb->refs.refs. The access path eb.refs.refs and type chain extent_buffer--refcount_t--atomic_t are consistent with the callee info. The location is corrected to parameter index 1 as per the callee specification."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "eb.refs.refs",
+        "extent_buffer--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "operation is unconditional and always succeeds; no failure path exists",
+    "contract_summary": "This is a batch put-wrapper that releases all references acquired by prior calls that added extent buffers to the transaction's writeback_inhibited_ebs xarray. For each entry, it decrements the writeback_inhibitors counter and then releases one reference (via free_extent_buffer) on the extent buffer. After iterating, the xarray is destroyed. The caller must not access any extent buffer through the xarray after this call, but the extent buffers themselves may still be alive if other references exist. No further action is required from the caller regarding this inhibition set."
+  }
+}

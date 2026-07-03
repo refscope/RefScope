@@ -1,0 +1,99 @@
+{
+  "function_name": "auth_domain_put",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "dom.ref.refcount",
+      "auth_domain--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_put_lock",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_put_lock",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes and there is no failure path; if the refcount were already zero it would be a bug (double-put), so retry is not applicable.",
+  "contract_summary": "This put wrapper releases a reference on an auth_domain by decrementing its kref refcount under the protection of auth_domain_lock. If the refcount reaches zero, it triggers the release function (auth_domain_release) which frees the object. After this call, the caller must not access the auth_domain pointer or attempt to release another reference to it. This function does not return any status; the release is unconditional and the caller should have obtained a valid reference beforehand.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to decrement the reference count of an auth_domain via kref_put_lock. It has no other logic or side effects.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes and there is no failure path; if the refcount were already zero it would be a bug (double-put), so retry is not applicable.",
+      "contract_summary": "This put wrapper releases a reference on an auth_domain by decrementing its kref refcount under the protection of auth_domain_lock. If the refcount reaches zero, it triggers the release function (auth_domain_release) which frees the object. After this call, the caller must not access the auth_domain pointer or attempt to release another reference to it. This function does not return any status; the release is unconditional and the caller should have obtained a valid reference beforehand."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dom.ref.refcount",
+          "auth_domain--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "dom.ref.refcount",
+          "auth_domain--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function auth_domain_put calls kref_put_lock on &dom->ref, which is a put operation on the refcount field (dom->ref.refcount). The access path from parameter 1 (dom) is dom.ref.refcount with type chain auth_domain--kref--refcount_t, matching the callee info and the code. Segment counts are consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "dom.ref.refcount",
+        "auth_domain--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes and there is no failure path; if the refcount were already zero it would be a bug (double-put), so retry is not applicable.",
+    "contract_summary": "This put wrapper releases a reference on an auth_domain by decrementing its kref refcount under the protection of auth_domain_lock. If the refcount reaches zero, it triggers the release function (auth_domain_release) which frees the object. After this call, the caller must not access the auth_domain pointer or attempt to release another reference to it. This function does not return any status; the release is unconditional and the caller should have obtained a valid reference beforehand."
+  }
+}

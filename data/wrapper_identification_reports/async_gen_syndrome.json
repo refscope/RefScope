@@ -1,0 +1,74 @@
+{
+  "function_name": "async_gen_syndrome",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "dmaengine_get_unmap_data",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "unmap.kref.refcount.refs",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dmaengine_unmap_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "unmap.kref.refcount",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "dmaengine_get_unmap_data",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "unmap.kref.refcount.refs",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "dmaengine_unmap_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "unmap.kref.refcount",
+      "member_type_chain": "dmaengine_unmap_data--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "Not a wrapper; retry logic is irrelevant.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": false,
+      "purity": "low",
+      "reason": "The function's primary purpose is to compute RAID6 P+Q syndromes (either via DMA or synchronously); the refcount operations (dmaengine_get_unmap_data/dmaengine_unmap_put) are incidental steps for managing DMA resources, not the core objective. The function does not expose a reference-counted object to the caller; it returns a DMA descriptor or NULL, and the caller is not responsible for managing any refcount.",
+      "conditionality": "conditional_on_path",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "Not a wrapper; retry logic is irrelevant.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "Not a wrapper; retry logic is irrelevant.",
+    "contract_summary": ""
+  }
+}

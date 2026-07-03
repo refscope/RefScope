@@ -1,0 +1,99 @@
+{
+  "function_name": "__ceph_lookup_mds_session",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "session.s_ref.refs",
+      "ceph_mds_session--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "ceph_get_mds_session",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.s_ref.refs",
+      "member_type_chain": "ceph_mds_session--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "ceph_get_mds_session",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "s.s_ref.refs",
+      "member_type_chain": "ceph_mds_session--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure occurs only when the session does not exist (out of bounds or NULL slot). Retrying will not create the session; the caller must handle the absence appropriately.",
+  "contract_summary": "This function looks up an MDS session by index and, if found, acquires a reference (via ceph_get_mds_session) and returns it to the caller. If the session does not exist (index out of bounds or NULL slot), it returns NULL. The caller must hold appropriate locks (typically mdsc->mutex) to prevent concurrent session removal. The caller must check the return value and, if non-NULL, must later release the reference with ceph_put_mds_session. The function does not transfer ownership of the session array entry; it only provides a reference to the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to look up an MDS session by index and, if found, acquire a reference via ceph_get_mds_session. The bounds check and NULL check are minimal validation; no other business logic exists.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure occurs only when the session does not exist (out of bounds or NULL slot). Retrying will not create the session; the caller must handle the absence appropriately.",
+      "contract_summary": "This function looks up an MDS session by index and, if found, acquires a reference (via ceph_get_mds_session) and returns it to the caller. If the session does not exist (index out of bounds or NULL slot), it returns NULL. The caller must hold appropriate locks (typically mdsc->mutex) to prevent concurrent session removal. The caller must check the return value and, if non-NULL, must later release the reference with ceph_put_mds_session. The function does not transfer ownership of the session array entry; it only provides a reference to the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "session.s_ref.refs",
+          "ceph_mds_session--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "session.s_ref.refs",
+          "ceph_mds_session--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The get operation is applied to the returned session pointer via ceph_get_mds_session, and the access path session.s_ref.refs (3 segments) matches the type chain ceph_mds_session--refcount_t--atomic_t (3 types). The location 'return' index 0 is correct as the session object is the return value."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "session.s_ref.refs",
+        "ceph_mds_session--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure occurs only when the session does not exist (out of bounds or NULL slot). Retrying will not create the session; the caller must handle the absence appropriately.",
+    "contract_summary": "This function looks up an MDS session by index and, if found, acquires a reference (via ceph_get_mds_session) and returns it to the caller. If the session does not exist (index out of bounds or NULL slot), it returns NULL. The caller must hold appropriate locks (typically mdsc->mutex) to prevent concurrent session removal. The caller must check the return value and, if non-NULL, must later release the reference with ceph_put_mds_session. The function does not transfer ownership of the session array entry; it only provides a reference to the caller."
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "function_name": "__get_md_pagetable",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hwpt.obj.users.refs",
+      "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+    ],
+    [
+      "get",
+      "return",
+      "0",
+      "hwpt.obj.wait_cnt.refs",
+      "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "iommufd_get_object",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "iommufd_get_object",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "iommufd_get_object",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.wait_cnt.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "iommufd_get_object",
+      "get_or_put": "put",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "iommufd_get_object",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.users.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "iommufd_get_object",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "obj.wait_cnt.refs",
+      "member_type_chain": "iommufd_object--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates the object does not exist or type mismatch; retrying with the same ID will not change this.",
+  "contract_summary": "This get-wrapper acquires a reference on an iommufd_hw_pagetable object identified by mockpt_id. It returns a pointer to the object on success, or an ERR_PTR on failure. The caller is responsible for releasing the reference via a corresponding put function (e.g., iommufd_put_object) when done using the object. The reference is valid as long as the caller holds it; the function does not create the object, only looks it up and increments its refcount.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to acquire a reference to an iommufd_hw_pagetable by calling iommufd_get_object (a get function) and convert the object pointer. Only other logic is error checking and container_of – negligible.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates the object does not exist or type mismatch; retrying with the same ID will not change this.",
+      "contract_summary": "This get-wrapper acquires a reference on an iommufd_hw_pagetable object identified by mockpt_id. It returns a pointer to the object on success, or an ERR_PTR on failure. The caller is responsible for releasing the reference via a corresponding put function (e.g., iommufd_put_object) when done using the object. The reference is valid as long as the caller holds it; the function does not create the object, only looks it up and increments its refcount."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hwpt.obj.users.refs",
+          "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+        ],
+        [
+          "put",
+          "return",
+          "0",
+          "hwpt.obj.users.refs",
+          "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hwpt.obj.wait_cnt.refs",
+          "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hwpt.obj.users.refs",
+          "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+        ],
+        [
+          "get",
+          "return",
+          "0",
+          "hwpt.obj.wait_cnt.refs",
+          "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "Both get operations are supported: iommufd_get_object increments users.refs and wait_cnt.refs on the returned object, and the access paths from the return value (hwpt) to those fields are consistent with the callee info. The put operation is rejected because the function code only calls iommufd_get_object, which is a get function, not a put; no put occurs on that path in this function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hwpt.obj.users.refs",
+        "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+      ],
+      [
+        "get",
+        "return",
+        "0",
+        "hwpt.obj.wait_cnt.refs",
+        "iommufd_hw_pagetable--iommufd_object--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 3,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates the object does not exist or type mismatch; retrying with the same ID will not change this.",
+    "contract_summary": "This get-wrapper acquires a reference on an iommufd_hw_pagetable object identified by mockpt_id. It returns a pointer to the object on success, or an ERR_PTR on failure. The caller is responsible for releasing the reference via a corresponding put function (e.g., iommufd_put_object) when done using the object. The reference is valid as long as the caller holds it; the function does not create the object, only looks it up and increments its refcount."
+  }
+}

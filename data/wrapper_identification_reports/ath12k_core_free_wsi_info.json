@@ -1,0 +1,106 @@
+{
+  "function_name": "ath12k_core_free_wsi_info",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "ag.wsi_node[i].kobj.kref.refcount",
+      "ath12k_hw_group--device_node--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "of_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "node.kobj.kref.refcount",
+      "member_type_chain": "device_node--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "of_node_put is a void function that always succeeds; there is no failure path to retry.",
+  "contract_summary": "This function is a put wrapper that releases all device_node references stored in the wsi_node array of the ath12k_hw_group. After calling this function, the caller must not use any of the previously stored wsi_node pointers, as they have been put and set to NULL. The num_devices counter is reset to 0 to mark the array as empty. This is typically used during cleanup or teardown, ensuring that device tree node references are properly released and no double-put occurs. The function does not return a value and requires no checking from the caller.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to release all device_node references stored in wsi_node array by calling of_node_put on each, then clear the array and reset count. The only logic is the loop and cleanup, which is directly tied to the refcount release.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "of_node_put is a void function that always succeeds; there is no failure path to retry.",
+      "contract_summary": "This function is a put wrapper that releases all device_node references stored in the wsi_node array of the ath12k_hw_group. After calling this function, the caller must not use any of the previously stored wsi_node pointers, as they have been put and set to NULL. The num_devices counter is reset to 0 to mark the array as empty. This is typically used during cleanup or teardown, ensuring that device tree node references are properly released and no double-put occurs. The function does not return a value and requires no checking from the caller."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ag.wsi_node[i].node.kobj.kref.refcount",
+          "ath12k_hw_group--device_node--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": false,
+      "ResultList": [],
+      "reason": "The member_access_path 'ag.wsi_node[i].node.kobj.kref.refcount' incorrectly starts from 'ag' instead of from the parameter (the device_node pointer passed to of_node_put). The path should be relative to parameter index 1 (e.g., 'node.kobj.kref.refcount'). Additionally, the member_type_chain 'ath12k_hw_group--device_node--kobject--kref--refcount_t' includes the parent struct type 'ath12k_hw_group' which is not part of the refcount access from the parameter; it should start from 'device_node'. Segment count mismatch: path has 6 segments, type chain has 5 types."
+    },
+    "reevaluate": {
+      "is_wrapper": true,
+      "passes_critical_variable": false,
+      "purity": "high",
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "ag.wsi_node[i].kobj.kref.refcount",
+          "ath12k_hw_group--device_node--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function's sole purpose is to release device_node references by calling of_node_put on each element of ag->wsi_node and resetting the count. It is a focused cleanup wrapper with no other business logic. The critical variable (device_node) is accessed via the parameter 'ag' and its refcount is decremented; it is not passed back to the caller. The corrected member access path from the parameter and type chain now align (5 segments, 5 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "ag.wsi_node[i].kobj.kref.refcount",
+        "ath12k_hw_group--device_node--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "of_node_put is a void function that always succeeds; there is no failure path to retry.",
+    "contract_summary": "This function is a put wrapper that releases all device_node references stored in the wsi_node array of the ath12k_hw_group. After calling this function, the caller must not use any of the previously stored wsi_node pointers, as they have been put and set to NULL. The num_devices counter is reset to 0 to mark the array as empty. This is typically used during cleanup or teardown, ensuring that device tree node references are properly released and no double-put occurs. The function does not return a value and requires no checking from the caller."
+  }
+}

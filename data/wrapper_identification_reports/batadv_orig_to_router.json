@@ -1,0 +1,151 @@
+{
+  "function_name": "batadv_orig_to_router",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ],
+    [
+      "put",
+      "parameter",
+      "1",
+      "orig_node.refcount.refcount",
+      "batadv_orig_node--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_find_router",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "router.refcount.refcount",
+      "member_type_chain": "batadv_neigh_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_orig_hash_find",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "orig_node_tmp.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "batadv_orig_node_put",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "orig_node.refcount.refcount",
+      "member_type_chain": "batadv_orig_node--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure to find the orig_node indicates the node is not in the hash; the lookup is definitive and retrying without external changes (e.g., node creation) would also fail.",
+  "contract_summary": "This helper looks up an originator node by address, finds the best router neighbor for a given outgoing interface, and returns it. It correctly acquires and releases a reference on the originator node during the lookup, ensuring no net reference leak. The caller receives a pointer to a neighbor node that must be used under proper synchronization (e.g., RCU lock or local softirq context) and may need to take its own reference if the pointer is used beyond the caller's critical section. The function does not transfer ownership of a reference on the returned neighbor node.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's only operations are a get on orig_node, a call to batadv_find_router, and a put on orig_node. The primary purpose is to manage the reference count of the originator node while returning a router neighbor pointer. No other business logic is present.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure to find the orig_node indicates the node is not in the hash; the lookup is definitive and retrying without external changes (e.g., node creation) would also fail.",
+      "contract_summary": "This helper looks up an originator node by address, finds the best router neighbor for a given outgoing interface, and returns it. It correctly acquires and releases a reference on the originator node during the lookup, ensuring no net reference leak. The caller receives a pointer to a neighbor node that must be used under proper synchronization (e.g., RCU lock or local softirq context) and may need to take its own reference if the pointer is used beyond the caller's critical section. The function does not transfer ownership of a reference on the returned neighbor node."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ],
+        [
+          "put",
+          "parameter",
+          "1",
+          "orig_node.refcount.refcount",
+          "batadv_orig_node--kref--refcount_t"
+        ]
+      ],
+      "reason": "Both operations are consistent with the code. The get from batadv_orig_hash_find increments orig_node's refcount, and the put via batadv_orig_node_put decrements it. Access paths and type chains match the callee information and the variable usage in the function."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ],
+      [
+        "put",
+        "parameter",
+        "1",
+        "orig_node.refcount.refcount",
+        "batadv_orig_node--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure to find the orig_node indicates the node is not in the hash; the lookup is definitive and retrying without external changes (e.g., node creation) would also fail.",
+    "contract_summary": "This helper looks up an originator node by address, finds the best router neighbor for a given outgoing interface, and returns it. It correctly acquires and releases a reference on the originator node during the lookup, ensuring no net reference leak. The caller receives a pointer to a neighbor node that must be used under proper synchronization (e.g., RCU lock or local softirq context) and may need to take its own reference if the pointer is used beyond the caller's critical section. The function does not transfer ownership of a reference on the returned neighbor node."
+  }
+}

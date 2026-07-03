@@ -1,0 +1,115 @@
+{
+  "function_name": "batadv_tp_list_find",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "tp_vars.refcount.refcount.refs",
+      "batadv_tp_vars--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails when refcount is zero, meaning the object is already being freed; retrying will not revive the object.",
+  "contract_summary": "This function performs an RCU-protected lookup of a batadv_tp_vars session by destination and role. If a matching session is found and its reference count is non-zero, it acquires a reference via kref_get_unless_zero and returns the pointer. The caller must check the return value: if non-NULL, they own a reference that must be released with batadv_tp_vars_put (or equivalent) when done. If NULL, the session either does not exist or is in the process of being destroyed. The RCU read-side lock is held only during the lookup and get operation; the caller does not need to hold it after return.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to find a tp_vars session by destination and role, and conditionally acquire a reference via kref_get_unless_zero. The only non-refcount logic is the hashtable iteration and comparison, which are minimal and standard for a get-wrapper lookup.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails when refcount is zero, meaning the object is already being freed; retrying will not revive the object.",
+      "contract_summary": "This function performs an RCU-protected lookup of a batadv_tp_vars session by destination and role. If a matching session is found and its reference count is non-zero, it acquires a reference via kref_get_unless_zero and returns the pointer. The caller must check the return value: if non-NULL, they own a reference that must be released with batadv_tp_vars_put (or equivalent) when done. If NULL, the session either does not exist or is in the process of being destroyed. The RCU read-side lock is held only during the lookup and get operation; the caller does not need to hold it after return."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tp_vars.refcount.refcount.refs",
+          "batadv_tp_vars--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "tp_vars.refcount.refcount.refs",
+          "batadv_tp_vars--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The kref_get_unless_zero(&pos->refcount) call increments the refcount of the matched session. The critical variable returned is tp_vars (same as pos). The access path from tp_vars to the atomic refs field goes through tp_vars.refcount (struct kref), then .refcount (refcount_t), then .refs (atomic_t), which matches the callee's internal access path and the type chain segments (4 each). The operation direction 'get' is correct."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "tp_vars.refcount.refcount.refs",
+        "batadv_tp_vars--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails when refcount is zero, meaning the object is already being freed; retrying will not revive the object.",
+    "contract_summary": "This function performs an RCU-protected lookup of a batadv_tp_vars session by destination and role. If a matching session is found and its reference count is non-zero, it acquires a reference via kref_get_unless_zero and returns the pointer. The caller must check the return value: if non-NULL, they own a reference that must be released with batadv_tp_vars_put (or equivalent) when done. If NULL, the session either does not exist or is in the process of being destroyed. The RCU read-side lock is held only during the lookup and get operation; the caller does not need to hold it after return."
+  }
+}

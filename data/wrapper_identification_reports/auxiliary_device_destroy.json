@@ -1,0 +1,99 @@
+{
+  "function_name": "auxiliary_device_destroy",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "auxdev.dev.kobj.kref.refcount",
+      "auxiliary_device--device--kobject--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "medium",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "auxiliary_device_uninit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "auxdev.dev.kobj.kref.refcount",
+      "member_type_chain": "auxiliary_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "auxiliary_device_uninit",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "auxdev.dev.kobj.kref.refcount",
+      "member_type_chain": "auxiliary_device--device--kobject--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+  "contract_summary": "Destroys an auxiliary device by first removing it from the subsystem (auxiliary_device_delete) and then releasing the initial reference with a put (auxiliary_device_uninit). After this call, the caller must not access the device. This function represents the final release stage of the auxiliary device lifecycle.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "medium",
+      "reason": "Primary purpose is to destroy an auxiliary device: it deletes the device from the system and then releases the reference via auxiliary_device_uninit (a put operation). The put is essential to the destruction lifecycle, making it a refcount wrapper despite the additional delete step.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+      "contract_summary": "Destroys an auxiliary device by first removing it from the subsystem (auxiliary_device_delete) and then releasing the initial reference with a put (auxiliary_device_uninit). After this call, the caller must not access the device. This function represents the final release stage of the auxiliary device lifecycle."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "auxdev.dev.kobj.kref.refcount",
+          "auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "auxdev.dev.kobj.kref.refcount",
+          "auxiliary_device--device--kobject--kref--refcount_t"
+        ]
+      ],
+      "reason": "auxiliary_device_uninit is a put function on its first parameter (auxdev). The code calls auxiliary_device_uninit(_auxdev) where _auxdev is the function's own parameter auxdev casted, so the refcount operation acts on the passed parameter. The access path auxdev.dev.kobj.kref.refcount and type chain auxiliary_device--device--kobject--kref--refcount_t are consistent with the callee information."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "medium",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "auxdev.dev.kobj.kref.refcount",
+        "auxiliary_device--device--kobject--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The operation always executes and never fails; retry is not applicable.",
+    "contract_summary": "Destroys an auxiliary device by first removing it from the subsystem (auxiliary_device_delete) and then releasing the initial reference with a put (auxiliary_device_uninit). After this call, the caller must not access the device. This function represents the final release stage of the auxiliary device lifecycle."
+  }
+}

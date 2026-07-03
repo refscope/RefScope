@@ -1,0 +1,90 @@
+{
+  "function_name": "aa_label_alloc",
+  "end_flag": false,
+  "functionality_list": [],
+  "is_update": true,
+  "purity": "low",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "aa_get_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.count.count.refcount.refs",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "aa_get_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "proxy.count.count.refcount",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "set",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "new.count.count.refcount.refs",
+      "member_type_chain": "aa_proxy--aa_count--kref--refcount_struct--atomic_t"
+    },
+    {
+      "callee_function_name": "aa_alloc_proxy",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "label.count.count.refcount",
+      "member_type_chain": "aa_label--aa_count--kref--refcount_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "On failure the caller gets NULL; immediate retry without addressing the root cause (e.g., memory pressure) is unlikely to succeed.",
+  "contract_summary": "",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": false,
+      "passes_critical_variable": true,
+      "purity": "low",
+      "reason": "The function's primary purpose is allocation and initialization of a new aa_label object, including memory allocation, proxy handling, and multiple refcount operations (label init, proxy set/get). This is not a simple get/put/set wrapper; it is a factory function with significant non-refcount logic.",
+      "conditionality": "unconditional",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "On failure the caller gets NULL; immediate retry without addressing the root cause (e.g., memory pressure) is unlikely to succeed.",
+      "contract_summary": ""
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": false,
+    "purity": "low",
+    "functionality_list": [],
+    "callee_count": 3,
+    "conditionality": "unconditional",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "On failure the caller gets NULL; immediate retry without addressing the root cause (e.g., memory pressure) is unlikely to succeed.",
+    "contract_summary": ""
+  }
+}

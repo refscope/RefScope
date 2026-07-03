@@ -1,0 +1,99 @@
+{
+  "function_name": "batadv_netlink_get_hardif",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "return",
+      "0",
+      "hard_iface.refcount.refcount",
+      "batadv_hard_iface--kref--refcount_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "batadv_netlink_get_hardif_from_ifindex",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "batadv_netlink_get_hardif_from_ifindex",
+      "get_or_put": "get",
+      "index": "0",
+      "location": "return",
+      "member_access_path": "hard_iface.refcount.refcount",
+      "member_type_chain": "batadv_hard_iface--kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_path",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "Failure indicates an invalid ifindex (ifindex zero) or a missing interface; retrying with the same netlink message will yield the same error.",
+  "contract_summary": "This wrapper extracts a hard interface index from a netlink attribute, validates it, and then calls a helper that acquires a reference on the corresponding batadv_hard_iface object. The caller receives a pointer with an elevated reference count and must release it via batadv_hardif_put when done. On failure (e.g., invalid ifindex or interface not found), the function returns an error pointer with no reference acquired. This function is the standard entry point for netlink handlers that need a hard interface pointer.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "Primary purpose is to obtain a reference-counted batadv_hard_iface pointer from a netlink callback, with minimal validation of the ifindex before delegating to a helper that acquires the reference.",
+      "conditionality": "conditional_on_path",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "Failure indicates an invalid ifindex (ifindex zero) or a missing interface; retrying with the same netlink message will yield the same error.",
+      "contract_summary": "This wrapper extracts a hard interface index from a netlink attribute, validates it, and then calls a helper that acquires a reference on the corresponding batadv_hard_iface object. The caller receives a pointer with an elevated reference count and must release it via batadv_hardif_put when done. On failure (e.g., invalid ifindex or interface not found), the function returns an error pointer with no reference acquired. This function is the standard entry point for netlink handlers that need a hard interface pointer."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "return",
+          "0",
+          "hard_iface.refcount.refcount",
+          "batadv_hard_iface--kref--refcount_t"
+        ]
+      ],
+      "reason": "The function returns the result of batadv_netlink_get_hardif_from_ifindex, which is a get operation on a batadv_hard_iface. The access path hard_iface.refcount.refcount matches the type chain batadv_hard_iface--kref--refcount_t, and the segment counts are consistent (3 segments, 3 types)."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "return",
+        "0",
+        "hard_iface.refcount.refcount",
+        "batadv_hard_iface--kref--refcount_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "conditional_on_path",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "Failure indicates an invalid ifindex (ifindex zero) or a missing interface; retrying with the same netlink message will yield the same error.",
+    "contract_summary": "This wrapper extracts a hard interface index from a netlink attribute, validates it, and then calls a helper that acquires a reference on the corresponding batadv_hard_iface object. The caller receives a pointer with an elevated reference count and must release it via batadv_hardif_put when done. On failure (e.g., invalid ifindex or interface not found), the function returns an error pointer with no reference acquired. This function is the standard entry point for netlink handlers that need a hard interface pointer."
+  }
+}

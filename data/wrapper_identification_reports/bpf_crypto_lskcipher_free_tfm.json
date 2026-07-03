@@ -1,0 +1,99 @@
+{
+  "function_name": "bpf_crypto_lskcipher_free_tfm",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "put",
+      "parameter",
+      "1",
+      "tfm.base.refcnt.refs",
+      "crypto_lskcipher--crypto_tfm--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "crypto_free_lskcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_lskcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "crypto_free_lskcipher",
+      "get_or_put": "put",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "tfm.base.refcnt.refs",
+      "member_type_chain": "crypto_lskcipher--crypto_tfm--refcount_t--atomic_t"
+    }
+  ],
+  "conditionality": "unconditional",
+  "must_check": false,
+  "retry_on_failure": false,
+  "retry_reason": "The put operation always executes and never signals failure. If the refcount were already zero, calling this function would be a double-free bug; retrying would only worsen the corruption.",
+  "contract_summary": "Release wrapper that decrements the reference count on a crypto_lskcipher tfm via crypto_free_lskcipher. After calling this function, the caller must not access the tfm pointer. The caller must ensure that the tfm is a valid, previously allocated object (non-NULL) and that a matching reference (e.g., from a prior get or allocation) exists. This function does not return a value and has no failure detection — any misuse (e.g., double put) is a caller bug.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The sole purpose of this function is to call crypto_free_lskcipher, a put function that decrements the reference count of the crypto_lskcipher tfm. There is no other logic — it is a pure release wrapper.",
+      "conditionality": "unconditional",
+      "must_check": false,
+      "retry_on_failure": false,
+      "retry_reason": "The put operation always executes and never signals failure. If the refcount were already zero, calling this function would be a double-free bug; retrying would only worsen the corruption.",
+      "contract_summary": "Release wrapper that decrements the reference count on a crypto_lskcipher tfm via crypto_free_lskcipher. After calling this function, the caller must not access the tfm pointer. The caller must ensure that the tfm is a valid, previously allocated object (non-NULL) and that a matching reference (e.g., from a prior get or allocation) exists. This function does not return a value and has no failure detection — any misuse (e.g., double put) is a caller bug."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.refcnt.refs",
+          "crypto_lskcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "put",
+          "parameter",
+          "1",
+          "tfm.base.refcnt.refs",
+          "crypto_lskcipher--crypto_tfm--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "The function calls crypto_free_lskcipher(tfm), which is a put operation on the tfm parameter. The access path tfm.base.refcnt.refs correctly traces from the parameter through the crypto_lskcipher's base field to the refcount. The type chain crypto_lskcipher--crypto_tfm--refcount_t--atomic_t matches the kernel structure definitions and the segment count is consistent."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "put",
+        "parameter",
+        "1",
+        "tfm.base.refcnt.refs",
+        "crypto_lskcipher--crypto_tfm--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 1,
+    "conditionality": "unconditional",
+    "must_check": false,
+    "retry_on_failure": false,
+    "retry_reason": "The put operation always executes and never signals failure. If the refcount were already zero, calling this function would be a double-free bug; retrying would only worsen the corruption.",
+    "contract_summary": "Release wrapper that decrements the reference count on a crypto_lskcipher tfm via crypto_free_lskcipher. After calling this function, the caller must not access the tfm pointer. The caller must ensure that the tfm is a valid, previously allocated object (non-NULL) and that a matching reference (e.g., from a prior get or allocation) exists. This function does not return a value and has no failure detection — any misuse (e.g., double put) is a caller bug."
+  }
+}

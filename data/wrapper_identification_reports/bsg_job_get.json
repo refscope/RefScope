@@ -1,0 +1,115 @@
+{
+  "function_name": "bsg_job_get",
+  "end_flag": true,
+  "functionality_list": [
+    [
+      "get",
+      "parameter",
+      "1",
+      "job.kref.refcount.refs",
+      "bsg_job--kref--refcount_t--atomic_t"
+    ]
+  ],
+  "is_update": true,
+  "purity": "high",
+  "callee_func_info_list": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "analyzed_callee_snapshot": [
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount.refs",
+      "member_type_chain": "kref--refcount_t--atomic_t"
+    },
+    {
+      "callee_function_name": "kref_get_unless_zero",
+      "get_or_put": "get",
+      "index": "1",
+      "location": "parameter",
+      "member_access_path": "kref.refcount",
+      "member_type_chain": "kref--refcount_t"
+    }
+  ],
+  "conditionality": "conditional_on_nonzero",
+  "must_check": true,
+  "retry_on_failure": false,
+  "retry_reason": "kref_get_unless_zero fails only when the refcount is zero, indicating the object is already destroyed or being torn down; retrying cannot revive the object.",
+  "contract_summary": "Conditional get-wrapper: acquires a kref reference on the bsg_job object only if its refcount is non‑zero (object still alive). Returns 1 on success (caller holds a reference) and 0 on failure (object is dead/dying). On success, the caller must later release the reference via a corresponding put (e.g., bsg_job_put). On failure, the caller must not use the job pointer. No locks or RCU requirements are imposed by this function.",
+  "stages": {
+    "judge": {
+      "need_more_info": false,
+      "is_wrapper": true,
+      "passes_critical_variable": true,
+      "purity": "high",
+      "reason": "The function's sole purpose is to conditionally acquire a reference on a bsg_job object by calling kref_get_unless_zero; there is no other logic.",
+      "conditionality": "conditional_on_nonzero",
+      "must_check": true,
+      "retry_on_failure": false,
+      "retry_reason": "kref_get_unless_zero fails only when the refcount is zero, indicating the object is already destroyed or being torn down; retrying cannot revive the object.",
+      "contract_summary": "Conditional get-wrapper: acquires a kref reference on the bsg_job object only if its refcount is non‑zero (object still alive). Returns 1 on success (caller holds a reference) and 0 on failure (object is dead/dying). On success, the caller must later release the reference via a corresponding put (e.g., bsg_job_put). On failure, the caller must not use the job pointer. No locks or RCU requirements are imposed by this function."
+    },
+    "extract": {
+      "need_more_info": false,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "job.kref.refcount.refs",
+          "bsg_job--kref--refcount_t--atomic_t"
+        ]
+      ]
+    },
+    "check": {
+      "validated": true,
+      "ResultList": [
+        [
+          "get",
+          "parameter",
+          "1",
+          "job.kref.refcount.refs",
+          "bsg_job--kref--refcount_t--atomic_t"
+        ]
+      ],
+      "reason": "kref_get_unless_zero is called on &job->kref, which increments the refcount if non-zero. The access path from job (parameter 1) through kref, refcount, refs matches the callee's path kref.refcount.refs. The type chain bsg_job--kref--refcount_t--atomic_t is consistent with struct definitions."
+    }
+  },
+  "final": {
+    "status": "ok",
+    "is_wrapper": true,
+    "purity": "high",
+    "functionality_list": [
+      [
+        "get",
+        "parameter",
+        "1",
+        "job.kref.refcount.refs",
+        "bsg_job--kref--refcount_t--atomic_t"
+      ]
+    ],
+    "callee_count": 2,
+    "conditionality": "conditional_on_nonzero",
+    "must_check": true,
+    "retry_on_failure": false,
+    "retry_reason": "kref_get_unless_zero fails only when the refcount is zero, indicating the object is already destroyed or being torn down; retrying cannot revive the object.",
+    "contract_summary": "Conditional get-wrapper: acquires a kref reference on the bsg_job object only if its refcount is non‑zero (object still alive). Returns 1 on success (caller holds a reference) and 0 on failure (object is dead/dying). On success, the caller must later release the reference via a corresponding put (e.g., bsg_job_put). On failure, the caller must not use the job pointer. No locks or RCU requirements are imposed by this function."
+  }
+}
