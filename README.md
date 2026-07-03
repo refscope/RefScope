@@ -197,11 +197,11 @@ data/
 │   └── *.json                           #   per-function confirmed bug reports (s10 output)
 │
 ├── checker_warns/                       # Raw checker warnings (Smatch + auto-cleanup)
-│   ├── smatch/                          #   Smatch intra- & cross-function refcount warnings
-│   └── auto_cleanup/                    #   s6b auto-cleanup bug detection warnings
+│   ├── refcount_warns.txt               #   Smatch refcount inbalance warnings
+│   └── auto_cleanup_warns.json          #   s6b auto-cleanup bug detection warnings
 │
 ├── comparision_study/                   # Comparison study: APISpecGen vs RefScope
-│   └── APISpecGen_deepth*.json          #   APISpecGen reports at various depths
+│   └── APISpecGen_deepth*.json          #   APISpecGen reports at various depth thresholds
 │
 └── wrapper_identification_reports/      # Wrapper function identification results (s1 output)
     ├── refcount_callgraph.json          #   full refcount call graph
@@ -215,8 +215,6 @@ data/
 | `checker_warns/` | Raw Smatch & auto-cleanup detector warnings | s6b, s7, s8 |
 | `comparision_study/` | Comparison-study reports (APISpecGen baseline) | external |
 | `wrapper_identification_reports/` | Wrapper function analysis & pair candidates | s1, s2 |
-| `FunctionResult/` | Per-function type-chain & contract analysis | s1 |
-| `SmatchResult/` | Timestamped Smatch scan outputs | s7, s8 |
 
 ## CLI Reference (`run_pipeline.py`)
 
