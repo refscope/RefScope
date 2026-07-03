@@ -35,11 +35,11 @@ python3 run_pipeline.py --pipeline s1-s10              # full pipeline
 | s7 | `s7_run_smatch_refcount.sh` | Runs Smatch intra-procedural refcount scan |
 | s8 | `s8_run_smatch_crossfunc.sh` | Runs Smatch cross-function (inter-procedural) scan |
 | s9 | `s9_prepare_audit_context.py` | Prepares audit context (extracts function source) |
-| s9 | `s9_v2_enrich_context.py` | Enriched audit context (v2) |
-| s9 | `s9_v3_contract_context.py` | Contract-driven minimal audit context (v3) |
-| s10 | `s10_audit_agent.py` | Iterative audit agent (v1) |
-| s10 | `s10_v2_audit_agent.py` | Parallel audit agent (v2) |
-| s10 | `s10_v3_batch_audit.py` | Batch audit with contract context (v3) |
+| s9 | `s9_enrich_context.py` | Enriched audit context |
+| s9 | `s9_contract_context.py` | Contract-driven minimal audit context |
+| s10 | `s10_audit_agent.py` | Iterative audit agent |
+| s10 | `s10_parallel_audit.py` | Parallel audit agent |
+| s10 | `s10_batch_audit.py` | Batch audit with contract context |
 
 ## Dependencies (imported by s1–s10)
 
@@ -61,9 +61,9 @@ python3 run_pipeline.py --pipeline s1-s10              # full pipeline
 | `template_check.prompt` | s1 (check stage) |
 | `template_expand.prompt` | s1 (expand stage) |
 | `template_reevaluate.prompt` | s1 (re-evaluate stage) |
-| `template_audit_v1.md` | s10 (audit template v1) |
-| `template_audit_v2.md` | s10_v2 (audit template v2) |
-| `template_audit_v3.md` | s10_v3 (audit template v3) |
+| `template_audit_v1.md` | s10 (audit template) |
+| `template_audit_v2.md` | s10_parallel (audit template) |
+| `template_audit_v3.md` | s10_batch (audit template v3) |
 | `template_api_config.env` | s10 series (API config template) |
 
 ## Requirements
