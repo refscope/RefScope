@@ -234,3 +234,7 @@ data/
 | `--config` | path | `api_config.env` | API config file (`.env` format) |
 | `--target-dir` | str | `""` | Smatch scan target subdirectory (e.g. `drivers/net`) |
 | `--build-smatch` | flag | `false` | rebuild Smatch before scanning |
+
+## NewBugsAfterSubmission Directory
+
+These are the bugs that have been newly confirmed since the paper was submitted; we will keep this list updated.
